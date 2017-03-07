@@ -1,0 +1,165 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li><a href="/wftadlogin/setting">系统设置</a></li>
+        <li class="active">启动图管理</li>
+    </ul>
+</div>
+
+<hgroup class="box">
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：启动图备用4个</div>
+    </aside>
+</hgroup>
+
+<table class="table">
+    <tr>
+        <th>id</th>
+        <th>名称</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>操作</th>
+    </tr>
+    <?php foreach ($data as $m=>$v): ?>
+        <tr>
+            <th><?php echo $v['id']; ?></th>
+            <th><a target="_blank" href="/wftadlogin/setting/install?act=view&id=<?php echo $v['id']; ?>"><?php echo $v['name']; ?></a></th>
+            <th><?php echo date('Y-m-d H:i:s', $v['width']);?></th>
+            <th><?php echo date('Y-m-d H:i:s', $v['height']);?></th>
+            <th>
+                <?php if($m>0):?>
+                <a href="/wftadlogin/setting/install?act=update&id=<?php echo $v['id']; ?>" class="btn btn-primary">刷新上浮</a>
+                <?php endif;?>
+                <a href="/wftadlogin/setting/install?act=del&id=<?php echo $v['id']; ?>" class="btn btn-danger">删除</a>
+            </th>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<form action="/wftadlogin/setting/install?act=save" method="post" class="form-inline">
+    <header class="box-title">添加启动图———— 需要上传3张</header>
+    <table class="table">
+
+        <tr>
+            <th>安卓启动图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="cover2" value="" />
+                    <span>　　请上传：<mark>720 × 1280</mark>的“<mark><b>jpg png</b></mark>”格式。</span>
+                </fieldset>
+                <br />
+
+                <div>
+                    <img width="180px" height="320px" class="fileupload2" src="">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>ios启动图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload3" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="cover3" value="" />
+                    <span>　　请上传：<mark>2670 × 2001</mark>的“<mark><b>jpg png</b></mark>”格式。</span>
+                </fieldset>
+                <br />
+
+                <div>
+                    <img width="132px" height="100px" class="fileupload3" src="">
+                </div>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">启动图所做的用途</th>
+            <th colspan="3" width="600">
+                <input class="form-control" name="val">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开始时间</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo  date('Y-m-d', time());?>" name="width">
+                <input type="time" value="<?php echo  '08:00';?>" name="widthl">　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">结束时间</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo  date('Y-m-d', time()+5184000);?>" name="height">
+                <input type="time" value="<?php echo  '08:00';?>" name="heightl">　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <button type="submit" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    /*$('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover1']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });*/
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload?boot=out',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover2']").attr('value', data.result.url);
+                $(".fileupload2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload3').fileupload({
+        url: '/wftadlogin/index/upload?boot=outer',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover3']").attr('value', data.result.url);
+                $(".fileupload3").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+
+</script>
+
+
+
+

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>玩翻天后台管理</title>
+    <script type="text/javascript">(function () {
+            if (!/*@cc_on!@*/0)return;
+            var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+            while (i--) {
+                document.createElement(e[i])
+            }
+        })();</script>
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/vnd.microsoft.icon',
+        'href' => $this->basePath() . '/img/favicon.ico'
+    ))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+        ->prependStylesheet($this->basePath() . '/css/loginDialog.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+</head>
+<body>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+
+        <h1 id="top-logo">
+            <a target="_blank" href="http://wan.wanfantian.com">
+                <img width="123" height="32" src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+        </h1>
+
+        <nav id="top-user">
+            <a href="javascript:;"></a>
+            <a href="/activity/manage/logout">安全退出</a>
+        </nav>
+    </header>
+
+    <nav id="side-nav">
+        <dl>
+            <dt class="box-title">荟聚活动</dt>
+            <dd class="box">
+                <ul>
+                    <li><a href="/activity/huijuadmin/list">查看参与用户</a></li>
+                    <li><a href="/activity/huijuadmin/prizelist">设置奖品</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </nav>
+
+    <div id="content" style="margin-top: 10px;">
+        <form class="box box-form" action="" method="">
+            <table>
+                <tr>
+                    <th width="160">参与来源</th>
+                    <th colspan="3" width="600">
+                        <?php
+
+                            if ($userData->come_type == 1) {
+                                echo 'app';
+                            } elseif ($userData->come_type == 2) {
+                                echo '微信';
+                            } else {
+                                echo '未知';
+                            }
+
+                        ?>
+                    </th>
+                </tr>
+                <tr>
+                    <th width="160">参与时间</th>
+                    <th colspan="3" width="600">
+                        <?php
+
+                            if ($userData->come_type == 1) {
+                                echo 'app';
+                            } elseif ($userData->come_type == 2) {
+                                echo '微信';
+                            } else {
+                                echo '未知';
+                            }
+                        ?>
+                    </th>
+                </tr>
+                <tr>
+                    <th width="160">抽奖次数</th>
+                    <th colspan="3" width="600">
+                    </th>
+                </tr>
+                <tr>
+                    <th width="160">加油次数</th>
+                    <th colspan="3" width="600">
+
+                    </th>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+    <script src="/seller/js/modernizr.js"></script>
+</head>
+<body>
+<!--<header id="header">-->
+<!--    <div class="center">-->
+<!--        <div id="header-tips">-->
+<!--            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>-->
+<!--            <h2 id="header-title">商家版</h2>-->
+<!--        </div>-->
+<!--        <div id="header-member">-->
+<!--            <figure>-->
+<!--                <a href="" title="user" class="portrait">-->
+<!--                    <img alt="" src="/seller/images/demo01.png">-->
+<!--                </a>-->
+<!--                <figcaption>-->
+<!--                    <a class="username" href="" title="世界儿童乐园">世界儿童乐园</a>-->
+<!--                </figcaption>-->
+<!--            </figure>-->
+<!--            <nav id="header-nav">-->
+<!--                <a class="set" href=""></a>-->
+<!--                <a class="exit" href=""></a>-->
+<!--            </nav>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+
+<div id="container" class="center">
+    <nav id="navigator">
+        <ul>
+            <li>
+                <a class="user-self active" href="" title="">
+                    <i></i>首页
+                </a>
+            </li>
+            <li>
+                <a class="user-order" href="/selleradmin/index/order" >
+                    <i></i>订单
+                </a>
+            </li>
+            <li>
+                <a class="user-shops" href="/selleradmin/index/shops" >
+                    <i></i>分店管理
+                </a>
+            </li>
+            <li>
+                <a class="user-info" href="/article.html" >
+                    <i></i>基本信息
+                </a>
+            </li>
+            <li>
+                <a class="user-account" href="/account.html" >
+                    <i></i>绑定银行账号
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main id="content">
+
+            <section class="wrapper">
+                <input class="code text" type="text" name="code" placeholder="输入兑换码" id="code"/><a class="button check" href="javascript:void(0)" id="checkBtn">验证</a>
+            </section>
+
+        <section class="wrapper">
+            <div class="sale-room left">
+                <div class="sale-info">
+                    <em></em>
+                    <div class="sale-num">昨日销量<span><?php echo $this->yes_sale_num;?></span></div>
+                    <div class="sale-totle">昨日销售额<span>&yen;<?php echo $this->yes_sale_cash ;?></span></div>
+                </div>
+                <div class="sale-rank">
+                    <span>销售额同行排名</span>
+                    <span class="sale-place">26</span>
+                    <div class="sale-sort">↓ 下降2位</div>
+                </div>
+            </div>
+            <div class="sale-room right">
+                <div class="sale-info">
+                    <em></em>
+                    <div class="sale-num">30日销量<span><?php echo $this->month_sale_num ;?></span></div>
+                    <div class="sale-totle">30日销售额<span>&yen;<?php echo $this->month_sale_cash ;?></span></div>
+                </div>
+                <div class="sale-rank">
+                    <span>销售额同行排名</span>
+                    <span class="sale-place">26</span>
+                    <div class="sale-sort">↓ 下降2位</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="wrapper">
+            <div class="main" h-com="toggle" data-toggle='{"target":".main-group"}'>
+                <h1>所有商品</h1>
+                <div class="main-group">
+                    <header class="main-title toggle"><span></span>待上架商品（<?php echo count($this->data['not_start']);?>）</header>
+                    <?php if(count($this->data['not_start'])>0):?>
+                    <?php foreach($this->data['not_start'] as $v) :?>
+                    <table class="main-list slide" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                        <tr>
+                            <th class="borderb">商品</th>
+                            <th class="borderb">销售情况</th>
+                            <th class="borderb">已使用</th>
+                            <th class="borderb">推送位置</th>
+                            <th class="borderb">操作</th>
+                        </tr>
+                        <!--list start-->
+                        <tr>
+                            <td class="goods">
+                                <a class="goods-img" href="" title="" target="_blank">
+<!--                                    <a href=""><img src="--><?php //echo $v['thumb'];?><!--" alt=""/></a>-->
+                                    <img src="/seller/images/demo02.png" alt=""/>
+
+                                </a>
+                                <h2><a href="" title="" target=""><?php echo $v['title']?></a></h2>
+                            </td>
+                            <td class="product">
+                                <div class="product-num">售出<?php echo $v['sale_num']>0 ? $v['sale_num'] : 0; ?> / 总量<?php echo $v['ticket_num']; ?></div>
+                                <div class="product-bar">
+                                    <div class="product-bar-cur" style="width: 0"></div>
+                                </div>
+                            </td>
+                            <td class="num">
+                                <?php echo $v['use_number']>0 ? $v['use_number'] : 0;?>
+                            </td>
+                            <td class="location">
+                                待发布
+                            </td>
+                            <td class="operate">
+                                <a class="orders" href="/selleradmin/index/order" title="" target="_blank">订单</a>
+                                <a class="comments" href="" title="" target="_blank">评论</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <?php endforeach;?>
+                    <?php endif;?>
+                </div>
+                <div class="main-group">
+                    <header class="main-title toggle"><span></span>在售商品（<?php echo count($this->data['on_sale']);?>）</header>
+                    <?php if(count($this->data['on_sale'])>0):?>
+                    <?php foreach($this->data['on_sale'] as $v) :?>
+                    <table class="main-list slide" width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                        <tr>
+                            <th class="borderb">商品</th>
+                            <th class="borderb">销售情况</th>
+                            <th class="borderb">已使用</th>
+                            <th class="borderb">推送位置</th>
+                            <th class="borderb">操作</th>
+                        </tr>
+                        <!--list start-->
+                        <tr>
+                            <td class="goods">
+                                <a class="goods-img" href="" title="" target="_blank">
+<!--                                    <a href=""><img src="--><?php //echo $v['thumb'];?><!--" alt=""/></a>-->
+                                    <img src="/seller/images/demo02.png" alt=""/>
+
+                                </a>
+                                <h2><a href="" title="" target=""><?php echo $v['title']?></a></h2>
+                            </td>
+                            <td class="product">
+                                <div class="product-num">售出<?php echo $v['sale_num']>0 ? $v['sale_num'] : 0; ?> / 总量<?php echo $v['ticket_num']; ?></div>
+                                <div class="product-bar">
+                                    <div class="product-bar-cur" style="width: 0"></div>
+                                </div>
+                            </td>
+                            <td class="num">
+                                <?php echo $v['use_number']>0 ? $v['use_number'] : 0;?>
+                            </td>
+                            <td class="location">
+                                <?php echo $v['link_type'];?>
+                            </td>
+                            <td class="operate">
+                                <a class="orders" href="/selleradmin/index/order" title="" target="_blank">订单</a>
+                                <a class="comments" href="" title="" target="_blank">评论</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </div>
+                <div class="main-group">
+                    <header class="main-title toggle"><span></span>待结算（<?php echo count($this->data['not_clean']);?>）</header>
+                    <?php if(count($this->data['not_clean'])>0):?>
+                        <?php foreach($this->data['not_clean'] as $v) :?>
+                            <table class="main-list slide" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <th class="borderb">商品</th>
+                                    <th class="borderb">销售情况</th>
+                                    <th class="borderb">已使用</th>
+                                    <th class="borderb">推送位置</th>
+                                    <th class="borderb">操作</th>
+                                </tr>
+                                <!--list start-->
+                                <tr>
+                                    <td class="goods">
+                                        <a class="goods-img" href="" title="" target="_blank">
+                                            <!--                                    <a href=""><img src="--><?php //echo $v['thumb'];?><!--" alt=""/></a>-->
+                                            <img src="/seller/images/demo02.png" alt=""/>
+
+                                        </a>
+                                        <h2><a href="" title="" target=""><?php echo $v['title']?></a></h2>
+                                    </td>
+                                    <td class="product">
+                                        <div class="product-num">售出<?php echo $v['sale_num']>0 ? $v['sale_num'] : 0; ?> / 总量<?php echo $v['ticket_num']; ?></div>
+                                        <div class="product-bar">
+                                            <div class="product-bar-cur" style="width: 0"></div>
+                                        </div>
+                                    </td>
+                                    <td class="num">
+                                        <?php echo $v['use_number']>0 ? $v['use_number'] : 0;?>
+                                    </td>
+                                    <td class="location">
+                                        <?php echo $v['link_type'];?>
+                                    </td>
+                                    <td class="operate">
+                                        <a class="orders" href="/selleradmin/index/order" title="" target="_blank">订单</a>
+                                        <a class="comments" href="" title="" target="_blank">评论</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </div>
+                <div class="main-group">
+                    <header class="main-title toggle"><span></span>已结算（<?php echo count($this->data['clean']);?>）</header>
+                    <?php if(count($this->data['clean'])>0):?>
+                        <?php foreach($this->data['clean'] as $v) :?>
+                            <table class="main-list slide" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                <tr>
+                                    <th class="borderb">商品</th>
+                                    <th class="borderb">销售情况</th>
+                                    <th class="borderb">已使用</th>
+                                    <th class="borderb">推送位置</th>
+                                    <th class="borderb">操作</th>
+                                </tr>
+                                <!--list start-->
+                                <tr>
+                                    <td class="goods">
+                                        <a class="goods-img" href="" title="" target="_blank">
+                                            <!--                                    <a href=""><img src="--><?php //echo $v['thumb'];?><!--" alt=""/></a>-->
+                                            <img src="/seller/images/demo02.png" alt=""/>
+
+                                        </a>
+                                        <h2><a href="" title="" target=""><?php echo $v['title']?></a></h2>
+                                    </td>
+                                    <td class="product">
+                                        <div class="product-num">售出<?php echo $v['sale_num']>0 ? $v['sale_num'] : 0; ?> / 总量<?php echo $v['ticket_num']; ?></div>
+                                        <div class="product-bar">
+                                            <div class="product-bar-cur" style="width: 0"></div>
+                                        </div>
+                                    </td>
+                                    <td class="num">
+                                        <?php echo $v['use_number']>0 ? $v['use_number'] : 0;?>
+                                    </td>
+                                    <td class="location">
+                                        <?php echo $v['link_type'];?>
+                                    </td>
+                                    <td class="operate">
+                                        <a class="orders" href="/selleradmin/index/order" title="" target="_blank">订单</a>
+                                        <a class="comments" href="" title="" target="_blank">评论</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+<footer id="footer"></footer>
+</body>
+<template id="alert">
+    <div class="modal-alert">
+        <h1 class="modal-alert-title">{{message}}</h1>
+        <input class="button modal-alert-button modal-close" type="button" value="确定" />
+    </div>
+</template>
+<script src="/seller/js/jquery.js"></script>
+<script src="/seller/js/lodash.js"></script>
+<script src="/seller/js/horcrux.js"></script>
+<script src="/seller/js/components.js" charset="utf-8"></script>
+<script>
+    $(function(){
+        $("#checkBtn").click(function(){
+            var code = $("#code").val();
+            if(!code){
+                alert('逗逼，连验证码都没输入');
+                return false;
+            }
+            $.post("/seller/index/validate",{'code':code},function(data){
+                alert(data.message);
+            },'json');
+        })
+    })
+</script>
+</html>
+

@@ -1,0 +1,69 @@
+<form class="box box-form" id="form-sub" action="/wftadlogin/contract/saveInventory" method="post">
+    <header class="box-title">
+         添加库存
+    </header>
+    <table class="table">
+        <tr>
+            <th width="160">商品id</th>
+            <th colspan="3">
+                <?php echo $goodData->id;?>
+                <input type="hidden" name="good_id" value="<?php echo $goodData->id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商品名称</th>
+            <th colspan="3">
+                <?php echo $goodData->title;?>
+                <input type="hidden" name="good_name" value="<?php echo $goodData->title;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">采购价</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="account_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">采购数量</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="purchase_number" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">库存地点</th>
+            <th colspan="3">
+                <select name="inventory_address">
+                    <option value="1">玩翻天</option>
+                    <option value="2">商家仓库</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">预付金</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="pre_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="contract_id" value="<?php echo $contractData->id; ?>">
+                <span   id="sub-form" class="btn btn-primary">保存</span>
+            </th>
+        </tr>
+
+    </table>
+</form>
+<script type="text/javascript">
+    $(function () {
+        $('#sub-form').click(function(){
+            $('#form-sub').submit();
+        });
+    });
+</script>

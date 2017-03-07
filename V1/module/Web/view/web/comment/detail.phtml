@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>��������</title>
+            <link href="/css/wap/common.css" rel="stylesheet"/>
+            <link href="/css/wap/travel.css" rel="stylesheet"/>
+            <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <header class="header top">
+        <a class="header-back" href="javascript:history.go(-1);"></a>
+        <a class="header-title">��������</a>
+        <a class="header-user" href="" title=""></a>
+    </header>
+    <section class="wrapper">
+        <ul class="pk-user">
+            <li>
+                <img class="photo" src="{{img}}"/>
+                <div class="info">
+                    <div class="stars">
+                        <span>{{username}}</span>
+                        <!--С����ɿ�ѡ-->
+                        {{if accept==1}}
+                        <em>С�����</em>
+                        {{/if}}
+                    </div>
+                    <time>{{dateline}}</time>
+                    <div class="con">
+                        <p>
+                            {{each msg}}
+                            {{if $value.t==1}}
+                            {{$value.val}}
+                            {{/if}}
+                            {{/each}}
+                        </p>
+                        <div class="con-pic">
+                            {{each msg}}
+                            {{if $value.t==2}}
+                            <img src="{{$value.val}}"/>
+                            {{/if}}
+                            {{/each}}
+                        </div>
+                        <div class="handle">
+                            <div class="ctr">
+                                <!--�е��޺͵���ʱ���active-->
+                                <div class="{{if is_like==1}} active{{/if}} like">
+                                    <a href="javascript:;" class="likes">{{like_number}}</a>
+                                </div>
+                                <div class="collect">
+                                    <a href="javascript:;" class="reply">{{reply_number}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        {{if reply_list[0]}}
+        {{each reply_list}}
+        <div class="ask-replay">
+            <div class="arrow-up"></div>
+            <div class="ask-main">
+                <div class="ask-img img"><img src="{{$value.img}}" style="60px;height:60px;"/></div>
+                <div class="title">
+                    <span class="name">{{$value.username}}</span>
+                    <span class="time">{{$value.dateline}}</span>
+                </div>
+            </div>
+            <p class="ask-answer">
+                {{each $value.msg}}
+                {{if $value.t==1}}
+                {{$value.val}}
+                {{/if}}
+                {{/each}}
+            </p>
+        </div>
+        {{/each}}
+        {{/if}}
+        <a class="review">
+            <input class="comment" type="text" name="comment" placeholder="д���������" autocomplte="off" id="comment" >
+            <button class="submit">����</button>
+        </a>
+    </section>
+</script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    $(function(){
+        alert(2)
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return decodeURI(r[2]); return null;
+        }
+
+        var object_id = GetQueryString('id');
+        $.ajax({
+            type: "POST",
+            url: "/post/index/info",
+            dataType:"json",
+            async: true,
+            data:{"uid":<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>,'pid':object_id},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    alert(result.response_params.message);
+                } else{
+                    var d=new Date(parseInt(result.response_params.dateline)*1000);
+                    result.response_params.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ (d.getMinutes()+1 < 10 ? '0'+(d.getMinutes()+1) : d.getMinutes()+1)+':'+ (d.getSeconds()+1 < 10 ? '0'+(d.getSeconds()+1) : d.getSeconds()+1);
+                    var len = result.response_params.reply_list.length;
+                    for(var i=0;i<len;i++){
+                        var info = result.response_params.reply_list[i];
+                        var d=new Date(parseInt(info.dateline)*1000);
+                        info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ (d.getMinutes()+1 < 10 ? '0'+(d.getMinutes()+1) : d.getMinutes()+1)+':'+ (d.getSeconds()+1 < 10 ? '0'+(d.getSeconds()+1) : d.getSeconds()+1);
+                    }
+
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+
+                    //���޺�ȡ������
+                    $('.like').click(function(){
+                        var obj = $(this);
+                        var mid = obj.attr('data');
+                        var data ={'mid':mid,'uid':<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>};
+                        if(obj.hasClass('active')){
+                            $.ajax({
+                                type: "POST",
+                                url: "/social/sendpost/deletelike",
+                                //        dataType:"json",
+                                async: true,
+                                data:data,
+                                headers: {
+                                    "VER": 10
+                                },
+                                success: function (result) {
+                                    if (result.response_params.status == 0) {
+                                        alert(result.response_params.message);
+
+                                    } else if(result.response_params.message =='�Ѿ�ȡ������'){
+                                        alert(result.response_params.message);
+                                    }else{
+                                        alert(result.response_params.message);
+                                        obj.removeClass('active');
+                                        var num = obj.find('a').text();
+                                        obj.find('a').text(parseInt(num)-1);
+                                    }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                    if (XMLHttpRequest.status == 401) {
+                                        //alert('��Ȩʧ��');
+                                        // ��ת��Ȩҳ��
+                                        //alert(XMLHttpRequest.responseJSON.message);
+                                        window.location.href = '<?php echo $authorUrl;?>';
+
+                                    }
+                                    else if (XMLHttpRequest.status == 403) {
+                                        alert('�ӿ���֤ʧ�ܣ��Ƿ�����');
+                                    }
+                                    else if (XMLHttpRequest.status == 400) {
+                                        alert('�����������');
+                                    }
+                                    else {
+                                        alert('�ӿ��쳣������״̬�룺' + XMLHttpRequest.status)
+                                    }
+                                }
+
+                            });
+                        }else{
+                            $.ajax({
+                                type: "POST",
+                                url: "/social/sendpost/like",
+                                //        dataType:"json",
+                                async: true,
+                                data:data,
+                                headers: {
+                                    "VER": 10
+                                },
+                                success: function (result) {
+                                    if (result.response_params.status == 0) {
+                                        alert(result.response_params.message);
+
+                                    } else if(result.response_params.message=='�Ѿ����޹���') {
+                                        alert(result.response_params.message);
+                                    }else{
+                                        alert(result.response_params.message);
+                                        obj.addClass('active');
+                                        var num = obj.find('a').text();
+                                        obj.find('a').text(parseInt(num)+1);
+                                    }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                    if (XMLHttpRequest.status == 401) {
+                                        //alert('��Ȩʧ��');
+                                        // ��ת��Ȩҳ��
+                                        //alert(XMLHttpRequest.responseJSON.message);
+                                        window.location.href = '<?php echo $authorUrl;?>';
+
+                                    }
+                                    else if (XMLHttpRequest.status == 403) {
+                                        alert('�ӿ���֤ʧ�ܣ��Ƿ�����');
+                                    }
+                                    else if (XMLHttpRequest.status == 400) {
+                                        alert('�����������');
+                                    }
+                                    else {
+                                        alert('�ӿ��쳣������״̬�룺' + XMLHttpRequest.status)
+                                    }
+                                }
+
+                            });
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //alert('��Ȩʧ��');
+                    // ��ת��Ȩҳ��
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('�ӿ���֤ʧ�ܣ��Ƿ�����');
+                }
+                else if (XMLHttpRequest.status == 400) {
+                    alert('�����������');
+                }
+                else {
+                    alert('�ӿ��쳣������״̬�룺' + XMLHttpRequest.status)
+                }
+            }
+
+        });
+    })
+</script>
+</body>
+</html>

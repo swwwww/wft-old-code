@@ -1,0 +1,108 @@
+<!--遛娃学院简介-->
+<div class="container-fluid" id="blueFocus">
+    <div class="row intr-shc">
+        <div class="col-md-0"></div>
+        <div class="col-md-4 center-img school-log">
+            <img src="/static/images/liuwa_r16_c2.png" class="cont-img img-responsive school-log-img">
+        </div>
+        <div class="col-md-8 liuwa-bg">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <p class="liuwa-info"><!--style="text-align: justify"-->
+                    <b>【遛娃学院介绍】</b><br>
+                    <span>亲爱的小玩家，欢迎来到玩翻天遛娃学院。玩翻天遛娃学院现面向</span>
+                    <span>全世界喜欢玩，又会玩的大小盆友招收金牌遛娃师OR VIP小玩家！如果你</span>
+                    <span>拥有我们看中的三心（爱心、童心、责任心），如果你足够有趣，并能GET</span><span>遛娃创意技能，为亲子家庭制定丰富多彩的亲子活动OR规划舒适好玩的亲子旅程，欢迎</span><span>即刻加入我们！玩翻天遛娃学院每周也会定期招收一批勇敢的VIP小玩家，由金牌遛娃师</span><span>带队参与活动，让孩子在活动中与我们一同愉快玩耍，学会分享，感知世界的美妙，在点</span><span>滴进步中证明自己，赢取遛娃学院成长徽章，为孩子们构建探索式成长的快乐童年！</span>
+                </p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div class="col-md-0"></div>
+    </div>
+</div><!--遛娃学院简介结束-->
+
+<!--content start-->
+<div class="container-fluid" id="content1">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-7 center-img resp-phone"> <!--移动端垂直排列-->
+            <img src="/static/images/liuwa_r1_c10.png" class="cont-img img-responsive resp-phone">
+        </div>
+        <div class="col-md-3 center">
+            <p>
+                有<span class="bold">爱心</span>,更会<span class="bold">玩</span><br>
+                我想成为遛娃师
+            </p>
+            <img src="/static/images/liu1.png" class="img-responsive liu-school">
+        </div>
+        <div class="col-md-6 center-img resp-pc"><!--PC 端水平排列-->
+            <img src="/static/images/liuwa_r1_c10.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row grayBg">
+        <div class="col-md-2"></div>
+        <div class="col-md-3 center-img">
+            <img src="/static/images/liuwa_r5_c3.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-6 center">
+            <p>
+                陪娃<span class="bold">玩</span>，找<span class="bold">同伴</span>
+                <br/> 我想参与遛娃活动
+            </p>
+            <img src="/static/images/liu2.png" class="img-responsive liu-school">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-7 center-img resp-phone"><!--自适应移动端-->
+            <img src="/static/images/liuwa_r9_c11.png" class="cont-img img-responsive">
+        </div>
+
+        <div class="col-md-3 center">
+            <p>
+                求<span class="bold">合作</span>,创<span class="bold">双赢</span><br>
+                我想提供遛娃场地
+            </p>
+            <img src="/static/images/liu3.png" class="img-responsive liu-school">
+        </div>
+        <div class="col-md-6 center-img resp-pc"><!--自适应PC端-->
+            <img src="/static/images/liuwa_r9_c11.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div><!--content end-->
+
+<!--hotlist sart-->
+<div class="container hot" id="hotlist">
+    <h2 class="hot-head">
+        <span class="hot-title">热门推荐</span>
+        <a href="/www/index/artical?type=2">查看更多> </a>
+    </h2>
+
+    <div class="row hot-content">
+        <div class="row hot-content">
+            <?php foreach($news as $k=>$new):?>
+                <div class="col-md-6 hot-info">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <img src="<?php echo $new['thumb_url'];?>" class="img-responsive hot-img">
+                        </div>
+                        <div class="col-xs-7">
+                            <h4 <?php if(in_array($k, array(0, 2))):?>class="hot-list-odd"<?php endif;?>>
+                                <a href="<?php echo $new['url'];?>"><?php echo $new['title'];?></a>
+                            </h4>
+                            <div class="hot-foot">
+                                <span class="footer-title"><?php echo $new['type_name'];?></span>
+                                <time class="hot-time"><?php echo date('Y-m-d', $new['dateline']);?></time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach?>
+        </div>
+    </div>
+</div>

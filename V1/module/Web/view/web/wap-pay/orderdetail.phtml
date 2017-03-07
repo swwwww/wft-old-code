@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>订单详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/order-center.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .gray-bg{background-color:gray};
+    </style>
+</head>
+<body>
+<header class="order-banner">
+    <p style="width: 100%;height: 80px;background:#fa6d51 url('/images/wap/share.jpg?ver=<?php echo time();?>') no-repeat center 0;"></p>
+</header>
+<a class="detail-title">
+    <p><?php echo $data->title;?></p>
+    <i></i>
+</a>
+<div class="detail-info">
+    <p>
+        <span style="float: left;font-size: 28px;color: #929292;">总价：</span>
+        <span style="float: left;margin-left: 80px;">&yen;</span>
+        <span class="info-price"><?php echo $data->money;?></span>
+    </p>
+</div>
+<div class="detail-selection">
+    <p>
+        <mark>套系名称：</mark>
+        <span><?php echo $data->attend_way;?></span>
+    </p>
+    <p>
+        <mark>订单号：</mark>
+        <span><?php echo $data->order_id;?></span>
+    </p>
+</div>
+<?php if(date("Y-m-d", $data->attend_start_time) == date("Y-m-d", $data->attend_end_time)):?>
+<a class="orderIntro useTime">
+    <p>
+        <mark>出行日期：</mark>
+        <span><?php echo date("Y-m-d", $data->attend_start_time);?> </span>
+        <i></i>
+    </p>
+</a>
+<?php else:?>
+    <a class="orderIntro useTime">
+        <p>
+            <mark>使用时间：</mark>
+            <span><?php echo date("Y-m-d H", $data->attend_start_time) . ':00';?> - <?php echo date("Y-m-d H", $data->attend_end_time) . ':00';?></span>
+            <i></i>
+        </p>
+    </a>
+<?php endif;?>
+<a class="orderIntro exchange">
+    <p>
+        <mark>兑换方式：</mark>
+        <span><?php echo $data->get_way;?></span>
+        <i></i>
+    </p>
+</a>
+
+<a class="orderIntro special">
+    <p>
+        <mark>特别说明：</mark>
+        <span><?php echo $data->special_info;?></span>
+        <i></i>
+    </p>
+</a>
+
+
+
+<a class="orderIntro unsubscribe" style="margin-bottom: 20px;">
+    <p>
+        <mark>退订说明：</mark>
+        <span><?php echo $data->back_money;?></span>
+    </p>
+</a>
+
+<a class="orderIntro shopName">
+    <p>
+        <mark>商家名称：</mark>
+        <span><?php echo $data->organizer_name;?></span>
+    </p>
+</a>
+
+<a class="orderIntro travelAddress">
+    <p>
+        <mark>出行地点：</mark>
+        <span><?php echo $data->attend_address;?></span>
+        <i></i>
+    </p>
+</a>
+
+<a class="orderIntro mobilePhone" style="margin-bottom: 20px;" href="tel:4008007211">
+    <p>
+        <mark>联系电话：</mark>
+        <span><?php echo $data->ask_phone;?></span>
+        <i></i>
+    </p>
+</a>
+
+<div class="contacts"  style="background:#fff;padding: 25px 0;border-bottom: 1px solid #e5e5e5">
+    <p style="height: 40px;line-height: 40px;border-left: 6px solid #fa6e51;font-size: 28px;padding-left: 28px;">联系人</p>
+</div>
+<div class="ticket-info" style="margin-top: 0">
+    <a>
+        <p><span class="address-name"><?php echo $data->buy_name;?></span><span class="address-tel"><?php echo $data->buy_phone;?></span></p>
+        <p class="address-line"><input style="border: none" type="text" value="<?php echo $res['contacts']['province'].$res['contacts']['city'].$res['contacts']['region'].$res['contacts']['address']; ?>" placeholder="点击完善收货地址" class="address-position" readonly="readonly" id="address"></p>
+    </a>
+</div>
+<?php if($data->insure_num_per_order>0) :?>
+<?php if($data->insure_num_per_order == count($data->associates)):?>
+<a href="/web/travel/traveller?total_people_num=<?php echo $data->insure_num_per_order;?>&order_sn=<?php echo $data->order_id;?>&type=3&ids=<?php echo rtrim($ids,',');?>" id="go-travel"  style="height: auto;">
+    <?php else:?>
+    <a href="/web/travel/traveller?total_people_num=<?php echo $data->insure_num_per_order;?>&order_sn=<?php echo $data->order_id;?>&type=2" class="go-travel">
+        <?php endif;?>
+        <div class="detail-info diff02">
+            <p>请补充出行人的真实姓名和信息</p>
+            <?php if($data->insure_num_per_order == count($data->associates)):?>
+                <p class="no-info">您的出行人信息已添加完成</p>
+            <?php else:?>
+                <p class="no-info">您有<?php echo ($data->insure_num_per_order)-(count($data->associates));?>个出行人信息未添加</p>
+            <?php endif;?>
+            <a class="arrow" href="#"></a>
+        </div>
+    </a>
+    <?php endif;?>
+    <div class="order-list">
+        <?php foreach($data->order_list as $v):?>
+            <div class="detail-info2">
+                <p><span class="info-name">验证码：</span><span class="info-content2"><?php echo $v->zyb_code ? $v->zyb_code : $v->code;?></span></p>
+                <p><span class="info-name">订单状态：</span><span class="info-content2"><mark class="color-blue"><?php if($v->status==0){echo "待使用";}elseif($v->status==1){echo "已使用";}elseif($v->status==2){echo "已退款";}else{echo "退款中...";};?></mark></span></p>
+                <?php if($v->status==0 && $data->back==1):?>
+                    <a class="refund-btn" href="#" data-password="<?php echo $v->code;?>" data-order_sn="<?php echo $data->order_id;?>" onclick="back(this);">申请退款</a>
+                <?php endif;?>
+            </div>
+        <?php endforeach;?>
+    </div>
+
+    <!--    加弹窗-->
+    <div class="matte-detail"></div>
+    <div class="popup-detail">
+        <p id="tip"></p>
+        <a class="go-travel" href="/web/travel/traveller?order_sn=<?php echo $data->order_id;?>&total_people_num=<?php echo $data->insure_num_per_order;?>&type=2">填写出行人信息</a>
+    </div>
+
+    <!--    说明部分弹窗-->
+    <div class="matte"></div>
+    <div class="introPopup" style="display: none">
+        <p></p>
+        <span></span>
+        <button class="introBtn">关闭</button>
+    </div>
+    <input type="hidden" id="traveller_sum" value="<?php echo $data->insure_num_per_order;?>">
+    <input type="hidden" id="traveller_num" value="<?php echo count($data->associates);?>">
+    <input type="hidden" id="message" value="<?php echo $data->tips ;?>">
+    <!--<footer id="footer">-->
+    <!--    --><?php //echo $this->render('layoutwap/footer.phtml'); ?>
+    <!--</footer>-->
+    <div id="tipsDia"></div>
+    <script type="text/javascript" src="/js/wap/zepto.min.js"></script>
+    <script>
+        (function () {
+            'use strict';
+            var introPopup = $(".introPopup");
+            $(".useTime").on("touchend",function(e){
+                e.preventDefault();
+                var title = $(".useTime").find("p").find("mark").text();
+                var newTitle = title.substring(0,title.length-1);//去掉字符串最后一位
+                var intro = $(".useTime").find("p").find("span").text();
+                introPopup.find("p").text(newTitle);
+                introPopup.find("span").text(intro);
+                introPopup.show();
+                $(".matte").show();
+            });
+
+            $(".special").on("touchend",function(e){
+                e.preventDefault();
+                var title = $(".special").find("p").find("mark").text();
+                var newTitle = title.substring(0,title.length-1);//去掉字符串最后一位
+                var intro = $(".special").find("p").find("span").text();
+                introPopup.find("p").text(newTitle);
+                introPopup.find("span").text(intro);
+                introPopup.show();
+                $(".matte").show();
+            });
+
+            $(".exchange").on("touchend",function(e){
+                e.preventDefault();
+                var title = $(".exchange").find("p").find("mark").text();
+                var newTitle = title.substring(0,title.length-1);//去掉字符串最后一位
+                var intro = $(".exchange").find("p").find("span").text();
+                introPopup.find("p").text(newTitle);
+                introPopup.find("span").text(intro);
+                introPopup.show();
+                $(".matte").show();
+            });
+
+            $(".travelAddress").on("touchend",function(e){
+                e.preventDefault();
+                var title = $(".travelAddress").find("p").find("mark").text();
+                var newTitle = title.substring(0,title.length-1);//去掉字符串最后一位
+                var intro = $(".travelAddress").find("p").find("span").text();
+                introPopup.find("p").text(newTitle);
+                introPopup.find("span").text(intro);
+                introPopup.show();
+                $(".matte").show();
+            });
+
+
+            $(".introBtn").on("touchend",function(e){
+                e.preventDefault();
+                $(".introPopup").hide();
+                $(".matte").hide();
+            });
+
+            var traveller_sum = $("#traveller_sum").val(),
+                traveller_num = $("#traveller_num").val(),
+                popup_detail = $(".popup-detail");
+            if(traveller_sum>traveller_num){
+                $("#tip").text("您还有"+parseInt(traveller_sum-traveller_num)+"个出行人的信息未填写，这些信息将被用于购买保险");
+                popup_detail.show();
+                setTimeout(function(){
+                    popup_detail.hide();
+                },3000);
+                return false;
+            }
+        }());
+
+        function back(obj){
+            var order_sn = $(obj).attr('data-order_sn'),
+                password = $(obj).attr('data-password'),
+                loginTip = $("#tipsDia"),
+                message = $("#message").val(),
+                aa = window.confirm(message);
+
+            if (aa) {
+                $('.refund-btn').text('请稍候...').css({'background-color': '#ccc'}).attr({"disabled": "disabled"});
+            } else {
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "/pay/index/backpay",
+                //        dataType:"json",
+                async: true,
+                data: {
+                    'order_sn': order_sn,
+                    'password': password
+
+                },
+                headers: {
+                    "VER": 10
+                },
+                beforeSend:function(){
+                    loginTip.text("正在提交...");
+                    loginTip.show();
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        loginTip.text(result.response_params.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+
+                        $('.refund-btn').text('申请退款').css({'background-color': '#fa6e51'}).removeAttr("disabled");
+                    } else {
+
+                        //todo 成功
+                        loginTip.text("操作成功");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+
+
+                }
+            });
+        }
+    </script>
+</body>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

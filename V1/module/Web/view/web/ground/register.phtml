@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,user-scalable=no,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m);}());</script>
+    <link href="/css/h5/ground.css" rel="stylesheet"/>
+    <title>绑定手机号</title>
+</head>
+<body>
+    <section class="wrapper">
+            <form id="register" action="" method="post" class="register-form">
+                <fieldset>
+                    <div class="item item-username">
+                        <label>手机</label>
+                        <input id="phone" class="" type="text" placeholder="请输入手机号" autofocus="" required="">
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="item input-info">
+                        <label>验证码</label>
+                        <input id="code" class="" type="text" size="11" maxlength="6" autocomplete="off" placeholder="请输入验证码">
+                        <a id="captcha" class="captcha" href="javascript:;" style="pointer-events: auto;">获取</a>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div id="loginTip"></div>
+                    <div class="item-btns">
+                        <input type="hidden" id="wap" value="1" />
+                        <a class="btn-login btn-disabled" href="javascript:;" id="loginBtn">注册</a>
+                    </div>
+                </fieldset>
+
+            </form>
+    </section>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+    "use strict";
+    var getVcodeBtn = $("#captcha"),
+        loginTip = $("#loginTip"),
+        phone = $("#phone"),
+        phoneReg = /^1\d{10}$/,
+        code = $("#code"),
+        codeAble = true,
+        loginAble = true,
+        loginBtn = $("#loginBtn"),
+        InterValObj,    //timer变量，控制时间
+        count = 60,     //间隔函数，1秒执行
+        curCount;     //当前剩余秒数
+
+    function check_tel () {
+        var phoneValue = $.trim(phone.val());
+        if(phoneValue == ""){
+            loginTip.text("您还未输入手机号");
+            phone.focus();
+            return false;
+        }
+        if(!phoneReg.test(phoneValue)){
+            loginTip.text("您输入手机号有误");
+            return false;
+        } else {
+            loginTip.text("");
+            //console.log(phoneValue);
+        }
+        return true;
+    }
+
+    function setVCodeBtn(){
+        getVcodeBtn.text("" + curCount + "s");
+        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+        getVcodeBtn.addClass('gray-bg');
+    }
+
+    function SetRemainTime() {
+        curCount--;
+        if (curCount == 0) {
+            window.clearInterval(InterValObj);//停止计时器
+            getVcodeBtn.css("pointer-events","auto");
+            getVcodeBtn.text("重新获取");
+            getVcodeBtn.removeClass('gray-bg');
+        } else {
+            getVcodeBtn.text("" + curCount+"s" );
+            getVcodeBtn.attr({"disabled":"disabled"});
+        }
+    }
+
+    getVcodeBtn.on("touchend",function(){
+        if((!loginAble) || (!check_tel())){ return false; }
+
+        var phoneValue = $.trim(phone.val()),
+                is_wap = $("#wap").val(),
+                code_data = {'phone':phoneValue,'wap':is_wap};
+
+        getVcodeBtn.css("pointer-events", "none");
+        curCount = count;
+        codeAble = false;
+
+        //post 请求验证码
+        $.ajax({
+            type: "POST",
+            url: "/user/login/getcode",
+            async: true,
+            data:code_data,
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    alert(result.response_params.message);
+                    getVcodeBtn.css("pointer-events", "auto");
+                } else {
+                    setVCodeBtn();
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                if (XMLHttpRequest.status == 401) {
+                    // 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '';
+
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+                    alert('请求参数错误');
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+
+        });
+    });
+
+    loginBtn.on("touchend",function(){
+
+
+        if((!loginAble) || (!check_tel())){ return false; }
+        var phoneValue = $.trim(phone.val()),
+            codeValue = $.trim(code.val()),
+            is_wap = $("#wap").val(),
+        //uid = loginBtn.attr('data-uid'),
+            submit_data = {
+                'phone': phoneValue,
+                'code': codeValue,
+                'wap': is_wap,
+                'did':'<?php echo $_COOKIE['dtid']; ?>',
+                'openid':'<?php echo $open_id; ?>'
+            };
+
+        if(codeValue == ""){
+            loginTip.text("您还未输入验证码");
+            code.focus();
+            return false;
+        } else {
+            getVcodeBtn.text("获取");
+            getVcodeBtn.addClass('gray-bg');
+            window.clearInterval(InterValObj); //停止计时器
+        }
+
+        loginBtn.text("提交中...");
+        loginAble = false;
+        //post
+        $.ajax({
+            type: "POST",
+            url: "/user/login/dituiregister?dtid=<?php echo $_COOKIE['dtid']; ?>",
+            async: true,
+            data:submit_data,
+            headers: {
+                "VER": 10,
+                "CITY": 'WH'
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    var exdate = new Date();
+                    exdate.setDate(exdate.getDate()+30);
+                    document.cookie = "uid="+result.response_params.uid+";path=/;expires="+exdate.toGMTString();
+                    document.cookie = "isold="+result.response_params.is_old+";path=/;expires="+exdate.toGMTString();
+                    document.cookie = "token="+result.response_params.token+";path=/;expires="+exdate.toGMTString();
+                    document.cookie = "open_id="+result.response_params.open_id+";path=/;expires="+exdate.toGMTString();
+                    document.cookie = "phone="+result.response_params.phone+";path=/;expires="+exdate.toGMTString();
+                    alert(result.response_params.message);
+                    loginAble = true;
+                } else {
+                    alert(result.response_params.message);
+
+                    window.location.href = '/web/generalize/confirm?dtid=<?php echo $_COOKIE['dtid']; ?>';
+                    return false;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (XMLHttpRequest.status == 401) {
+                    //alert('授权失败');
+                    // 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '';
+
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+                    alert('请求参数错误');
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+
+        });
+
+    });
+
+</script>
+</html>

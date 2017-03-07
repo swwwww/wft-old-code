@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <title>玩翻天活动签到</title>
+    <link rel="stylesheet" href="/css/h5/ground_new.css" />
+    <link rel="stylesheet" href="/css/h5/ground_add.css"/>
+</head>
+<body>
+    <section class="gift">
+        <div class="gift-box">
+            <div class="gift-box-bag">
+                <?php if($cc): ?>
+                <img src="/images/ground/q-check-cash.png" class="gift-box-cash">
+                <span class="gift-box-money"><?php echo (int)$cc->price; ?>元</span>
+                <?php endif; ?>
+                <a href="/web/wappay/my" class="gift-box-get">
+                    <button class="gift-box-btn">
+                        <img src="/images/ground/q-see-cash.png" class="gift-box-scash">
+                    </button>
+                </a>
+                <a href="/web/wappay/nindex" class="gift-box-get">
+                    <button class="gift-box-btn">
+                        <img src="/images/ground/d-see-activty.png" class="gift-box-see">
+                    </button>
+                </a>
+            </div>
+        </div>
+        <img src="/images/ground/logo.png" class="gift-box-logo">
+    </section>
+    <?php echo $this->partial('web/generalize/shareq.phtml'); ?>
+</body>
+
+</html>

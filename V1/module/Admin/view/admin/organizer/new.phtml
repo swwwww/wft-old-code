@@ -1,0 +1,232 @@
+<form class="box box-form" action="/wftadlogin/organizer/save" method="post" id="organizer-save">
+    <header class="box-title"><?php echo $data ? '<a href="/wftadlogin/organizer/new?oid='. $data->id .'">修改商家</a>' : '添加商家';?> 　　　　<?php if($data):?><a href="/wftadlogin/organizer/account?oid=<?php echo $data->id;?>">商家账号</a><?php endif;?></header>
+    <table class="table">
+    <tr>
+        <th width="160">名称</th>
+        <th colspan="3">
+            <input type="text" class="cssInput" style="width:300px" name="name" value="<?php echo $data ? $data->name : ''; ?>">　<span style="color:red">30个字节以内</span>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">地址</th>
+        <th colspan="3" width="600">
+            <input type="text" class="cssInput" style="width:500px" name="address" value="<?php echo $data ? $data->address : ''; ?>">　<span style="color:red">100个字节以内</span>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160"></th>
+        <th colspan="3" width="600">
+            <span style="line-height: 15px;color: green">纬度坐标：</span><input type="text" class="cssInput" style="width:90px" name="addr_y" id="addr_y" value="<?php echo $data ? $data->addr_y : '30.571659'; ?>">
+            <span style="line-height: 15px;color: green">经度坐标：</span><input type="text" class="cssInput" style="width:90px" name="addr_x" id="addr_x" value="<?php echo $data ? $data->addr_x : '114.306655'; ?>">　　<button type="button" class="btn btn-primary btn-sm setmap">设置坐标点</button>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">联系电话</th>
+        <th colspan="3" width="600">
+            <input type="text" class="cssInput" style="width:200px" name="phone" value="<?php echo $data ? $data->phone : ''; ?>">　<span style="color:red">没有电话请勿填写 （默认会填上玩翻天客服电话）</span>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">简介</th>
+        <th colspan="3" width="600">
+            <textarea class="cssTextArea" name="brief"><?php echo $data ? $data->brief : '';?></textarea>　<span style="color:red">1000汉字内</span>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">图文详情</th>
+        <th colspan="3" width="600">
+            <script type="text/plain" id="myEditor" style="width:600px;height:240px;"><?php echo $data ? htmlspecialchars_decode($data->information) : '<p>这里我可以写一些输入提示</p>';?></script>
+        </th>
+    </tr>
+
+    <tr>
+        <th>封面图 <span style="line-height: 15px;color: red">（选填）</span> </th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" name="cover" value="<?php echo $data ? $data->cover : '';?>" />
+                <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="240px" height="120px" class="fileupload1" src="<?php echo $data ? $data->cover : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th>缩略图 <span style="line-height: 15px;color: red">（选填）</span></th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" class="hidden" name="thumb" value="<?php echo $data ? $data->thumb : '';?>" />
+                <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="120px" height="120px" class="fileupload2" src="<?php echo $data ? $data->thumb : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th></th>
+        <th colspan="3">
+            <input type="hidden" name="oid"  value="<?php echo $data ? $data->id : '';?>">
+            <input type="hidden" name="city"  value="<?php echo $_COOKIE['city'];?>">
+            <span type="submit" class="btn btn-primary" id="ti-organizer">提交</span>
+        </th>
+    </tr>
+    </table>
+</form>
+
+
+<!--   地图   -->
+<div class="modal fade" id="setmap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>获取位置信息</h3>
+            </div>
+            <div class="modal-body">
+                <h4>拖动跳动的点,使用滚轮快速放大缩小 <input type="text" value="搜索" id="skey"> <a class="btn btn-primary btn-sm"
+                                                                                  id="mapsearch">搜索</a></h4>
+
+                <iframe name="myFrame" src="/wftadlogin/seller/setmap"
+                        style="width:100%; height:500px; border: 0px;border-radius: 5px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="ui-button" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="ui-button getmap" data-dismiss="modal" aria-hidden="true">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        /*limitMultiFileUploadSize: 1,
+        limitMultiFileUploadSizeOverhead: 30,
+        maxFileSize : 34,
+       //autoUpload: false,
+        acceptFileTypes:  /(\.|\/)(gpg|jpeg|png)$/i,
+        maxNumberOfFiles : 1,*/
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='thumb']").attr('value', data.result.url);
+                $(".fileupload2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>
+
+<script>
+    $(function () {
+
+        $('#ti-organizer').click(function () {
+            $.post('/wftadlogin/organizer/save', $('#organizer-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href="/wftadlogin/organizer/new?oid=" + data.oid;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UE.getEditor('myEditor');
+
+</script>
+
+<script>
+    $(function () {
+        $('.dropdown-menu a').click(function () {
+            var sval = $(this).text();
+            var bval = $(this).attr('val');
+            $('#business').val(bval)
+            $('#dLabel').text(sval)
+            $('.dropdown').removeClass('open')
+            return false;
+        })
+
+        ////////////////    地图      ///////////////////
+
+        $('.setmap').click(function () {
+            //地图框架地址
+            posturl = $(this).attr("url");
+            init_xy = [];
+            init_xy[0] = $('#addr_x').val();
+            init_xy[1] = $('#addr_y').val();
+            if (init_xy[0] == 0 || init_xy[1] == 0) {
+                init_xy[0] = 114.306655;  //湖北武汉
+                init_xy[1] = 30.571659;
+            }
+
+
+            $("#setmap").modal()
+            try {
+                //初始化地图
+                myFrame.window.initmap(init_xy[0], init_xy[1]);
+            }
+            catch (err) {
+                setTimeout(function () {
+                    myFrame.window.initmap(init_xy[0], init_xy[1]);
+                }, 2000)
+            }
+        })
+        $(".getmap").click(function () {
+            var mapxy = myFrame.window.getmap().split(',');
+            $('#addr_x').val(mapxy[0])
+            $('#addr_y').val(mapxy[1])
+
+        })
+
+        $("#mapsearch").click(function () {
+            var skey;
+            skey = $("#skey").val();
+            myFrame.window.baidusearch(skey);
+        })
+        ////////////////  地图结束 /////////////////
+    });
+</script>
+
+
+

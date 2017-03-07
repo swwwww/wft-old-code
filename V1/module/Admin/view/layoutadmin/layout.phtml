@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>玩翻天后台管理</title>
+    <script type="text/javascript">(function () {
+            if (!/*@cc_on!@*/0)return;
+            var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+            while (i--) {
+                document.createElement(e[i])
+            }
+        })();</script>
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/vnd.microsoft.icon',
+        'href' => $this->basePath() . '/img/favicon.ico'
+    ))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+        ->prependStylesheet($this->basePath() . '/css/loginDialog.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+    <!-- Scripts -->
+    <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+        ->prependFile($this->basePath() . '/js/jquery.min.js')
+        ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',)); ?>
+
+    <!-- 编辑器 -->
+<!--    <link href="--><?php //echo $this->basePath(); ?><!--/css/umeditor.css" type="text/css" rel="stylesheet">-->
+    <script type="text/javascript" charset="utf-8"
+            src="<?php echo $this->basePath(); ?>/plugins/UEditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<?php echo $this->basePath(); ?>/plugins/UEditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->basePath(); ?>/plugins/UEditor/lang/zh-cn/zh-cn.js"></script>
+    <!-- 编辑器end -->
+
+</head>
+<body>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+
+        <h1 id="top-logo">
+            <a target="_blank" href="http://wan.wanfantian.com">
+                <img width="123" height="32"
+                     src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+            <input onclick="window.location.href='/wftadlogin/code/index?is_hotal=1'" style="display:none;height: 30px;color: #ff0000;font-size: 20px; margin-left: 20px;width: 320px;" type="button" id="logo_alert" value="" />
+        </h1>
+
+        <nav id="top-user">
+            <a href="javascript:;"></a>
+            <?php if($_COOKIE['city']==1): ?>
+            <?php echo \Deyi\GetCacheData\CityCache::getFilterCity($_GET['city']?:$_COOKIE['city'],2); ?>
+            <?php else: ?>
+            <a href="/wftadlogin/index/logout"><?php echo $_COOKIE['city']; ?></a>
+            <?php endif; ?>
+            <a href="/wftadlogin/index/logout">安全退出</a>
+        </nav>
+    </header>
+
+    <!--顶部导航结束-->
+    <!--侧边栏开始-->
+    <!--    <div id="top-two-menu">aa</div>-->
+
+    <style>
+        #side-nav {
+            background-color: #E6E6E6;
+            font-size: 15px;
+        }
+    </style>
+    <nav id="side-nav">
+
+
+        <dl>
+            <dt class="box-title" >功能列表</dt>
+            <br>
+
+            <?php foreach ($this->menu as $m): ?>
+                <?php if ((int)$m['pid'] === 0):
+                    $_mod = explode('/', $m['url']);
+                    $_mod = trim($_mod[0]);
+                    if($m['title']=='未命名操作' || $m['hide']){continue;}
+
+                    if(!in_array($m['id'],$rule_dis) && $_COOKIE['group']!=1){
+                        continue;
+                    }?>
+
+                    <dt class="box-title"><a <?php echo $this->mod === $_mod ? 'class = "active"' : ''; ?>
+                            href="/<?php echo $m['module'] . '/' . $m['url']; ?>"><?php echo $m['title']; ?></a></dt>
+                    <br/>
+                <?php endif; ?>
+            <?php endforeach; ?>
+
+            <dt class="box-title">帮助</dt>
+            <dd class="box">
+                <ul>
+                    <li>联系电话：</li>
+                    <li>xxxxxxxx</li>
+                    <!-- <li>在线客服：<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1153471593&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:1153471593:51" alt="点击这里给我发消息" title="点击这里给我发消息"/></a>
+                     </li>-->
+                </ul>
+            </dd>
+        </dl>
+    </nav>
+    <!--侧边栏结束-->
+    <dt class="box-title" style="height:auto !important;">
+    <div style="font-size: 12px;">
+        <?php foreach ($this->child as $c): ?>
+            <a style="padding: 0px 10px;"
+               href="/<?php echo $c['module'] . '/' . $c['url']; ?>"><?php echo $c['title']; ?></a>
+        <?php endforeach; ?>
+    </div>
+
+    </dt>
+    <!--主界面开始-->
+    <div id="content" style="margin-top: 10px;">
+
+
+        <?php echo $this->content; ?>
+    </div>
+    <!--主界面结束-->
+</div>
+<?php if(count($this->alert_windows)):?>
+<?php include_once('alert.phtml'); ?>
+<?php endif;?>
+</body>
+</html>
+
+
+

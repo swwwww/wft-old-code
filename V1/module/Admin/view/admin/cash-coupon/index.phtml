@@ -1,0 +1,240 @@
+<hgroup class="box">
+    <header>
+        <h3>现金券管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/cashcoupon/new">添加现金券</a>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span></div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $code_status = null;
+        $word = null;
+        $give_start = NULL;
+        $give_end = NULL;
+        $use_time = NULL;
+        $use_time_end = NULL;
+
+        if (isset($_GET['code_status']) && $_GET['code_status']) {
+            $code_status = $_GET['code_status'];
+        }
+
+        if (array_key_exists('use_range',$_GET) and is_numeric($_GET['use_range'])) {
+            $use_range = (int)$_GET['use_range'];
+        }
+
+        if (isset($_GET['word']) && $_GET['word']) {
+            $word = $_GET['word'];
+        }
+
+        if (isset($_GET['give_start']) && $_GET['give_start']) {
+            $give_start = $_GET['give_start'];
+        }
+
+        if (isset($_GET['give_end']) && $_GET['give_end']) {
+            $give_end = $_GET['give_end'];
+        }
+
+        if (isset($_GET['use_time']) && $_GET['use_time']) {
+            $use_time = $_GET['use_time'];
+        }
+
+        if (isset($_GET['use_time_end']) && $_GET['use_time_end']) {
+            $use_time_end = $_GET['use_time_end'];
+        }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">使用状态</th>
+            <th>
+                <select name="code_status" id="select">
+                    <option value="0" <?php echo ($code_status == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($code_status == 1) ? 'selected' : '';?>>待发放</option>
+                    <option value="2" <?php echo ($code_status == 2) ? 'selected' : '';?>>正在发放</option>
+                    <option value="3" <?php echo ($code_status == 3) ? 'selected' : '';?>>已结束</option>
+                    <option value="4" <?php echo ($code_status == 4) ? 'selected' : '';?>>停止发放</option>
+                </select>
+            </th>
+            <th width="160">使用范围</th>
+            <th>
+                <select name="use_range" id="select2">
+                    <option value="" <?php echo (!$use_range) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($use_range == 1) ? 'selected' : '';?>>全场商品通用</option>
+                    <option value="2" <?php echo ($use_range == 2) ? 'selected' : '';?>>部分商品使用</option>
+                    <option value="3" <?php echo ($use_range == 3) ? 'selected' : '';?>>特殊类别使用</option>
+                    <option value="4" <?php echo ($use_range == 4) ? 'selected' : '';?>>所有活动使用</option>
+                    <option value="5" <?php echo ($use_range == 5) ? 'selected' : '';?>>部分活动使用</option>
+                </select>
+            </th>
+            <th width="160">输入现金券ID/名称/传播码</th>
+            <th>
+                <input type="text" class="cssInput" name="word" value="<?php echo $word;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">发放时间</th>
+            <th>
+                <input name="give_start" type="date" class="cssInput" style="width:200px"  value="<?php echo $give_start;?>">
+                <input name="give_end" type="date" class="cssInput" style="width:200px"  value="<?php echo $give_end;?>">
+            </th>
+
+            <th width="160">使用时间</th>
+            <th>
+                <input name="use_time" type="date" class="cssInput" style="width:200px"  value="<?php echo $use_time;?>">
+                <input name="use_time_end" type="date" class="cssInput" style="width:200px"  value="<?php echo $use_time_end;?>">
+            </th>
+
+            <th width="160"></th>
+            <th>
+                <a href="/wftadlogin/cashcoupon/index" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <apan id='out-data' data-url="/wftadlogin/cashcoupon/out" style="background-color: green" class="ui-button">导出</apan>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">编号</th>
+                <th class="size1">现金券名称</th>
+                <th class="size1">传播码</th>
+                <th class="size1">创建人</th>
+                <th class="size1">现金券单价</th>
+                <th class="size1">总张数</th>
+                <th class="size1">已发放</th>
+                <th class="size1">已使用</th>
+                <th class="size1">发放状态</th>
+                <th class="size1">审核状态</th>
+                <th class="size1">使用范围</th>
+                <th class="size1">有效期</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1">
+                            <a href="/wftadlogin/cashcoupon/detail?cid=<?php echo $row['id']; ?>">
+                                <?php echo $row['id']; ?>
+                            </a>
+                        </td>
+                        <td class="size1"><?php echo $row['title']; ?></td>
+                        <td class="size1"><?php echo urldecode($row['diffuse_code']); ?></td>
+                        <td class="size1"><?php echo $row['admin_name'];; ?></td>
+                        <td class="size1"><?php echo $row['price']; ?></td>
+                        <td class="size1"><?php echo $row['total']; ?></td>
+                        <td class="size1"><?php echo $row['give_num']; ?></td>
+                        <td class="size1"><?php echo $row['use_num']; ?></td>
+                        <td class="size1">
+                            <?php if ((int)$row['status'] === 0): ?>
+                                未审核
+                            <?php else: ?>
+                                已审核
+                            <?php endif; ?>
+                        </td>
+                        <td class="size1">
+                            <?php if ((int)$row['is_close'] === 1): ?>
+                                停止发放
+                            <?php elseif(($row['residue'] < 1) or $row['end_time'] < time()): ?>
+                                已结束
+                            <?php elseif(((int)$row['status'] === 0) OR $row['begin_time'] > time()): ?>
+                                待发放
+                            <?php else: ?>
+                            正在发放
+                            <?php endif; ?>
+                        </td>
+                        <td class="size1">
+                            <?php
+                                switch($row['range']){
+                                    case 0:
+                                        echo '全场商品通用';
+                                        break;
+                                    case 1:
+                                        echo '部分商品使用';
+                                        break;
+                                    case 2:
+                                        echo '特殊类别使用';
+                                        break;
+                                    case 3:
+                                        echo '所有活动使用';
+                                        break;
+                                    case 4:
+                                        echo '部分活动使用';
+                                        break;
+                                }
+                            ?>
+                        </td>
+                        <td class="size1">
+                            <?php
+                                if($row['time_type']){//领券后
+                                    if($row['after_hour'] < 24 or ($row['after_hour']%24)){
+                                        $dw = '小时';
+                                        $hour = $row['after_hour'];
+                                    }elseif(($row['after_hour']%24)==0){
+                                        $dw = '天';
+                                        $hour = $row['after_hour']/24;
+                                    }
+                                    echo '领券后'.$hour.$dw.'有效';
+                                }else{
+                                    echo date('Y-m-d H:i',$row['use_stime']).'到<br>'.date('Y-m-d H:i',$row['use_etime']);
+                                }
+                            ?>
+                        </td>
+                        <td class="size3">
+                            <a href="/wftadlogin/cashcoupon/edit?id=<?php echo $row['id']; ?>"
+                               class="ui-button">编辑</a>
+                            <?php if ($row['is_close']): ?>
+                                <a href="/wftadlogin/cashcoupon/close?id=<?php echo $row['id']; ?>&isclosed=0"
+                                   class="ui-button">恢复发放</a>
+                            <?php else: ?>
+                                <a href="/wftadlogin/cashcoupon/close?id=<?php echo $row['id']; ?>&isclosed=1"
+                                   class="ui-button">停止发放</a>
+                            <?php endif; ?>
+                            <a href="/wftadlogin/cashcoupon/detail?cid=<?php echo $row['id']; ?>"
+                               class="ui-button">领券记录</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无现金券 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-url'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+    });
+</script>
+
+
+
+

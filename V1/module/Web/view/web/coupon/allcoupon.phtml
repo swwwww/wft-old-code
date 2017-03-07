@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>所有票券</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/index.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <style>
+        .list-nav .cat .tag_menu{
+            /*height:100%;*/
+            opacity: 1;
+        }
+        #cate_menu{
+            height: 100%;
+        }
+        .list-nav .cat .tag_menu .area_right{
+            width:50%;
+            backgroud-color:#ededed;
+        }
+        /*添加*/
+        li.area_right {
+            text-align: center;!important
+            border: none !important;
+            font-size: 24px;
+            color: #666666;
+            line-height: 75px;
+            background-color: #F6F6F6;
+        }
+
+        /*  li.area_right.active {
+              background-color: #fff !important;
+              color: #FB5F39 !important;
+          }*/
+
+        li.area_left {
+            font-size: 22.2px;
+            color: #666666;
+            line-height: 75px;
+            border-bottom: 1px solid #ccc;
+        }
+        li.area_left a:active,
+        #cate_menu li a:active,
+        #new_menu li a:active{
+            color: #FB5F39;
+            background-image: url(/images/wap/Rchecked.png);
+            background-repeat: no-repeat;
+            background-size: 22px 17px;
+        }
+        li.area_left a:active{
+            background-position: 265px 35px;
+        }
+        ol.area_list {
+            display: inline-block;
+            position: absolute;
+            width: 50%;
+            right: 0;
+            top: 0;
+            /*overflow-y:scroll;*/
+            /*height:100%*/
+        }
+        .dropUp{
+            position: relative;
+            top: -15px;
+            left: 7px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 6px solid #FB5F39;
+        }
+        #cate_menu li, #new_menu li{
+            line-height: 75px;
+            border-bottom: 1px solid #cccccc;
+        }
+        #cate_menu li a,
+        #new_menu li a{
+            font-size: 24px;
+            color: #666666;
+        }
+        #cate_menu li a:active,
+        #new_menu li a:active{
+            background-position: 580px 35px;
+        }
+        .inner {
+            margin-top: 15px;
+        }
+        span.addr {
+            display: inline-block;
+            font-size: 20.5px;
+            color: #666666;
+            float: right;
+            margin-top: 8px;
+        }
+        span.addr:before{
+            content: "";
+            width: 26px;
+            height: 25px;
+            display: inline-block;
+            background-image: url(/images/wap/addr1.png);
+            background-repeat: no-repeat;
+            background-size: 23px 25px;
+            background-position: 0px 2px;
+        }
+        .pos{
+            position: fixed;
+            overflow: hidden;
+        }
+        .null{
+            display: block;
+            width: 640px;
+            height: 150px;
+        }
+        #tipsDia{display: none; width: 50%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 10; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px; }
+    </style>
+</head>
+<body>
+<main class="align fixed-bottom-80" id="content"></main>
+<script id="test" type="text/html">
+    <section>
+        <nav class="list-nav">
+            <ul class="cat Fix" id="select_menu">
+                <li class="tags">
+                    <a class="trigger cate_menu">所有分类<i class="drop"></i></a>
+                    <ul class="tag_menu" id="cate_menu">
+                        {{each tag}}
+                        <li class="tag_list" data="cate_menu">
+                            <a href="/web/coupon/allcoupon?id={{$value.id}}" >
+                                {{$value.name}}
+                            </a>
+                        </li>
+                        {{/each}}
+                        <div class="null"></div>
+                    </ul>
+                </li>
+                <li class="tags" style="">
+                    <a class="trigger area_menu">全部区域<i class="drop"></i>
+<!--                        {{each area}} -->
+<!--                    {{if $value.rid > 0}}-->
+<!--                        <i class="dropUp"></i>-->
+<!--                        {{else}}-->
+<!--                        <i class="drop"></i>-->
+<!--                        {{/if}}-->
+<!--                        {{/each}}-->
+                    </a>
+                    <ul class="tag_menu" id="area_menu">
+                        <li class="area_right">
+                            <a href="javascript:;" id="near">
+                                附近
+                            </a>
+                        </li>
+                        {{each area}}
+                        <li class="area_right" id="area_{{$value.rid}}" data="{{$value.rid}}">
+                            <a href="javascript:;">
+                                {{if $value.child[0]}}{{$value.name}}{{/if}}
+                            </a>
+                        </li>
+                        <ol class="area_list" id="ul_list">
+                            <li class="area_left area_{{$value.rid}} tag_list"  style="display: none" data="area_menu">
+                                <a href="/web/coupon/allcoupon?rid={{$value.rid}}">
+                                    全部
+                                </a>
+                            </li>
+                            {{each $value.child as val index}}
+                            <li class="area_left area_{{$value.rid}} tag_list"  style="display: none" data="area_menu">
+                                <a href="/web/coupon/allcoupon?aid={{val.rid}}">
+                                    {{val.name}}
+                                </a>
+                            </li>
+                            {{/each}}
+                        </ol>
+                        {{/each}}
+                        <div class="null"></div>
+                    </ul>
+                </li>
+                <li class="tags">
+                    <a class="trigger last-one order_menu">最新上架<i class="drop"></i></a>
+                    <ul class="tag_menu" id="order_menu">
+                        <li data="order_menu" class="tag_list">
+                            <a href="/web/coupon/allcoupon?status=new">
+                                最新上架
+                            </a>
+                        </li>
+                        <li data="order_menu" class="tag_list">
+                            <a href="/web/coupon/allcoupon?status=hot">
+                                最热门
+                            </a>
+                        </li>
+                        <li data="order_menu" class="tag_list">
+                            <a href="/web/coupon/allcoupon?status=price_up">
+                                价格最高
+                            </a>
+                        </li>
+                        <li  data="order_menu" class="tag_list">
+                            <a href="/web/coupon/allcoupon?status=price_down">
+                                价格最低
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <div class="null"></div>
+            </ul>
+        </nav>
+    </section>
+    {{include 'list'}}
+</script>
+<script id="list" type="text/html">
+    <section class="wrapper fixed-top-60">
+        <div class="cur-position">
+            <div class="addr">
+                <span class="left">当前：</span>
+                <span class="left now" id="baidu_geo">正在GPS定位中...</span>
+            </div>
+<!--            <a class="icon" onclick="location.reload()"></a>-->
+        </div>
+        <div class="group">
+        </div>
+        <div class="inner">
+            <div class="lists">
+                {{if coupon_list[0]}}
+                {{each coupon_list}}
+                <div class="search-main">
+                    <div class="search-head">
+                        <a class="img" href="/web/organizer/shops?id={{$value.coupon_id}}" title="">
+                            <img src="{{$value.cover}}"/>
+                        </a>
+                        <div class="info">
+                            <a class="coupon-name" href="/web/organizer/shops?id={{$value.coupon_id}}" title="">{{$value.name}}</a>
+                            <aside class="cou-aside">
+                                <div class="price"><mark>&yen;{{$value.price}}</mark><span class="old-price">&yen;{{$value.low_money}}</span></div>
+                                {{if $value.buy_num>0}}
+                                <span class="num">已售：{{$value.buy_num}}份</span>
+                                {{else}}
+                                <span class="num">有票</span>
+                                {{/if}}
+                            </aside>
+                            <div class="time">结束购买：{{$value.end_time}} </div>
+                            {{if $value.circle}}
+                            <span class="addr">{{$value.circle}}</span>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{else}}
+                <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+</script>
+<script id="more" type="text/html">
+    {{each coupon_list}}
+    <div class="search-main">
+        <div class="search-head">
+            <a class="img" href="/web/organizer/shops?id={{$value.coupon_id}}" title="">
+                <img src="{{$value.cover}}"/>
+            </a>
+            <div class="info">
+                <a class="coupon-name" href="/web/organizer/shops?id={{$value.coupon_id}}" title="">{{$value.name}}</a>
+                <aside class="cou-aside">
+                    <div class="price"><mark>&yen;{{$value.price}}</mark><span class="old-price">&yen;{{$value.low_money}}</span></div>
+                    {{if $value.buy_num>0}}
+                    <span class="num">已售：{{$value.buy_num}}份</span>
+                    {{else}}
+                    <span class="num">有票</span>
+                    {{/if}}
+                </aside>
+                <div class="time">结束购买：{{$value.end_time}} </div>
+                {{if $value.circle}}
+                <span class="addr">{{$value.circle}}</span>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+<div id="tipsDia"></div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<!--<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>-->
+<script type="text/javascript">
+    //            document.cookie='open_id=oBzdouDW7_CB-Sbby1dlk9bu-ebE;path=/';
+    //            document.cookie='phone=13871281565;path=/';
+    //            document.cookie='token=2a51400ae195e7999af09197e6b53e49;path=/';
+    //            document.cookie='uid=70623;path=/';
+    $(".features-ticket").addClass("current");
+    var city = localStorage.getItem("select_city"),
+        addr = localStorage.getItem("ADDRESS"),
+        lat = localStorage.getItem('lat'),
+        lng = localStorage.getItem('lng'),
+        key = localStorage.getItem("key"),
+        val = localStorage.getItem('val');
+    var search = window.location.search;
+    if(search==''){
+        localStorage.setItem("key",'');
+        localStorage.setItem("val",'');
+    }
+
+    var loginTip = $("#tipsDia");
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+    var id = GetQueryString('id'),
+        rid = GetQueryString('rid'),
+        aid = GetQueryString('aid'),
+        addr_x=GetQueryString('addr_x'),
+        addr_y=GetQueryString('addr_y'),
+        order=GetQueryString('status');
+
+    order = order ? order : 'new';
+
+    $.ajax({
+        type: "POST",
+        url: "/coupon/list/index",
+        dataType:"json",
+        data:{'id':id,'addr_x':addr_x,'addr_y':addr_y,'order':order,'rid':rid,'aid':aid,'wap':1},
+        async: true,
+        headers: {
+            "VER": 10,
+            "CITY":encodeURI(city)
+        },
+        beforeSend:function(){
+            loginTip.text("正在疯狂请求...");
+            loginTip.show();
+        },
+        complete:function(){
+            loginTip.hide();
+        },
+        success: function (result) {
+            if (result.response_params.status == 0) {
+                //alert(result.response_params.message);
+            } else {
+                //todo 成功
+                //window.location.href = "";
+                //console.log(result.response_params);
+                for(var i=0;i<result.response_params.coupon_list.length;i++){
+                    var info = result.response_params.coupon_list[i];
+
+                    var da = new Date(parseInt(info.end_time)*1000);
+                    var year = da.getFullYear();
+                    var month = da.getMonth()+1;
+                    var date = da.getDate();
+                    info.end_time=[year,month,date].join('-');
+                }
+                var html = template('test', result.response_params);
+                document.getElementById('content').innerHTML = html;
+                $("#baidu_geo").html(addr);
+
+                if(search==''){
+                    localStorage.setItem("key",'');
+                    localStorage.setItem("val",'');
+                }
+
+                $("#"+key).prev('.trigger').text(val);
+
+                var select_menu = $("#select_menu");
+                select_menu.on('click',".trigger", function(e){
+                    var event = $(e.target);
+                    event[0].style.color = "#FB5F39";/*add*/
+                    event.next().slideToggle(300, function () {
+                        if($(this).is(':visible')){ /*add*/
+                            $('body').addClass('pos');
+                            $(this).siblings().find('i').addClass('dropUp');
+                            $(this).siblings().find('i').removeClass('drop');
+                            $(this).parent().siblings().find('i').addClass('drop');
+                            $(this).parent().siblings().find('i').removeClass('dropUp');
+                        }else {
+                            $('body').removeClass('pos');
+                            $(this).siblings().find('i').addClass('drop');
+                            $(this).siblings().find('i').removeClass('dropUp');
+                        }
+                    });
+                    event.parent().siblings().find('.trigger').css('color',"#666666"); /*add*/
+                    event.parent().siblings().find('.tag_menu').hide();
+//                    $(this).siblings().find('i').addClass('dropUp');
+                });
+
+                /*添加的“全部区域”事件  add*/
+                $('.tag_menu').on('click', ".area_right", function () {
+                    var data = $(this).attr('data');
+                    $('.area_'+data).show();
+                    $('.area_'+data).parent().siblings().children('li').hide();
+                    $(this).siblings().find('i').addClass('dropUp');
+                    $(this).css('background-color', '#fff');
+                    $(this).children('a')[0].style.color= "#FB5F39";
+                    $(this).siblings('li').css('background-color', '#F6F6F6');
+                    $(this).siblings('li').find('a').css( 'color' , "#666666");
+                });
+
+                //点击附近
+                $('#near').click(function(){
+                    var val = $(this).text();
+                    localStorage.setItem("key","area_menu");
+                    localStorage.setItem("val",val);
+                    console.log("406--"+val);
+                    window.location.href='/web/coupon/allcoupon?addr_x='+lng+'&addr_y='+lat;
+                });
+
+                $(".tag_list").on('click',function(){
+                    var val = $(this).find('a').text();
+                    var key = $(this).attr('data');
+                    console.log($(this).parents().parents());
+                    console.log("406--"+val);
+                    localStorage.setItem("key",key);
+                    localStorage.setItem("val",val);
+                });
+
+                //加载更多
+                var counter = 1;
+                // dropload
+                var dropload = $('.inner').dropload({
+                    scrollArea : window,
+                    domDown : {
+                        domClass   : 'dropload-down',
+                        domRefresh : '<div class="dropload-refresh" style="height:50px;text-align: center;margin-bottom: 25px;">↑上拉加载更多</div>',
+                        domLoad    : '<div class="dropload-load" style="height:50px;line-height: 50px;text-align: center;margin-bottom: 30px;"><span class="loading"></span>加载中...</div>',
+                        domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;margin-bottom: 15px;">暂无数据</div>'
+                    },
+
+                    loadDownFn : function(me){
+                        counter++;
+                        $.ajax({
+                            type: "POST",
+                            url: "/coupon/list/index",
+                            dataType: 'json',
+                            async: true,
+                            data:{'id':id,'addr_x':addr_x,'addr_y':addr_y,'order':order,'rid':rid,'aid':aid,'page':counter,'wap':1},
+                            headers: {
+                                "VER": 10,
+                                "CITY":encodeURI(city)
+                            },
+                            success: function(data){
+                                var len= data.response_params.coupon_list.length;
+                                for(var i=0;i<len;i++){
+                                    var info = data.response_params.coupon_list[i];
+
+                                    var da = new Date(parseInt(info.end_time)*1000);
+                                    var year = da.getFullYear();
+                                    var month = da.getMonth()+1;
+                                    var date = da.getDate();
+                                    info.end_time=[year,month,date].join('-');
+
+                                }
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function(){
+                                    $('.lists').append(template('more', data.response_params));
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                },500);
+
+                                if(len==0){
+                                    // 锁定
+                                    me.lock();
+                                    // 无数据
+                                    me.noData();
+                                    return;
+                                }
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown){
+//                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                me.resetload();
+                            }
+                        });
+                    }
+                });
+
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+            if (XMLHttpRequest.status == 401) {
+                //todo 跳转授权页面
+//                alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+            }
+            else if (XMLHttpRequest.status == 403) {
+//                alert('接口验证失败，非法访问');
+                window.location.href = '<?php echo $authorUrl;?>';
+
+            }
+            else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                alert('请求参数错误:' + XMLHttpRequest.error_msg);
+            }
+            else {
+                alert('接口异常，返回状态码：' + XMLHttpRequest.status)
+            }
+        }
+    });
+
+
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        if(arr=document.cookie.match(reg))
+            return decodeURI(arr[2]);
+        else
+            return null;
+    }
+
+    function getLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(showPosition,showError);
+        }else{
+            alert("浏览器不支持地理定位。");
+        }
+    }
+    function showPosition(position){
+        var city;
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        localStorage.setItem('lat',lat);
+        localStorage.setItem('lng',lon);
+        var point = new BMap.Point(lon, lat);  // 创建坐标点
+        // 根据坐标得到地址描述
+        var myGeo = new BMap.Geocoder();
+        myGeo.getLocation(point, function (result) {
+//                    alert(JSON.stringify(result.addressComponents));
+            city = result.addressComponents.province+result.addressComponents.city+result.addressComponents.district+result.addressComponents.street+result.addressComponents.streetNumber;//定位城市
+            $("#baidu_geo").text(city);
+        });
+    }
+
+    function showError(error){
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                $("#baidu_geo").html(addr);
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("定位失败,位置信息是不可用");
+                break;
+            case error.TIMEOUT:
+                alert("定位失败,请求获取用户位置超时");
+                break;
+            case error.UNKNOWN_ERROR:
+                alert("定位失败,定位系统失效");
+                break;
+        }
+    }
+    getLocation();
+
+    //        $(".tags").click(function()
+    //        {
+    //            $(this).find('.tag_menu').slideToggle(300);
+    //            $(this).siblings().find('.tag_menu').slideUp("slow")
+    //        });
+    //        $(".tags").click(function()
+    //        {
+    //            $(this).find('.tag_menu').slideToggle(300);
+    //            $(this).siblings().find('.tag_menu').slideUp("slow")
+    //        });
+
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

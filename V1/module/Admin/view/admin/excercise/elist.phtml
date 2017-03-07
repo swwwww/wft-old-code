@@ -1,0 +1,298 @@
+<link rel="stylesheet" href="/js/wap/plugin/laydate/skins/molv/laydate.css">
+<style>
+    #tipsDia{display: none; width: 40%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>场次列表</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/excercise">返回活动列表</a>
+        &nbsp;&nbsp;&nbsp;
+<!--        <i class="icon icon-list"></i>-->
+<!--        <a href="/wftadlogin/excercise/personlist?bid=--><?php //echo $_GET['bid']; ?><!--">人员名单</a>-->
+<!--        &nbsp;&nbsp;&nbsp;-->
+        <?php if($_GET['bid']): ?>
+            <i class="icon icon-add"></i>
+            <a href="/wftadlogin/excercise/newe?id=<?php echo $_GET['bid']; ?>">添加场次</a>
+        <?php endif; ?>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span></div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/excercise/elist" method="get" id="out-data-form">
+    <input name="bid" type="hidden"   value="<?php echo $_GET['bid'];?>">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $code_status = null;
+    $word = $end_time = $start_time = null;
+
+    if (isset($_GET['status']) && $_GET['code_status']) {
+        $code_status = $_GET['status'];
+    }
+
+    if (isset($_GET['word']) && $_GET['word']) {
+        $word = $_GET['word'];
+    }
+
+    if (isset($_GET['start_time']) && $_GET['start_time']) {
+        $start_time = $_GET['start_time'];
+    }
+
+    if (isset($_GET['end_time']) && $_GET['end_time']) {
+        $end_time = $_GET['end_time'];
+    }
+    ?>
+    <table class="table">
+        <tr>
+            <th>场次时间</th>
+            <th>
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $start_time?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+
+            <th width="160">场次状态</th>
+            <th>
+                <select name="code_status" id="select">
+                    <option <?php if($_GET['code_status']==0): ?>selected="selected" <?php endif; ?> value="0">全部状态</option>
+                    <option <?php if($_GET['code_status']==1): ?>selected="selected" <?php endif; ?> value="1">已删除</option>
+                    <option <?php if($_GET['code_status']==2): ?>selected="selected" <?php endif; ?> value="2">活动暂停</option>
+                    <option <?php if($_GET['code_status']==3): ?>selected="selected" <?php endif; ?> value="3">正常售卖</option>
+                    <option <?php if($_GET['code_status']==4): ?>selected="selected" <?php endif; ?> value="4">已满员</option>
+                    <option <?php if($_GET['code_status']==5): ?>selected="selected" <?php endif; ?> value="5">活动结束</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="5">
+                <a href="/wftadlogin/excercise/elist" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">场次ID</th>
+                <th class="size1">活动ID</th>
+                <th class="size2">活动名称</th>
+                <th class="size1">场次时间</th>
+                <th class="size2">游玩地</th>
+                <th class="size1">遛娃师电话</th>
+                <th class="size1">最少数量</th>
+                <th class="size1">报名人数</th>
+                <th class="size1">缺口人数</th>
+                <th class="size1">虚拟票</th>
+                <th class="size1">状态</th>
+                <th class="size1">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size2">
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['id']; ?>">
+                                <?php echo $row['id']; ?>
+                            </a>
+                        </td>
+                        <td class="size2">
+                            <a href="/wftadlogin/excercise/edit?id=<?php echo $row['bid']; ?>">
+                                <?php echo $row['bid']; ?>
+                            </a>
+                        </td>
+                        <td class="size2"><?php echo $row['name'].' 第'.$row['no'].'期'; ?></td>
+                        <td class="size1"><?php echo date('Y-m-d H:i',$row['start_time']).'<br/>-'.date('Y-m-d H:i',$row['end_time']); ?></td>
+                        <td class="size1"><?php echo $shop[$row['shop_id']]['shop_name']; ?></td>
+                        <td class="size2"><?php echo $row['teacher_phone']; ?></td>
+                        <td class="size1"><?php echo $row['least_number']; ?></td>
+                        <td class="size1"><?php echo $row['join_number']; ?></td>
+                        <td class="size1"><?php echo ($row['perfect_number']-$row['join_number']>0)?$row['perfect_number']-$row['join_number']:0; ?></td>
+                        <td class="size1"><?php echo (int)$row['vir_ault'] + (int)$row['vir_child']; ?></td>
+                        <td class="size1"><!--售卖状态 -1 删除  0停止售卖(活动暂停) 1正常售卖 2已满员 3活动结束-->
+
+                            <?php if ($row['sell_status'] ==3): ?>
+                                已结束
+                            <?php elseif($row['sell_status'] == 0): ?>
+                                暂停中
+                            <?php elseif($row['sell_status'] == -1): ?>
+                                已删除
+                            <?php elseif($row['open_time'] >time()): ?>
+                                未开始
+                            <?php elseif($row['over_time'] >time() && $row['join_number']<$row['perfect_number']): ?>
+                                报名中
+                            <?php elseif($row['join_number']>=$row['perfect_number']): ?>
+                                已满员
+                            <?php else: ?>
+                                已结束
+                            <?php endif; ?>
+                        </td>
+                        <td class="size3">
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['id']; ?>&p=<?php echo isset($_GET['p'])?$_GET['p']:0;?>"
+                               class="ui-button">编辑</a>
+                            <a href="/wftadlogin/excercise/personlist?id=<?php echo $row['id']; ?>" class="ui-button">人员名单</a>
+                            <?php if($row['join_number'] >= $row['least_number']): ?>
+                                <a data-src="/wftadlogin/excercise/policy?id=<?php echo $row['id']; ?>" data-join="<?php echo $row['join_number'];?>" data-least="<?php echo $row['least_number'];?>" data-days="<?php echo $row['days'] ? $row['days'] : 0;?>" class="ui-button policy">投保</a>
+                            <?php endif; ?>
+
+                            <?php if ($row['sell_status'] == 0): ?>
+                                <a onclick="if(confirm( '确定取消暂停吗')==false) return false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=1"
+                                   class="ui-button">取消暂停</a>
+                                <a onclick="if(confirm( '结束场次会全员退款 严重 请小心')==false) return  false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=3"
+                                   class="ui-button">结束场次</a>
+                            <?php elseif($row['sell_status'] == 1): ?>
+                                <a onclick="if(confirm( '确定暂停吗')==false) return false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=0"
+                                   class="ui-button">暂停</a>
+                                <a onclick="if(confirm( '结束场次会全员退款 严重 请小心')==false) return  false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=3"
+                                   class="ui-button">结束场次</a>
+                            <?php elseif($row['sell_status'] == 2): ?>
+                                <a onclick="if(confirm( '确定暂停吗')==false) return false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=0"
+                                   class="ui-button">暂停</a>
+                                <a onclick="if(confirm( '结束场次会全员退款 严重 请小心')==false) return  false;" href="/wftadlogin/excercise/estatus?id=<?php echo $row['id']; ?>&isclose=3"
+                                   class="ui-button">结束场次</a>
+                            <?php endif; ?>
+
+
+                            <!--<a onclick="del_confirm(<?php echo $row['id']; ?>);" href="#"
+                                   class="ui-button">删除</a>-->
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无内容 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<div id="LoginBox">
+    <div class="row1">
+        请选择保险生效时间<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>
+    </div>
+    <div class="row">
+        开始日(保险天数：<mark id="range"></mark>)：<li class="laydate-icon" id="start" style="width:200px; margin-right:10px;"></li>
+        结束日：<li class="laydate-icon" id="end" style="width:200px;"></li>
+    </div>
+    <div class="row" style="margin-top:130px;">
+        <a href="#" id="loginbtn">确定</a>
+    </div>
+</div>
+<div id="tipsDia"></div>
+<input type="hidden" name="ids" id="ids">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/wap/plugin/laydate/laydate.js"></script>
+<script>
+    var loginTip = $("#tipsDia");
+
+    function del_confirm(id)
+    {
+        var r=confirm("是否确定要删除？");
+        if (r==true)
+        {
+            window.location.href="/wftadlogin/excercise/estatus?id="+id+"&isclose=-1";
+        }
+
+    }
+
+    //投保
+    var start = {
+        elem: '#start',
+        format: 'YYYY/MM/DD',
+//            min: laydate.now(), //设定最小日期为当前日期
+        max: '2099-06-16', //最大日期
+        istime: true,
+        istoday: false,
+        choose: function(datas){
+            end.min = datas; //开始日选好后，重置结束日的最小日期
+            end.start = datas; //将结束日的初始值设定为开始日
+        }
+    };
+    var end = {
+        elem: '#end',
+        format: 'YYYY/MM/DD',
+//            min: laydate.now(),
+        max: '2099-06-16',
+        istime: true,
+        istoday: false,
+        choose: function(datas){
+            start.max = datas; //结束日选好后，重置开始日的最大日期
+        }
+    };
+    laydate(start);
+    laydate(end);
+
+    $(".policy").on("click",function(){
+        var join_number = $(this).attr('data-join');
+        var least_number = $(this).attr('data-least');
+        if(join_number<least_number){
+            loginTip.text("报名中场次人员不可以投保");
+            loginTip.show();
+            setTimeout(function(){
+                loginTip.hide();
+            },2000);
+            return false;
+        }
+        var url  = $(this).attr('data-src');
+        var days = $(this).attr('data-days')+'天';
+
+        if (confirm('确定将选中的场次投保？不可恢复')){
+
+            $("body").append("<div id='mask'></div>");
+            $("#mask").addClass("mask").fadeIn("slow");
+            $("#LoginBox").fadeIn("slow");
+            $('#range').text(days);
+        }
+
+        //按钮的透明度
+        $("#loginbtn").hover(function () {
+            $(this).stop().animate({
+                opacity: '1'
+            }, 600);
+        }, function () {
+            $(this).stop().animate({
+                opacity: '0.8'
+            }, 1000);
+        });
+
+        //文本框不允许为空---按钮触发
+        $("#loginbtn").on('click', function () {
+            var start = $("#start").text();
+            var end = $("#end").text();
+            if (start == "" || end == "") {
+                loginTip.text("保险日期为必填项");
+                loginTip.show();
+                setTimeout(function () {
+                    loginTip.hide();
+                }, 2000);
+                return false;
+            }
+
+            window.location.href=url+'&start='+start+'&end='+end;
+        });
+
+        //关闭
+        $(".close_btn").hover(function () { $(this).css({ color: 'black' }) }, function () { $(this).css({ color: '#999' }) }).on('click', function () {
+            $("#LoginBox").fadeOut("fast");
+            $("#mask").css({ display: 'none' });
+        });
+
+    });
+</script>

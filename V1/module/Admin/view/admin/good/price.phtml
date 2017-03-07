@@ -1,0 +1,259 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/good/priceInfo?gid=<?php echo $goodData->id;?>">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/good/savePrice" method="post" id="price-save">
+    <table class="table">
+
+        <tr>
+            <th width="160">商品名称</th>
+            <th colspan="3">
+                <?php echo $goodData->title;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">套系名称</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" name="name" value="<?php echo ($priceData and $_GET['id']) ? $priceData->name : '';?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">特例商品</th>
+            <th colspan="3">
+                <input type="radio" class="" name="excepted" <?php if((int)$priceData->excepted===1){echo 'checked';} ;?> value="1"> 是
+                <input type="radio" class="" name="excepted" <?php if((int)$priceData->excepted===0){echo 'checked';} ;?> value="0"> 否
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">销售员单份收益</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" id="single_income" data-cap="<?php echo $linkData ? ($linkData->price - $linkData->account_money) : 0;?>" name="single_income" value="<?php echo $priceData ? $priceData->single_income : '';?>">
+            </th>
+        </tr>
+
+        <!--<tr>
+            <th width="160">数量</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" name="total_num" value="<?php /*echo $priceData ? $priceData->total_num : '';*/?>"><mark>售卖数量</mark>
+            </th>
+        </tr>-->
+
+        <?php /*if($linkData && $linkPrice['type']):*/?><!--
+        <tr>
+            <th width="160">该系列合同限制数量</th>
+            <th colspan="3">
+                <?php /*echo $linkPrice['number'];*/?>
+            </th>
+        </tr>
+        --><?php /*endif;*/?>
+
+        <?php if(!$_GET['id']):?>
+            <tr>
+                <th width="160">原价</th>
+                <th colspan="3">
+                    <?php echo $linkData->money;?>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">采购价(结算价)</th>
+                <th colspan="3">
+                    <?php echo $linkData->account_money;?>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">售价</th>
+                <th colspan="3">
+                    <?php echo $linkData->price;?>
+                </th>
+            </tr>
+        <?php endif;?>
+
+        <?php if($_GET['id']):?>
+            <tr>
+                <th width="160">原价</th>
+                <th colspan="3">
+                    <?php echo $priceData->money;?>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">采购价(结算价)</th>
+                <th colspan="3">
+                    <?php echo $priceData->account_money;?>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">售价</th>
+                <th colspan="3">
+                    <?php echo $priceData->price;?>
+                </th>
+            </tr>
+        <?php endif;?>
+
+        <tr>
+            <th width="160">份数限制</th>
+            <th colspan="3" width="600">
+                每机限购&nbsp;
+                <input type="text" class="cssInput" name="limit_num" style="width: 60px" value="<?php echo $priceData ? $priceData->limit_num : 10; ?>">份　
+
+                最低购买份数&nbsp;
+                <input type="text" class="cssInput" name="limit_low_num" style="width: 60px" value="<?php echo $priceData ? $priceData->limit_low_num : 1; ?>">份　
+            </th>
+        </tr>
+        <tr>
+            <th width="160">限制</th>
+            <th colspan="3" width="600">
+
+                限购资格&nbsp;
+                <select name="qualified">
+                    <option <?php echo $priceData ? (($priceData->qualified == 1) ? 'selected' : '') : ''; ?> value="1">不限购</option>
+                    <option <?php echo $priceData ? (($priceData->qualified == 2) ? 'selected' : '') : ''; ?> value="2">限购</option>
+                </select>　　
+
+                是否新用户专享&nbsp;
+                <select name="for_new">
+                    <option <?php echo $priceData ? (($priceData->for_new == 2) ? 'selected' : '') : ''; ?> value="2">所有用户</option>
+                    <option <?php echo $priceData ? (($priceData->for_new == 1) ? 'selected' : '') : ''; ?> value="1">新用户</option>
+                </select>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="120px">开始售卖时间：</th>
+            <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo ($priceData && $priceData->up_time) ? date('Y-m-d', $priceData->up_time) : date('Y-m-d', time()+259200);?>" name="up_time">
+                <input type="time" value="<?php echo ($priceData && $priceData->up_time) ? date('H:i', $priceData->up_time) : '23:59';?>" name="up_timel">
+            </span>
+                　<span style="color:red">开始和结束售卖时间 限制是否可以购买</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">停止售卖时间：</th>
+            <th colspan="3">
+        <span>
+            <input type="date" value="<?php echo ($priceData && $priceData->down_time) ? date('Y-m-d', $priceData->down_time) : date('Y-m-d', time()+1814400);?>" name="down_time">
+            <input type="time" value="<?php echo ($priceData && $priceData->down_time) ? date('H:i', $priceData->down_time) : '23:59';?>" name="down_timel">
+        </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">停止退款时间：</th>
+            <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo $priceData ? date('Y-m-d', $priceData->refund_time) : date('Y-m-d', time()+5184000);?>" name="refund_time">
+                <input type="time" value="<?php echo $priceData ? date('H:i', $priceData->refund_time) : '08:00';?>" name="refund_timel">　
+            </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">特别说明</th>
+            <th colspan="3">
+                <textarea class="" rows="5" style="width:300px" name="remark" ><?php echo $priceData ? $priceData->remark : ''; ?></textarea>
+
+                <span style="color:red">请填写套系的使用时间和其他特别说明！</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">兑换方式</th>
+            <th colspan="3">
+                <textarea class="" rows="5" style="width:300px" name="order_method" ><?php echo $priceData ? $priceData->order_method : ''; ?></textarea>
+            <span></span>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">所需积分</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" name="integral" value="<?php echo $priceData ? $priceData->integral : '';?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">保险类型</th>
+            <th colspan="3" width="600">
+                <select name="insure_days">
+                    <?php foreach ($baoyoulist as $v): ?>
+                        <option <?php if($priceData->insure_days == $v['RateCode']): ?>selected="selected" <?php endif; ?> value="<?php echo $v['RateCode']; ?>"><?php echo "{$v['PlanName']}({$v['DayRange']}天)"; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                保险单价&nbsp;
+                <input type="text" class="cssInput" name="insure_price" style="width: 60px" value="<?php echo $priceData ? $priceData->insure_price : ''; ?>">元　
+
+                每单保险人数&nbsp;
+                <input type="text" class="cssInput" name="insure_num_per_order" style="width: 60px" value="<?php echo $priceData ? $priceData->insure_num_per_order : ''; ?>">份　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">智游宝商品码</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" name="goods_sm" value="<?php echo $priceData ? $priceData->goods_sm : '';?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <?php if($linkData):?>
+                <input type="hidden" name="lid" value="<?php echo $linkData->id; ?>">
+                <?php endif;?>
+                <?php if($_GET['id'] and $priceData):?>
+                    <input type="hidden" name="id" value="<?php echo $priceData->id; ?>">
+                <?php endif;?>
+                <input type="hidden" name="gid" value="<?php echo $goodData->id; ?>">
+                <button id="ti-price" type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $(function () {
+
+        //保存提交
+        $('#ti-price').click(function () {
+            var value_en = $('#single_income').attr('data-cap');
+            var input_en = $('#single_income').val();
+            if (parseInt(parseFloat(value_en) * 100) < parseInt(parseFloat(input_en) * 100)) {
+                if (confirm('单份收益超过  售卖价 - 结算价，确定这样设置？')) {
+                    $.post('/wftadlogin/good/savePrice', $('#price-save').serialize(), function (data) {
+                        if (data.status == 1) {
+                            alert('保存成功');
+                            window.location.href = "/wftadlogin/good/priceInfo?gid=" + data.gid;
+                        } else {
+                            alert(data.message);
+                        }
+                    }, 'json');
+                }
+            } else {
+                $.post('/wftadlogin/good/savePrice', $('#price-save').serialize(), function (data) {
+                    if (data.status == 1) {
+                        alert('保存成功');
+                        window.location.href = "/wftadlogin/good/priceInfo?gid=" + data.gid;
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+            }
+            return false;
+        });
+    })
+</script>
+
+

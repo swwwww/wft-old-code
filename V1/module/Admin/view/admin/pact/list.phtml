@@ -1,0 +1,193 @@
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/pact/list">合同审核</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $start_time = null;
+        $end_time = null;
+        $contract_no = null;
+        $operator = null;
+        $organizer = null;
+        $contract_type = null;
+        $check_status = null;
+
+        if (isset($_GET['start_time']) && $_GET['start_time']) {
+            $start_time = $_GET['start_time'];
+        }
+
+        if (isset($_GET['end_time']) && $_GET['end_time']) {
+            $end_time = $_GET['end_time'];
+        }
+
+        if (isset($_GET['contract_no']) && $_GET['contract_no']) {
+            $contract_no = $_GET['contract_no'];
+        }
+
+        if (isset($_GET['operator']) && $_GET['operator']) {
+            $operator = $_GET['operator'];
+        }
+
+        if (isset($_GET['organizer']) && $_GET['organizer']) {
+            $organizer = $_GET['organizer'];
+        }
+
+        if (isset($_GET['contract_type']) && $_GET['contract_type']) {
+            $contract_type = $_GET['contract_type'];
+        }
+
+        if (isset($_GET['check_status'])) {
+            $check_status = $_GET['check_status'];
+        } else {
+            $check_status = 4;
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">合同创建时间</th>
+            <th>
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $start_time;?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+            <th width="160">商家名称</th>
+            <th>
+                <input name="organizer" type="text" class="cssInput" style="width:190px"  value="<?php echo $organizer;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">合同编号</th>
+            <th>
+                <input type="text" class="cssInput" name="contract_no" value="<?php echo $contract_no;?>">
+            </th>
+            <th width="160">合同类型</th>
+            <th>
+                <select name="contract_type">
+                    <option value="0" <?php echo (!$contract_type) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($contract_type == '1') ? 'selected' : '';?>>包销</option>
+                    <option value="3" <?php echo ($contract_type == '3') ? 'selected' : '';?>>代销</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">经办人</th>
+            <th>
+                <input type="text" class="cssInput" name="operator" value="<?php echo $operator;?>">
+            </th>
+            <th width="160">合同状态</th>
+            <th>
+                <select name="check_status">
+                    <option value="4" <?php echo ($check_status == 4) ? 'selected' : '';?>>全部</option>
+                    <option value="0" <?php echo ($check_status == 0) ? 'selected' : '';?>>未审批</option>
+                    <option value="1" <?php echo ($check_status == 1) ? 'selected' : '';?>>提交审批</option>
+                    <option value="2" <?php echo ($check_status == 2) ? 'selected' : '';?>>已审批</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/contract" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/pact/outData" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">合同列表</div>
+    <div class="panel-body">
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">合同编号</th>
+                <th scope="col">创建时间</th>
+                <th scope="col">经办人</th>
+                <th scope="col">商家</th>
+                <th scope="col">合同类型</th>
+                <th scope="col">合同状态</th>
+                <th scope="col">预付金</th>
+                <th scope="col">待审核预付金</th>
+                <th scope="col">商品数</th>
+                <th scope="col">商品订单数</th>
+                <th scope="col">操作</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['contract_no']; ?></td>
+                    <td><?php echo date('Y-m-d H:i:s', $v['create_time']); ?></td>
+                    <td><?php echo $v['business_taker']; ?></td>
+                    <td><?php echo $v['organizer_name'];?></td>
+                    <td>
+                        <?php
+                        if ($v['contracts_type'] == 1) {
+                            echo '包销';
+                        } elseif ($v['contracts_type'] == 3) {
+                            echo '代销';
+                        }
+
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                        if($v['check_status']==0){
+                            echo '未审批';
+                        } elseif ($v['check_status']==1) {
+                            echo '已提交审批';
+                        } elseif ($v['check_status']==2) {
+                            echo '已审批';
+                        }
+                        ?>
+                    </td>
+                    <td><?php echo  floatval($v['pre_money']['total']); ?></td>
+                    <td><?php echo  floatval($v['pre_money']['wait']); ?></td>
+                    <td><?php echo  $v['goods_num']; ?></td>
+                    <td><?php echo  $v['order_num']; ?></td>
+                    <td>
+                       <!-- <?php /*if($v['check_status'] == 1){ */?>
+                            <a class="ui-button" href="/wftadlogin/pact/approve?id=<?php /*echo $v['id']; */?>">
+                                <?php /*echo $v['pre_money']['wait'] > 0 ? '批准预付金' : '审批通过'*/?>
+                            </a>
+                        --><?php /*} ;*/?>
+                        <?php if($v['check_status'] == 2){ ?>
+                            <a class="ui-button" href="/wftadlogin/pact/backapprove?id=<?php echo $v['id']; ?>">反审核</a>
+                        <?php } ;?>
+                        <a class="ui-button" href="/wftadlogin/pact/info?cid=<?php echo $v['id']; ?>">查看详情</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <div>
+            <?php echo $this->pageData; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //导出
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+        });
+    });
+</script>
+
+

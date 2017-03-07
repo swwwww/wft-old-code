@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>我的奖励</title>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="/css/invite.css?t=3883" rel="stylesheet"/>
+    <!--    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>-->
+
+</head>
+<body>
+<div class="clickBtn">
+    <div class="prise-head">
+        您已经赢取
+        <?php if ($sumint): ?>
+            <?php echo $sumint; ?>积分
+        <?php endif; ?>
+        <?php if ($summoney): ?>
+            <?php echo $summoney; ?>元红包
+        <?php endif; ?>
+        <?php if ($sumprice): ?>
+            <?php echo $sumprice; ?>元现金券
+        <?php endif; ?>
+        推荐奖励
+    </div>
+    <div class="prise-arrow"></div>
+</div>
+
+<section id="prise" class="prise inner">
+    <div class="lists">
+        <?php foreach ($list as $l): ?>
+            <div class="prise-list">
+                <div class="prise-list-info">
+                    <img src="<?php echo $l['img'] ?: '/images/invite/child.png'; ?>" class="prise-list-img">
+            <span class="prise-list-num"><mark id="<?php echo $l['id']; ?>"><?php echo substr_replace($l['phone'],
+                        '****', 3, 4); ?></mark><br/>
+                <?php if ($l['status'] == 0):echo '待使用玩翻天';
+                elseif ($l['status'] == 1):echo '已注册，首单未开启';
+                else: echo '推荐成功';endif; ?>
+                <input type="hidden" value="<?php echo $allr[$l['ruleid']]['v'] . $allr[$l['ruleid']]['t']; ?>"/>
+            </span>
+                </div>
+                <a id="<?php echo $l['uid']; ?>"
+                   class="prise-list-a <?php if ($l['status'] == 2): ?> prise-list-suc<?php else: ?> prise-list-tips <?php endif; ?>">
+                    <span><?php if ($l['status'] == 2):echo '';
+                        else:echo '提醒他';endif; ?></span>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+
+<!--    我的奖励提醒TA弹窗-->
+<div class="remind">
+    <div class="remind-popup">
+        <div class="remind-popup-content">
+            <input type="text" id="modify" placeholder="您的昵称：<?php echo $username; ?>(点击修改）"
+                   value="<?php echo $username; ?>"/>
+
+            <p>Hi玩翻天小伙伴，我是<span id="changeText"><?php echo $username; ?></span>别忘了我送你的<span id="piz"></span>哟。下载链接:</p>
+            <a class="remind-link" href="http://t.cn/RqsYpau">http://t.cn/RqsYpau</a>
+
+            <div id="close-btn2">确定</div>
+            <div class="circle-top"></div>
+            <div class="circle-right"></div>
+            <div class="circle-bottom"></div>
+            <div class="circle-left"></div>
+        </div>
+    </div>
+</div>
+<!--    已经提醒TA了弹窗-->
+<div style="display: none" class="hadRemind">
+    <div class="hadRemind-popup">
+        <div class="hadRemind-popup-content">
+            <p id="hrmsg"></p>
+
+            <div id="close-btn3">关闭</div>
+            <div class="circle-top"></div>
+            <div class="circle-right"></div>
+            <div class="circle-bottom"></div>
+            <div class="circle-left"></div>
+        </div>
+    </div>
+</div>
+<div class="matte"></div>
+</body>
+
+<script type="text/javascript" src="/js/drop.min.js"></script>
+<script>
+    (function () {
+        "use strict";
+        var tel_id;
+        var pmsg;
+        var lists = $(".lists");
+
+        lists.on("click", ".prise-list-tips",function () {
+
+            $(".remind").show();
+            $(".matte").show();
+            tel_id = $(this).prev().find('mark').attr("id");
+            pmsg = $(this).prev().find('input').val();
+            $('#piz').text(pmsg);
+        });
+
+        $("#close-btn2").on("click", function (e) {
+            var name = $("#modify").val();
+            $.post("/webinvite/index/send", {name: name, id: tel_id}, function (res) {
+                var data = $.parseJSON(res);
+                $("#hrmsg").html(data.msg);
+                $(".hadRemind").show();
+            });
+            $(".remind").hide();
+            $(".matte").hide();
+        });
+
+        $("#close-btn3").on("click", function (e) {
+            $(".hadRemind").hide();
+        });
+
+        $(".circle-right,.circle-top,.circle-bottom,.circle-left").on("click", function (e) {
+            $(".remind").hide();
+            $(".matte").hide();
+        });
+        $("#modify").on("input", function (e) {
+            var changed = $(this).val();
+            console.log(changed);
+            $("#changeText").text(changed);
+        });
+
+        $('.clickBtn').on("click", function (e) {
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location.href = 'integral$$id=0';
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.integral(0);
+            } else {
+                //alert('不是手机浏览器')
+            }
+        });
+
+
+        var counter = 1,
+            inner = $(".inner");
+        // dropload
+        var dropload = inner.dropload({
+            scrollArea: window,
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh" style="font-size:14px;height:40px;line-height:40px;text-align: center;">上拉加载更多</div>',
+                domLoad: '<div class="dropload-load" style="font-size:14px;height:40px;line-height: 40px;text-align: center;"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData" style="font-size:14px;height:20px;text-align: center;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/webinvite/index/award?p=<?php echo $_GET['p']; ?>",
+                    dataType: 'json',
+                    async: true,
+                    data:{'uid':<?php echo $_COOKIE['uid'] ?  : 0;?>,'page': counter,'wap':1},
+
+                    success: function(data){
+                        var result = '';
+                        var len =data.length;
+                        for(var i = 0; i < len; i++){
+                            result += '<div class="prise-list">'+'<div class="prise-list-info">'
+                                +'<img src=" '+data[i].img+'" class="prise-list-img">'
+                                +'<span class="prise-list-num">'
+                                + '<mark id="'+data[i].id+'" class="tel">'+data[i].phone+'</mark><br/>'
+                                +''+data[i].str+''
+                                +'<input type="hidden" value="'+data[i].desc+'"/>'
+                                +'</span>'
+                                +'</div>'
+                                +'<a id="'+data[i].id+'" class="prise-list-a '+data[i].clss+' ">'
+                                +'<span>'+data[i].tips+'</span>'
+                                +'</a>'
+                                +'</div>';
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            lists.append(result);
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1000);
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        me.resetload();
+                    }
+                });
+            }
+
+        });
+    })();
+</script>
+</html>

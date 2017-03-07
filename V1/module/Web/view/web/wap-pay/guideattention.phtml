@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>玩翻天-查看订单</title>
+    <link rel="stylesheet" href="/css/wap/check_order.css?ver=<?php echo time();?>" />
+    <!--750等比缩放-->
+    <script>
+        (function(){
+            var w=window.screen.width,
+                s=w/640,
+                u=navigator.userAgent,
+                m='<meta name="viewport" content="width=640,';
+            if(/android (\d+\.\d+)/i.test(u)){
+                if(parseFloat(RegExp.$1>2.3)){
+                    m+="minimum-scale = "+s+", maximum-scale = "+s+","
+                }
+            }else{
+                m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';
+            document.write(m)}());
+    </script>
+</head>
+<body>
+<section class="code">
+    <div class="code-matte"></div>
+    <div class="code-info">
+        <div class="code-info-msg">
+            <span class="code-info-up" style="color: #F95F50">购买成功！</span>
+            <a href="/web/wappay/allorder"><span class="code-info-down">长按二维码，立即查看订单</span></a>
+<!--            <img src="/images/wap/hand.png" class="code-info-img" style="right:85px;">-->
+        </div>
+        <img src="/images/wap/Qcode.png" class="code-Qcode">
+    </div>
+</section>
+</body>
+</html>

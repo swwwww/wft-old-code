@@ -1,0 +1,28 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li class="active"><a href="/wftadlogin/word">评论管理</a></li>
+        <li><a href="/wftadlogin/word/new?pid=<?php echo $data['pid'];?>"><?php echo $data['subject'];?></a></li>
+        <li>回复</li>
+    </ul>
+</div>
+
+<form class="box box-form" action="/wftadlogin/word/saveReply" method="post">
+    <table class="table">
+
+        <tr>
+            <th width="160">内容</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="info"></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="pid"  value="<?php echo $data['pid'];?>">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>

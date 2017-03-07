@@ -1,0 +1,103 @@
+<div id="all" class="exchange">
+    <header><a class="h-btn icon back" href="#"></a>
+
+        <h3>兑换订单</h3></header>
+    <div class="container">
+        <div class="title bg2">
+            <a href="/shop/index/order" class="ce-btn c-btn">查看</a>
+            <a href="/shop" class="ce-btn e-btn s-btn">兑换</a>
+        </div>
+        <div id="order-form">
+            <form class="order-form" id="form1" method="post">
+                <input type="number" name="name" id="fv" placeholder="请输入订单确认码">
+            </form>
+        </div>
+        <a id="popup-btn" class="dl-btn icon d-btn" href="#">确定</a>
+
+        <div id="fade" class="black"></div>
+        <div id="popup">
+            <div id="tip" class="white-content">
+            </div>
+        </div>
+        <a style="color: green; position: absolute; top:14px; right:20px;font-size:15px"
+           href="/shop/index/logout">退出</a>
+    </div>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script>
+    //阻止回车
+    document.onkeydown = function (event) {
+        e = event ? event : (window.event ? window.event : null);
+        if (e.keyCode == 13) {
+            return false;
+        }
+    }
+    //阻止回车 end
+
+    var lock = false;
+    $(function () {
+        $("#popup-btn").click(function () {
+            $(this).css('background', 'gray');
+            if (lock) {
+                return;
+            }
+            lock = true;
+
+            //todo 请求订单信息
+            $.post('/shop/index/getorderinfo', $('#form1').serialize(), function (data) {
+                if (data.status == 1) {
+                    if (confirm(data.message)) {
+                        $.post('/shop/index/usecode', $('#form1').serialize(), function (data) {
+                            if (data.status == 1) {
+                                $("#tip").html('<div class="popup-title pb">订单已确认</div><div class="popup-main pb">' + data.message + '</div><a href="#" class="popup-btn popup-btn2 line">取消</a><a href="#" class="popup-btn popup-btn2">确定</a>');
+                                $('.popup-btn2').bind('click', function () {
+                                        $("#fade").hide();
+                                        $("#popup").hide();
+                                        $("#fv").attr("value", "");
+                                    }
+                                );
+                                $("#fade").show();
+                                $("#popup").show();
+                            } else {
+                                $("#tip").html('<div class="popup-main pb">' + data.message + '</div><a href="#" class="popup-btn popup-btn1">确定</a>');
+                                $('.popup-btn1').bind('click', function () {
+                                        $("#fade").hide();
+                                        $("#popup").hide();
+                                        $("#fv").attr("value", "");
+                                    }
+                                );
+                                $("#fade").show();
+                                $("#popup").show();
+                            }
+                            lock = false;
+                            $('#popup-btn').css({
+                                'background': ' url(/images/iconr.png) 0 0 no-repeat',
+                                'background-size': '200px 200px'
+                            });
+                        }, 'json')
+                    } else {
+                        lock = false;
+                        $('#popup-btn').css({
+                            'background': ' url(/images/iconr.png) 0 0 no-repeat',
+                            'background-size': '200px 200px'
+                        });
+                    }
+                } else {
+                    alert(data.message);
+                    lock = false;
+                    $('#popup-btn').css({
+                        'background': ' url(/images/iconr.png) 0 0 no-repeat',
+                        'background-size': '200px 200px'
+                    });
+                }
+            }, 'json');
+
+
+
+
+
+            return false;
+        })
+
+    });
+</script>

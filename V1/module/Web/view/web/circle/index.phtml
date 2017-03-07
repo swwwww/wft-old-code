@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title><?php echo $data['title'];?>-玩翻天</title>
+    <link type="text/css" rel="stylesheet" href="/css/share/circle-style.css" />
+</head>
+<body>
+<div class="container">
+    <section>
+        <div class="info">
+            <img src="<?php echo $data['img']?>" />
+            <div class="info-text">
+                <p class="text1"><?php echo $data['username'];?><span><?php echo $data['user_detail'];?></span><span class="date"><?php echo date('Y-m-d', $data['time']);?></span></p>
+                <p class="text2"><span>来自<?php echo ($data['type'] == 1) ? '圈子' : '';?></span><span class="red"><?php echo $data['c_name'];?></span></p>
+            </div>
+        </div>
+        <div class="article">
+           <h3><?php echo $data['title'];?></h3>
+            <?php
+            foreach($data['msg'] as $msg) {
+                if ($msg['t'] == 1) {
+                    echo '<p>'.str_replace($emo, $ji, $msg['val']).'</p>';
+                }
+
+                if ($msg['t'] == 2) {
+                    echo '<img src="'.$msg['val'] .'" />';
+                }
+            }
+            ?>
+        </div>
+        <div id="bottom">
+            <a class="comments">
+                <i></i>
+                <span>评论</span>
+            </a>
+            <a class="likes liked">
+                <i></i>
+                <span><?php echo $data['like_num'];?></span>
+            </a>
+        </div>
+    </section>
+    <?php if($data['msg_type'] != 1):?>
+        <a href="<?php echo $data['url'];?>">
+            <section class="ads">
+                <img src="<?php echo $data['object_data']['object_img'];?>" />
+                <p><?php echo $data['object_data']['object_title'];?></p>
+            </section>
+        </a>
+    <?php endif;?>
+</div>
+<footer>
+    <i></i>
+    <div><h4>玩翻天</h4><p>玩翻天，孩子们的游玩管家。</p></div>
+    <a href="/app/index.php">免费下载</a>
+</footer>
+<div id="pop">
+    <a href="/app/index.php">
+        <div class="pop-main">
+            <a id="close"></a>
+            <p>更多内容，请到玩翻天app查看</p>
+            <a class="download">立即下载</a>
+        </div>
+    </a>
+</div>
+<script>
+    (function(){
+        var oPop = document.getElementById('pop');
+        document.getElementById('bottom').addEventListener('touchstart', function () {
+            oPop.style.display='block';
+        }, false);
+        document.getElementById('close').addEventListener('touchstart', function () {
+            oPop.style.display='none';
+        }, false);
+    })();
+</script>
+</body>
+</html>

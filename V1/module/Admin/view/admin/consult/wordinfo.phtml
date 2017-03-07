@@ -1,0 +1,30 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/consult">咨询管理</a></li>
+        <li>咨询内容：<?php echo $msg['msg']; ?></li>
+    </ul>
+</div>
+
+
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb">
+        <li><?php echo date('Y-m-d', $msg['dateline']) . '　　';
+            echo $msg['username'] . '　咨询:' . $msg['msg']; ?></li>
+        <a href="/wftadlogin/consult/update?id=<?php echo $msg['_id']; ?>&type=<?php echo ($msg['status'] == 2) ? 'same' : 'up'; ?>"
+           class="ui-button"><?php echo ($msg['status'] == 2) ? '取消置顶' : '置顶'; ?></a>
+        <a href="/wftadlogin/consult/update?id=<?php echo $msg['_id']; ?>&type=<?php echo ($msg['status'] == 0) ? 'same' : 'hidden'; ?>"
+           class="ui-button"><?php echo ($msg['status'] == 0) ? '取消隐藏' : '隐藏'; ?></a>
+    </ul>
+
+    <?php if($msg['reply']): ?>
+    <div>
+        <?php echo date('Y-m-d', $post['dateline']) . '　　';
+        echo $post['username'] . '　回复:' . $post['msg']; ?>
+
+        <a href="/wftadlogin/consult/del?id=<?php echo $msg['_id']; ?>"
+           class="ui-button">删除</a>
+        <a href="/wftadlogin/consult/newreply?id=<?php echo $msg['_id']; ?>"
+           class="ui-button">编辑</a>
+    </div>
+    <?php endif; ?>
+</div>

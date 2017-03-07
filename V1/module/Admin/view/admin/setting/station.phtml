@@ -1,0 +1,62 @@
+<hgroup class="box">
+    <header>
+        <h3>城市管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/circle">返回商圈管理</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <form action="/wftadlogin/setting/stationsave" method="post" id="menu-save">
+                <?php foreach ($data as $n): ?>
+
+                    <?php if (array_key_exists('child', $n) || (array_key_exists('pid', $n) && (int)$n['pid'] === 0)
+                    ):
+                        if ($end == 'a') {
+                            echo '</div>';
+                        }
+                        ?>
+                        <div title="moudle" <?php if ($end): ?> style="margin-top: 30px;" <?php endif; ?>
+                             class="box-title"><input disabled
+                                                      id="<?php echo $n['pid'] . '_' . $n['id']; ?>"
+                                                      <?php if ($n['have']): ?>checked<?php endif; ?> name="province[]"
+                                                      value="<?php echo $n['id']; ?>"
+                                                      type="radio"><?php echo $n['title'] . '&nbsp;&nbsp;&nbsp;'; ?></div>
+                        <?php $end = 'm'; endif; ?>
+
+                <?php foreach ($n['child'] as $c): ?>
+                        <?php
+                        if ($end !== 'a') {
+                            echo '<div style="margin-left: 40px;">';
+                        }
+                        ?>
+                        <span title="action" class="tips"><input
+                                                                 id="<?php echo $c['pid'] . '_' . $c['id']; ?>"
+                                                                 <?php if ($c['is_close']==0): ?>checked<?php endif; ?>
+                                                                 name="city[]" value="<?php echo $c['id']; ?>"
+                                                                 type="checkbox"><?php echo $c['title'] . '&nbsp;&nbsp;&nbsp;'; ?></span>
+                        <?php $end = 'a';
+
+                    endforeach; ?>
+
+                <?php endforeach; ?>
+                <br/>
+
+                <input type="submit" class="btn btn-primary" id="ti-new"></input>
+            </form>
+
+        </ul>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $data['title'];?></title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/travel.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style type="text/css">
+        #map{
+            margin:0;
+            height:100%;
+            width:100%;
+            position:absolute;
+        }
+        #mapContainer{
+            position: absolute;
+            top:0;
+            left: 0;
+            right:0;
+            bottom:0;
+        }
+
+        #tip{
+            background-color:#fff;
+            border:1px solid #ccc;
+            padding-left:10px;
+            padding-right:2px;
+            position:absolute;
+            min-height:65px;
+            top:10px;
+            font-size:12px;
+            right:10px;
+            border-radius:3px;
+            overflow:hidden;
+            line-height:20px;
+            min-width:200px;
+        }
+        #tip input[type="button"]{
+            background-color: #0D9BF2;
+            height:25px;
+            text-align:center;
+            line-height:25px;
+            color:#fff;
+            font-size:12px;
+            border-radius:3px;
+            outline: none;
+            border:0;
+            cursor:pointer;
+        }
+
+        #tip input[type="text"]{
+            height:25px;
+            border:1px solid #ccc;
+            padding-left:5px;
+            border-radius:3px;
+            outline:none;
+        }
+        #pos{
+            height: 70px;
+            background-color: #fff;
+            padding-left: 10px;
+            padding-right: 10px;
+            position:absolute;
+            font-size: 12px;
+            right: 10px;
+            bottom: 30px;
+            border-radius: 3px;
+            line-height: 30px;
+            border:1px solid #ccc;
+        }
+        #pos input{
+            border:1px solid #ddd;
+            height:23px;
+            border-radius:3px;
+            outline:none;
+        }
+
+        #result1{
+            max-height:200px;
+        }
+    </style>
+</head>
+<body>
+<a id="download" href="http://play.wanfantian.com/location/redirectHome" title="">
+    <img src="/images/wap/newbanner.png" alt=""/>
+</a>
+<main class="align fixed-top fixed-bottom" id="content">
+<!--    <header class="header">-->
+<!--        <a class="header-back" href="javascript:history.go(-1);"></a>-->
+<!--        <a class="header-title">--><?php //echo $data['title'];?><!--</a>-->
+<!--        <a class="header-user" href="/web/wappay/newallorders" title=""></a>-->
+<!--    </header>-->
+    <section class="wrapper">
+        <div class="pk-head">
+            <div class="cover">
+                <img src="<?php echo $data['cover'];?>"/>
+                <em></em>
+            </div>
+            <div class="pk-addr"><?php echo $data['circle'];?></div>
+            <h2 class="pk-title"><?php echo $data['title'];?></h2>
+        </div>
+    </section>
+    <a id="sign" title=""></a>
+    <section class="wrapper">
+        <div class="sub-nav">
+            <ul class="category">
+                <li><a class="item active" href="javascript:;" title="" onclick="view(this)" data="info">看攻略</a></li>
+                <?php if(!count($data['good_list'])):?>
+                    <li><a class="item" href="javascript:;" title="" onclick="view(this)" data="like">猜你喜欢</a></li>
+                <?php else:?>
+                    <li><a class="item" href="javascript:;" title="" onclick="view(this)" data="like">去买票</a></li>
+                <?php endif;?>
+                <li><a class="item" href="javascript:;" title="" onclick="view(this)" data="nearby">查周边</a></li>
+            </ul>
+        </div>
+        <div id="con-container">
+            <div class="con" id="info" style="display: block">
+                <div class="pk-main com-main">
+                    <?php echo $data['information'];?>
+                </div>
+                <a class="com-more btn" href="javascript:;" data-more="more"  id="getmore"><i></i>点击加载更多</a>
+                <?php if(count($data['strategy_list'])>0):?>
+                <section class="wrapper">
+                    <ul class="pk-strategy com-main">
+                            <?php foreach($data['strategy_list'] as $v):?>
+                                <li>
+                                    <a class="tit" href="/web/place/strategy?id=<?php echo $v['strategy_id'];?>">
+                                        <img src="<?php echo $v['strategy_image'];?>"/>
+                                        <span class="title"><?php echo $v['strategy_title'];?></span>
+                                        <i class="range">适合<?php echo $v['suit_month'];?>月</i>
+                                        <i class="arrowent"></i>
+                                    </a>
+                                </li>
+                            <?php endforeach;?>
+                    </ul>
+                    <?php if(count($data['strategy_list'])>1):?>
+                    <a class="com-more btn" href="javascript:;"><i></i>更多攻略请至客户端查看</a>
+                    <?php endif;?>
+                </section>
+                <?php endif;?>
+                <section class="wrapper">
+                    <div class="pk-remark">
+                        <div class="stars">
+                            <span>整体评分</span>
+                            <div class="product-bar">
+                                <div class="product-bar-cur" style="width: <?php echo $data['whole_score']/5*100;?>%"></div>
+                            </div>
+                            <em><?php echo $data['whole_score'];?></em>
+                        </div>
+<!--                        <a href="" class="remark">-->
+<!--                            <span>更多点评</span>-->
+<!--                            <i class="arrowent"></i>-->
+<!--                        </a>-->
+                    </div>
+                    <ul class="pk-user">
+                        <?php if($data['post_number']>0):?>
+                            <?php foreach($data['post_list'] as $post):?>
+                                <li>
+                                    <img class="photo" src="<?php echo $post['author_img']?>"/>
+                                    <div class="info">
+                                        <div class="stars">
+                                            <span><?php echo $post['author'];?></span>
+                                            <div class="product-bar">
+                                                <div class="product-bar-cur" style="width: <?php echo $post['score']/5*100;?>%"></div>
+                                            </div>
+                                            <!--小编采纳可选-->
+                                            <?php if($post['accept']==1):?>
+                                                <em>小编采纳</em>
+                                            <?php endif;?>
+                                        </div>
+                                        <time><?php echo date("Y-m-d",$post['dateline']);?></time>
+                                        <div class="con">
+                                            <p>
+                                                <?php foreach($post['message'] as $val):?>
+                                                    <?php if($val['t']==1):?>
+                                                        <?php echo $val['val'];?>
+                                                    <?php endif;?>
+                                                <?php endforeach;?>
+                                            </p>
+                                            <div class="con-pic">
+                                                <?php foreach($post['message'] as $pic):?>
+                                                    <?php if($pic['t']==2):?>
+                                                        <img src="<?php echo $pic['val']; ?>" alt="">
+                                                    <?php endif;?>
+                                                <?php endforeach;?>
+                                            </div>
+                                            <div class="handle">
+                                                <span><?php echo $post['title'];?></span>
+                                                <div class="ctr">
+                                                    <!--有点赞和点评时添加active-->
+                                                    <div class="like active">
+                                                        <a class="" href=""><?php echo $post['like_number'];?></a>
+                                                    </div>
+                                                    <div class="collect active">
+                                                        <a class="" href=""><?php echo $post['reply_number'];?></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                    </ul>
+                </section>
+                <section class="wrapper">
+                    <ul class="pk-intro">
+                        <li>
+                            <a href="#" title="" id="go_baidu">
+                                <i class="icon place"></i>
+                                <span class="address"><?php echo $data['address'];?></span>
+                                <i class="arrowent"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:<?php if($data['phone']>0){echo $data['phone'];}else{echo '4008007221'; } ;?>">
+                                <i class="icon tele"></i>
+                                <span><?php if($data['phone']>0){echo $data['phone'];}else{echo '4008007221'; } ;?></span>
+                                <i class="arrowent"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <i class="icon timer"></i>
+                            <span><?php echo $data['open_time'];?></span>
+                        </li>
+                        <li class="i-bnr">
+                            <i class="icon age"></i>
+                            <span>适合<?php echo $data['age_for'];?></span>
+                        </li>
+                        <li>
+                            <i class="icon price"></i>
+                            <span>人均<?php echo $data['reference_price'];?>元</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+            <div class="con" id="like" style="display: none">
+                <ul class="by-list">
+                    <?php if(!count($data['place_list'])):?>
+                        <?php foreach($data['good_list'] as $v):?>
+                            <li>
+                                <a class="by-img" href="/web/organizer/shops?id=<?php echo $v['id'];?>" title="">
+                                    <i class="status">
+                                        <?php
+//                                        if($v['g_have']==1)
+//                                            echo '非合作';
+                                        if($v['g_have']==2){
+                                            echo '售罄';
+                                        }else{
+                                            echo '有票';
+                                        }
+                                        ?>
+                                    </i>
+                                    <img src="<?php echo $v['cover'];?>"/></a>
+                                <div class="by-info">
+                                    <a class="shopname" href="/web/organizer/shops?id=<?php echo $v['id'];?>" title=""><?php echo $v['name'];?></a>
+                                    <div class="title"><?php echo $v['editor_talk'];?></div>
+                                    <aside class="Fix">
+                                        <span class="symbol">¥</span>
+                                        <span class="price"><?php echo $v['price'];?></span>
+                            <?php foreach($v['prise'] as $val):?>
+                                <span class="sale">
+                                    <?php echo $val;?>
+                                </span>
+                            <?php endforeach;?>
+                                        <span class="address"><?php echo $v['shop_addr'];?></span>
+                                    </aside>
+                                </div>
+                            </li>
+                        <?php endforeach;?>
+                    <?php else:?>
+                        <?php foreach($data['place_list'] as $v):?>
+                            <li>
+                                <a class="by-img" href="/web/place/index?id=<?php echo $v['id'];?>" title="">
+                                    <img src="<?php echo $v['cover'];?>"/></a>
+                                <div class="by-info">
+                                    <a class="shopname" href="/web/place/index?id=<?php echo $v['id'];?>" title=""><?php echo $v['title'];?></a>
+                                    <div class="title"><?php echo $v['editor_word'];?></div>
+                                    <aside class="Fix">
+                                        <span class="sale"><?php echo $v['prise'][0];?></span>
+                                        <span class="address"><?php echo $v['circle'];?></span>
+                                    </aside>
+                                </div>
+                            </li>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </ul>
+            </div>
+            <div class="con" id="nearby" style="display: none" >
+                <section class="wrapper nb-around">
+                    <?php if(!$data['near_park_list'] && !$data['near_restaurant_list'] && !$data['near_place_list']):?>
+                        <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+                    <?php elseif(count($data['near_park_list'])):?>
+                        <article class="nb-title stops">
+                            <h3 class="title W-title">停车场<span class="num">(<?php echo count($data['near_park_list'])?>)</span><i class="drop" data-id="stop-list"></i></h3>
+                            <div class="search-list T_list" id="stop-list">
+                                <?php foreach($data['near_park_list'] as $v):?>
+                                    <a class="item Fix">
+
+                                        <div class="intro">
+                                            <h4 class="name" data-x="<?php echo $v['addr_x'];?>" data-y="<?php echo $v['addr_y'];?>"><?php echo $v['shop_name'];?></h4>
+                                            <div class="address"><?php echo $v['shop_address'];?></div>
+                                        </div>
+                                        <div class="distance"><?php echo $v['dis'];?>m</div>
+
+                                    </a>
+                                <?php endforeach;?>
+
+                            </div>
+                            <?php if(count($data['near_park_list'])):?>
+                                <a class="com-more more-btn" href="javascript:;" data-key="stop" data-id="2"><i></i>点击加载更多</a>
+                            <?php endif;?>
+                            <input type="hidden" name="sid" id="sid" value="<?php echo $data['sid'];?>">
+                        </article>
+                    <?php elseif(count($data['near_restaurant_list'])):?>
+                        <article class="nb-title babies">
+                            <h3 class="title W-title">适合宝宝的餐厅<span class="num">(<?php echo count($data['near_restaurant_list']);?>)</span></h3>
+                            <div class="search-list T_list" id="baby-list">
+                                <?php foreach($data['near_restaurant_list'] as $v):?>
+                                    <a class="item Fix">
+
+                                        <div class="intro">
+                                            <h4 class="name" data-x="<?php echo $v['addr_x'];?>" data-y="<?php echo $v['addr_y'];?>"><?php echo $v['shop_name'];?></h4>
+                                            <div class="address"><?php echo $v['shop_address'];?></div>
+                                        </div>
+                                        <div class="distance"><?php echo $v['dis'];?>m</div>
+
+                                    </a>
+                                <?php endforeach;?>
+
+                            </div>
+                            <?php if(count($data['near_restaurant_list'])):?>
+                                <a class="com-more more-btn" href="javascript:;" data-key="baby" data-id="1"><i></i>点击加载更多</a>
+                            <?php endif;?>
+                        </article>
+                    <?php elseif(count($data['near_place_list'])):?>
+                        <article class="nb-title games">
+                            <h3 class="title">周边游玩地<span class="num">(<?php echo count($data['near_place_list']);?>)</span></h3>
+                            <div class="search-list T_list" id="near-list">
+                                <?php foreach($data['near_place_list'] as $v):?>
+                                    <a class="item Fix go_baidu" href="/web/h5/map?title=<?php echo $v['shop_name'];?>&addr_x=<?php echo $v['addr_x'];?>&addr_y=<?php echo $v['addr_y'];?>&city=<?php echo $city;?>&address=<?php echo $v['shop_address'];?>">
+
+                                        <div class="intro">
+                                            <h4 class="name" data-x="<?php echo $v['addr_x'];?>" data-y="<?php echo $v['addr_y'];?>"><?php echo $v['shop_name'];?></h4>
+                                            <div class="address"><?php echo $v['shop_address'];?></div>
+                                        </div>
+                                        <div class="distance"><?php echo $v['dis'];?>m</div>
+
+                                    </a>
+                                <?php endforeach;?>
+                            </div>
+                            <?php if(count($data['near_place_list'])):?>
+                                <a class="com-more more-btn" href="javascript:;" data-key="near" data-id="0"><i></i>点击加载更多</a>
+                            <?php endif;?>
+                        </article>
+                    <?php endif;?>
+                </section>
+
+            </div>
+        </div>
+    </section>
+</main>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<div id="footer">
+    <?php if($data['double']>1):?>
+    <a class="download-app">
+        app中评论该商品，可获得<mark><?php echo $data['double'];?></mark>倍积分
+        <i class="arrowent"></i>
+    </a>
+    <?php endif;?>
+    <input type="hidden" name="uid" value="<?php echo $data['uid'];?>" id="uid">
+    <div class="touch">
+        <?php if($data['is_collect']==1):?>
+        <a class="shouc on" href="javascript:;" title="" id="collect" data="<?php echo $data['sid'];?>" >已收藏</a>
+        <?php else:?>
+        <a class="shouc" href="javascript:;" title="" id="collect" data="<?php echo $data['sid'];?>" >收藏</a>
+        <?php endif;?>
+        <?php if($data['post_number']>0):?>
+        <a class="dianp" href="/web/comment/index?type=3&id=<?php echo $data['sid'];?>" title="">点评<em><?php echo $data['post_number'];?></em></a>
+        <?php else:?>
+        <a class="dianp" href="/web/organizer/review?type=3&id=<?php echo $data['sid'];?>" title="">点评<em></em></a>
+        <?php endif;?>
+<!--        <a class="dianp" href="javascript:;" title="" id="dianp">点评<em>--><?php //echo $data['post_number'];?><!--</em></a>-->
+    </div>
+</div>
+<!--<div class="check-win" id="check-win">-->
+<!--    <div class="check-win-box" id="check-win-box" data="place" data-id="--><?php //echo $data['sid'];?><!--">-->
+<!--        <div class="check-win-tips" id="check-win-tips">-->
+<!--            <h4>在APP中查看更多</h4>-->
+<!--            <div class="check-btn">-->
+<!--                <a class="check-win-close send-close">取消</a>-->
+<!--                <a class="check-win-btn send-ok" id="send-ok">确定</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>
+<script>
+(function(){
+    'use strict';
+    $("#dianp").click(function(){
+        alert("该功能未开放，敬请期待");
+        return false;
+    });
+
+    $("#getmore").click(function(){
+        var obj = $(this).prev();
+        obj.css("height","auto");
+        $(this).hide();
+    });
+
+}());
+
+function view(obj){
+    var data = $(obj).attr("data");
+    $(obj).addClass('active');
+    $(obj).parent().siblings().children().removeClass('active');
+    $("#"+data).show();
+    $("#"+data).siblings().hide();
+}
+//
+//    function getLocation(){
+//        if (navigator.geolocation){
+//            navigator.geolocation.getCurrentPosition(showPosition);
+//        }else{
+//            alert("浏览器不支持地理定位。");
+//        }
+//    }
+//    function showPosition(position){
+//        var city;
+//        var lat = position.coords.latitude;
+//        var lon = position.coords.longitude;
+//        var point = new BMap.Point(lon, lat);  // 创建坐标点
+//        // 根据坐标得到地址描述
+//        var myGeo = new BMap.Geocoder();
+//        myGeo.getLocation(point, function (result) {
+////                    alert(JSON.stringify(result.addressComponents));
+//            city = result.addressComponents.province+result.addressComponents.city+result.addressComponents.district+result.addressComponents.street+result.addressComponents.streetNumber;//定位城市
+//            $("#go_baidu").attr("href","/web/h5/map?title=<?php //echo $data['title'];?>//&addr_x=<?php //echo $data['addr_x'];?>//&addr_y=<?php //echo $data['addr_y'];?>//&city=<?php //echo $city;?>//&address=<?php //echo $data['address'];?>//&naddr="+city)
+//        });
+//    }
+//    getLocation();
+
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = '//hm.baidu.com/hm.js?a1b66f5bbc7b8808ef15aef7c152d9eb';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

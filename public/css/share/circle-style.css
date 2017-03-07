@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    padding: 10px 10px 0;
+    background: #f0f0f0;
+    color: #666;
+    font: 13px "microsoft yahei";
+}
+a {
+    text-decoration: none;
+}
+section {
+    margin-bottom: 10px;
+    background: #fff;
+    border-top: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: rgba(0,0,0,0.7);
+    overflow: hidden;
+}
+footer i {
+    float: left;
+    width: 40px;
+    height: 40px;
+    margin: 5px 10px;
+    background: url("../../images/share_circle/applogo.png");
+    background-size: 40px 40px;
+}
+footer div {
+    float: left;
+    width: 160px;
+    color: #fff;
+}
+footer h4 {
+    margin: 3px 0 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+footer p {
+    font-size: 12px;
+}
+footer a {
+    float: right;
+    width: 75px;
+    height: 30px;
+    margin: 10px;
+    background: #ffbf00;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: padding-box;
+    color: #520;
+    line-height: 30px;
+    text-align: center;
+}
+.qrcode {
+    padding: 50px 0 80px;
+    text-align: center;
+}
+.qrcode img {
+    width: 42%;
+    margin: 0 auto 15px;
+}
+.qrcode h3 {
+    color: #444;
+    font-size: 18px;
+}
+.qrcode p {
+    margin-top: 10px;
+    font-size: 12px;
+}
+.container {
+    padding-bottom: 50px;
+}
+.info {
+    height: 34px;
+    padding: 5px;
+    border-bottom: 1px solid #e7e7e7;
+    overflow: hidden;
+}
+.info img {
+    float: left;
+    width: 34px;
+    border-radius: 17px 17px 17px 17px;
+    background-clip: padding-box;
+}
+.info-text p {
+    margin-left: 45px;
+    overflow: hidden;
+}
+.info-text .text1 span {
+    font-size: 12px;
+    padding-left: 10px;
+}
+.info-text .text1 .date {
+    float: right;
+    font-size: 10px;
+}
+.info-text .text2 {
+    position: relative;
+    padding-left: 15px;
+    font-size: 12px;
+    line-height: 18px;
+}
+.info-text .text2:before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 11px;
+    height: 11px;
+    background: url("../../images/share_circle/icon.gif") no-repeat;
+    background-size: 15px 100px;
+}
+.info-text .text2 span {
+    padding-right: 10px;
+}
+.info-text .text2 .red {
+    color: #f95f50;
+}
+.article {
+    padding: 10px;
+}
+.article p {
+    line-height: 20px;
+}
+.article img {
+    max-width: 100%;
+    margin: 5px 0;
+}
+#bottom {
+    height: 16px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+#bottom .comments, #bottom .likes {
+    float: right;
+    width: 70px;
+    overflow: hidden;
+}
+#bottom i {
+    float: left;
+    width: 20px;
+    height: 16px;
+    background: url("../../images/share_circle/icon.gif") no-repeat;
+    background-size: 15px 100px;
+}
+#bottom .comments i {
+    background-position: 0 -75px;
+}
+#bottom .likes i {
+    background-position: 0 -24px;
+}
+#bottom .liked i {
+    background-position: 0 -50px;
+}
+.ads {
+    padding: 10px;
+    overflow: hidden;
+}
+.ads img {
+    float: left;
+    width: 40px;
+    height: 40px;
+}
+.ads p {
+    margin-left: 50px;
+    line-height: 20px;
+}
+#pop {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1;
+}
+.pop-main {
+    width: 250px;
+    margin: 100px auto;
+    padding: 20px 0;
+    background: #fff;
+    position: relative;
+}
+.pop-main p {
+    margin-bottom: 10px;
+    color: #f95f50;
+    font-size: 14px;
+    text-align: center;
+}
+.pop-main .download {
+    display: block;
+    width: 75px;
+    height: 30px;
+    margin: 0 auto;
+    background: #ffbf00;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: padding-box;
+    color: #520;
+    line-height: 30px;
+    text-align: center;
+}
+#close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 26px;
+    height: 29px;
+    background: url("../../images/share_circle/close.png") no-repeat;
+    background-size: 26px 29px;
+}

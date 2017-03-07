@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <title>现场扫码送礼券</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,user-scalable=no,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m);}());</script>
+    <link href="/css/h5/ground.css" rel="stylesheet"/>
+</head>
+<body class="gift-body">
+<header class="gi-title">
+    <h2>Dear <?php echo $username; ?></h2>
+    <h3>现场扫码赠送现金券一张，到app里面使用吧~</h3>
+    <div class="coupon-list">
+        <div class="item">
+            <div class="left price">¥<?php echo (int)$coupon->price; ?><span class="point">.00</span></div>
+            <div class="right info">
+                <h2 class="title"><?php echo $coupon->title; ?></h2>
+                <div class="tips"><?php echo $n; ?>个接券商品</div>
+                <i class="checked"></i>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="wrapper inner"  id="search-main">
+    <h2 class="coupon-shop"><span><b>接券商品</b></span></h2>
+    <div class="lists">
+        <?php foreach($data as $good): ?>
+            <div class="search-main">
+                <div class="search-head select-place" data-info='{"url": "<?php echo $good['gurl']; ?>"}'>
+                    <a class="img">
+                        <?php if($good['has']): ?>
+                            <i class="tips">有票</i>
+                        <?php endif; ?>
+                        <img src="<?php echo $good['cover']; ?>"/>
+                    </a>
+                    <div class="info">
+                        <a class="shopname" href="javascript:;" title=""><?php echo $good['title']; ?></a>
+                        <aside class="aside">
+                            <span class="sale"><?php echo $good['refund']; ?></span>
+                            <!--                    <div class="distance"><i class="icon"></i>汉阳 钟家村</div>-->
+                        </aside>
+                    </div>
+                </div>
+                <div class="search-list">
+                    <div class="arrow-ent"></div>
+                    <?php if($good['info']): ?>
+                        <?php foreach($good['info'] as $info): ?>
+                            <a href="javascript:" class="item item-info" data-item='{"url":"<?php echo $info['infourl']; ?>"}'>
+                                <div class="info">
+                                    <i class="icon"></i>
+                                    <p class="title"><?php echo $info['price_name']; ?></p>
+                                    <?php if($welfare[$info['id']] && $welfare[$info['id']]['welfare_value']<$info['price_name']): ?>
+                                        <p class="tips">购买后赠送<mark><?php echo $welfare[$info['id']]['welfare_value'] ; ?>元</mark>现金券</p>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="price">
+                                    <span class="symbol">&yen;</span>
+                                    <span class="num"><mark><?php echo $info['price']; ?></mark></span>
+                                </div>
+                                <i class="arrow-up"></i>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<script id="more" type="text/html">
+    {{each data}}
+        <div class="search-main">
+            <div class="search-head select-place" data-info='{"url": "{{$value.gurl}}" }'>
+                <a class="img">
+                    {{if $value.has}}
+                        <i class="tips">有票</i>
+                    {{/if}}
+                    <img src="{{$value.cover}}"/>
+                </a>
+                <div class="info">
+                    <a class="shopname" href="javascript:;" title="">{{$value.title}}</a>
+                    <aside class="aside">
+                        <span class="sale">{{$value.refund}}</span>
+                        <!--                    <div class="distance"><i class="icon"></i>汉阳 钟家村</div>-->
+                    </aside>
+                </div>
+            </div>
+            <div class="search-list">
+                <div class="arrow-ent"></div>
+                {{if $value.info}}
+                    {{each $value.info}}
+                        <a class="item item-info"  data-item='{"url": "{{$value.infourl}}" }'>
+                            <div class="info">
+                                <i class="icon"></i>
+                                <p class="title">{{$value.price_name}}</p>
+                                {{if $value.wv}}
+                                    <p class="tips">购买后赠送<mark>{{$value.wv}}元</mark>现金券</p>
+                                {{/if}}
+                            </div>
+                            <div class="price">
+                                <span class="symbol">&yen;</span>
+                                <span class="num"><mark>{{$value.price}}</mark></span>
+                            </div>
+                            <i class="arrow-up"></i>
+                        </a>
+                    {{/each}}
+                {{/if}}
+            </div>
+        </div>
+    {{/each}}
+</script>
+<div class="popup" id="fade"></div>
+<div class="tipsWrapper">
+    <div class="tipsDia" id="tip">
+        <h2>优惠券仅在APP中使用</h2>
+        <a class="isApp btn" href="http://wan.wanfantian.com/app/index.php">打开APP购买</a>
+        <a class="isChat btn" href="" id="weixin-buy">使用微信购买</a>
+        <div class="close" id="close-btn">×</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/js/drop.min.js"></script>
+<script type="text/javascript">
+(function () {
+    "use strict";
+    var fade = $("#fade"),
+        tip = $("#tip"),
+        weixin = $('#weixin-buy'),
+        lists = $(".lists");
+
+//    $('#search-main').on("click", function (e) {
+//        fade.show();
+//        tip.show();
+//        e.preventDefault();
+//    });
+
+    lists.on("click", '.item-info',function (e) {
+        var data = $(e.target).closest('.item').data('item');
+        fade.show();
+        tip.show();
+        e.preventDefault();
+        weixin.prop({
+            href: data.url
+        });
+    });
+
+    lists.on('click','.select-place', function (e) {
+        var data = $(e.target).closest('.select-place').data('info');
+        fade.show();
+        tip.show();
+        e.preventDefault();
+        weixin.prop({
+            href: data.url
+        });
+    });
+
+    $('#close-btn').on("click", function (e) {
+        fade.hide();
+        tip.hide();
+        e.preventDefault();
+    });
+
+    var counter = 1,
+        inner = $(".inner");
+    // dropload
+    var dropload = inner.dropload({
+        scrollArea : window,
+        domDown : {
+            domClass   : 'dropload-down',
+            domRefresh : '<div class="dropload-refresh" style="height:40px;line-height:40px;text-align: center;">上拉加载更多</div>',
+            domLoad    : '<div class="dropload-load" style="height:40px;line-height: 40px;text-align: center;"><span class="loading"></span>加载中...</div>',
+            domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;">暂无数据</div>'
+        },
+        loadDownFn : function(me){
+            counter++;
+            $.ajax({
+                type: "POST",
+                url: "/web/generalize/gift?cid=<?php echo $cid; ?>",
+                dataType: 'json',
+                async: true,
+                data:{'uid':<?php echo $_COOKIE['uid'] ?  : 0;?>,'page': counter,'wap':1},
+
+                success: function(data){
+                    var len= data.response_params.data.length;
+                    // 为了测试，延迟1秒加载
+                    setTimeout(function(){
+                        lists.append(template('more', data.response_params));
+                        // 每次数据加载完，必须重置
+                        me.resetload();
+                    },1000);
+
+                    if(len==0){
+                        // 锁定
+                        me.lock();
+                        // 无数据
+                        me.noData();
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    me.resetload();
+                }
+            });
+        }
+    });
+})();
+</script>
+</html>

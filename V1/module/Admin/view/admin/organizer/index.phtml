@@ -1,0 +1,134 @@
+<div class="box">
+    <div class="box-title">
+        商家列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="商家名称或商家id" name="k" value="">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size3">商家名称</th>
+                <th class="size1">城市&nbsp;&nbsp;<?php echo $filtercity; ?></th>
+                <th class="size1">登陆密码</th>
+                <th class="size1">验证(支付)密码</th>
+                <th class="size1">商品</th>
+                <th class="size2">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row['id']; ?></td>
+                        <td class="size3"><a href="/wftadlogin/organizer/new?oid=<?php echo $row['id']; ?>"><?php echo $row['name']; ?></a></td>
+                        <td class="size1"><?php echo $city[$row['city']]; ?></td>
+                        <td class="size1"><?php echo $row['pwd']; ?></td>
+                        <td class="size1"><?php echo $row['pay_pwd']; ?></td>
+                        <td class="size1"><a href="/wftadlogin/game?oid=<?php echo $row['id'];?>"><?php echo $row['game_num']; ?></a></td>
+                        <td class="size2">
+                            <a href="/wftadlogin/order/list?market_name=<?php echo $row['name'];?>" class="ui-button">交易详情</a>
+                            <?php if(!$row['branch_id']):?>
+                            <a href="/wftadlogin/organizer/branch?oid=<?php echo $row['id']; ?>" class="ui-button">关联分店</a>
+                            <?php endif;?>
+                            <a href="/wftadlogin/organizer/contract?id=<?php echo $row['id']; ?>" class="ui-button">商家合同</a>
+                            <a href="/wftadlogin/organizer/linker?oid=<?php echo $row['id']; ?>" class="ui-button">商家联系人</a>
+                            <a href='javascript:;' class=" ui-button" id="bing" onclick="bing(this)" data="<?php echo $row['id']?>">绑定手机号</a>
+                            <a href="/wftadlogin/organizer/change?oid=<?php echo $row['id']; ?>&type=1" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                            <?php if(isset($_GET['heiwu']) && $_GET['heiwu']):?>
+                                <a href="/wftadlogin/organizer/change?oid=<?php echo $row['id']; ?>&type=2" class="ui-button">恢复</a>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无商家 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<div id="LoginBox">
+        <div class="row1">
+            绑定商家手机号<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>
+        </div>
+        <div class="row">
+            手机号: <span class="inputBox">
+                <input type="text" id="txtName" placeholder="商家手机号" name="phone"/>
+                <input type="hidden" id="oid" name="oid"/>
+            </span><a href="javascript:void(0)" title="提示" class="warning" id="warn">*</a>
+        </div>
+        <div class="row">
+            <a href="#" id="loginbtn">确定</a>
+        </div>
+</div>
+<script>
+    function bing(obj){
+        $("body").append("<div id='mask'></div>");
+        $("#mask").addClass("mask").fadeIn("slow");
+        $("#LoginBox").fadeIn("slow");
+        var oid = $(obj).attr('data');
+        $("#oid").val(oid);
+    }
+        //
+        //按钮的透明度
+        $("#loginbtn").hover(function () {
+            $(this).stop().animate({
+                opacity: '1'
+            }, 600);
+        }, function () {
+            $(this).stop().animate({
+                opacity: '0.8'
+            }, 1000);
+        });
+        //文本框不允许为空---按钮触发
+        $("#loginbtn").on('click', function () {
+            var txtName = $("#txtName").val();
+            if (txtName == "" || txtName == undefined || txtName == null) {
+                $("#warn").css({ display: 'block' });
+                $("#warn2").css({ display: 'none' });
+            }
+            if(txtName.length != 11 || isNaN(txtName)){
+                alert('手机号格式错误');
+                return false;
+            }
+            var oid= $("#oid").val();
+            $.post("/wftadlogin/organizer/bind",{"phone":txtName,"pid":oid},function(d){
+                if(d.status==0){
+                    alert(d.message);
+                }else{
+                    alert(d.message);
+                    window.location.reload();
+                }
+            },'json');
+
+        });
+        //文本框不允许为空---单个文本触发
+        $("#txtName").on('blur', function () {
+            var txtName = $("#txtName").val();
+            if (txtName == "" || txtName == undefined || txtName == null) {
+                $("#warn").css({ display: 'block' });
+            }
+            else {
+                $("#warn").css({ display: 'none' });
+            }
+        });
+        $("#txtName").on('focus', function () {
+            $("#warn").css({ display: 'none' });
+        });
+        //
+        //关闭
+        $(".close_btn").hover(function () { $(this).css({ color: 'black' }) }, function () { $(this).css({ color: '#999' }) }).on('click', function () {
+            $("#LoginBox").fadeOut("fast");
+            $("#mask").css({ display: 'none' });
+        });
+
+</script>

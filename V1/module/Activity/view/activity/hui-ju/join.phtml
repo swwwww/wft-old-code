@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>晒宝宝疯玩照片，赢取荟聚周年壕礼！</title>
+    <link rel="stylesheet" type="text/css" href="/activity/css/layout.css">
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+</head>
+<body>
+<div class="banner">
+    <img src="http://wan.wanfantian.com/uploads/2016/04/23/29f09e216a7a9dd583d00e6d82ca2300.jpg"/>
+</div>
+<form id="upload_form">
+    <div class="info">
+        <div class="upload">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="upload_area clearfix">
+                <ul id="imglist" data-uploadweixin="<?php echo $wx;?>" class="post_imglist">
+                </ul>
+                <div id="uploadtip">
+                    <p>赢取荟聚大奖</p>
+                    <a class="upload_btn phone">上传照片</a>
+                </div>
+            </div>
+        </div>
+        <div class="info-btn">
+            <a class="btn2" id="submit-huiju" data-id="0" href="javascript:void(0)">确认提交</a>
+            <a class="btn2 del" href="/activity/huiju/join">修改照片</a>
+        </div>
+        <p class="end">* 确认提交后不可再修改照片</p>
+    </div>
+</form>
+<div class="black"></div>
+<div class="popup3">
+    <div class="popup-content">
+        <h1>恭喜您，上传成功！</h1>
+        <p>yeah~！上传成功！<br/>点击右上角发送给朋友为你助力吧！<br/>每获得<span>50</span>积分，可抽奖一次噢 </p>
+        <div class="cross"></div>
+    </div>
+    <div class="popup-btn">确认</div>
+</div>
+</body>
+<script src="/activity/js/zepto.js" type="text/javascript"></script>
+<script src="/activity/js/upload.min.js" type="text/javascript"></script>
+<script src="/activity/js/common.js" type="text/javascript"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    $(function () {
+        $('#submit-huiju').on("tap", function(){ //jquery的点击事件
+            var href = '/activity/huiju/hold';//跳转的链接
+            var file_img = $('#file0').val();
+            var tr = $(this);
+            $.post(href, {img:file_img}, function (data) {
+                if (data.status == 1) {
+                    tr.attr('data-id', data.hid);
+                    $(".popup3").show();
+                    $(".black").show();
+                } else {
+                    alert(data.message);
+                    if (data.message == '已经参加过了') {
+                        location.href="/activity/huiju/info?id=" + data.hid
+                    }
+                }
+            }, 'json');
+            return false;
+        })
+
+        $('.popup-btn').on("tap",function(){
+            $(".popup3").hide();
+            $(".black").hide();
+            var hid = $('#submit-huiju').attr('data-id');
+            location.href="/activity/huiju/info?id=" + hid;
+            return false;
+        })
+
+        $(".cross").on("tap",function(){
+            $(".popup3").hide();
+            $(".black").hide();
+            var hid = $('#submit-huiju').attr('data-id');
+            location.href="/activity/huiju/info?id=" + hid;
+            return false;
+        });
+
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '<?php echo $jsApi['appid'];?>', // 必填，公众号的唯一标识
+            timestamp: <?php echo $jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+            nonceStr: '<?php echo $jsApi['noncestr'];?>', // 必填，生成签名的随机串
+            signature: '<?php echo $jsApi['signature'];?>',// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+        });
+
+        wx.ready(function () {
+// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            wx.onMenuShareTimeline({
+                title: '<?php echo $share['title'];?>', // 分享标题
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: '<?php echo $share['img'];?>', // 分享图标
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: '<?php echo $share['title'];?>', // 分享标题
+                desc: '<?php echo $share['desc'];?>', // 分享描述
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: '<?php echo $share['img'];?>', // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+        });
+
+    });
+</script>
+</html>

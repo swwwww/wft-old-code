@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>积分规则</title>
+    <link href="/css/h5/style.css" rel="stylesheet"/>
+</head>
+<body>
+<section id="tab">
+    <div class="tabList">
+        <ul>
+            <li class="cur">如何获得</li>
+            <li>如何使用</li>
+            <li>有效期</li>
+        </ul>
+    </div>
+    <div class="tabCon">
+        <div class="cur">
+            <h2>每日签到</h2>
+            <p>1、每日签到获得<?php echo $s->sign_one;?>积分；<br>
+                2、连续签到<?php echo $s->sign_day;?>日额外获得<?php echo $s->sign_integral;?>积分；</p>
+            <h2>首次完善资料</h2>
+            <p>1、更换头像获得<?php echo $s->face_integral;?>积分；<br>
+                2、补充宝宝资料获得<?php echo $s->baby_info;?>积分；<br>
+                3、上传宝宝头像获得<?php echo $s->baby_face;?>积分；<br>
+                3、绑定微信号获得<?php echo $s->weixin_bind;?>积分；<br>
+                4、个人资料完善之后再次修改不再获得积分；</p>
+            <h2>内容奖励</h2>
+            <p>
+                <?php $i = 1; ?>
+                <?php if($s->circle_speak): ?>
+                <?php echo $i++; ?>、圈子发言一次获得<?php echo $s->circle_speak;?>积分，发言被点赞超过<?php echo $s->circle_prize_num;?>次获得<?php echo $s->circle_prize_integral;?>积分；<br>
+                <?php endif; ?>
+
+                <?php if($s->good_comment_prize_num): ?>
+                <?php echo $i++; ?>、不同商品点评获得积分倍数不同，商品点评被点赞超过<?php echo $s->good_comment_prize_num;?>次获得<?php echo $s->good_comment_prize_integral;?>积分；<br>
+                <?php endif; ?>
+
+                <?php if($s->place_comment_prize_num): ?>
+                <?php echo $i++; ?>、不同游玩地点评获得积分倍数不同，游玩地点评被点赞超过<?php echo $s->place_comment_prize_num;?>次获得<?php echo $s->place_comment_prize_integral;?>积分，
+                每人每日点评游玩地最多获得<?php echo $s->oneday_place_comment_integral;?>积分；<br>
+                <?php endif; ?>
+
+                <?php echo $i++; ?>、消费产品后点评/游玩地点评，超过15字的带图评论可获得特定数额的点评积分；</p>
+            <h2>分享奖励</h2>
+            <p>1、分享特定商品和游玩地可获得特定数额的积分；<br>
+                2、每人每天分享商品最多获得<?php echo $s->oneday_share_good_integral; ?>积分，每人每天分享游玩地最多获得<?php echo $s->oneday_share_place_integral; ?>积分；</p>
+            <h2>消费产品后将获得与实付金额同等数额的积分，特例商品除外</h2>
+            <h2>除消费奖励积分和签到、完善资料等固定积分外，每人每天可获得积分上限为<?php echo $s->oneday_integral;?>积分</h2>
+        </div>
+        <div>
+            <h2>消费抵现</h2>
+            <p>消费产品时，直接抵扣部分现金；</p>
+            <h2>特殊权益</h2>
+            <p>兑换活动资格券、如一元秒杀、神价格等。一次资格需<?php echo (int)$s->integral_quota;?>积分；资格券兑换后<?php echo $s->quota_time; ?>天不使用将过期</p>
+            <h2>参加活动</h2>
+            <p>参与抽奖、游戏及其他活动；</p>
+            <h2>兑换礼品</h2>
+            <p>在【积分商城】兑换礼品；</p>
+        </div>
+        <div>
+            <br>
+            <p>用户获得但未使用的积分，每年将进行两次清空，清理积分时间待定。后期将以公告形式告知。</p>
+        </div>
+    </div>
+</section>
+</body>
+<script style="text/javascript">
+    (function(){
+        "use strict";
+        var oDiv = document.getElementById("tab"),
+            oLi = oDiv.getElementsByTagName("div")[0].getElementsByTagName("li"),
+            aCon = oDiv.getElementsByTagName("div")[1].getElementsByTagName("div");
+        for (var i = 0; i < oLi.length; i++) {
+            oLi[i].index = i;
+            oLi[i].ontouchstart = function() {
+                show(this.index);
+            };
+            oLi[i].onclick = function() {
+                show(this.index);
+            };
+        }
+        function show(a) {
+            var  index = a;
+            for (var j = 0; j < oLi.length; j++) {
+                oLi[j].className = "";
+                aCon[j].className = "";
+            }
+            oLi[index].className = "cur";
+            aCon[index].className = "cur";
+        }
+    }());
+</script>
+</html>

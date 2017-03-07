@@ -1,0 +1,52 @@
+<hgroup class="box">
+    <header>
+        <h3>账户角色分配管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/authaccess">返回账户角色分配</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span> </div>
+
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/authaccess/save" method="post" id="news-save">
+    <header class="box-title"><?php echo count($data)?'修改分类':'添加分类';?></header>
+    <table class="table">
+    <tr>
+        <th width="160">管理员ID</th>
+        <th colspan="3"><input type="text" class="cssInput" name="uid" value="<?php echo $data ?$data->uid:0; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">分组</th>
+        <th colspan="3"><input type="text" class="cssInput" name="group_id" value="<?php echo $data ?$data->group_id: ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">其它权限</th>
+            　<th colspan="3"><input type="text" class="cssInput" name="other_auth" value="<?php echo $data ?$data->other_auth: ''; ?>">
+        </th>
+    </tr>
+
+    </table>
+    <span type="submit" class="btn btn-primary" id="ti-new">提交</span>
+</form>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script>
+    $(function () {
+        $('#ti-new').click(function () {
+            $.post('/wftadlogin/authaccess/save', $('#news-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+</script>

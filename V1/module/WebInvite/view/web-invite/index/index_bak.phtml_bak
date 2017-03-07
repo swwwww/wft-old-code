@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>红包首页</title>
+    <link type="text/css" rel="stylesheet" href="/css/layout.css">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body>
+<header id="header-index">
+    <div class="wrapper">
+        <div class="header-title">萌宝免费玩全城</div>
+        <a id="popup1" class="btn-submit">我要拿红包</a>
+
+        <div class="text-title">财大气粗，现金直接拿走</div>
+    </div>
+</header>
+<section class="hongbao">
+    <div class="hongbao-list">
+        <a href="http://wan.deyi.com/web/coupon/activity?id=79">
+            <p class="shop">悠游堂</p>
+
+            <p class="amount"><span>￥120000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=80">
+            <p class="shop">积木村公园</p>
+
+            <p class="amount"><span>￥90000</span>元</p>
+        </a>
+
+        <a href="http://wan.deyi.com/web/coupon/activity?id=81">
+            <p class="shop">塔卡密室</p>
+
+            <p class="amount"><span>￥90000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=82">
+            <p class="shop">雪莲体育馆</p>
+
+            <p class="amount"><span>￥45000</span>元</p>
+        </a>
+
+    </div>
+    <div class="hongbao-list1">
+        <a href="http://wan.deyi.com/web/coupon/activity?id=83">
+            <p class="shop">贝乐园</p>
+
+            <p class="amount"><span>￥42000</span>元</p>
+        </a>
+
+        <a href="http://wan.deyi.com/web/coupon/activity?id=84">
+            <p class="shop">张公山寨</p>
+
+            <p class="amount"><span>￥30000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=85">
+            <p class="shop">冒险家拓展乐园</p>
+
+            <p class="amount"><span>￥30000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=86">
+            <p class="shop">奥山冰雪公园</p>
+
+            <p class="amount"><span>￥21000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=87">
+            <p class="shop">果町猫</p>
+
+            <p class="amount"><span>￥10000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=88">
+            <p class="shop">麦奇国</p>
+
+            <p class="amount"><span>￥18000</span>元</p>
+        </a>
+        <a href="http://wan.deyi.com/web/coupon/activity?id=89">
+            <p class="shop">赛尔之城</p>
+
+            <p class="amount"><span>￥9000</span>元</p>
+        </a>
+    </div>
+</section>
+<section>
+    <div class="text-title bg-rules">活动说明</div>
+    <div class="rules">
+        <p><mark>1</mark><span>每人每天可抽奖三次，兑换一次；</span></p>
+        <p><mark>2</mark><span>分享活动给朋友，会增加抽中大红包的概率；</span></p>
+        <p><mark>3</mark><span>抽中的红包金额、商品不满意，可重新抽取，但是重新抽取必须放弃当前红包；</span></p>
+        <p><mark>4</mark><span>红包兑换完成后，可在玩翻天APP“我的订单”里找到，到指定门店直接出示验证码即可；</span></p>
+        <p><mark>5</mark><span>红包不与店内其他优惠叠加使用，红包不能叠加使用。</span></p>
+
+    </div>
+</section>
+<section class="qrcode">
+    <h3>玩翻天 孩子们的游玩管家</h3>
+    <h4>周三 1元秒 遛娃天天见</h4>
+
+    <div class="qrcode-bg"><img src="/images/qrcode.gif"/></div>
+</section>
+<footer></footer>
+<!--弹出背景层-->
+<div id="fade1" class="black-overlay"></div>
+
+
+<div class="white-content0">
+    <div id="tip1" class="white-content1 white-content">
+        <div class="popup1">
+            <!--  <h3>恭喜获得【逢考必过】红包</h3>
+              <h4>健康有活力，充满干劲的一整年。</h4>
+
+              <div class="good-main">
+                  <div class="good-img"><img
+                          src="http://userpic.deyi.com/ucenter/data/avatar/000/39/69/68_avatar_middle.jpg"/></div>
+                  <div class="good-details">
+                      <h3>优惠商品名称如果这个商品名称有这个商品名称有</h3>
+                  </div>
+              </div>-->
+        </div>
+        <a id="close1" class="btn-submit">收 下</a>
+    </div>
+</div>
+
+<div id="fade2" class="black-overlay"></div>
+<div class="white-content0">
+    <div id="tip2" class="white-content2 white-content">
+        <a id="close2"></a>
+
+        <div class="popup2">
+            <p>输入手机号，下载玩翻天即可获得红包</p>
+            <input type="text" name="phone" class="phone" placeholder="输入手机号"/>
+            <a class="btn-submit">开始下载</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<style>
+    .hongbao-list p,.hongbao-list1 p{
+        color: #fff;
+    }
+
+</style>
+<script>
+    $(function () {
+
+        var p = '<?php echo isset($_GET['p'])?$_GET['p']:'';?>';
+        var prize_id =<?php echo isset($prize_id)?$prize_id:0;?>;
+        var wft = '<?php echo $wft;?>';
+        click2 = true;
+        $('#popup1').click(function () {
+
+//            if (wft == 'no') {
+//
+//                //todo 不是通过app访问
+//                if (confirm('请下载APP后,点击首页右上角参与活动,确定下载[玩翻天]吗')) {
+//                    window.location.href = '/app/index.php';
+//                }
+//                return false;
+//            }
+//            if (!p) {
+//                alert('请登录后再来抽奖');
+//                return false;
+//            }
+
+            if (prize_id && !wft) {
+                window.location.href = '/webactivity/index/user?p=' + p + '&id=' + prize_id;
+                return false;
+            }
+
+
+            if (click2 == false) {
+                return false;
+            }
+
+            $.get('/webactivity/index/prize', {'p': p, 'wft': wft}, function (data) {
+                if (data.status == 0) {
+                    alert(data.message);
+                    return false;
+                } else {
+                    prize_id = data.id;
+                    $('.popup1').html(data.coupon_html);
+                    show('tip1', 'fade1');
+                }
+            }, 'json');
+
+        });
+
+        $('#close1').click(function () {
+            hide('tip1', 'fade1');
+            window.location.href = '/webactivity/index/user?p=' + p + '&id=' + prize_id;
+        });
+        //弹出隐藏层
+        function show(show_div, hide_div) {
+            document.getElementById(show_div).style.display = 'block';
+            document.getElementById(hide_div).style.display = 'block';
+        }
+
+        //关闭弹出层
+        function hide(show_div, hide_div) {
+            document.getElementById(show_div).style.display = 'none';
+            document.getElementById(hide_div).style.display = 'none';
+        }
+
+        alert('活动已结束！')
+    })
+</script>
+</html>

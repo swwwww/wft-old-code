@@ -1,0 +1,56 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li><a href="/wftadlogin/setting">系统设置</a></li>
+        <li class="active">商品属性管理</li>
+    </ul>
+</div>
+<form action="/wftadlogin/setting/gameattribute?type=3" method="post" id="new_tag">
+    <table border="0">
+        <tr>
+            <th>
+                <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入新的商品属性名称" name="attribute_name" value="">
+                        <span class="input-group-btn">
+                            <a class="btn btn-default new_tag">添加</a>
+                        </span>
+                    </div>
+                    <!-- /input-group -->
+                </div>
+            </th>
+        </tr>
+    </table>
+</form>
+<?php foreach($data as $v):?>
+    <?php echo $v->good_attribute_name;?> &nbsp;<a class="btn btn-warning delete" data-src="/wftadlogin/setting/gameattribute?type=2&tid=<?php echo $v->id; ?>">删除</a>　&nbsp;&nbsp;&nbsp;
+<?php endforeach;?>
+<script>
+    $(function () {
+        $('.delete').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r == true) {
+                $.get($(this).attr('data-src'), function (result) {
+                    if (result.status == 1) {
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                });
+            }
+            return false;
+        })
+
+        $('.new_tag').click(function () {
+            $.post('/wftadlogin/setting/gameattribute?type=3', $('#new_tag').serialize(), function (data) {
+                if (data.status == 1) {
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+
+    });
+</script>

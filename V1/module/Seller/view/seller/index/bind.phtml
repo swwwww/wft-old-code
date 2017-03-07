@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>玩翻天商家后台</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="co-header">
+    <a class="left" href="/seller/index/log">流水记录</a>
+    <a class=" middle" href="/seller/index/code">验证</a>
+    <a class="checked right" href="/seller/index/bind">绑定手机</a>
+</header>
+<input type="hidden" name="bind_phone" id="bind_phone" value="<?php echo $phone;?>">
+<div id="step1">
+    <form action="javascript:void(0)" class="fg-form" id="form1">
+        <fieldset>
+            <input class="text" name="user" type="hidden" placeholder="请输入用户名/ID" id="user" value="<?php echo $_COOKIE['id'];?>">
+        </fieldset>
+        <fieldset>
+            <input class="text fg-text" name="tel" type="text" placeholder="请输入手机号" id="phone">
+            <input type="button" value="获取验证码" class="phone_code_call button" id="get_vcode" style="pointer-events: auto;">
+        </fieldset>
+        <fieldset>
+            <input class="text"  name="code" type="text" placeholder="请输入验证码" id="code">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="text"  name="new_pwd" type="password" placeholder="请输入登录密码" id="new_pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="button gf-button" type="button" value="确定" id="bindBtn"/>
+        </fieldset>
+    </form>
+    <footer class="footer">
+        <img class="in-logo" src="/img/logo_m.gif" />
+        <h4>孩子们的游戏管家</h4>
+    </footer>
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--tips-->
+            <div class="check-win-list check-win-tips">
+                <div id="loginTip" class="wx_text">
+                    <i></i>
+                </div>
+                <a class="check-win-close">确定</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="check-code" id="step2">
+    <header class="in-header">
+        <h4>你已经绑定手机号：<?php echo $phone;?></h4>
+    </header>
+    <fieldset>
+        <h3>用户在进行验证之后，绑定的手机将会及时收到一条确认信息</h3>
+    </fieldset>
+    <fieldset style="margin-top:100px;">
+        <input class="button gf-button" type="button" value="重新绑定" id="reBind"/>
+    </fieldset>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script>
+    $(function(){
+        var bind_phone = $("#bind_phone").val();
+        if(bind_phone){
+            $("#step1").hide();
+            $("#step2").show();
+        }else{
+            $("#step1").show();
+            $("#step2").hide();
+        }
+
+        $("#reBind").click(function(){
+            $("#step2").hide();
+            $("#step1").show();
+        })
+    })
+</script>
+</html>

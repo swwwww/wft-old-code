@@ -1,0 +1,665 @@
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/code">验证码管理</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $good_name = null;
+        $good_id = null;
+        $order_id = null;
+        $user_name = null;
+        $code_number = null;
+        $user_phone = null;
+        $buy_start = null;
+        $buy_end = null;
+        $check_start = null;
+        $check_end = NULL;
+        $back_start = null;
+        $back_end = NULL;
+        $code_status = 0;
+        $pageNum = 10;
+        $organizer_id = null;
+        $organizer_name = null;
+        $is_hotal = '';
+
+        if (isset($_GET['organizer_id']) && $_GET['organizer_id']) {
+            $organizer_id = $_GET['organizer_id'];
+        }
+
+        if (isset($_GET['organizer_name']) && $_GET['organizer_name']) {
+            $organizer_name = $_GET['organizer_name'];
+        }
+
+        if (isset($_GET['good_name']) && $_GET['good_name']) {
+            $good_name = $_GET['good_name'];
+        }
+
+        if (isset($_GET['good_id']) && $_GET['good_id']) {
+            $good_id = $_GET['good_id'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['user_name']) && $_GET['user_name']) {
+            $user_name = $_GET['user_name'];
+        }
+
+        if (isset($_GET['code_number']) && $_GET['code_number']) {
+            $code_number = $_GET['code_number'];
+        }
+
+        if (isset($_GET['user_phone']) && $_GET['user_phone']) {
+            $user_phone = $_GET['user_phone'];
+        }
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['check_start']) && $_GET['check_start']) {
+            $check_start = $_GET['check_start'];
+        }
+
+        if (isset($_GET['check_end']) && $_GET['check_end']) {
+            $check_end = $_GET['check_end'];
+        }
+
+        if (isset($_GET['back_start']) && $_GET['back_start']) {
+            $back_start = $_GET['back_start'];
+        }
+
+        if (isset($_GET['back_end']) && $_GET['back_end']) {
+            $back_end = $_GET['back_end'];
+        }
+
+        if (isset($_GET['code_status']) && $_GET['code_status']) {
+            $code_status = $_GET['code_status'];
+        }
+
+        if (isset($_GET['page_num']) && $_GET['page_num']) {
+            $pageNum = $_GET['page_num'];
+        }
+
+        if (isset($_GET['message_type']) && is_numeric($_GET['message_type'])) {
+            $message_type = $_GET['message_type'];
+        }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">订单id</th>
+            <th>
+                <input type="text" name="order_id" value="<?php echo $order_id;?>">
+            </th>
+            <th colspan="2">
+                商品名称<input type="text" name="good_name" value="<?php echo $good_name;?>">
+                商品id<input type="text" name="good_id" value="<?php echo $good_id;?>">
+            </th>
+
+        </tr>
+
+        <tr>
+            <th width="160">购买时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_start;?>">
+                <input name="buy_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_end;?>">
+            </th>
+            <th width="160">使用时间</th>
+            <th>
+                <input name="check_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_start;?>">
+                <input name="check_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">退款时间</th>
+            <th>
+                <input name="back_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_start;?>">
+                <input name="back_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_end;?>">
+            </th>
+            <th width="160">用户手机号</th>
+            <th>
+                <input type="text" class="cssInput" name="user_phone" value="<?php echo $user_phone;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="user_name" value="<?php echo $user_name;?>">
+            </th>
+            <th width="160">使用码</th>
+            <th>
+                <input type="text" class="cssInput" name="code_number" value="<?php echo $code_number;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用码状态</th>
+            <th>
+                <select name="code_status" id="select">
+                    <?php
+                        if(!isset($_GET['code_status'])) {
+                            $code_status = 1;
+                        }
+                    ?>
+                    <option value="0" <?php echo ($code_status == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($code_status == 1) ? 'selected' : '';?>>待使用</option>
+                    <option value="2" <?php echo ($code_status == 2) ? 'selected' : '';?>>已使用</option>
+                    <option value="3" <?php echo ($code_status == 3) ? 'selected' : '';?>>已提交退款</option>
+                    <option value="5" <?php echo ($code_status == 5) ? 'selected' : '';?>>已退款</option>
+                    <option value="6" <?php echo ($code_status == 6) ? 'selected' : '';?>>已过期</option>
+                    <option value="4" <?php echo ($code_status == 4) ? 'selected' : '';?>>已受理退款</option>
+                </select>
+                <select name="page_num">
+                    <option value="10" <?php echo ($pageNum == 10) ? 'selected' : '';?>>展示个数_10</option>
+                    <option value="30" <?php echo ($pageNum == 30) ? 'selected' : '';?>>展示个数_30</option>
+                    <option value="50" <?php echo ($pageNum == 50) ? 'selected' : '';?>>展示个数_50</option>
+                </select>
+            </th>
+            <th colspan="2">
+                商家名称<input type="text" name="organizer_name" value="<?php echo $organizer_name;?>">
+                商家id<input type="text" name="organizer_id" value="<?php echo $organizer_id;?>">
+            </th>
+        </tr>
+
+        <!-- 短信模板类型 -->
+        <tr>
+            <th width="160">短信发送模板</th>
+            <th width="300">
+                <select name="message_type">
+                    <option value="" >请选择</option>
+                    <?php
+                    foreach ($config_message_type as $key=>$val) {
+                        ?>
+                        <option <?php echo ($message_type == $val['id']) ? 'selected' : ''; ?> value="<?php echo $val['id'];?>"><?php echo $val['message_type_name'];?></option>
+                    <?php
+                    }
+                    ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/code" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/code/outCode" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        使用码列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="100">验证码</th>
+                <th width="100">订单号</th>
+                <th width="80">用户名</th>
+                <th width="80">用户手机号</th>
+                <th width="170">商品名</th>
+                <th width="170">套系名称</th>
+                <th width="150">购买时间</th>
+                <th width="150">出行日期</th>
+                <th width="150">使用时间</th>
+                <th width="100">备注</th>
+                <th width="100">审核状态</th>
+                <th width="100">验证码状态</th>
+                <th width="300">操作</th>
+            </tr>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td width="50"><input type="checkbox" name="check_ids" value="<?php echo $row['id']; ?>"></td>
+                        <td width="100">
+                           <?php echo $row['id']. $row['password']; ?>
+                        </td>
+                        <td width="100">
+                            <a href="/wftadlogin/order/info?order_sn=<?php echo $row['order_sn'];?>"><?php echo $row['order_sn']; ?></a>
+                        </td>
+                        <td width="80"><?php echo $row['username']; ?></td>
+                        <td width="80"><?php echo $row['buy_phone']; ?></td>
+                        <td width="170"><?php echo $row['coupon_name']; ?></td>
+                        <td width="170"><?php echo $row['type_name']; ?></td>
+                        <td width="150"><?php echo date('Y-m-d H:i:s',$row['dateline']); ?></td>
+                        <?php if((int)$row['need_use_time'] !== 2 ): ?>
+                        <?php $end = '-'.date('Y-m-d H:i',$row['end_time']) ?>
+                            <td width="150"><?php echo date('Y-m-d H:i',$row['start_time']).$end; ?></td>
+                        <?php else: ?>
+                            <td width="150"><?php echo date('Y-m-d',$row['start_time']); ?></td>
+                        <?php endif; ?>
+                        <td width="150"><?php echo $row['use_datetime'] ? date('Y-m-d H:i',$row['use_datetime']) : ''; ?></td>
+                        <td width="100" title="<?php echo $row['message']; ?>"><?php echo mb_substr($row['message'],0,20); ?></td>
+                        <td width="100"><?php echo ($row['check_status'] == 2) ? '已审核' : '未审核'; ?></td>
+                        <td width="100">
+                            <?php
+                                if ($row['status'] == 0) {
+                                    echo '待使用';
+                                } elseif ($row['status'] == 1) {
+                                    if ($row['force'] == 0) {
+                                        echo '已使用';
+                                    } elseif ($row['force'] == 2) {
+                                        echo '已受理退款';
+                                    } elseif ($row['force'] == 3) {
+                                        echo '已退款';
+                                    }
+                                } elseif ($row['status'] == 2) {
+                                    if ($row['force'] == 2) {
+                                        echo '已受理退款';
+                                    } elseif ($row['force'] == 3) {
+                                        echo '已退款';
+                                    } else {
+                                        if ($row['back_money'] > 0) {
+                                            echo '已退款';
+                                        } else {
+                                            echo '已过期';
+                                        }
+                                    }
+                                } elseif ($row['status'] == 3) {
+                                    if ($row['force'] == 2) {
+                                        echo '已受理退款';
+                                    } elseif ($row['force'] == 0) {
+                                        echo '已提交退款';
+                                    }
+                                }
+
+                             ?>
+                        </td>
+                        <td width="300">
+                            <?php if($row['status'] == 0):?>
+                                <a onclick="if(confirm('确定提交退费?')==false) return false;" href="/wftadlogin/code/giveBack?type=1&id=<?php echo $row['id']; ?>" class="login btn">提交退费</a>
+                                <a href="/wftadlogin/code/useCode?type=1&id=<?php echo $row['id']; ?>" onclick="if(confirm('确定验证使用?')==false) return false;" class="ui-button">验证使用</a>
+                            <?php endif;?>
+
+                            <?php if($row['status'] == 1 && $row['force'] == 0):?>
+                                <a href="javascript:void(0)" data-src="/wftadlogin/code/specialRefund?type=1&id=<?php echo $row['id']; ?>" class="ui-button loginr">提交特殊退费</a>
+                            <?php endif;?>
+
+                            <?php if($row['status'] == 3 && $row['force'] == 0):?>
+                                <a href="/wftadlogin/code/check?type=1&id=<?php echo $row['id']; ?>" class="ui-button">受理退款</a>
+                            <?php endif;?>
+
+                            <?php if($row['status'] == 2 && $row['force'] == 0 && $row['back_money'] == 0):?>
+                                <a href="javascript:void(0)" data-src="/wftadlogin/code/specialRefund?type=1&id=<?php echo $row['id']; ?>" class="ui-button loginr">提交特殊退费</a>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php if(in_array($code_status, array(1, 2, 3, 6))):?>
+        <input type="checkbox" id="check-all">全选
+        <?php endif;?>
+        <?php if($code_status == 1):?>
+        <button class="ui-button" id="mark-back">提交退费</button>
+        <button class="ui-button" id="mark-check">验证使用</button>
+        <?php endif;?>
+
+        <?php if($code_status == 2 || $code_status == 6):?>
+            <button class="ui-button" id="mark-special">提交特殊退费</button>
+        <?php endif;?>
+
+        <?php if($code_status == 3):?>
+            <button class="ui-button" id="mark-approve">受理退款</button>
+        <?php endif;?>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3>单个验证码特殊退费操作</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="" id="zjh" method="post">
+            <ol>
+                <li>原因: <input name="reason" placeholder="特殊退款" class="cssInput" type="text " /></li>
+                <!--<li>金额: <input name="money" placeholder="默认支付金额" class="cssInput" style="width:90px" type="text " /></li>-->
+                <li><button  type="submit">提交</button></li>
+            </ol>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        $('.loginr').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-src');
+            $('#zjh').attr('action', url);
+
+        })
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+        //全选和全不选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //批量提交退费
+        $('#mark-back').click(function() {
+            if (confirm('确定将所有选中的订单提交退费？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/code/giveBack?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status == 1) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+
+        });
+
+        //批量验证使用
+        $('#mark-check').click(function() {
+            if (confirm('确定将所有选中的订单验证使用？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/code/useCode?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status == 1) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+
+        //受理退款
+        $('#mark-approve').click(function() {
+            if (confirm('确定将所有选中的订单受理退款？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/code/check?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status == 1) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+
+        //特殊退款
+        $('#mark-special').click(function() {
+            if (confirm('确定将所有选中的订单提交特殊退款？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/code/specialRefund?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status == 1) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+
+    });
+</script>
+
+
+
+

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $data['title']?></title>
+    <link type="text/css" rel="stylesheet" href="/css/web-style.css" />
+</head>
+<body>
+<div id="all" class="activity">
+    <div class="activity-pic">
+        <span><?php echo $data['like_number'] ?></span>
+        <img src="<?php echo $data['cover']?>" />
+    </div>
+    <div class="activity-header">
+        <i><img src="<?php echo $data['image'] ?>" /></i>
+        <span><?php echo $data['title']?></span>
+    </div>
+    <div class="container">
+        <div class="activity-info">
+            <div class="space1"><?php echo $data['introduce']?></div>
+        </div>
+        <?php foreach($data['news_list'] as $val):?>
+            <div class="activity-list">
+                <div class="activity-img">
+                    <img src="<?php echo $val['news_cover'];?>" />
+                </div>
+                <a href="/web/coupon/news?id=<?php echo $val['news_id'];?>">
+                    <div class="activity-detail">
+                        <div class="activity-detail-title"><?php echo $val['news_name'];?></div>
+                        <div class="activity-detail-main"><?php echo $val['editor_word'];?></div>
+                        <div class="activity-detail-bottom">
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach;?>
+        <?php foreach($data['coupon_list'] as $val):?>
+        <div class="activity-list">
+            <div class="activity-img">
+                <img src="<?php echo $val['coupon_cover'];?>" />
+            </div>
+            <a href="/web/coupon?id=<?php echo $val['coupon_id'];?>">
+                <div class="activity-detail">
+                    <div class="activity-detail-title"><?php echo $val['coupon_name'];?></div>
+                    <div class="activity-detail-main"><?php echo $val['editor_word'];?></div>
+                    <div class="activity-detail-bottom">
+                        <div class="detail-bottom-l">
+                            <span class="money">￥<?php echo $val['coupon_price'];?></span>
+                            <span class="numb"><?php echo $val['discount'];?>折</span>
+                        </div>
+                        <a class="buy-button" href="/web/coupon?id=<?php echo $val['coupon_id'];?>">
+                            <?php if($val['endtime'] < time() || $val['coupon_buy'] >= $val['coupon_total']):?>
+                                已结束
+                            <?php elseif($val['coupon_starttime'] > time()):?>
+                                即将开始
+                            <?php else:?>
+                                直接买
+                            <?php endif;?>
+                        </a>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <?php endforeach;?>
+    </div>
+</div>
+</body>
+</html>

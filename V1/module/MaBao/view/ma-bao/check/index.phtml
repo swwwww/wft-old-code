@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>玩翻天后台管理</title>
+    <script type="text/javascript">(function () {
+            if (!/*@cc_on!@*/0)return;
+            var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+            while (i--) {
+                document.createElement(e[i])
+            }
+        })();</script>
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+    <!-- Scripts -->
+    <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+        ->prependFile($this->basePath() . '/js/jquery.min.js')
+        ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',)); ?>
+
+    <!-- 编辑器 -->
+    <link href="<?php echo $this->basePath(); ?>/css/umeditor.css" type="text/css" rel="stylesheet">
+    <!--  <script type="text/javascript" src="<?php /*echo $this->basePath(); */ ?>/js/jquery.min.js"></script>-->
+    <script type="text/javascript" charset="utf-8"
+            src="<?php echo $this->basePath(); ?>/js/umeditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<?php echo $this->basePath(); ?>/js/umeditor.min.js"></script>
+    <script type="text/javascript" src="<?php echo $this->basePath(); ?>/js/zh-cn.js"></script>
+    <!-- 编辑器end -->
+</head>
+<body>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+        <h1 id="top-logo">
+            <a target="_blank" href="http://www.deyi.com"><img width="123" height="32"
+                                                               src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+        </h1>
+        <nav id="top-user">
+            <!--<a href="javascript:;"></a>
+            <a href="" target="blank">前往商铺首页</a>
+            <a href="" target="blank">主页</a>-->
+            <a href="/wftadlogin/index/logout">安全退出</a>
+        </nav>
+    </header>
+    <!--顶部导航结束-->
+
+    <!--主界面开始-->
+    <div id="content">
+        <hgroup class="box">
+            <header>
+                <h3>马宝宝管理</h3>
+            </header>
+            <aside class="tips">
+                <i class="icon icon-notice"></i>
+                <div>温馨提示： 有问题 请及时联系</div>
+            </aside>
+        </hgroup>
+        <div class="box">
+            <div class="box-title">
+                马宝宝列表
+                <div style="float:right;margin-right:30px">
+                    <form action="#" method="get">
+                        <select class="cssInput" style="width: 200px;" name="status">
+                            <option value="4">全部</option>
+                            <option <?php echo ($_GET['status'] === '0') ? 'selected="selected"' : ''; ?> value="0">
+                                待审核
+                            </option>
+                            <option <?php echo ($_GET['status'] === '1') ? 'selected="selected"' : ''; ?> value="1">
+                                已通过
+                            </option>
+                            <option <?php echo ($_GET['status'] === '2') ? 'selected="selected"' : ''; ?> value="2">
+                                已领取
+                            </option>
+                            <option <?php echo ($_GET['status'] === '-1') ? 'selected="selected"' : ''; ?> value="-1">
+                                已驳回
+                            </option>
+                        </select>
+                        <input type="text" class="cssInput" style="margin-top: 5px;width:200px" placeholder="用户名称"
+                               name="k" value="<?php echo $_GET['k']; ?>">
+                        <input type="text" class="cssInput" style="margin-top: 5px;width:200px" placeholder="宝宝名称"
+                               name="baby" value="<?php echo $_GET['baby']; ?>">
+                        <input type="text" class="cssInput" style="margin-top: 5px;width:200px" placeholder="uid"
+                               name="uid" value="<?php echo $_GET['uid']; ?>">
+                        <input type="text" class="cssInput" style="margin-top: 5px;width:200px" placeholder="手机号"
+                               name="phone" value="<?php echo $_GET['phone']; ?>">
+                        <button class="btn btn-default" type="submit">搜索</button>
+                    </form>
+                </div>
+            </div>
+            <div class="box-table">
+                <table>
+                    <tbody>
+                    <tr>
+                        <th class="size1">id</th>
+                        <th class="size1">uid</th>
+                        <th class="size2">用户名称</th>
+                        <th class="size2">参与宝宝名称</th>
+                        <th class="size1">参与手机号</th>
+                        <th class="size1">状态</th>
+                        <th class="size2">操作</th>
+                    </tr>
+                    <?php if (count($data)): ?>
+                        <?php foreach ($data as $key => $row): ?>
+                            <tr style="text-align: left">
+                                <td class="size1"><?php echo $row->id; ?></td>
+                                <td class="size1"><?php echo $row->uid; ?></td>
+                                <td class="size2"><?php echo $row->u_username; ?></td>
+                                <td class="size2"><?php echo $row->username; ?></td>
+                                <td class="size1"><?php echo $row->phone; ?></td>
+                                <td class="size1">
+                                    <?php if ($row->check_status == 0) {
+                                        echo "待审核";
+                                    } elseif ($row->check_status == 1) {
+                                        echo "通过";
+                                    } elseif ($row->check_status == 2) {
+                                        echo "已领取";
+                                    } else {
+                                        echo "驳回ing";
+                                    } ?>
+                                </td>
+                                <td class="size2">
+                                    <?php if ($row->check_status == 0): ?>
+                                        <a href="/mabao/check/change?uid=<?php echo $row->uid; ?>&type=1&debug=1"
+                                           class="ui-button">通过</a>
+                                        <a href="/mabao/check/change?uid=<?php echo $row->uid; ?>&type=2&debug=1"
+                                           class="ui-button">驳回</a>
+                                    <?php elseif ($row->check_status == 1): ?>
+                                        <a href="/mabao/check/change?uid=<?php echo $row->uid; ?>&type=3" class="ui-button">反悔</a>
+                                    <?php endif; ?>
+                                    <a target="_blank" href="/mabao/check/info?uid=<?php echo $row->uid; ?>"
+                                       class="ui-button">查看图片</a>
+                                    <?php if ($_GET['admin'] == 1) { ?>
+                                        <a target="_blank" href="/mabao/check/delete?id=<?php echo $row->id; ?>"
+                                           class="ui-button">删除</a>
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7"><p>暂无马宝宝参加哦</p></td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+                <footer>
+                    <?php echo $this->pagedata; ?>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <!--主界面结束-->
+</div>
+</body>
+</html>
+
+

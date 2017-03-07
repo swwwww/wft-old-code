@@ -1,0 +1,111 @@
+<hgroup class="box">
+    <header>
+        <h3>设置微信菜单</h3>
+
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/weixin">回到微信管理首页</a>
+
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/weixin/setMenu">回到菜单首页</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<div class="box">
+    <div class="box-title"><?php echo $this->menu ? '修改' : '添加'; ?>菜单</div>
+
+    <form method="post" action="/wftadlogin/weixin/updateMenu<?php echo $this->menu ? '?id=' . $this->menu->id : ''; ?>">
+        <table class="table">
+            <tr>
+                <th class="menu-th1">菜单级别</th>
+                <th colspan="4">
+                    <select id="button" name="button" class="menu-button">
+                        <option value="">请选择菜单级别</option>
+                        <option value="1" id="menu-first" <?php echo ($this->menu && $this->menu['button'] == 1) ? 'selected' : ''; ?>>一级菜单</option>
+                        <?php if (count($this->first_menu)) : ?>
+                            <option value="2" id="menu-second" <?php echo ($this->menu && $this->menu['button'] == 2) ? 'selected' : ''; ?>>二级菜单</option>
+                        <?php endif; ?>
+                    </select>
+
+                    <select id="menu-pmid" name="pmid" class="menu-button menu-pmid">
+                        <option value="">请选择父级菜单</option>
+                        <?php foreach ($this->first_menu as $fm) : ?>
+                            <option value="<?php echo $fm['id']; ?>"
+                                <?php echo $this->menu['pmid'] == $fm['id'] ? 'selected' : ''; ?>><?php echo $fm['menu_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="menu-pmid">添加二级菜单后，原一级菜单的url链接将失效哦</span>
+                </th>
+            </tr>
+            <tr>
+                <th class="menu-th1">菜单类型</th>
+                <th colspan="4">
+                    <select id="type" id="menu-type" name="type" class="menu-type">
+                        <option value="">请选择菜单类型</option>
+                        <option value="view" <?php echo ($this->menu && $this->menu['type'] == 'view') ? 'selected' : ''; ?>>一般链接跳转</option>
+                        <!--<option value="click" <?php //echo ($this->menu && $this->menu['type'] == 'click') ? 'selected' : ''; ?>>点击推送消息</option>-->
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th class="menu-th1">菜单标题</th>
+                <th colspan="4">
+                    <input type="text" name="menu_name" class="menu_name"
+                           value="<?php echo $this->menu ? $this->menu['menu_name'] : ''; ?>">
+                    <span>一级菜单标题不超过4个汉字，二级菜单标题不超过7个汉字，多余汉字将用...代替</span>
+                </th>
+            </tr>
+            <tr>
+                <th class="menu-th1">菜单链接地址</th>
+                <th colspan="4">
+                    <input type="text" id="menu_url" name="url" class="menu-info" placeholder="请输入菜单链接地址"
+                           value="<?php echo $this->menu ? $this->menu['url'] : ''; ?>" <?php echo $this->second_menu_num ? 'readOnly' : ''; ?>>
+                </th>
+            </tr>
+
+            <!--<tr>
+                <th class="menu-th1">菜单Key值</th>
+                <th colspan="4">
+                    <input type="text" id="menu_key" name="key" class="menu-info" placeholder="请输入菜单Key值，汉字不超过25个，字符不超过60个"
+                     value="<?php echo $this->menu ? $this->menu['key'] : ''; ?>">
+                    <span>* 点击推送消息菜单必填</span>
+                </th>
+            </tr>-->
+
+            <tr>
+                <th><p><button id="ti-place" class="ui-button">提交</button></p></th>
+                <th colspan="4"><p>注：一级菜单最多3个，每个一级菜单下的二级菜单最多5个，没有三级菜单</p></th>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<style>
+    .menu-th1 {
+        width: 160px;
+    }
+    .menu-button,.menu-type,.menu_name {
+        width: 200px;
+    }
+    .menu-info {
+        width: 900px;
+    }
+</style>
+
+<script>
+    $(function(){
+        $('.menu-pmid').hide();
+
+        $('#button').click(function(){
+            if ($(this).val() == '2') {
+                $('.menu-pmid').show();
+            } else {
+                $('.menu-pmid').hide();
+            }
+        });
+    })
+</script>
+

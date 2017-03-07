@@ -1,0 +1,50 @@
+
+
+<p>
+    <a  class="ui-button" href="/activity/pingxuanadmin/newPrize">添加奖品</a>
+</p>
+
+
+<div class="box">
+    <div class="box-title">
+        商家列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="150">奖品名称</th>
+                <th width="100">奖品数量</th>
+                <th width="100">奖品领取数量</th>
+                <th width="100">概率</th>
+                <th width="300">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['id']; ?></td>
+                    <td width="150">
+                        <?php echo $row['name']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['limit_num']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['get_num']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['probability']; ?>  概率是  <?php echo bcdiv($row['probability'] * 100, $pv, 2). '%'; ?>
+                    </td>
+                    <td width="300">
+                        <a class="ui-button" href="/activity/pingxuanadmin/newPrize?id=<?php echo $row['id']; ?>">修改</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->page; ?>
+        </footer>
+    </div>
+</div>
+

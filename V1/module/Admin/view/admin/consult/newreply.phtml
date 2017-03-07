@@ -1,0 +1,27 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/consult">咨询管理</a></li>　　
+        <li class="active"><?php echo $msg['msg']?>__回复</li>　
+    </ul>
+</div>
+
+<form class="box box-form" action="/wftadlogin/consult/reply" method="post">
+    <table class="table">
+
+        <tr>
+            <th width="160">内容</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="info"></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="mid"  value="<?php echo $msg['_id'];?>"> <!--//主贴id-->
+                <input type="hidden" name="uid"  value="<?php echo $userData->bind_user_id;?>">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>

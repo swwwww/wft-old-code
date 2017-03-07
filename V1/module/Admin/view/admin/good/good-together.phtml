@@ -1,0 +1,263 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/game">返回商品列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/good/save" id="game-save" method="post">
+    <header class="box-title"> 添加非合作商品 </header>
+    <table class="table">
+        <tr>
+            <th width="160">商品名称</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="title" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">分享标题</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="share_title" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商家</th>
+            <th colspan="3">
+                玩翻天
+                <input type="hidden" class="cssInput" name="organizer_id" value="24">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">份数限制</th>
+            <th colspan="3" width="600">
+                每机限购&nbsp;
+                <input type="text" class="cssInput" name="limit_num" style="width: 60px" value="1">份　
+
+                最低购买份数&nbsp;
+                <input type="text" class="cssInput" name="limit_low_num" style="width: 60px" value="">份　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">限制</th>
+            <th colspan="3" width="600">
+                虚拟票&nbsp;
+                <input type="text" class="cssInput" name="coupon_vir" style="width: 60px"
+                       value="">份
+                限购资格&nbsp;
+                <select name="qualified">
+                    <option value="1">不限够</option>
+                    <option value="2">限购</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">上架时间：</th>
+            <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo date('Y-m-d', time());?>" name="start_time">
+                <input type="time" value="<?php echo '08:00';?>" name="start_timel">　
+            </span>
+                <span style="color:red">上架下架时间 限制是否在手机里面展示</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">下架时间：</th>
+            <th colspan="3">
+        <span>
+            <input type="date" value="<?php echo date('Y-m-d', time()+1728000);?>" name="end_time">
+            <input type="time" value="<?php echo '23:59';?>" name="end_timel">
+        </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">开始售卖时间：</th>
+            <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo date('Y-m-d', time()+259200);?>" name="up_time">
+                <input type="time" value="<?php echo '23:59';?>" name="up_timel">
+            </span>
+                　<span style="color:red">开始和结束售卖时间 限制是否可以购买</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">停止售卖时间：</th>
+            <th colspan="3">
+        <span>
+            <input type="date" value="<?php echo date('Y-m-d', time()+1814400);?>" name="down_time">
+            <input type="time" value="<?php echo '23:59';?>" name="down_timel">
+        </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">停止退款时间：</th>
+            <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo date('Y-m-d', time()+5184000);?>" name="refund_time">
+                <input type="time" value="<?php echo '08:00';?>" name="refund_timel">　
+            </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用时间</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:300px" name="use_time" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">预约方式</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:300px" name="order_method" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">咨询电话</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:300px" name="phone" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">适合年龄</th>
+            <th colspan="3" width="600">
+                开始年龄：
+                <select name="age_min">
+                    <?php for ($i = 0; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?>岁</option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?>岁</option>
+                    <?php endfor; ?>
+                </select>
+                结束年龄：
+                <select name="age_max">
+                    <option value="100">以上</option>
+                    <?php for ($i = 0.5; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?>岁</option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?>岁</option>
+                    <?php endfor; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">分类</th>
+            <th width="300">
+            <span id="tag_inner">
+                <?php foreach ($labels as $z): ?>
+                    <input name="label[]" value=<?php echo $z->id; ?>  type="checkbox" /><?php echo $z->tag_name; ?>
+                <?php endforeach; ?>
+            </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">标签(属性)</th>
+            <th width="300">
+                <span>
+                <?php foreach ($tags as $z): ?>
+                    <input  name="tag[]" value=<?php echo $z->id; ?>  type="checkbox" /><?php echo $z->tag_name; ?>
+                <?php endforeach; ?>
+                </span>
+            </th>
+        </tr>
+
+        <!-- 短信模板类型 -->
+        <tr>
+            <th width="160">短信发送模板</th>
+            <th width="300">
+                <select name="message_type">
+                <?php
+                    foreach ($config_message_type as $key=>$val) {
+                ?>
+                    <option <?php echo $goodData ? (($goodData->message_type == $val['id']) ? 'selected' : '') : ''; ?> value="<?php echo $val['id'];?>"><?php echo $val['message_type_name'];?></option>
+                <?php
+                    }
+                ?>
+                </select>
+            </th>
+        </tr>
+
+        <!-- 自定义短信 -->
+        <tr>
+            <th width="160">短信自定义内容</th>
+            <th colspan="3">
+                <textarea name="message_custom_content" class="csstextarea"><?php echo $goodData ? $goodData->message_custom_content : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <!-- 特权标签 -->
+        <tr>
+            <th width="160">特权标签</th>
+            <th colspan="3">
+                <div id="">
+                    <?php
+                    foreach($config_special_labels as $key=>$val): ?>
+                        <input type="checkbox" class="labels" name="special_labels[]" value='<?php echo $val['id'] ?>' /><?php echo $val['tag_name'] ?>
+                    <?php endforeach; ?>
+                </div>
+                <script>
+                    $(function(){
+                        setchecked('<?php echo $special_labels_str?:0;?>','.labels')
+                    });
+
+                    //多选（单选）按钮组设置默认值
+                    function setchecked(data_string, classs) {
+                        var v = data_string.split(',');
+                        $(classs).each(function () {
+                            category = $(this);
+                            $.each(v, function (index, value) {
+                                if (category.val() == value) {
+                                    category.attr("checked", true);
+                                }
+                            });
+                        })
+                    }
+                </script>
+            </th>
+        </tr>
+
+        <tr>
+            <th></th>
+            <th colspan="3">
+
+                <input type="hidden" name="city"  value="<?php echo $_COOKIE['city'];?>">
+                <span type="submit" class="btn btn-primary" id="ti-game">提交</span>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $(function () {
+        //保存提交
+        $('#ti-game').click(function () {
+            $.post('/wftadlogin/good/save?type=together', $('#game-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href="/wftadlogin/good/new?gid="+ data.gid;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+    })
+</script>

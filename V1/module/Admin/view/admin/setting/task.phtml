@@ -1,0 +1,85 @@
+<hgroup class="box">
+    <header>
+        <h3>做任务换积分</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/task">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/setting/tasksave" method="post">
+    <header class="box-title">添加新手任务&nbsp;&nbsp;<?php echo $filtercity; ?></header>
+
+    <table class="table">
+
+        <tr>
+            <th width="160">添加新手任务</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="alt_face" <?php if($data->alt_face == 11): ?>checked<?php endif; ?>
+                       value="11"> 更换头像&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="b_weixin" <?php if($data->b_weixin == 14): ?>checked<?php endif; ?>
+                       value="14"> 微信绑定&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="baby_info" <?php if($data->baby_info == 12): ?>checked<?php endif; ?>
+                       value="12"> 补充宝宝资料&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="baby_face" <?php if($data->baby_face == 13): ?>checked<?php endif; ?>
+                       value="13"> 上传宝宝头像&nbsp;&nbsp;&nbsp;&nbsp;
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">全部完成以上任务(额外积分)</th>
+            <th colspan="3"><input type="text" class="cssInput" name="new_plus"
+                                   value="<?php echo $data->new_plus; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th class="box-title" colspan="4">添加每日任务</th>
+        </tr>
+        <tr>
+            <th width="160">添加每日任务</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="sign" <?php if($data->sign): ?>checked<?php endif; ?>
+                       value="8"> 签到&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php if(true): ?>
+                <input type="checkbox" class="" name="invite" <?php if($data->invite): ?>checked<?php endif; ?>
+                       value="22"> 邀请好友注册&nbsp;&nbsp;&nbsp;&nbsp;
+                <?php endif; ?>
+                <input type="checkbox" class="" name="share_good" <?php if($data->share_good): ?>checked<?php endif; ?>
+                       value="3"> 分享商品&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="share_place" <?php if($data->share_place): ?>checked<?php endif; ?>
+                       value="1"> 分享游玩地&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="comm_good" <?php if($data->comm_good): ?>checked<?php endif; ?>
+                       value="4"> 点评商品&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="comm_place" <?php if($data->comm_place): ?>checked<?php endif; ?>
+                       value="2"> 点评游玩地&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="buy_good" <?php if($data->buy_good): ?>checked<?php endif; ?>
+                       value="5"> 购买商品&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" class="" name="circle_msg" <?php if($data->circle_msg): ?>checked<?php endif; ?>
+                       value="15"> 圈子发言&nbsp;&nbsp;&nbsp;&nbsp;
+            </th>
+        </tr>
+        <tr>
+            <th width="160">
+                当日全部完成以上任务(额外积分)
+            </th>
+            <th colspan="3"><input type="text" class="cssInput" name="day_plus"
+                                   value="<?php echo $data->day_plus; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input name="city" value="<?php echo $city; ?>" type="hidden" />
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+
+</form>
+
+
+

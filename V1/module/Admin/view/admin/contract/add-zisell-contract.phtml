@@ -1,0 +1,245 @@
+<hgroup class="box">
+    <header>
+        <h3>添加合同</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/contract">返回合同列表</a>
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+<form class="box box-form" action="/wftadlogin/contract/save" method="post" id="save-contract-form">
+
+    <table class="table">
+        <tr id="s-organizer-view">
+            <th width="160">合作商家</th>
+            <th colspan="3">
+                <input class="orTz" type="text" class="cssInput" style="width:190px"  value="">
+                <div></div>
+                <input name="mid" type="hidden" id="organizer-id" class="cssInput" style="width:190px"  value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">经办人</th>
+            <th colspan="3">
+                <select name="business_id">
+                    <?php foreach($marketer as $te):?>
+                        <option value="<?php echo $te->id;?>"><?php echo $te->admin_name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">录入人</th>
+            <th colspan="3">
+                <?php echo $_COOKIE['user'];?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">生效日期</th>
+            <th colspan="3">
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">合同描述</th>
+            <th colspan="3">
+                <textarea name="information" class="cssTextArea"></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th>上传文件</th>
+            <td id="l_upload" data-uploaded="" colspan="3">
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div class="img-box img-upload" style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传图片</div>
+                </div>
+                <div id="html5_1905r4ojgvh61ln71q8j63v1ggs3_container" class="moxie-shim moxie-shim-html5"
+                     style="position: absolute; top: 13px; left: 153px; width: 130px; height: 130px; overflow: hidden; z-index: 0;">
+                    <input id="html5_1905r4ojgvh61ln71q8j63v1ggs3" type="file"
+                           style="font-size: 999px; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                           multiple="" accept="image/jpeg,image/gif,image/png">
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th width="160">提交审批</th>
+            <th colspan="3">
+                <select name="check_status">
+                    <option value="0">不提交审批</option>
+                    <option value="1">提交审批</option>
+                </select>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">类别</th>
+            <th colspan="3">
+                <input name="contracts_type" checked="checked"  type="radio" value="2" />自营合同　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">申请借款</th>
+            <th colspan="3">
+                <input name="pre_money" type="text" class="cssInput" style="width:190px"  value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">价格方案</th>
+            <th colspan="3">
+
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="cid" value="">
+                <button type="submit" class="btn btn-primary" id="save-contract">下一步</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+</body>
+
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+
+<script type="text/javascript" src="/js/plupload.full.min.js"></script>
+<script>
+    (function () {
+
+        //保存提交
+        $('#save-contract').click(function () {
+            $.post('/wftadlogin/contract/save', $('#save-contract-form').serialize(), function (data) {
+                if (data.status == 1) {
+                    if (data.fid) {
+                        window.location.href = "/wftadlogin/contract/good?cid=" + data.fid;
+                    } else {
+                        alert('保存成功');
+                    }
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        //搜索商家的
+        $('#s-organizer-view').on('input propertychange', '.orTz', function () {
+            var k = $(this).val();
+            var that =  $(this).next();
+            that.empty();
+            $.post('/wftadlogin/contract/getOrganizer?type=1&k='+ k,
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div class="xiala" data-name="' + entry['name'] + '" data-sid="' + entry['sid'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+                    })
+                }, 'json'
+            );
+        });
+
+        $('#s-organizer-view').on('click','.xiala',function() {
+            var shop_name = $(this).attr('data-name');
+            var shop_id = $(this).attr('data-sid');
+            $('.orTz').val(shop_name);
+            $('#organizer-id').val(shop_id);
+            /*alert($(this).parent('div').prev());
+             alert($(this).parent('div'));*/
+            // $(this).parent('div').prev().();
+            $(this).parent('div').empty();
+
+        });
+
+
+        //上传图片
+        var upload = $('#l_upload'),
+            buttons = upload.find('.img-upload'),
+            maxCount = 10,
+            uploaded = upload.find('.img-box').length - 1,
+            uploader = new plupload.Uploader({
+                runtimes: "html5,flash,silverlight,html4",
+
+                browse_button: [].slice.call(buttons),
+
+                url: '/wftadlogin/index/upload?type=contract',
+                flash_swf_url: '/js/Moxie.swf',
+                file_data_name: 'file',  //键名
+                multi_selection: true,
+                unique_names: true,
+                dragdrop: true,
+                filters: {
+                    max_file_size: '10mb',
+                    mime_types: [
+                        {title: "Image files", extensions: "jpg,gif,png"},
+                    ]
+                }
+            }),
+            imgContainer = '<div style="float:left" class="img-box" >' +
+                '<img class="img-thumb" width="100px" height="100px" src="{url}" />' +
+                '<div class="close">&times;</div>' +
+                '<div class="coverset"  style="position:absolute;z-index: 2;opacity: 1;top:50px;left:30px;color:red">' +
+                '<input type="hidden" name="imgs[]" value="{url}" /></div></div>';
+        uploader.init();
+
+        uploader.bind('FilesAdded', function (up, files) {
+            var extra;
+            extra = uploaded + files.length - maxCount;
+
+            //如果选择图片过多
+            if (extra > 0) {
+                $.each(files.splice(maxCount - uploaded, extra), function (index, file) {
+                    up.removeFile(file);
+                });
+            }
+
+            uploaded += files.length;
+
+            setTimeout(function () {
+                up.start();
+            }, 10);
+        });
+
+        uploader.bind('FileUploaded', function (up, file, data) {
+            var json = $.parseJSON(data.response),
+                img = $(imgContainer.replace(/{url}/g, json.url));
+
+            upload.prepend(img);
+        });
+
+        uploader.bind('UploadComplete', function () {
+            if (uploaded === 10) {
+                buttons.hide();
+            }
+        });
+
+
+        upload.on('click', '.close', function (e) {
+            if (uploaded === 10) {
+                buttons.show();
+            }
+            uploaded--;
+            $(e.target).parent().remove();
+        });
+    }());
+</script>

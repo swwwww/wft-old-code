@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $res['name'];?></title>
+    <link type="text/css" rel="stylesheet" href="/css/share/share-0526.css" />
+</head>
+<body class="share-detail">
+<div class="photo">
+    <img src="<?php echo $res['cover']?>" />
+</div>
+<div class="wrapper">
+    <div class="share-title">简介</div>
+    <section class="space5">
+         <?php echo $res['brief'];?>
+    </section>
+    <a class="share-one view space5">图文详情</a>
+    <div>
+        <?php echo htmlspecialchars_decode($res['information']);?>
+    </div>
+    <section class="place">
+        <a class="address" href="#"><?php echo $res['address'];?><i></i></a>
+        <a class="tel" href="tel:<?php echo $res['phone'];?>">联系电话<span><?php echo $res['phone'] ? $res['phone'] : '暂无';?></span><i></i></a>
+    </section>
+    <div class="share-title">活动</div>
+    <div class="share-list">
+        <?php foreach($res['game'] as $game):?>
+        <a class="space5" href="/web/organizer/game?id=<?php echo $game['id'];?>">
+                <span class="portrait">
+                    <img src="<?php echo $game['thumb'];?>">
+                </span>
+            <div class="detail">
+                <p class="title"><?php echo $game['name'];?></p>
+                <p class="time">活动时间：<?php echo date('Y-m-d H:i', $game['time']);?></p>
+                <p class="text">
+                    <span class="sold">￥<?php echo $game['price'];?></span>
+                    <span class="location"><?php echo $game['circle'];?></span>
+                </p>
+            </div>
+        </a>
+        <?php endforeach;?>
+        <a class="share-one space5" href="/web/organizer/list?id=<?php echo $res['organizer_id'];?>">所有活动</a>
+    </div>
+</div>
+</body>
+</html>

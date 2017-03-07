@@ -1,0 +1,167 @@
+<hgroup class="box">
+    <header>
+        <h3>合同</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/contract">返回合同列表</a>
+    </header>
+</hgroup>
+<body>
+<form class="box box-form" action="/wftadlogin/contract/save" method="post" id="save-contract-form">
+    <header class="box-title">
+        <a href="/wftadlogin/contract/addContract?cid=<?php echo $contractData->id ;?>">合同基本信息</a>　　　　
+        <a href="/wftadlogin/contract/contractGood?cid=<?php echo $contractData->id ;?>">商品管理</a>
+    </header>
+    <table class="table">
+        <tr>
+            <th width="160">合同编号</th>
+            <th colspan="3">
+                <?php echo $contractData->contract_no;?>
+            </th>
+        </tr>
+
+        <tr id="s-organizer-view">
+            <th width="160">合作商家</th>
+            <th colspan="3">
+                <input class="orTz" <?php echo ($contractData && $contractData->check_status > 0) ? 'readonly' : ''?> type="text" class="cssInput" style="width:190px"  value="<?php echo $organizerData->name;?>">
+                <div></div>
+                <input name="mid" type="hidden" id="organizer-id" class="cssInput" style="width:190px"  value="<?php echo $contractData->mid;?>">
+                <div id="account"></div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">收款人</th>
+            <th colspan="3">
+                <?php echo $organizerAccount ? $organizerAccount->bank_user : '无';?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开户银行</th>
+            <th><?php echo $organizerAccount ? $organizerAccount->bank_name : '无';?></th>
+            <th width="160">开户支行</th>
+            <th><?php echo $organizerAccount ? $organizerAccount->bank_address : '无';?></th>
+        </tr>
+
+        <tr>
+            <th width="160">银行账号</th>
+            <th colspan="3"><?php echo $organizerAccount ? $organizerAccount->bank_card : '无';?></th>
+        </tr>
+
+        <tr>
+            <th width="160">经办人</th>
+            <th colspan="3">
+                <select name="business_id">
+                    <?php foreach($marketer as $te):?>
+                    <option <?php echo ($contractData && $contractData->business_id == $te->id) ? 'selected' : ''; ?> value="<?php echo $te->id;?>"><?php echo $te->admin_name;?></option>
+                     <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">录入人</th>
+            <th colspan="3">
+                <?php echo $contractData->editor;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">生效日期</th>
+            <th colspan="3">
+                <input <?php echo ($contractData && $contractData->check_status > 0) ? 'readonly' : ''?> name="start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo date('Y-m-d', $contractData->start_time);?>">
+                <input <?php echo ($contractData && $contractData->check_status > 0) ? 'readonly' : ''?> name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo date('Y-m-d', $contractData->end_time);?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">合同描述</th>
+            <th colspan="3">
+                <textarea name="information" class="cssTextArea"><?php echo $contractData->information;?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">类别</th>
+            <th colspan="3">
+                <?php
+                    if($contractData->contracts_type == 1) {
+                        echo '包销合同';
+                        echo '<input name="contracts_type" type="hidden" value="1" />';
+                    } elseif ($contractData->contracts_type == 2) {
+                        echo '自营合同';
+                        echo '<input name="contracts_type" type="hidden" value="2" />';
+                    } elseif ($contractData->contracts_type == 3) {
+                        echo '代销合同';
+                        echo '<input name="contracts_type" type="hidden" value="3" />';
+                    }
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="cid" value="<?php echo $contractData->id; ?>">
+                <button type="submit" class="ui-button" id="save-contract">保存</button>
+                <!--<a class="ui-button" href="/wftadlogin/contract/contractGood?cid=<?php /*echo $contractData->id ;*/?>">商品管理</a>-->
+            </th>
+        </tr>
+
+    </table>
+</form>
+</body>
+
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+<script>
+    (function () {
+
+        //保存提交
+        $('#save-contract').click(function () {
+            $.post('/wftadlogin/contract/save', $('#save-contract-form').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        //搜索商家的
+        $('#s-organizer-view').on('input propertychange', '.orTz', function () {
+            var k = $(this).val();
+            var that =  $(this).next();
+            that.empty();
+            $.post('/wftadlogin/contract/getOrganizer?k='+ k, "que=1",
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div class="xiala" data-name="' + entry['name'] + '" data-sid="' + entry['sid'] + '" data-account="' + entry['account'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+                    })
+                }, 'json'
+            );
+        });
+
+        $('#s-organizer-view').on('click','.xiala',function() {
+            var shop_name = $(this).attr('data-name');
+            var shop_id = $(this).attr('data-sid');
+            $('.orTz').val(shop_name);
+            $('#organizer-id').val(shop_id);
+            $(this).parent('div').empty();
+            $('#account').append($(this).attr('data-account'));
+
+        });
+    }());
+</script>
+
+

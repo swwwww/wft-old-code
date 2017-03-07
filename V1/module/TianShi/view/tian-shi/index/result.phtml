@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8">
+    <link href="/css/h5/prize.css" rel="stylesheet"/>
+    <title>天使宝宝大赛—奖品查询结果</title>
+</head>
+<body>
+<header class="re-header">
+    <div class="main">
+        <h3 class="name"><?php echo $user['username'] ?>:</h3>
+        <?php if ($award) { ?>
+            <p class="prize">在玩翻天天使宝宝大赛中 荣获&nbsp;<span><?php echo mb_substr($award['rank'], 0, 4, 'utf-8') ?></span>&nbsp;奖,
+            </p>
+            <p class="info">将获得<?php echo $award['title'] ?>!</p>
+        <?php } else { ?>
+            <p class="prize">在玩翻天天使宝宝大赛中暂时还未获奖
+            </p
+        <?php } ?>
+    </div>
+</header>
+<?php if ($data) { ?>
+    <section class="wrapper">
+        <h2 class="re-title">领取奖品</h2>
+        <?php foreach ($data as $value) { ?>
+
+            <!-- 立即领取2 --->
+            <?php if ($value['type'] == 2) { ?>
+                <form action="javascript:void(0)" class="gift-form">
+                    <fieldset class="title">
+                        <div class="pic"><img src="/img/tianshi/<?php echo $value['img'] ?>"/></div>
+                        <div class="name">
+                            <?php echo $value['rank'] ?>
+                        </div>
+                    </fieldset>
+                    <fieldset class="info">
+                        <p><span class="left">奖品名称：</span><span class="right"><?php echo $value['title'] ?></span></p>
+                        <p><span class="left">领取时间：</span><span class="right">截止<?php echo $value['time'] ?></span></p>
+                        <p><span class="left">使用备注：</span><span class="right"><?php echo $value['note'] ?></span>
+                        </p>
+                    </fieldset>
+                    <fieldset class="submit">
+                        <?php if ($value['status'] == 0) { ?>
+                            <a class="button" data-user="person"
+                               data-awardid="<?php echo $value['award_id'] ?>">立即领取</a>
+                        <?php } else { ?>
+                            <a class="button disabled">已领取</a>
+                        <?php } ?>
+                    </fieldset>
+                </form>
+            <?php } ?>
+
+            <!-- 商家确认3 --->
+            <?php if ($value['type'] == 3) { ?>
+                <form action="javascript:void(0)" class="gift-form">
+                    <fieldset class="title">
+                        <div class="pic"><img src="/img/tianshi/<?php echo $value['img'] ?>"/></div>
+                        <div class="name">
+                            <?php echo $value['rank'] ?>
+                        </div>
+                    </fieldset>
+                    <fieldset class="info">
+                        <p><span class="left">奖品名称：</span><span class="right"><?php echo $value['title'] ?></span></p>
+                        <?php if ($value['award_id'] == 4 or $value['award_id'] == 7 or $value['award_id'] == 8) { ?>
+                            <p><span class="left">领卡时间：</span><span class="right">2016.3.17-3.31</span></p>
+                        <?php } else { ?>
+                            <p><span class="left">领取时间：</span><span class="right">截止<?php echo $value['time'] ?></span>
+                            </p>
+                        <?php } ?>
+                        <p><span class="left">使用备注：</span><span class="right"><?php echo $value['note'] ?></span></p>
+                    </fieldset>
+                    <fieldset class="submit">
+                        <?php if ($value['status'] == 1) { ?>
+                            <a class="button disabled">已领取</a>
+                        <?php } else { ?>
+                            <fieldset class="coding code-inner">
+                                <div class="code-num">
+                                    <input class="text codeword" type="password" id="<?php echo $value['award_id'].'code' ?>" value="" placeholder="请工作人员输入验证码"/>
+                                    <aside class="code-error"></aside>
+                                </div>
+                                <a class="check-code" data-user="company" data-awardid="<?php echo $value['award_id'] ?>"
+                                       >确认使用</a>
+                            </fieldset>
+                        <?php } ?>
+                    </fieldset>
+                </form>
+            <?php } ?>
+
+            <!-- 兑换码4 --->
+            <?php if ($value['type'] == 4) { ?>
+                <form action="javascript:void(0)" class="gift-form">
+                    <fieldset class="title">
+                        <div class="pic"><img src="/img/tianshi/<?php echo $value['img'] ?>"/></div>
+                        <div class="name">
+                            <?php echo $value['rank'] ?>
+                        </div>
+                    </fieldset>
+                    <fieldset class="info">
+                        <p><span class="left">奖品名称：</span><span class="right"><?php echo $value['title'] ?></span></p>
+                        <p><span class="left">领取时间：</span><span class="right">截止<?php echo $value['time'] ?></span></p>
+                        <p><span class="left">使用备注：</span><span class="right"><?php echo $value['note'] ?></span>
+                        </p>
+                    </fieldset>
+                    <fieldset class="submit">
+                        <?php if ($value['status'] == 1) { ?>
+                            <a class="button disabled" data-user="look" data-number="<?php
+                            if ($value['rank'] == '快乐天使奖') {
+                                echo 20;
+                            } elseif ($value['rank'] == '希望天使奖') {
+                                echo 100;
+                            } else {
+                                echo 50;
+                            }
+                            ?>">已领取,点击查看</a>
+                        <?php } else { ?>
+                            <a class="button" data-user="code" data-awardid="<?php echo $value['award_id'] ?>"
+                               data-number="<?php
+                               if ($value['rank'] == '快乐天使奖') {
+                                   echo 20;
+                               } elseif ($value['rank'] == '希望天使奖') {
+                                   echo 100;
+                               } else {
+                                   echo 50;
+                               }
+                               ?>">立即领取</a>
+                        <?php } ?>
+                    </fieldset>
+                </form>
+            <?php } ?>
+
+            <!-- 邮寄1 --->
+            <?php if ($value['type'] == 1) { ?>
+                <form action="javascript:void(0)" class="gift-form">
+                    <fieldset class="title">
+                        <div class="pic"><img src="/img/tianshi/<?php echo $value['img'] ?>"/></div>
+                        <div class="name">
+                            <?php echo $value['rank'] ?>
+                        </div>
+                    </fieldset>
+                    <fieldset class="info">
+                        <p><span class="left">奖品名称：</span><span class="right"><?php echo $value['title'] ?></span></p>
+                        <p><span class="left">使用备注：</span><span class="right"><?php echo $value['note'] ?></span></p>
+                    </fieldset>
+                    <fieldset class="submit">
+                        <?php if ($value['status'] == 1) { ?>
+                            <a class="button disabled">待发放</a>
+                        <?php } elseif ($value['status'] == 2) { ?>
+                            <!--                            <a class="button" data-user="ems">已发放</a>-->
+                            <a class="button">已发放</a>
+                        <?php } else { ?>
+                            <a class="button disabled">已失效</a>
+<!--                            <a class="button " data-user="mail" data-awardid="--><?php //echo $value['award_id'] ?><!--">已失效</a>-->
+                        <?php } ?>
+                    </fieldset>
+                </form>
+            <?php } ?>
+        <?php } ?>
+    </section>
+<?php } ?>
+<div class="check-win" id="check-win">
+    <div class="check-win-box" id="check-win-box">
+        <!--up-->
+        <div class="check-win-list check-win-up" id="check-win-up">
+            <div class="info">
+                您的玩翻天不是最新版，<br>
+                请先升级。<br>
+                奖品在等你噢。
+            </div>
+            <a class="confirm" href="http://wan.wanfantian.com/app/index.php">立即升级</a>
+        </div>
+        <!--send-->
+        <div class="check-win-list check-win-send" id="check-win-send">
+            <form action="javascript:void(0)">
+                <fieldset class="info">
+                    确认使用吗？<br>
+                    此按钮为商家/工作人员点击。<br>
+                    自己点击，则视为放弃奖品。<br>
+                    确认使用后，奖品核销。
+                </fieldset>
+                <fieldset class="check-btn">
+                    <a class="confirm" id="send-ok" data-info="gift" data-awardid="">确定</a>
+                    <a class="check-win-close cancel gogo">取消</a>
+                </fieldset>
+            </form>
+        </div>
+        <!--code-->
+        <div class="check-win-list check-win-code" id="check-win-code">
+            <div class="main">
+                <h2>格瓦拉@电影10元红包</h2>
+                <div class="code">
+                    <p>码：<span id="code-mark">XXXX</span></p>
+
+                </div>
+                <p>在格瓦拉支付时输入兑换码，即可使用。</p>
+            </div>
+            <a class="check-win-close cancel" id="cancel">×</a>
+        </div>
+
+        <!--code2-->
+        <div class="check-win-list check-win-code" id="check-win-code2">
+            <div class="main">
+                <h2>恭喜您获得武商网优惠券</h2>
+                <div class="code">
+                    <p>兑换码1：<span id="code-mark1">XXXX</span></p>
+                    <p>密&nbsp;&nbsp;&nbsp;码1：<span id="code-psd1">654321</span></p>
+                    <p>兑换码2：<span id="code-mark2">XXXX</span></p>
+                    <p>密&nbsp;&nbsp;&nbsp;码2：<span id="code-psd2">654321</span></p>
+                    <p>各50元</p>
+                </div>
+                <p>在武商网-会员中心-我的优惠券中激活即可使用！</p>
+            </div>
+            <a class="check-win-close cancel" id="cancel">×</a>
+        </div>
+
+        <!--mail-->
+        <div class="check-win-list check-win-mail" id="check-win-mail">
+            <form action="javascript:void(0)" id="mail-form">
+                <h2>请填写邮寄信息方便奖品邮寄</h2>
+
+                <fieldset class="item">
+                    <label class="left" for="name">姓名:</label>
+                    <div class="right">
+                        <input class="neme" id="name" type="text" name="name" placeholder="请输入收件人姓名" autocomplte="off">
+                        <aside class="in-error" id="loginName"></aside>
+                    </div>
+                </fieldset>
+
+                <fieldset class="item">
+                    <label class="left" for="phone">联系方式：</label>
+                    <div class="right">
+                        <input class="phone" id="phone" type="text" name="phone" placeholder="请输入手机号码"
+                               autocomplte="off">
+                        <aside class="in-error" id="loginTip"></aside>
+                    </div>
+                </fieldset>
+
+                <fieldset class="item">
+                    <label class="left" for="address">收件地址：</label>
+                    <div class="right">
+                        <textarea class="msg" id="address" name="address" cols="20" rows="3"
+                                  placeholder="请输入详细的收获地址"></textarea>
+                        <aside class="in-error" id="loginAdr"></aside>
+                        <div class="tips"><span>*</span>仅限武汉地区</div>
+                    </div>
+                </fieldset>
+                <input type="hidden" name="token" value="654321"/>
+                <input type="hidden" name="type" value="1"/>
+                <input type="hidden" name="awardid" value="1"/>
+                <fieldset class="check-btn">
+                    <a class="check-win-close cancel gogo">取消</a>
+                    <a class="confirm" data-info="mail">确认提交</a>
+                </fieldset>
+            </form>
+        </div>
+        <!--tips-->
+        <div class="check-win-list check-win-tips" id="check-win-tips">
+            <div class="tips">
+                提交成功！<br>
+                请等待邮递员们为您<br>
+                马不停蹄地安排发放咯~
+            </div>
+            <a class="check-win-close check-btn close">好的，我知道了</a>
+        </div>
+        <!--ems-->
+        <div class="check-win-list check-win-ems" id="check-win-ems">
+            <div class="tips">
+                您的奖品已发放， <br>
+                请注意查收哟! <br>
+                快递单号：<span id="ems-num">140025515462</span>
+            </div>
+            <a class="check-win-close check-btn close gogo">好的，我知道了</a>
+        </div>
+        <!--noaward-->
+        <div class="check-win-list check-win-ems" id="check-win-noaward">
+            <div class="tips" id="nowordtext">
+
+            </div>
+            <a class="check-win-close check-btn close gogo" onclick="window.location.reload();">好的，我知道了</a>
+        </div>
+        <!--waiting-->
+        <div class="check-win-list check-win-ems" id="check-win-waiting">
+            <div class="tips">
+                领奖中…请稍后
+            </div>
+        </div>
+    </div>
+    <div id="prize-token" data-id="654321"></div>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/prize.js"></script>
+</html>

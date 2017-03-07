@@ -1,0 +1,46 @@
+
+
+<div class="box">
+    <div class="box-title">
+        投票记录
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="50">商家名称</th>
+                <th width="50">商家id</th>
+                <th width="50">投票时间</th>
+
+
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['id']; ?></td>
+                    <td width="50">
+                        <?php echo $row['name']; ?>
+                    </td>
+
+                    <td width="50">
+                        <?php echo $row['bid']; ?>
+                    </td>
+
+
+                    <td width="50">
+                        <?php echo date('Y-m-d H:i:s',$row['dateline']); ?>
+                    </td>
+
+                    
+
+
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->page; ?>
+        </footer>
+    </div>
+</div>
+

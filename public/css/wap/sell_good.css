@@ -1,0 +1,211 @@
+body{
+    padding: 0;
+    margin: 0;
+    max-width: 750px;
+    font-family: 'microsoft yaHei';
+    color: #000;
+    background: #eee;
+}
+
+a{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+mark{
+    background: none;
+}
+
+.header{
+    width: 100%;
+    overflow: hidden;
+}
+
+.header-nav{
+    font-size: 28px;
+    line-height: 37px;
+    color: #000;
+    padding: 18px 0 18px 20px;
+    border-bottom: 1px solid #dededf;
+    background: #fff url("/images/wappay/icons.png?ver=1") no-repeat 690px -1170px;
+}
+
+.header-nav.active{
+    background: #fff url("/images/wappay/icons.png?ver=1") no-repeat 690px -1120px;
+}
+
+.header-content{
+    display: none;
+    width: 100%;
+    height: 190px;
+    background: #fff;
+    margin-bottom: 22px;
+    overflow: hidden;
+}
+
+.header-content .category{
+    width: 340px;
+    margin: 40px 205px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.header-content .category .item{
+    float: left;
+    width: 156px;
+    height: 56px;
+    border: 1px solid #000;
+    border-radius: 8px 8px 8px 8px;
+    -webkit-border-radius: 8px 8px 8px 8px;
+    font-size: 28px;
+    color: #000;
+    line-height: 56px;
+    text-align: center;
+}
+
+.item:nth-child(2){
+    margin-left: 20px;
+}
+
+.category .matte-l{
+    display: none;
+    position: absolute;
+    width: 158px;
+    height: 58px;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0);
+    z-index: 10;
+}
+
+.category .matte-r{
+    display: none;
+    position: absolute;
+    width: 158px;
+    height: 58px;
+    top: 0;
+    right: 0;
+    background: rgba(0,0,0,0);
+    z-index: 10;
+}
+
+.header-content .category .item.active{
+    border: 1px solid #fb5f39;
+    color: #fb5f39;
+}
+
+.header-content .category .item.disabled{
+    border: 1px solid #c3c3c3;
+    color: #c3c3c3;
+}
+
+.i-bottom{
+    display: block;
+    width: 100%;
+    height: 49px;
+    background: #fff url("/images/wappay/icons.png?ver=1") no-repeat 330px -1032px;
+}
+.ticket-list {
+    width: 100%;
+}
+.ticket-list .ticket-list-item {
+    display: block;
+    padding: 20px 25px 0 20px;
+    overflow: hidden;
+    border-bottom: 1px solid #e5e5e5;
+    background: #fff;
+    margin-bottom: 20px;
+}
+.ticket-list .ticket-list-item img {
+    float: left;
+    width: 160px;
+    height: 160px;
+    padding-bottom: 20px;
+    border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+}
+.ticket-list .ticket-list-item .item-content {
+    float: left;
+    width: 525px;
+    margin-left: 20px;
+    overflow: hidden;
+}
+.item-content .ticket-title {
+    float: left;
+    height: 80px;
+    width: 525px;
+    font-size: 34px;
+    line-height: 40px;
+    color: #000;
+}
+.item-content .ticket-detail {
+    float: left;
+    width: 525px;
+    line-height: 40px;
+    padding: 5px 0;
+    overflow: hidden;
+}
+.item-content .ticket-detail span {
+    float: left;
+    font-size: 30px;
+    color: #fa6e51;
+}
+.item-content .ticket-detail mark {
+    float: left;
+    font-size: 20px;
+    color: #bbbbbb;
+    margin-left: 15px;
+    text-decoration: line-through;
+}
+.item-content .ticket-detail i {
+    float: right;
+    font-size: 24px;
+    color: #bbbbbb;
+    font-style: normal;
+}
+.item-content .ticket-tip {
+    float: left;
+    width: 525px;
+    line-height: 31px;
+
+    overflow: hidden;
+}
+.item-content .ticket-tip span {
+    float: left;
+    font-size: 24px;
+    margin-left: 5px;
+    color: #bbbbbb;
+}
+.item-content .ticket-tip mark {
+    float: left;
+    font-size: 24px;
+    margin-left: 10px;
+    color: #bbbbbb;
+}
+.item-content .ticket-tip i {
+    float: right;
+    padding-left: 30px;
+    font-size: 24px;
+    color: #bbbbbb;
+    font-style: normal;
+    background: #fff url("/images/wappay/icons.png?ver=1") no-repeat 0 -1093px;
+}
+
+.profit{
+    float: left;
+    width: 100%;
+    height: 54px;
+    font-size: 24px;
+    line-height: 54px;
+    color: #666;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.profit-info{
+    color: #fa6e51;
+}
+
+.main{
+    margin-top: 7px;
+}

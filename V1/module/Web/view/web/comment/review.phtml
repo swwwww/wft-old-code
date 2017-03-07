@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>专题评论</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/travel.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content">
+    <header class="header">
+        <a class="header-back" href="javascript:history.go(-1);"></a>
+        <a class="header-title">评论</a>
+        <!--<a class="header-user" href="" title=""></a>-->
+    </header>
+    <section class="wrapper">
+        <form id="form" action="" method="post" class="comm-frame">
+
+            <div class="all-comment">
+                <span class="name">评分</span>
+                <a href="javascript:;" data-star="10" title="总体评价" class="comm-star
+                 star-cur"></a>
+                <a href="javascript:;" data-star="20" title="总体评价" class="comm-star
+                 star-cur"></a>
+                <a href="javascript:;" data-star="30" title="总体评价" class="comm-star
+                 star-cur"></a>
+                <a href="javascript:;" data-star="40" title="总体评价" class="comm-star
+                 star-cur"></a>
+                <a href="javascript:;" data-star="50" title="总体评价" class="comm-star "></a>
+                <input id="W_star_holder" type="hidden" name="star" value="">
+<!--                <input id="pid" type="hidden" name="pid" value="">-->
+                <input id="object_id" type="hidden" name="object_id" value="<?php echo $data['sid'];?>">
+                <input id="type" type="hidden" name="type" value="3">
+            </div>
+            <div class="all-con">
+                <textarea id="message" placeholder="写评价获得{n倍}积分，编辑采纳赠送现金券" name="body" cols="" rows="8" class="tarea"></textarea>
+                <div class="pic">
+                    <a class="W_photo" href="javascript:;" title="">添加晒单照片</a>
+                </div>
+            </div>
+            <a id="W_submit" href="javascript:;" title="提交" class="icon-btn icon-btn-orange">提交</a>
+            <!--<input type="hidden" name="csrftoken" value="">-->
+        </form>
+    </section>
+</main>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script>
+    $(function(){
+        $("#W_submit").click(function () {
+            var comment = $("#message").val();
+            if(!comment){
+                alert("内容不能为空");
+                return false;
+            }
+            var sid = $("#object_id").val();
+
+        });
+    })
+</script>
+</body>
+</html>

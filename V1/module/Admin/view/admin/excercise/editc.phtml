@@ -1,0 +1,463 @@
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+
+</style>
+<hgroup class="box">
+    <header>
+        <h3>场次编辑</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/excercise/blist?p=<?php echo $_GET['p']; ?>">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form id="aform" class="box box-form" action="/wftadlogin/excercise/eventupdate" method="post">
+
+    <table class="table">
+        <tr>
+            <th width="160">活动名称</th>
+            <th colspan="3"><input type="text" disabled class="cssInput" name="name" value="<?php echo $bbt->name; ?>"/> 第<?php echo $eet->no; ?>场
+            </th>
+        </tr>
+        <tr class="between_time">
+            <th width="160">活动开始时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($eet && $eet->start_time > 0) ? date('Y-m-d', $eet->start_time) : date('Y-m-d', time());?>" name="start_time">
+                <input type="time" value="<?php echo ($eet && $eet->start_time > 0) ? date('H:i', $eet->start_time) : date('H:i', time());?>" name="start_timel">
+                </span>
+            </th>
+        </tr>
+
+        <tr class="between_time">
+            <th width="160">活动结束时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($eet && $eet->end_time > 0) ? date('Y-m-d', $eet->end_time) : date('Y-m-d', time());?>" name="end_time">
+                <input type="time" value="<?php echo ($eet && $eet->end_time > 0) ? date('H:i', $eet->end_time) : date('H:i', time());?>" name="end_timel">
+                </span>
+            </th>
+        </tr>
+
+        <tr class="between_time">
+            <th width="160">报名截止时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($eet && $eet->over_time > 0) ? date('Y-m-d', $eet->over_time) : date('Y-m-d', time());?>" name="over_time">
+                <input type="time" value="<?php echo ($eet && $eet->over_time > 0) ? date('H:i', $eet->over_time) : date('H:i', time());?>" name="over_timel">
+                </span>
+            </th>
+        </tr>
+
+        <tr class="between_time">
+            <th width="160">退款时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($eet && $eet->back_time > 0) ? date('Y-m-d', $eet->back_time) : date('Y-m-d', time());?>" name="back_time">
+                <input type="time" value="<?php echo ($eet && $eet->back_time > 0) ? date('H:i', $eet->back_time) : date('H:i', time());?>" name="back_timel">
+                </span>
+            </th>
+        </tr>
+        <tr class="between_time">
+            <th width="160">开始售卖时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($eet && $eet->open_time > 0) ? date('Y-m-d', $eet->open_time) : date('Y-m-d', time());?>" name="open_time">
+                <input type="time" value="<?php echo ($eet && $eet->open_time > 0) ? date('H:i', $eet->open_time) : date('H:i', time());?>" name="open_timel">
+                </span>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">游玩地</th>
+            <th colspan="3">
+                <select name="shop_id">
+                    <?php foreach($pst as $p): ?>
+                        <option <?php if($p['shop_id'] == $eet->shop_id): ?> selected <?php endif; ?> value ="<?php echo $p['shop_id']; ?>"><?php echo $p['shop_name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </th>
+        </tr>
+        <tr style="display: none">
+            <th width="160">集合说明</th>
+            <th colspan="3">
+                <textarea name="meeting_desc" rows="5" cols="80" class="csstextarea"><?php echo $eet->meeting_desc ?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">集合地点</th>
+            <th colspan="3">
+                <?php
+                if($meeting){
+                    $meetings = explode(',',$meeting);
+                }
+                ?>
+                <input class="btn btn-primary meet_but" type="button" value="添加" /><span style="color: #555">&nbsp;</span>
+                <?php if($emt): ?>
+                    <?php foreach($emt as $k => $v): ?>
+                        <div class="meeting" id="meeting<?php echo $k; ?>">
+                            <input type="hidden" value="<?php echo $v['id']; ?>" name="mid[]"  />
+                            <select name="meeting_place[]" >
+                                <?php $place = []; foreach($meetings as $g): ?>
+                                    <option <?php if($v['meeting_place'] == $g): ?>selected="selected" <?php endif; ?> value="<?php echo $g; ?>" ><?php echo $g; ?></option>
+                                    <?php $place[] = $g; ?>
+                                <?php endforeach; ?>
+                                <?php if(!in_array('游玩地点',$place)): ?>
+                                    <option value="游玩地点" >游玩地点</option>
+                                <?php endif; ?>
+                            </select>
+                            <input type="date" value="<?php echo ($v['meeting_time'] > 0) ? date('Y-m-d', $v['meeting_time']) : date('Y-m-d', time());?>" name="meeting_time[]">
+                            <input type="time" value="<?php echo ($v['meeting_time'] > 0) ? date('H:i', $v['meeting_time']) : date('H:i', time());?>" name="meeting_timel[]">
+                            <input style="float:none; display:inline;" type="button" onclick="meeting_delete(<?php echo $k; ?>)" class="ui-button"  value="删除" />
+                            <br/></div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+
+                <?php endif; ?>
+                <div style="display: none" class="meeting" id="meeting"></div>
+            </th>
+        </tr>
+
+
+    </table>
+
+    <header class="box-title">收费项 　　　　　
+        <span class="ui-button" id="add-charge">添加收费项</span></header>
+    <table style="" class="table charge">
+        <tr class="">
+            <th width="160">保险与人数</th>
+            <th>保险：
+                <select name="insurance_id">
+                    <?php foreach ($baoyoulist as $v): ?>
+                        <option <?php if($eet->insurance_id == $v['RateCode']): ?>selected="selected" <?php endif; ?> value="<?php echo $v['RateCode']; ?>"><?php echo "{$v['PlanName']}({$v['DayRange']}天)"; ?></option>
+                    <?php endforeach; ?>
+                </select>
+
+            </th>
+            <th colspan="1">
+                最少数量：<input style="width: 100px;" type="text" class="cssInput" name="least_number" value="<?php echo $eet->least_number; ?>" />&nbsp;&nbsp;&nbsp;
+                最佳数量：<input style="width: 100px;" type="text" class="cssInput" name="perfect_number" value="<?php echo $eet->perfect_number; ?>" />  &nbsp;&nbsp;&nbsp;
+                最多数量：<input style="width: 100px;" type="text" class="cssInput" name="most_number" value="<?php echo $eet->most_number; ?>" />&nbsp;&nbsp;&nbsp;
+                <!-- 虚拟票：<input style="width: 100px;" type="text" class="cssInput" name="vir_number" value="<?php echo $eet->vir_number; ?>" /> -->
+                虚拟票成人：<input style="width: 100px;" type="text" class="cssInput" name="vir_ault" value="<?php echo $ebt->vir_ault; ?>">&nbsp;&nbsp;&nbsp;
+                虚拟票儿童：<input style="width: 100px;" type="text" class="cssInput" name="vir_child" value="<?php echo $ebt->vir_child; ?>">
+            </th>
+        </tr>
+    </table>
+    <?php $k = -1; ?>
+    <?php foreach ($ept as $e) : ?>
+        <?php if($e['is_other']){continue;} ?>
+        <table id="charge<?php $k++; echo $k; ?>" class="table charge">
+            <tr class="charge1">
+                <th style="width: 400px;" colspan="2">
+                    <input type="hidden" name="pid[]" value="<?php echo $e['id']; ?>" />
+                    <input type="hidden" name="eid[]" value="<?php echo $eid; ?>" />
+                    项目：<input  style="width: 300px;" type="<?php echo ((int)$e['selectp']===99)?'text':'hidden';?>" class="cssInput" name="price_name[]" value="<?php echo $e['price_name']; ?>">
+                    <select name="selectp[]" onchange="showinput(this);">
+                        <?php foreach ($p_name as $kk => $v): ?>
+                            <option <?php if($e['selectp']==$kk): ?>selected="selected" <?php endif; ?> value="<?php echo $kk; ?>"><?php echo "{$v}"; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </th>
+                <th colspan="1">单价（含保险）：<input  style="width: 100px;" type="text" class="cssInput" name="price[]" value="<?php echo $e['price']; ?>"></th>
+                <th colspan="1">出行人数成人：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_ault[]" value="<?php echo $e['person_ault']; ?>"></th>
+                <th colspan="1">儿童：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_child[]" value="<?php echo $e['person_child']; ?>"></th>
+                <th colspan="1">限购最多：<input style="width: 100px;" type="text" class="cssInput" name="most[]" value="<?php echo $e['most']; ?>"></th>
+                <th colspan="1">最少：<input style="width: 100px;" type="text" class="cssInput" name="least[]" value="<?php echo $e['least']; ?>">份</th>
+                <th colspan="1">销售员单份收益：<input style="width: 100px;" type="text" class="cssInput" name="single_income[]" value="<?php echo $e['single_income']; ?>">元</th>
+                <th>
+                    <span style="" onclick="chargedelete(<?php echo $k; ?>)" class="ui-button" >删除</span>
+                </th>
+            </tr>
+        </table>
+    <?php endforeach; ?>
+    <header class="box-title">其它费用 　　　　　
+        <span class="ui-button" id="add-othercharge">添加其他费用</span></header>
+    <table class="table" >
+        <tr>
+            <th width="200px" >项目</th>
+            <th width="200px" >单价</th>
+            <th width="200px" >操作</th>
+        </tr>
+        <tr style="display: none;" class="othercharge"></tr>
+        <?php $k = -1; ?>
+        <?php foreach ($ept as $e) :  ?>
+            <?php if(!$e['is_other']){continue;} ?>
+            <tr id="ocharge<?php $k++; echo $k; ?>" class="othercharge">
+                <input type="hidden" name="o_pid" value="<?php echo $e['id']; ?>" />
+                <input type="hidden" name="o_eid" value="<?php echo $eid; ?>" />
+                <th colspan="1"><input  type="text" class="cssInput" style="width: 200px;" name="o_price_name[]" value="<?php echo $e['price_name']; ?>"></th>
+                <th colspan="1"><input  type="text" class="cssInput" style="width: 200px;" name="o_price[]" value="<?php echo $e['price']; ?>"></th>
+                <th colspan="1">
+                    <?php if($is_edit): ?>
+                    <?php endif; ?>
+                    <span onclick="ochargedelete(<?php echo $k; ?>)" class="ui-button">删除</span>
+                </th>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    <table class="table">
+        <tr>
+            <th width="160">满减优惠</th>
+            <th colspan="3">
+                每满<input type="text" style="width: 100px;" class="cssInput" name="full_price" value="<?php echo $eet->welfare_type?(int)$eet->full_price:$eet->full_price; ?>"/>
+                <select name="welfare_type">
+                    <option <?php if(!$eet->welfare_type): ?>selected="selected" <?php endif; ?> value ="0">元</option>
+                    <option <?php if($eet->welfare_type): ?>selected="selected" <?php endif; ?> value ="1">人</option>
+                </select>
+                减<input style="width: 100px;" type="text" class="cssInput" name="less_price" value="<?php echo $eet->welfare_type?(int)$eet->less_price:$eet->less_price; ?>"/>元
+            </th>
+        </tr>
+        <tr>
+            <th width="160">评论积分</th>
+            <th colspan="3">
+                是否奖励
+                <input type="radio" <?php if($eet->comment_integral==1): ?> checked <?php endif; ?> class="" name="comment_integral" value="1"/>是
+                <input type="radio" <?php if(!$eet->comment_integral==1): ?> checked <?php endif; ?> class="" name="comment_integral" value="0"/>否
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input style="width: 100px;" type="text" class="cssInput" name="integral_multiple" value="<?php echo $eet->integral_multiple?:1; ?>"/>倍
+            </th>
+        </tr>
+        <tr>
+            <th width="160">是否给予分享奖励</th>
+            <th colspan="1">
+                <input type="radio" <?php if($eet->share_reward): ?>checked="true" <?php endif; ?> class="" name="share_reward" value="1"/>是
+                <input type="radio" <?php if(!$eet->share_reward): ?>checked="true" <?php endif; ?> class="" name="share_reward" value="0"/>否
+            <th colspan="1"></th>
+            <th colspan="1">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">特例商品</th>
+            <th colspan="1">
+                <input type="radio" <?php if($eet->excepted): ?>checked="true" <?php endif; ?> class="" name="excepted" value="1"/>是
+                <input type="radio" <?php if(!$eet->excepted): ?>checked="true" <?php endif; ?> class="" name="excepted" value="0"/>否
+            <th colspan="1"></th>
+            <th colspan="1">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">
+                <input type="hidden" name="id" value="<?php echo $eet->id; ?>" /></th>
+            <th colspan="3">
+                <button id="asubmit" type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+
+
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+
+        //实例化编辑器
+        var um = UE.getEditor('myEditor');
+
+
+        $('.meet_but').on('click',function() {
+            var k = $('.meeting').length;
+
+            str = '<div class="meeting" id="meeting'+k+'">'+
+            '<input type="hidden" value="" name="mid[]"  />'+
+            <?php
+             if($meeting){
+                    $meetings = explode(',',$meeting);
+                }
+             ?>
+            '<select name="meeting_place[]" >'+
+            <?php foreach($meetings as $g): ?>
+            '<option value="<?php echo $g; ?>" ><?php echo $g; ?></option>'+
+            <?php $place[] = $g; ?>
+            <?php endforeach; ?>
+            <?php if(!in_array("游玩地点",$place)): ?>
+            '<option value="游玩地点" >游玩地点</option>'+
+            <?php endif; ?>
+            '</select>'+
+            ' <input type="date" value="<?php echo date('Y-m-d', time());?>" name="meeting_time[]">'+
+            ' <input type="time" value="<?php echo date('H:i', time());?>" name="meeting_timel[]">'+
+            ' <input style="float:none; display:inline;" type="button" onclick="meeting_delete('+k+')" class="ui-button"  value="删除" />'+
+            '<br/></div>';
+            $('#meeting').after(str);
+        });
+
+        var meeting_delete = function(n){
+            if(confirm( '是否确定删除！')==false)return false;
+            var charge = $('#meeting'+n);
+            charge.remove();
+        };
+
+
+
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='thumb']").attr('value', data.result.url);
+                $("#img").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $("#img2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#add-charge').on('click',function() {
+        var n = $('.charge').length;
+        var charge = $('.charge').eq(n-1);
+        var html = '<table  id="charge'+n+'"  class="table charge">'+
+            '<tr class="charge1">'+
+                '<input id="cpid'+n+'" type="hidden" name="pid[]" value="" />'+
+                '<input type="hidden" name="eid[]" value="<?php echo $eid; ?>" />'+
+        '<th style="width: 400px;" colspan="5">'+
+        '项目：<input style="width: 300px;" type="hidden" class="cssInput" name="price_name[]" value="">'+
+            '<select name="selectp[]" onchange="showinput(this);">'+
+            <?php foreach ($p_name as $k => $v): ?>
+            '<option value="<?php echo $k; ?>"><?php echo "{$v}"; ?></option>'+
+            <?php endforeach; ?>
+            '</select></th>'+
+            '<th colspan="1">单价（含保险）：<input style="width: 100px;" type="text" class="cssInput" name="price[]" value=""></th>'+
+            '<th colspan="1">出行人数成人：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_ault[]" value=""></th>'+
+            '<th colspan="1">儿童：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_child[]" value=""></th>'+
+            '<th colspan="1">限购最多：<input style="width: 100px;" type="text" class="cssInput" name="most[]" value=""></th>'+
+            '<th colspan="1">最少：<input style="width: 100px;" type="text" class="cssInput" name="least[]" value="">份</th>'+
+            '<th colspan="1">销售员单份收益：<input style="width: 100px;" type="text" class="cssInput" name="single_income[]" value="">元</th>' +
+            '<th>'+
+            '<span onclick="chargedelete('+n+')" class="ui-button" >删除</span></td>'+
+        '</table>';
+        charge.after(html);
+    });
+
+    var chargedelete = function(n){
+        var charge = $('#charge'+n);
+        if(confirm( '是否确定删除！')==false)return false;
+        charge.remove();
+    };
+
+    //费用保存
+    var chargeedit = function(n){
+        var charge = $('#charge'+n);
+        charge.find("input").attr('disabled',false);
+        $('#cs'+n).show();
+        $('#ce'+n).hide();
+    };
+
+    var chargesave = function(n){
+        var charge = $('#charge'+n);
+
+        $.post('/wftadlogin/excercise/chargesave', charge.find("input").serialize(), function (data) {
+            if (data.status == 1) {
+                alert('保存成功');
+//                window.location.href="/wftadlogin/excercise/new?id="+ data.id;
+            } else {
+                alert(data.message);
+            }
+        }, 'json');
+
+
+        charge.find("input").attr('disabled',true);
+        $('#ce'+n).show();
+        $('#cs'+n).hide();
+    };
+
+    $('#add-othercharge').on('click',function() {
+        var n = $('.othercharge').length;
+        var ocharge = $('.othercharge').eq(n-1);
+        var html = '<tr id="ocharge'+n+'" class="othercharge">'+
+                '<input id="opid'+n+'" type="hidden" name="o_pid[]" value="" />'+
+                '<input type="hidden" name="o_eid[]" value="<?php echo $eid; ?>" />'+
+            '<th colspan="1"><input type="text" class="cssInput" style="width: 200px;" name="o_price_name[]" value=""></th>'+
+        '<th colspan="1"><input type="text" class="cssInput" style="width: 200px;" name="o_price[]" value=""></th>'+
+        '<th colspan="1">'+
+        '<span onclick="ochargedelete('+n+')" class="ui-button">删除</span>'+
+        '</th>'+
+        '</tr>';
+        ocharge.after(html);
+    });
+
+    var ochargedelete = function(n){
+        var ocharge = $('#ocharge'+n);
+//        var eid = ocharge.find("[name='pid']").val();
+//        $.post('/wftadlogin/excercise/epricedel', {'id':eid}, function (data) {
+//            if (data.status == 1) {
+//                alert(data.message);
+//                ocharge.remove();
+//            } else {
+//                alert(data.message);
+//            }
+//        }, 'json');
+        ocharge.remove();
+    };
+    //其它费用
+    var ochargeedit = function(n){
+        var ocharge = $('#ocharge'+n);
+        ocharge.find("input").attr('disabled',false);
+        $('#os'+n).show();
+        $('#oe'+n).hide();
+    };
+
+    var ochargesave = function(n){
+        var ocharge = $('#ocharge'+n);
+
+        $.post('/wftadlogin/excercise/ochargesave', ocharge.find("input").serialize(), function (data) {
+            if (data.status == 1) {
+                alert('保存成功');
+//                //window.location.href="/wftadlogin/excercise/new?id="+ data.id;
+            } else {
+                alert(data.message);
+            }
+        }, 'json');
+
+
+        ocharge.find("input").attr('disabled',true);
+        $('#oe'+n).show();
+        $('#os'+n).hide();
+    };
+
+        var showinput = function(obj){
+            var k = $(obj).val();
+            if(k == 99){
+                $(obj).prev().attr('type','text');
+            }else{
+                $(obj).prev().attr('type','hidden');
+            }
+        };
+
+    //保存提交
+    $('#asubmit').click(function () {
+        $.post('/wftadlogin/excercise/eventupdate', $('#aform').serialize(), function (data) {
+            if (data.status == 1) {
+                alert('保存成功');
+                window.location.href="/wftadlogin/excercise/blist?p=<?php echo $_GET['p']; ?>";
+            } else {
+                alert(data.message);
+            }
+        }, 'json');
+        return false;
+    });
+
+
+</script>

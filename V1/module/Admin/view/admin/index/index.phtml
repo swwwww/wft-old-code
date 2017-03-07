@@ -1,0 +1,66 @@
+<h1>欢迎访问后台</h1>
+<hr>
+
+<h3>合作商家分布图</h3>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>所有店铺</title>
+    <style type="text/css">
+        body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
+        #l-map{height:600px;width:100%;}
+        #r-result{width:100%; font-size:14px;line-height:20px;}
+        label {
+            max-width: none;
+            -moz-border-radius: 15px;      /* Gecko browsers */
+            -webkit-border-radius: 15px;   /* Webkit browsers */
+            border-radius:15px;            /* W3C syntax */
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gPUtdgCwWw7cqBnBEUvhqCXN"></script>
+</head>
+<body>
+<div id="l-map"></div>
+<div id="r-result">
+<!--    <input type="button" value="批量反地址解析+商圈" onclick="bdGEO(0)" />-->
+    <div id="result"></div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("l-map");
+    map.centerAndZoom(new BMap.Point(114.342775,30.529742), 13);
+    map.enableScrollWheelZoom(true);
+    var index = 0;
+    var myGeo = new BMap.Geocoder();
+    var adds = [
+        <?php foreach($data as $v):?>
+        [new BMap.Point(<?php echo floatval($v->addr_x)?>,<?php echo floatval($v->addr_y)?>),'<?php echo $v->shop_name;?>'],
+
+
+        <?php endforeach;?>
+    ];
+    for(var i = 0; i<adds.length; i++){
+        var marker = new BMap.Marker(adds[i][0]);
+        map.addOverlay(marker);
+        marker.setLabel(new BMap.Label(adds[i][1],{offset:new BMap.Size(20,-10)}));
+    }
+    function bdGEO(){
+        var pt = adds[index][0];
+        geocodeSearch(pt);
+        index++;
+    }
+    function geocodeSearch(pt){
+        if(index < adds.length-1){
+            setTimeout(window.bdGEO,400);
+        }
+        myGeo.getLocation(pt, function(rs){
+            var addComp = rs.addressComponents;
+            document.getElementById("result").innerHTML += index + ". " +adds[index-1][0].lng + "," + adds[index-1][0].lat + "："  + "商圈(" + rs.business + ")  结构化数据(" + addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber + ")<br/><br/>";
+        });
+    }
+
+</script>

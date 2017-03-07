@@ -1,0 +1,190 @@
+<hgroup class="box">
+    <header>
+        <h3>首页管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/first/list?type=6">图标列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：① <span style="color:green">有问题 请及时联系</span> ② 请及时 记得删除无效的</div>
+    </aside>
+    <?php if($count < 7):?>
+    <aside class="tips">
+        <a href="/wftadlogin/first/add?type=6" class="ui-button">添加专题</a>
+        <a id="add_url" class="ui-button">添加关联模块</a>
+    </aside>
+    <?php endif;?>
+</hgroup>
+<div id="add_form" style="display: none">
+    <form class="box box-form" action="/wftadlogin/first/urlsave?link_type=6" method="post" id="menu-save">
+        <table class="table">
+            <tr>
+                <th width="160">说明文字</th>
+                <th colspan="3">
+                    <input type="text" style="width: 100px;" class="cssInput" name="title" value=""><mark>必填， 且不能多余4个汉字</mark>
+                </th>
+            </tr>
+            <tr id="text_url">
+                <th width="160">URL地址</th>
+                <th colspan="3">
+                    <input type="text" style="width: 500px;" class="cssInput" name="url" value=""><mark>当选择html页面时必填</mark>
+                </th>
+
+            </tr>
+            <tr id="radio_type">
+                <th width="160">选择板块</th>
+                <th colspan="2">
+                    <input name="category" checked type="radio" value="6"  />html页面 &nbsp;&nbsp;&nbsp;
+                    <input name="category" checked type="radio" value="9"  /> 邀请 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="10" /> 积分 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="11" /> 账户 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="12" /> 秒杀 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="13" /> 优惠券 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="14" /> 游玩地类别 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="17" /> 发现 &nbsp;&nbsp;&nbsp;
+                    <input name="category" type="radio" value="18" /> 会员专区 &nbsp;&nbsp;&nbsp;
+                    <select style="display: none;" id="select_cate" name="label_type">
+                        <?php foreach($category as $c): ?>
+                            <option value="<?php echo $c['id']; ?>"><?php echo $c['tag_name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>封面图</th>
+                <th colspan="3">
+                    <fieldset style="margin: 0px;">
+                        <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                            <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                            <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                        </div>
+                        <input type="hidden" id="cover1" name="cover" value="" /><mark>必填</mark>
+                        <span>　　样片封面图请上传：<mark>75*75px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                    </fieldset>
+                    <div>
+                        <img width="240px" height="120px" class="fileupload1" src="">
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160"></th>
+                <th colspan="3">
+                    <button  class="ui-button">提交</button>
+                </th>
+            </tr>
+        </table>
+    </form>
+</div>
+<div class="box">
+    <div class="box-title">
+        图标列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">id</th>
+                <th width="100">说明文字</th>
+                <th width="30">评论</th>
+                <th width="30">点击</th>
+                <th width="30">分享</th>
+                <th width="30">状态</th>
+                <th width="60">类别</th>
+                <th width="200">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td  width="15"><?php echo $row['id']; ?></td>
+                        <td  width="100">
+                            <?php
+                            if ($row['type'] == 1) {
+                                $url = '/wftadlogin/activity/new?aid='.$row['link_id'];
+                            } elseif($row['type'] == 4) {
+                                $url = '/wftadlogin/place/new?sid='.$row['link_id'];
+                            } elseif($row['type'] == 5) {
+                                $url = '/wftadlogin/good/new?gid='.$row['link_id'];
+                            } elseif($row['type'] == 6) {
+                                $url = array_key_exists('url',$row)?$row['url']:'';
+                            } elseif($row['type'] == 7) {
+                                $url = '/wftadlogin/circle/wordinfo?id='.$row['link_id'];
+                            } elseif($row['type'] == 8) {
+                                $url = '/wftadlogin/circle/new?id='.$row['link_id'];
+                            }
+                            ?>
+
+                            <a href="<?php echo $url;?>"><?php echo $row['block_title']; ?></a>
+                        </td>
+
+                        <td width="30"><?php echo $row['post_num']; ?></td>
+                        <td width="30"><?php echo $row['click_num']; ?></td>
+                        <td width="30"><?php echo $row['share_num']; ?></td>
+                        <td width="30">
+                            <?php
+                                if($row['status'] == 2 && $row['flag']) {
+                                    echo '置顶';
+                                } elseif ($row['flag']) {
+                                    echo '有效';
+                                } else {
+                                    echo '无效';
+                                }
+                            ?>
+                        </td>
+                        <td width="60"><?php echo $label[$row['type'] -1]; ?></td>
+                        <td  width="200">
+                            <?php if($row['status'] == 1):?>
+                                <a href="/wftadlogin/first/up?id=<?php echo $row['id']; ?>" class="ui-button">置顶</a>
+                            <?php endif;?>
+                            <?php if($row['status'] == 2):?>
+                                <a href="/wftadlogin/first/down?id=<?php echo $row['id']; ?>" class="ui-button">取消置顶</a>
+                            <?php endif;?>
+                            <a href="/wftadlogin/first/delete?id=<?php echo $row['id']; ?>" class="ui-button">删除</a>
+                            <a href="/wftadlogin/first/view?id=<?php echo $row['id']; ?>" class="ui-button">修改</a>
+                            <a href="/wftadlogin/first/float?id=<?php echo $row['id']; ?>" class="ui-button">刷新上浮</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无数据 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $(".fileupload1").attr('src' , data.result.url);
+                $("#cover1").attr('value' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $("input[name='category']").change(function(){ //jquery的点击事件
+        if($(this).val() == 14){
+            $('#select_cate').show();
+        }else{
+            $('#select_cate').hide();
+        }
+    })
+
+    $('#add_url').click(function(){
+        $('#add_form').show();
+    });
+
+</script>

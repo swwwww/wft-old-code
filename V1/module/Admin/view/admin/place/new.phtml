@@ -1,0 +1,620 @@
+<form class="box box-form" action="/wftadlogin/place/save" method="post" id="place_save">
+    <header class="box-title"><?php echo $shopData ? '修改游玩地' : '添加游玩地'; ?></header>
+    <table class="table">
+        <tr>
+            <th width="160">游玩地名称</th>
+            <th colspan="3"><input type="text" class="cssInput" name="shop_name"
+                                   value="<?php echo $shopData ? $shopData->shop_name : ''; ?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">分享标题</th>
+            <th colspan="3"><input type="text" class="cssInput" name="share_title"
+                                   value="<?php echo $shopData ? $shopData->share_title : ''; ?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">营业时间</th>
+            <th colspan="3">
+                <input name="shop_open" type="time" class="cssInput" style="width:90px"
+                       value="<?php echo $shopData ? date('H:i', $shopData->shop_open) : '08:30'; ?>">
+                <input name="shop_close" type="time" class="cssInput" style="width:90px"
+                       value="<?php echo $shopData ? date('H:i', $shopData->shop_close) : '18:30'; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开放时间</th>
+            <th colspan="3"><input type="text" class="cssInput" style="width:600px;" name="open_time"
+                                   value="<?php echo $shopData ? $shopData->open_time : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">联系电话</th>
+            <th colspan="3"><input type="text" class="cssInput" name="shop_phone"
+                                   value="<?php echo $shopData ? $shopData->shop_phone : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">地 址</th>
+            <th colspan="3"><input type="text" class="cssInput" name="shop_address"
+                                   value="<?php echo $shopData ? $shopData->shop_address : ''; ?>">
+                <span style="line-height: 15px;color: red">(必填)</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">坐 标</th>
+            <th colspan="3">
+                纬度坐标：<input type="text" class="cssInput" style="width:100px" name="addr_y" id="addr_y"
+                            value="<?php echo $shopData ? $shopData->addr_y : '30.571659'; ?>">
+                经度坐标：<input type="text" class="cssInput" style="width:100px" name="addr_x" id="addr_x"
+                            value="<?php echo $shopData ? $shopData->addr_x : '114.306655'; ?>">
+                <button type="button" class="btn btn-primary btn-sm setmap">设置坐标点</button> <span style="line-height: 15px;color: red">(必填)</span>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">商 圈</th>
+            <th colspan="3">
+                <select id="s1" name="s1" onchange="changeCircle(this,1);">
+                    <?php foreach ($country_arr as $k => $v): ?>
+                        <option <?php if($v['rid']==$country): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select id="s2" name="s2" onchange="changeCircle(this,2);">
+                    <option value="0">请选择</option>
+                    <?php if($province_arr): ?>
+                        <?php foreach ($province_arr as $k => $v): ?>
+                            <option <?php if($v['rid']==$province): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                </select>
+                <select id="s3" name="s3" onchange="changeCircle(this,3);">
+                    <option value="0">请选择</option>
+                    <?php if($city_arr): ?>
+                        <?php foreach ($city_arr as $k => $v): ?>
+                            <option <?php if($v['rid']==$c_rid): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                </select>
+                <select id="s4" name="s4" onchange="changeCircle(this,4);">
+                    <option value="0">请选择</option>
+                    <?php if($area_arr): ?>
+                        <?php foreach ($area_arr as $k => $v): ?>
+                            <option <?php if($v['rid']==$area_rid): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                </select>
+                <select id="s5" name="s5" >
+                    <option value="0">请选择</option>
+                    <?php if($street_arr): ?>
+                        <?php foreach ($street_arr as $k => $v): ?>
+                            <option <?php if($v['rid']==$street_rid): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+
+                </select>
+            </th>
+        </tr>
+
+        <!--<tr>
+            <th width="160">所属标签</th>
+            <th colspan="3">
+                <?php /*foreach ($tagData as $val): */ ?>
+                    <div style="width:200px;height:20px;float:left;margin-right:15px;text-align:left;overflow: hidden">
+                        <input name="tagIds[]" <?php /*echo ($shopData && json_decode($val->object_id) && in_array($shopData->shop_id, json_decode($val->object_id))) ? 'checked' : '';  */ ?> value="<?php /*echo $val->id*/ ?>"  type="checkbox"/>
+                        <?php /*echo $val->tag_name; */ ?>
+                    </div>
+                <?php /*endforeach; */ ?>
+            </th>
+        </tr>-->
+
+        <tr>
+            <th width="160">分类</th>
+            <th colspan="3">
+                <select name="label_id">
+                    <?php foreach ($labelData as $label): ?>
+                        <option <?php echo ($shopData && $shopData->label_id == $label->id) ? 'selected' : ''; ?>
+                            value="<?php echo $label->id; ?>"><?php echo $label->tag_name; ?></option>
+                    <?php endforeach; ?>
+                    <option <?php echo (!$shopData) ? 'selected' : ''; ?> value="0">默认分类</option>
+                </select>
+                <span style="line-height: 15px;color: red">(必填)</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">标签</th>
+            <th colspan="3">
+                <?php foreach ($tags as $z): ?>
+                    <input <?php echo ($shopData && in_array(array('tag_id' => $z->id), $link_tag)) ? 'checked' : ''; ?>
+                    name="tag[]" value=<?php echo $z->id; ?>  type="checkbox" /><?php echo $z->tag_name; ?>
+                <?php endforeach; ?>
+                <span style="line-height: 15px;color: red">(必填)</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">专题</th>
+            <th colspan="3">
+                <?php if ($shopData && count($activityData)): ?>
+                    <?php foreach ($activityData as $val): ?>
+                        <?php echo $val->ac_name . '　　'; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    该游玩地还没有被关联到专题里面
+                <?php endif; ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">wap 页面地址</th>
+            <th colspan="3">
+                <?php if ($shopData): ?>
+                    <?php echo $url . '/web/place?id=' . $shopData->shop_id; ?>
+                <?php endif; ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">是否允许评论</th>
+            <th colspan="3">
+                <input name="allow_post" type="radio"
+                       value="1" <?php echo (!$shopData || $shopData->allow_post == 1) ? 'checked' : ''; ?> /> 允许评论
+                &nbsp;&nbsp;&nbsp;
+                <input name="allow_post" type="radio"
+                       value="0" <?php echo ($shopData && $shopData->allow_post == 0) ? 'checked' : ''; ?>/> 不允许评论
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">是否给予点评现金奖</th>
+            <th colspan="3">
+                <input name="post_award" type="radio"
+                       value="1" <?php echo (!$shopData || $shopData->post_award == 1) ? 'checked' : ''; ?> /> 不给 &nbsp;&nbsp;&nbsp;
+                <input name="post_award" type="radio"
+                       value="2" <?php echo ($shopData && $shopData->post_award == 2) ? 'checked' : ''; ?>/> 给予奖励
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">参考价格</th>
+            <th width="400"><input type="text" class="cssInput" style="width:50px" name="reference_price"
+                                   value="<?php echo $shopData ? (float)$shopData->reference_price : ''; ?>"><span
+                    style="line-height: 15px">&nbsp;元</span><span style="line-height: 15px;color: red"><价格保存至小数点后一位></span>
+            </th>
+            <th colspan="2"></th>
+        </tr>
+
+        <tr>
+            <th width="160">评论输入框内容</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:300px" name="post_area_word"
+                       value="<?php echo $shopData ? $shopData->post_area_word : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">适合年龄</th>
+            <th colspan="3" width="600">
+                开始年龄:
+                <select name="age_min">
+                    <?php for ($i = 0; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option <?php echo ($shopData && $i == (string)$shopData->age_min) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option <?php echo ($shopData && $i == (string)$shopData->age_min) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                </select>
+                结束年龄：
+                <select name="age_max">
+                    <option <?php echo (!$shopData || 100 == (string)$shopData->age_max) ? 'selected' : ''; ?>
+                        value="100">以上
+                    </option>
+                    <?php for ($i = 0.5; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option <?php echo ($shopData && $i == (string)$shopData->age_max) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option <?php echo ($shopData && $i == (string)$shopData->age_max) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">小编 说</th>
+            <th colspan="3">
+                <textarea class="cssTextArea"
+                          name="editor_word"><?php echo $shopData ? $shopData->editor_word : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <!--<tr>
+            <th width="160">图文详情</th>
+            <th colspan="3" width="600">
+                <script type="text/plain" id="myEditor" style="width:600px;height:240px;"><?php /*echo $shopData ? htmlspecialchars_decode($shopData->information) : '<p>这里我可以写一些输入提示</p>';*/ ?></script>
+            </th>
+        </tr>-->
+
+        <tr>
+            <th>封面图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" name="cover" value="<?php echo $shopData ? $shopData->cover : ''; ?>"/>
+                    <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="240px" height="120px" class="fileupload1"
+                         src="<?php echo $shopData ? $shopData->cover : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>缩略图 <span style="line-height: 15px;color: red">（选填）</span></th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" class="hidden" name="thumbnails"
+                           value="<?php echo $shopData ? $shopData->thumbnails : ''; ?>"/>
+                    <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload2"
+                         src="<?php echo $shopData ? $shopData->thumbnails : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="shop_id" value="<?php echo $shopData ? $shopData->shop_id : 0; ?>">
+                <button id="ti-place" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<?php if ($shopData): ?>
+    <div class="box">
+        <header class="box-title">游玩地福利</header>
+        <div>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th width="50">id</th>
+                    <th width="80">奖励对象</th>
+                    <th width="170">奖励基础积分倍数</th>
+                    <th width="80">每个用户限额多少份</th>
+                    <th width="170">总积总份数</th>
+                    <th width="170">操作</th>
+                </tr>
+                <?php if ($welfare['share']): ?>
+                    <tr>
+                        <td width="50"><?php echo $welfare['share']->id; ?></td>
+                        <td width="80"><?php echo '分享'; ?></td>
+                        <th width="170"><?php echo $welfare['share']->double; ?></th>
+                        <th width="80"><?php echo $welfare['share']->limit_num; ?></th>
+                        <th width="170"><?php echo $welfare['share']->total_num; ?></th>
+                        <th width="170">
+                            <a class="ui-button" target="_blank"
+                               href="/wftadlogin/welfare/new?id=<?php echo $welfare['share']->id; ?>">修改</a>
+                            <!--<a class="ui-button" href="/wftadlogin/welfare/deleteIntegral?id=<?php /*echo $welfare['share']->id;*/ ?>">删除</a>-->
+                        </th>
+                    </tr>
+                <?php else: ?>
+                    <form class="box box-form" action="/wftadlogin/welfare/save" method="post">
+                        <tr>
+                            <td width="50"></td>
+                            <td width="80"><?php echo '分享'; ?></td>
+                            <th width="170">
+                                <select name="double">
+                                    <option value="1">1倍</option>
+                                    <option value="2">2倍</option>
+                                    <option value="3">3倍</option>
+                                    <option value="4">4倍</option>
+                                    <option value="5">5倍</option>
+                                </select>
+                            </th>
+                            <th width="80"><input type="text" name="limit_num" value="1"></th>
+                            <th width="170"><input type="text" name="total_num" value="1000"></th>
+                            <th width="170">
+                                <input type="hidden" name="welfare_type" value="4">
+                                <input type="hidden" name="object_type" value="1">
+                                <input type="hidden" name="object_id" value="<?php echo $shopData->shop_id; ?>">
+                                <button type="submit">保存</button>
+                            </th>
+                        </tr>
+                    </form>
+                <?php endif; ?>
+                <?php if ($welfare['post']): ?>
+                    <tr>
+                        <td width="50"><?php echo $welfare['post']->id; ?></td>
+                        <td width="80"><?php echo '评论'; ?></td>
+                        <th width="170"><?php echo $welfare['post']->double; ?></th>
+                        <th width="80"><?php echo $welfare['post']->limit_num; ?></th>
+                        <th width="170"><?php echo $welfare['post']->total_num; ?></th>
+                        <th width="170">
+                            <a class="ui-button" target="_blank"
+                               href="/wftadlogin/welfare/new?id=<?php echo $welfare['post']->id; ?>">修改</a>
+                            <!--<a class="ui-button" href="/wftadlogin/welfare/deleteIntegral?id=<?php /*echo $welfare['post']->id;*/ ?>">删除</a>-->
+                        </th>
+                    </tr>
+                <?php else: ?>
+                    <form class="box box-form" action="/wftadlogin/welfare/save" method="post">
+                        <tr>
+                            <td width="50"></td>
+                            <td width="80"><?php echo '评论'; ?></td>
+                            <th width="170">
+                                <select name="double">
+                                    <option value="1">1倍</option>
+                                    <option value="2">2倍</option>
+                                    <option value="3">3倍</option>
+                                    <option value="4">4倍</option>
+                                    <option value="5">5倍</option>
+                                </select>
+                            </th>
+                            <th width="80"><input type="text" name="limit_num" value="2"></th>
+                            <th width="170"><input type="text" name="total_num" value="10000"></th>
+                            <th width="170">
+                                <input type="hidden" name="welfare_type" value="3">
+                                <input type="hidden" name="object_type" value="1">
+                                <input type="hidden" name="object_id" value="<?php echo $shopData->shop_id; ?>">
+                                <button type="submit">保存</button>
+                            </th>
+                        </tr>
+                    </form>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="box">
+        <header class="box-title">游玩地攻略 　　<a class="ui-button"
+                                             href="/wftadlogin/strategy/new?sid=<?php echo $shopData->shop_id; ?>">添加攻略</a>
+        </header>
+        <div>
+            <?php if (count($strategy)): ?>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th width="50">创建时间</th>
+                        <th width="80">标题</th>
+                        <th width="170">适合月份</th>
+                        <th width="50">创建人</th>
+                        <th width="80">提供者姓名</th>
+                        <th width="80">状态</th>
+                        <th width="170">操作</th>
+                    </tr>
+                    <?php foreach ($strategy as $str): ?>
+                        <tr>
+                            <th width="50"><?php echo $str['time']; ?></th>
+                            <th width="80"><a
+                                    href="/wftadlogin/strategy/new?id=<?php echo $str['id']; ?>"><?php echo $str['title']; ?></a>
+                            </th>
+                            <th width="170"><?php echo $str['month']; ?></th>
+                            <th width="50"><?php echo $str['editor']; ?></th>
+                            <th width="80"><?php echo $str['username']; ?></th>
+                            <th width="80">
+                                <?php
+                                if ($str['status'] == 0) {
+                                    echo '不显示';
+                                } elseif ($str['status'] == 1) {
+                                    echo '显示';
+                                } elseif ($str['status'] == 2) {
+                                    echo '首选';
+                                }
+                                ?>
+                            </th>
+                            <th width="170">
+                                <?php if ($str['status'] == 0): ?>
+                                    <a href="/wftadlogin/strategy/update?type=first&sid=<?php echo $str['id']; ?>">设为首选</a>
+                                    <a href="/wftadlogin/strategy/update?type=show&sid=<?php echo $str['id']; ?>">显示</a>
+                                <?php elseif ($str['status'] == 1): ?>
+                                    <a href="/wftadlogin/strategy/update?type=first&sid=<?php echo $str['id']; ?>">设为首选</a>
+                                    <a href="/wftadlogin/strategy/update?type=hidden&sid=<?php echo $str['id']; ?>">取消显示</a>
+                                <?php elseif ($str['status'] == 2): ?>
+                                    <a href="/wftadlogin/strategy/update?type=show&sid=<?php echo $str['id']; ?>">取消首选</a>
+                                    <a href="/wftadlogin/strategy/update?type=hidden&sid=<?php echo $str['id']; ?>">取消显示</a>
+                                <?php endif; ?>
+                            </th>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+    </div>
+
+<?php endif; ?>
+
+
+
+
+<!--   地图   -->
+<div class="modal fade" id="setmap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>获取位置信息</h3>
+            </div>
+            <div class="modal-body">
+                <h4>拖动跳动的点,使用滚轮快速放大缩小 <input type="text" value="搜索" id="skey"> <a class="btn btn-primary btn-sm"
+                                                                                  id="mapsearch">搜索</a></h4>
+
+                <iframe name="myFrame" src="/wftadlogin/seller/setmap"
+                        style="width:100%; height:500px; border: 0px;border-radius: 5px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="ui-button" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="ui-button getmap" data-dismiss="modal" aria-hidden="true">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //实例化编辑器
+        var um = UE.getEditor('myEditor');
+
+        //商圈选择
+        $('.dropdown-menu a').click(function () {
+            var sval = $(this).text();
+            var bval = $(this).attr('val');
+            $('#business').val(bval)
+            $('#dLabel').text(sval)
+            $('.dropdown').removeClass('open')
+            return false;
+        })
+
+        // post提交
+        $('#ti-place').click(function () {
+            $.post('/wftadlogin/place/save', $('#place_save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href = '/wftadlogin/place/new?sid=' + data.pid;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+
+</script>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='thumbnails']").attr('value', data.result.url);
+                $(".fileupload2").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+
+    ////////////////    地图      ///////////////////
+
+    $('.setmap').click(function () {
+        //地图框架地址
+        posturl = $(this).attr("url");
+        init_xy = [];
+        init_xy[0] = $('#addr_x').val();
+        init_xy[1] = $('#addr_y').val();
+        if (init_xy[0] == 0 || init_xy[1] == 0) {
+            init_xy[0] = 114.306655;  //湖北武汉
+            init_xy[1] = 30.571659;
+        }
+
+
+        $("#setmap").modal()
+        try {
+            //初始化地图
+            myFrame.window.initmap(init_xy[0], init_xy[1]);
+        }
+        catch (err) {
+            setTimeout(function () {
+                myFrame.window.initmap(init_xy[0], init_xy[1]);
+            }, 2000)
+        }
+    })
+    $(".getmap").click(function () {
+        var mapxy = myFrame.window.getmap().split(',');
+        $('#addr_x').val(mapxy[0])
+        $('#addr_y').val(mapxy[1])
+
+    })
+
+    $("#mapsearch").click(function () {
+        var skey;
+        skey = $("#skey").val();
+        myFrame.window.baidusearch(skey);
+    })
+    ////////////////  地图结束 /////////////////
+    changeCircle = function (obj, level) {
+        $.ajax({
+            type: 'GET',
+            url: "/wftadlogin/setting/getcircle",
+            dataType: 'json',
+            async: true,
+            data: {'level': level, 'rid': obj.value},
+
+            success: function (result) {
+                temp_html = '<option value="0">请选择</option>';
+                if (result.length) {
+                    $.each(result,function(i,c){
+                        temp_html+="<option value='"+ c.rid+"'>"+ c.name+"</option>";
+                    });
+
+                    level++;
+                    $('#s'+level).html(temp_html);
+                    for(var i=0;i<=(6-level);i++){
+                        level++;
+                        $('#s'+level).html('<option value="0">请选择</option>');
+                    }
+
+                } else {
+                    //todo 成功
+                    //window.location.href = "";
+                    //console.log(result.response_params);
+                }
+            }
+        })
+    };
+</script>
+
+
+

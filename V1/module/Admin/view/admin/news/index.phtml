@@ -1,0 +1,77 @@
+<hgroup class="box">
+    <header>
+        <h3>资讯管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/news/new?city=<?php echo $city;?>">添加资讯</a>
+        &nbsp;&nbsp;&nbsp;
+        <select id="cityChange">
+            <?php foreach($cityData as $k=>$v):?>
+                <option <?php echo ($city == $k) ?  'selected' : '';?> data-src="/wftadlogin/news?city=<?php echo $k; ?>"><?php echo $v;?></option>
+            <?php endforeach;?>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        资讯列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+              <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索资讯名称" name="k" value="">
+              <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">资讯id</th>
+                <th class="size3">名称</th>
+                <th class="size1">参考价格</th>
+                <th class="size1">查看数</th>
+                <th class="size1">评论数</th>
+                <th class="size1">状态</th>
+                <th class="size2">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id; ?></td>
+                        <td class="size3"><a href="/wftadlogin/news/new?nid=<?php echo $row->id; ?>"><?php echo $row->title; ?></a></td>
+                        <td class="size1"><?php echo (float)$row->reference_price; ?>元</td>
+                        <td class="size1"><?php echo $row->view_nums; ?></td>
+                        <td class="size1"><a href="/wftadlogin/post?type=news&id=<?php echo $row->id;?>"><?php echo $row->post_number; ?></a></td>
+                        <td class="size1"><?php echo $row->status ? '发布ing': '未发布'; ?></td>
+                        <td class="size2">
+                            <a href="/wftadlogin/news/update?nid=<?php echo $row->id;?>&type=<?php echo ($row->status == 1) ? 1 : 2?>" class="ui-button"><?php echo $row->status ? '取消发布': '发布';?></a>
+                            <a href="/wftadlogin/news/update?nid=<?php echo $row->id;?>&type=3" class="ui-button">删除</a>
+                             <a href="/wftadlogin/firstpage/link?lid=<?php echo $row->id;; ?>&type=3" class="ui-button">推送首页</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无资讯 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+<script>
+    $(function () {
+        // 城市下拉
+        $('#cityChange').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+    })
+</script>

@@ -1,0 +1,46 @@
+<hgroup class="box">
+    <header>
+        <h3>补丁管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.back(-1)">返回</a>
+
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+
+<a class="btn btn-default" href="patchEdit" >新增补丁</a>
+
+<a class="btn btn-default" href="patchList?view=ios" >只看IOS</a>
+
+<a class="btn btn-default" href="patchList?view=android" >只看Android</a>
+
+
+    <table  class="table" width="100px;">
+        <tr>
+            <td width="100px;">版本号</td>
+            <td width="50px;">类型</td>
+            <td width="100px;">PatchCode</td>
+            <td width="100px;">补丁描述</td>
+            <td width="200px;">补丁时间</td>
+            <td width="100px;">状态</td>
+            <td width="100px;">操作</td>
+        </tr>
+        <?php foreach ($data as $v):?>
+            <tr>
+                <td><?php echo 'V'.$v['version_name']?></td>
+                <td><?php echo $v['client_type']?></td>
+                <td><?php echo $v['patch_code']?></td>
+                <td><?php echo $v['version_info']?></td>
+                <td><?php  echo date('Y-m-d H:i:s',$v['dateline']); ?></td>
+                <td><?php echo $v['status']==1?'正常':'删除';?></td>
+                <td width="200px;"><a href="patchEdit?id=<?php echo $v['id'];?>">修改</a>|<a onclick="return confirm('Yes/No');" href="patchDel?id=<?php echo $v['id'];?>">删除</a>|<a onclick="return confirm('Yes/No');" href="patchre?status=1&id=<?php echo $v['id'];?>">恢复</a></td>
+            </tr>
+        <?php endforeach;?>
+
+    </table>
+
+
+</body>

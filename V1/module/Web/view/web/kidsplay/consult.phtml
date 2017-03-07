@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>咨询</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        #tipsDia{display: none; width: 60%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+    </style>
+</head>
+<body>
+<section id="consult-module">
+    <div class="consult">
+        <form class="consult-question">
+            <textarea placeholder="请输入您想要咨询的问题，玩翻天客服会尽快回复您哦！~" id="W_describe"></textarea>
+            <div class="consult-question-put" id="post_consult">我要提问</div>
+        </form>
+        <?php if(!$data):?>
+            <div class="nodata" style="text-align: center"><img src="/images/wap/nodata.gif" /></div>
+        <?php else:?>
+        <?php foreach($data as $v):?>
+        <div class="consult-dialogue">
+            <p class="consult-dialogue-info">
+                <span class="consult-name"><?php echo $v['username'];?></span>
+                <span class="consult-time"><?php echo date("Y-m-d",$v['dateline']);?></span>
+            </p>
+            <p class="consult-dialogue-question"><?php echo $v['msg'];?></p>
+            <?php if(count($v['reply'])>0):?>
+            <?php foreach($v['reply'] as $reply):?>
+                <div class="consult-dialogue-answer">
+                    <p class="answer-info">
+                        <span class="answer-name"><?php echo $reply['username'];?></span>
+                        <span class="answer-time"><?php echo date("Y-m-d",$reply['dateline']);?></span>
+                    </p>
+                    <p class="answer-content"><?php echo $reply['msg'];?></p>
+                    <div class="triangle-up"></div>
+                    <img class="consult-portrait portrait-margin" src="<?php echo $reply['img']?>" />
+                </div>
+            <?php endforeach;?>
+            <?php endif;?>
+            <img class="consult-portrait" src="<?php echo $v['img'];?>" />
+        </div>
+        <?php endforeach;?>
+        <?php endif;?>
+    </div>
+</section>
+<input type="hidden" name="play_id" id="play_id" value="<?php echo $id;?>">
+<div id="tipsDia"></div>
+</body>
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script>
+    (function(){
+       var loginTip = $("#tipsDia");
+        $("#post_consult").on("tap",function(e){
+            e.preventDefault();
+            var mes = $("#W_describe");
+            var play_id = $("#play_id").val();
+            if(mes.val()==''){
+                loginTip.text("请输入咨询内容");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    $("#btn").attr('disabled', false);
+                },1500);
+                mes.focus();
+                return false;
+            }
+            if(mes.val()!=''){
+                $.ajax({
+                    type: "POST",
+                    url: "/kidsplay/consult",
+                    async: true,
+                    data:{"uid":<?php echo $_COOKIE['uid'];?>,"play_id":play_id,"message":mes.val()},
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function (result) {
+                        if (result.error_code == 0) {
+                            loginTip.text(result.error_msg);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                                $("#btn").attr('disabled', false);
+                            },1500);
+                            mes.focus();
+                            return false;
+
+                        } else {
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                                $("#btn").attr('disabled', false);
+                            },1500);
+                            mes.focus();
+                            setTimeout(function(){
+                                window.location.reload();
+                            },2000);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //alert('授权失败');
+                            // 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+                            alert('请求参数错误');
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+
+                });
+            }
+        })
+    }());
+</script>
+</html>

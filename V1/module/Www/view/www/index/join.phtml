@@ -1,0 +1,152 @@
+<!--crumbs-->
+<section id="crumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="crumbs">当前位置：
+                    <span><a href="/www/index/business">商家版</a></span>&nbsp;&gt;&nbsp;
+                    <a href="javascript:void(0)" >商家入驻</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--crumbs end-->
+
+<!--enter form-->
+<section id="enter">
+    <div class="container enter">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="col-sm-12 col-xs-12" id="from-post">
+                <h2 class="enter-title">商家入驻</h2>
+                    <div class="row label-list">
+                        <div class="col-sm-4 col-xs-4">
+                            <label for="name">商家名称</label>
+                        </div>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="text" name="market_name"/>
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-4 col-xs-4">
+                            <label for="addr">商家地址</label>
+                        </div>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="text" name="market_address">
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-4 col-xs-4">
+                            <label for="manage">经营内容</label>
+                        </div>
+                        <div class="col-sm-8 col-xs-8">
+                            <textarea name="market_area" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-4 col-xs-4">
+                            <label for="contName">联系人姓名</label>
+                        </div>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="text" name="market_user">
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-4 col-xs-4">
+                            <label for="phoneN">联系人电话</label>
+                        </div>
+                        <div class="col-sm-8 col-xs-8">
+                            <input type="tel" name="market_phone">
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-3 col-xs-3"></div>
+                        <div class="col-sm-9 col-xs-9">
+                            <span class="enter-notice">提出申请的商家，玩翻天会在3个工作日内与联系人联系，请保持联系人电话畅通</span>
+                        </div>
+                    </div>
+                    <div class="row label-list">
+                        <div class="col-sm-3 col-xs-3"></div>
+                        <div class="col-sm-9 col-xs-9">
+                            <input type="submit" id="fighting" class="form-control" value="提交">
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</section>
+<!--enter form end-->
+
+<!--提交表单后的弹窗-->
+<section id="popUp" style="display: none">
+    <div class="container pop">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="col-md-4 col-sm-4 col-xs-1"></div>
+            <div class="col-md-4 col-sm-4 col-xs-10">
+                <div class="pop-msg col-sm-12 col-xs-12 pop-info">
+                    提交成功！<br>
+                    请保持联系人电话畅通
+                    <a href="/www/index/business">确定</a>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4 col-xs-1"></div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</section>
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        //
+
+        //联系
+        $('#fighting').click(function() {
+
+            var market_name = $('#from-post input[name="market_name"]').val();
+            var market_address = $('#from-post input[name="market_address"]').val();
+            var market_area = $('#from-post textarea[name="market_area"]').val();
+            var market_user = $('#from-post input[name="market_user"]').val();
+            var market_phone = $('#from-post input[name="market_phone"]').val();
+
+            var regx_phone = /^1[34578]\d{9}$/;
+            var regx_name = /^[\u4e00-\u9fa5]{2,5}$/;
+
+            if (!regx_name.test(market_user)) {
+                alert('请输入正确的联系人姓名');
+                return false;
+            }
+
+            if (!regx_phone.test(market_phone)) {
+                alert('请输入正确的联系人电话');
+                return false;
+            }
+
+            $.ajax({
+                type: "post",
+                url: '/www/index/saveLinker',
+                async: false, // 使用同步方式
+                // 1 需要使用JSON.stringify 否则格式为 a=2&b=3&now=14
+                // 2 需要强制类型转换，否则格式为 {"a":"2","b":"3"}
+                data: JSON.stringify({
+                    market_name : market_name,
+                    market_address : market_address,
+                    market_area : market_area,
+                    market_user : market_user,
+                    market_phone : market_phone
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(data) {
+                    if (data.status == 1) {
+                        $('#popUp').css('display', 'block');
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+    });
+</script>

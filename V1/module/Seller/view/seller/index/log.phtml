@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天商家后台</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+    <style>
+        .search{
+            border-bottom: 1px solid #ccc;
+        }
+        .search .left input{
+            border:1px solid #9e9e9e;
+            width:120px;
+            height: 25px;
+            position: relative;top:-8px;
+            border-radius: 5px;
+        }
+        .search .right button{
+            padding: 6px 20px;
+            margin: 0 5px;
+            border-radius: 4px;
+        }
+        .btn-search{
+            background: linear-gradient(to bottom,#5cb85c 0,#419641 100%);
+            background-repeat: repeat-x;
+            font-size:16px;
+            color: #fff;
+        }
+
+        .btn-search:hover {
+            background-color: #419641;
+            background-position: 0 -15px;
+            color: #fff;
+            border-color: #398439;
+            text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+            -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 16px;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+
+
+        .btn-info{
+            background-image: linear-gradient(to bottom, #5bc0de 0px, #2aabd2 100%);
+            background-repeat: repeat-x;
+            border-color: #28a4c9;
+            color: #fff;
+        }
+
+        .btn-info:hover {
+            background-color: #2aabd2;
+            /*background-position: 0 -15px;*/
+            color: #fff;
+            border-color: #398439;
+            text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+            -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+        }
+    </style>
+</head>
+<body>
+<header class="co-header">
+    <a class="checked left" href="/seller/index/log">流水记录</a>
+    <a class="middle" href="/seller/index/code">验证</a>
+    <a class="right" href="/seller/index/bind">绑定手机</a>
+</header>
+<section class="co-log">
+    <?php if($this->data==''):?>
+        <div class="tips">还没有流水记录哦</div>
+    <?php else:?>
+    <div id="goodslist">
+        <form action="#" method="get" id="form1">
+            <?php
+            $start_time = null;
+            $end_time = null;
+            if (isset($_GET['start_time']) && $_GET['start_time']) {
+                $start_time = $_GET['start_time'];
+            }
+
+            if (isset($_GET['end_time']) && $_GET['end_time']) {
+                $end_time = $_GET['end_time'];
+            }
+            ?>
+            <div class="co-str  search">
+                <div class="left">
+                    验证时间 <input type="date" name="start_time" class="cssInput" value="<?php echo $start_time;?>">&nbsp;~&nbsp;<input type="date" name="end_time" class="cssInput" value="<?php echo $end_time;?>">
+                </div>
+                <div class="right">
+                    <button class="btn btn-search" type="submit">搜索</button>
+<!--                    <button class="btn btn-info" type="submit" data="/seller/index/outlog" id="out-log">导出</button>-->
+                    <a href="javascript:void(0)" data-src="/seller/index/outlog" id="out-data" style="background-color: green" class="btn btn-info">导出</a>
+                </div>
+            </div>
+        </form>
+        <?php foreach($this->data as $v):?>
+        <div class="co-str">
+            <div class="user left">
+                <?php echo $v['buy_phone']; ?>
+            </div>
+            <div class="time right"><?php echo $v['usetime']; ?></div>
+        </div>
+
+        <div class="co-str">
+            <p>订单号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $v['order_sn'];?></p>
+        </div>
+        <div class="co-str">
+            <p>验证码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $v['code'];?></p>
+        </div>
+<!--        <div class="co-str">-->
+<!--            <p>购买时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--><?php //echo date("Y-m-d H:i:s",$v['dateline']);?><!--</p>-->
+<!--        </div>-->
+
+        <div class="co-detail">
+            <div class="info left">
+                <h2><?php echo $v['coupon_name']; ?></h2>
+                <p>套系：<?php echo $v['price_name']; ?></p>
+            </div>
+            <div class="price left">
+                <h2>&yen;<?php echo $v['price']; ?></h2>
+                <p>×1</p>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        </div>
+        <a class="com-more more-btn" href="javascript:;" onclick="GetMore(this)">点击加载更多</a>
+    <?php endif;?>
+</section>
+<a href="" class="fixed">详细信息请查看pc完整版商家后台</a>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script>
+$(function(){
+    // 获取终端的相关信息
+    var Terminal = {
+        // 辨别移动终端类型
+        platform : function(){
+            var u = navigator.userAgent.toLowerCase(), app = navigator.appVersion;
+
+            return {
+                // android终端或者uc浏览器
+                android: u.indexOf('android') > -1 || u.indexOf('linux') > -1,
+                // 是否为iPhone或者QQHD浏览器
+                iPhone: u.indexOf('iphone') > -1 ,
+                // 是否iPad
+                iPad: u.indexOf('ipad') > -1,
+                WeChat: u.indexOf('micromessenger') > -1
+            };
+        }()
+    };
+    //导出
+    $('#out-data').click(function() {
+        if(Terminal.platform.WeChat || Terminal.platform.android || Terminal.platform.iPad || Terminal.platform.iPhone){
+            alert("请用pc导出！");
+            return false;
+        }
+        $('#form1').attr('action', $(this).attr('data-src'));
+        $('#form1').submit();
+        $('#form1').attr('action', '');
+    });
+
+});
+//获取url参数
+function GetQueryString(name)
+{
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if(r!=null)return  unescape(r[2]); return null;
+}
+
+var s_time = GetQueryString("start_time");
+var e_time = GetQueryString("end_time");
+var nStart = 2;
+var last_id=0;
+function GetMore(obj){
+    $(obj).hide();
+    $.ajax({
+        type: "GET",
+        url: "/seller/index/log",
+        dataType:"json",
+        data:{'p':nStart,'start_time':s_time,'end_time':e_time,'last_id':last_id},
+        timeout:6000,
+        success: function(data){
+            var objJosn = data.data;
+            if(objJosn==null){
+                $(obj).text('没有更多的了').removeAttr("onclick");
+                alert("没有更多数据了");
+                return false;
+            }
+            var nLen = objJosn.length;
+            var Dom_Option = [];
+            var info = null;
+            for(var i=0; i<nLen; i++){
+                info = objJosn[i];
+                Dom_Option.push('<div class="co-str">');
+                Dom_Option.push('<div class="user left">'+info.buy_phone+'</div>');
+                Dom_Option.push('<div class="time right">'+info.usetime+'</div>');
+                Dom_Option.push('</div>');
+                Dom_Option.push('<div class="co-str">');
+                Dom_Option.push('<p>订单号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+info.order_sn+'</p></div>');
+                Dom_Option.push('<div class="co-str">');
+                Dom_Option.push('<p>验证码&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+info.code+'</p></div>');
+                Dom_Option.push('<div class="co-detail">');
+                Dom_Option.push('<div class="info left">');
+                Dom_Option.push('<h2>'+info.coupon_name+'</h2>');
+                Dom_Option.push('<p>套系：'+info.price_name+'</p>');
+                Dom_Option.push('</div>');
+                Dom_Option.push('<div class="price left">');
+                Dom_Option.push('<h2>&yen;'+info.price+'</h2>');
+                Dom_Option.push('<p>×1</p>');
+                Dom_Option.push('</div>');
+                Dom_Option.push('</div>');
+                last_id=info.id;
+            }
+
+            $('#goodslist').append(Dom_Option.join(''));
+
+            $(obj).show();
+
+            nStart++;
+
+            if(nLen <= 0){
+                $(obj).text('没有更多的了').removeAttr("onclick");
+                alert("没有更多数据了");
+            }
+        },
+        error: function(){
+            $(obj).show();
+        }
+    });
+}
+</script>
+</body>
+</html>

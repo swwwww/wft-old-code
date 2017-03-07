@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信活动购买页</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<form id="activity-buy" class="space10">
+    <section class="activity-info">
+        <div class="title">
+            <span class="sold-price">￥<?php echo $low_price; ?><!--~￥--><?php /*echo $money;*/ ?></span>
+
+            <div class="discount">
+                <mark><?php echo $discount; ?>折</mark>
+                <span class="mark-price">￥<?php echo $money; ?> </span>
+            </div>
+            <span class="shop-name"><?php echo $title; ?></span>
+        </div>
+        <ul class="info-more">
+            <li class="buy">
+                <p>已报名</p>
+
+                <p class="numb"><?php echo $buy; ?></p>
+            </li>
+            <li class="remain">
+                <p>剩余</p>
+
+                <p class="numb surplus"><?php echo $total_num - $buy; ?></p>
+            </li>
+            <li class="limit">
+                <p>每机限制</p>
+
+                <p class="numb maxnum"><?php echo $limit_num; ?></p>
+            </li>
+        </ul>
+    </section>
+    <section class="activity-way">
+        <div class="title">选择参与方式：</div>
+        <ul class="options" id="way-options">
+
+        </ul>
+    </section>
+    <section class="activity-time">
+        <div class="title">出行日期：</div>
+        <ul class="options" id="time-options">
+
+        </ul>
+    </section>
+    <section class="activity-place">
+        <div class="title">选择地点：</div>
+        <ul class="options" id="place-options">
+
+        </ul>
+    </section>
+    <input type="hidden" name="order-id" id="order-id" value=""/>
+    <section class="activity-number">
+        <div class="title">
+            <span>报名数：</span>
+
+            <div class="data">
+                <i id="prev" class="grey">-</i>
+                <span>1</span>
+                <i id="next">+</i>
+            </div>
+        </div>
+        <div class="total">
+            <span>总价</span>
+            <mark>￥<span id="price"><?php echo $price; ?></span></mark>
+        </div>
+    </section>
+    <!--<section class="activity-buyer">
+        <div class="title">联系人</div>
+        <div class="info">
+            <span>姓&nbsp;&nbsp;&nbsp;&nbsp;名</span>
+            <mark>123</mark>
+        </div>
+        <div class="info">
+            <span>手机号</span>
+            <mark>123</mark>
+        </div>
+    </section>-->
+    <button id="buy">确定</button>
+</form>
+<script src="/js/zepto1.1.6.min.js"></script>
+<script>
+
+    function date(time) {
+        return time;
+        //return new Date(parseInt(time) * 1000).toLocaleString().replace(/:\d{1,2}$/, ' ');
+    }
+
+    var source =<?php echo json_encode($game_order,JSON_UNESCAPED_UNICODE);?>;
+
+    //    var source = [
+    //        {
+    //            "order_id":"26",
+    //            "shop_name":"地点1",
+    //            "way":"套餐1",
+    //            "s_time": "2015 08:00-06-11",
+    //            "e_time": "2015 14:20-06-11"
+    //        },
+    //        {
+    //            "order_id":"27",
+    //            "shop_name":"地点2",
+    //            "way":"套餐1",
+    //            "s_time": "2015 10:00-06-11",
+    //            "e_time": "2015 14:20-06-11"
+    //        },
+    //        {
+    //            "order_id":"28",
+    //            "shop_name":"地点3",
+    //            "way":"套餐1",
+    //            "s_time": "2015 10:00-06-11",
+    //            "e_time": "2015 14:20-06-11"
+    //        },
+    //        {
+    //            "order_id":"29",
+    //            "shop_name":"地点1",
+    //            "way":"套餐2",
+    //            "s_time": "2015 08:00-06-11",
+    //            "e_time": "2015 14:20-06-11"
+    //        },
+    //        {
+    //            "order_id":"30",
+    //            "shop_name":"地点3",
+    //            "way":"套餐2",
+    //            "s_time": "2015 12:00-06-11",
+    //            "e_time": "2015 14:20-06-11"
+    //        }
+    //    ];
+
+    function convert(source) {
+        var ret = {};
+
+        source.forEach(function (data) {
+            var name = data.way,
+                item = ret[name],
+                time = data.s_time + ' - ' + data.e_time,
+                child;
+
+            if (times.indexOf(time) === -1) {
+                times.push(time);
+            }
+
+            if (locations.indexOf(data.shop_name) === -1) {
+                locations.push(data.shop_name);
+            }
+
+            if (!item) {
+                item = ret[name] = {
+                    children: {},
+                    times: [time],
+                    locations: [data.shop_name]
+                };
+            } else {
+                if (item.times.indexOf(time) === -1) {
+                    item.times.push(time);
+                }
+
+                if (item.locations.indexOf(data.shop_name) === -1) {
+                    item.locations.push(data.shop_name);
+                }
+            }
+
+            child = item.children[time];
+            if (!child) {
+                child = item.children[time] = {};
+            }
+
+            child[data.shop_name] = data.order_id;
+        });
+
+        return ret;
+    }
+
+    var times = [];
+
+    var locations = [];
+
+    var result = convert(source);
+
+    $(function () {
+        (function (doc) {
+            var inputList = {},
+                index = 0,
+                options = {
+                    way: result,
+                    time: times,
+                    place: locations
+                },
+                selectedWay,
+                selectedDate;
+
+            function createItem(index, name, text) {
+                var li = $(doc.createElement('li')),
+                    input = $(doc.createElement('input')),
+                    label = $(doc.createElement('label')),
+                    list = inputList[name];
+
+                if (!list) {
+                    list = inputList[name] = {};
+                }
+
+                input.attr({
+                    id: name + index,
+                    type: 'radio',
+                    name: name
+                });
+
+                label.attr('for', name + index).text(text);
+
+                li.append(input).append(label);
+
+                list[text] = input;
+                return li;
+            }
+
+            $.each(options, function (name, data) {
+                var ul = $('#' + name + '-options');
+
+                $.each(data, function (i, key) {
+                    var li = createItem(index, name, $.isPlainObject(key) ? i : key);
+                    index++;
+
+                    if (name === 'way') {
+                        li.data('type', 'way').data('data', JSON.stringify(key));
+                    } else {
+                        li.data('type', name).data('data', key);
+                    }
+
+                    ul.append(li);
+                });
+
+                index = 0;
+            });
+
+
+            var price;
+
+            $('#activity-buy').on('change', '[type="radio"]', function (e) {
+                var $target = $(e.target),
+                    parent = $target.parent(),
+                    type = parent.data('type'),
+                    data = parent.data('data');
+
+                if (type === 'way') {
+
+                    selectedWay = data;
+                    $.each(inputList.time, function (key, input) {
+                        input.prop('checked', false);
+                        input.attr('disabled', '');
+                    });
+
+                    $.each(inputList.place, function (key, input) {
+                        input.prop('checked', false);
+                        input.removeAttr('disabled', '');
+                    });
+
+                    $.each(data.times, function (i, name) {
+                        inputList.time[name].removeAttr('disabled');
+                    });
+
+                    $.each(source, function (i, data) {
+                        if (data.way == $('.activity-way input:checked').siblings('label').text()) {
+                            price = data.price;
+                            $('#price').text(price);
+                        }
+                    });
+                } else if (type === 'time') {
+                    selectedDate = selectedWay.children[data];
+                    $.each(inputList.place, function (key, input) {
+                        input.attr('disabled', '');
+                    });
+
+                    $.each(selectedDate, function (name) {
+                        inputList.place[name].removeAttr('disabled');
+                    });
+                } else {
+                    $('#order-id').val(selectedDate[data]);
+                }
+            });
+
+            num = 1;
+            var surplus = $('.surplus').text();
+            var limit = <?php echo $limit_num;?>;
+            //todo 允许的购买数
+            var max = 0;
+            if (limit > 0) {
+                max = (surplus > limit) ? limit : surplus;
+            } else {
+                max = surplus;
+            }
+            $("#prev").on('click', function () {
+                $("#next").removeClass('grey');
+                if (num > 1) {
+                    num--;
+                    $('#price').text((price * num).toFixed(2));
+                    if (num == 1) {
+                        $("#prev").addClass('grey');
+                    }
+                } else {
+                    $("#prev").addClass('grey');
+                }
+                $(".data span").text(num);
+            });
+
+            $("#next").on('click', function () {
+                $("#prev").removeClass('grey');
+                if (max > num) {
+                    num++;
+                    $('#price').text((price * num).toFixed(2));
+                    if (max == num) {
+                        $("#next").addClass('grey');
+                    }
+                } else {
+                    $("#next").addClass('grey');
+                }
+                $(".data span").text(num);
+            });
+
+
+            //提交
+            $('#buy').click(function () {
+
+
+                select_1 = $('#order-id').val();
+
+                if (!select_1) {
+                    alert('请按顺序依次选择参与方式，出行日期和地点');
+                    return false;
+                }
+
+                //按钮变灰色禁用
+                $(this).text('请稍候..').css({'background-color': '#ccc'}).attr({"disabled": "disabled"});
+
+
+//            if (!select_1) {
+//                alert('请选择参与方式');
+//                return false;
+//            } else if (!select_2) {
+//                alert('请选择出行日期');
+//                return false;
+//            } else if (!select_3) {
+//                alert('请选择地点')
+//                return false;
+//            }
+
+
+                /************ 生成订单************/
+
+                $.ajax({
+                    type: "POST",
+                    url: "/pay/index/index",
+                    //        dataType:"json",
+                    async: true,
+                    data: {
+                        'coupon_id': '<?php echo $_GET['id'];?>',
+                        'number': num,
+                        'order_type': 2,
+                        'order_id': select_1
+                    },
+                    headers: {
+                        "VER": 8
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            alert(result.response_params.message);
+                        } else {
+                            //todo 成功
+                            window.location.href = '/web/wappay/activitypay?showwxpaytitle=1&orderId=' + result.response_params.order_sn;
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+
+
+                    }
+                });
+
+                /************ 生成订单 end ************/
+                return false;
+            });
+        }(document));
+    })
+
+
+</script>
+</body>
+</html>

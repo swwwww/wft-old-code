@@ -1,0 +1,130 @@
+<hgroup class="box">
+    <header>
+        <h3>分类管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/label/new">添加分类</a>
+        &nbsp;&nbsp;&nbsp;
+        <select>
+                <option><?php echo $city;?></option>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span> </div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+
+            <tr>
+                <th class="size1">id</th>
+                <th class="size2">分类名</th>
+                <th class="size1">关联游玩地</th>
+                <th class="size1">关联关联商品</th>
+                <th class="size1">状态</th>
+                <th class="size1">浏览</th>
+                <th class="size1">分享</th>
+                <th class="size1">类型</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row['id']; ?></td>
+                        <td class="size2">
+                            <a href="/wftadlogin/label/new?lid=<?php echo $row['id']; ?>">
+                                <?php echo $row['tag_name']; ?>
+                            </a>
+                        </td>
+                        <td class="size1"><?php echo $row['shop_num']; ?></td>
+                        <td class="size1"><?php echo $row['game_num']; ?></td>
+                        <td class="size1">
+                            <?php if($row['status'] <= 1):?>
+                                  未发布
+                            <?php elseif($row['status'] <= 2): ?>
+                                  已发布 未推送
+                            <?php else: ?>
+                                  已发布 已推送
+                            <?php endif;?>
+                        </td>
+                        <td class="size1"><?php echo $row['label_click'];?></td>
+                        <td class="size1 share_number">0</td>
+                        <td class="size1"><?php echo $labelType[$row['label_type']];?></td>
+                        <td class="size3">
+                            <a href="/wftadlogin/label/change?lid=<?php echo $row['id']; ?>&type=del" class="ui-button">删除</a>
+                            <a href="/wftadlogin/label/change?lid=<?php echo $row['id']; ?>&type=push" class="ui-button"><?php echo ($row['status'] <= 1) ? '发布' : '取消发布'?></a>
+                            <a href="/wftadlogin/label/change?lid=<?php echo $row['id']; ?>&type=first" class="ui-button"><?php echo ($row['status'] == 3) ? '从发现删除' : '添加到发现'?></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无标签 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(function () {
+        //设为焦点图
+        $(".check_v").click(function(){$.get($(this).attr('data-src'),
+                function(result){
+                    if(result.status == 1){
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                }, 'json'
+            );
+            return false;
+        });
+
+        /*  //排序
+         $(":input, .order").blur(function(){
+         $.get($(this).attr('data-src')+'&oid='+$(this).val(),
+         function(result){
+         if(result.status == 1){
+         window.location.reload();
+         }
+         }, 'json'
+         );
+         return false;
+         });*/
+
+
+
+
+        /*document.getElementById("click").onclick=function(){
+            var text=document.getElementById("t");
+            var val=text.innerHTML;
+            text.innerHTML="<input type='text' id='n' value="+val+" />";
+            document.getElementById("n").addEventListener("blur",function(e){
+                text.innerHTML=document.getElementById("n").value;
+            });
+        };*/
+
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/index/sharedata?type=tag&id=' + id);
+        })
+
+
+
+    })
+</script>

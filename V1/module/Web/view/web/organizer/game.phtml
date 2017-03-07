@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html id="join">
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+        <meta name="format-detection" content="telephone=no">
+        <meta name="apple-itunes-app" content="app-id=myAppStoreID" />
+        <title><?php echo $res['g_buy'] ? '拼团更省钱' : '活动详情'; ?></title>
+
+        <?php if ($res['g_buy']) :?>
+            <link type="text/css" rel="stylesheet" href="/css/share/share-1104.css">
+        <?php else : ?>
+            <link type="text/css" rel="stylesheet" href="/css/share/share-0526.css"/>
+        <?php endif; ?>
+    </head>
+
+    <body<?php echo (isset($res['g_buy']) && $res['g_buy']) ? '' : ' class="share-index"'; ?>>
+        <a id="top-fixed" href="http://wan.deyi.com/app/index.php">
+            <p>玩翻天——孩子们的游玩管家。<br/>下载app，获得更多优惠！</p>
+        </a>
+
+        <?php if (isset($res['g_buy']) && $res['g_buy']) : ?>
+            <div class="wrapper">
+                <section class="top">
+                    <img alt="<?php echo isset($res['title']) ? $res['title'] : ''; ?>"
+                         src="<?php echo isset($res['cover']) && $res['cover'] ? $res['cover'] : '/images/tongwan/zt.jpg'; ?>">
+                    <header class="top-title">
+                        <?php echo isset($res['title']) ? $res['title'] : ''; ?>
+                        <div class="top-more">
+                            <span class="notify">
+                                该商品支持<?php echo $res['g_limit'];?>人开团，2小时组团时间，人数不足自动退款
+                            </span>
+                            <a class="button" href="/web/organizer/detail">规则详情&gt;&gt;</a>
+                        </div>
+                    </header>
+                </section>
+                <section class="info">
+                    <div class="info-title">
+                        <div class="info-name"><em></em>小玩说</div>
+                    </div>
+                    <div class="info-main">
+                        <div class="info-detail">
+                            <?php echo isset($res['editor_word']) ? $res['editor_word'] : ''; ?>
+                        </div>
+                    </div>
+                </section>
+                <div class="share-title">【活动流程】</div>
+                <section>
+                    <?php echo isset($res['process']) ? $res['process'] : ''; ?>
+                </section>
+                <div class="share-title">【图文详情】</div>
+                <section>
+                    <?php echo isset($res['information']) ? $res['information'] : ''; ?>
+                </section>
+                <div class="share-title">【注意事项】</div>
+                <section>
+                    <?php echo isset($res['matters']) ? $res['matters'] : ''; ?>
+                </section>
+                <section>
+                    <div class="play-address">
+                        <span>&bull;&nbsp;&nbsp;游玩地点&nbsp;&nbsp;&bull;</span>
+                    </div>
+                    <?php foreach ($res['shop'] as $shop) : ?>
+                        <a class="playground" href="/web/place?id=<?php echo $shop['shop_id']; ?>">
+                            <span class="title"><?php echo $shop['shop_name']; ?></span>
+                            <!--<span class="text">解放公园 永清路<mark>250m</mark></span>-->
+                            <span class="title"><?php echo $shop['shop_addr'] ? $shop['shop_addr'] : ''; ?></span>
+                        </a>
+                    <?php endforeach; ?>
+                </section>
+                <div class="share-title">【发布商家】</div>
+                <section>
+                    <a class="playground place" href="/web/organizer?id=<?php echo $res['organizer']['organizer_id'] ?>">
+                        <span class="title"><?php echo $res['organizer']['name']?></span>
+                    </a>
+                    <a class="playground place" href="tel:<?php echo $res['organizer']['phone'] ?>">
+                        <span class="text tel">联系电话<mark><?php echo $res['organizer']['phone'] ? $res['organizer']['phone'] : '';?></mark></span>
+                    </a>
+                </section>
+            </div>
+        <?php else : ?>
+            <div class="wrapper">
+                <section class="top">
+                    <span class="sold-price">￥<?php echo $res['price'];?></span>
+
+                    <div class="discount">
+                        <mark><?php echo $res['discount'];?>折</mark>
+                        <span class="mark-price">￥<?php echo $res['money'];?></span>
+                    </div>
+                    <span class="shop-name"><?php echo $res['title'];?></span>
+                </section>
+                <ul class="top-more">
+                    <li class="buy">
+                        <p>已报名</p>
+
+                        <p class="numb"><?php echo $res['buy']?($res['coupon_vir']+$res['buy']):0;?></p>
+                    </li>
+                    <li class="remain">
+                        <p>剩余</p>
+
+                        <p class="numb"><?php echo $res['total_num'] - $res['buy'];?></p>
+                    </li>
+                    <li class="finish">
+                        <p>每机限制</p>
+
+                        <p class="numb"><?php echo $res['limit_num'];?><span></span></p>
+                    </li>
+                </ul>
+                <div class="share-title">小玩说</div>
+                <section class="space10">
+                    <?php echo $res['editor_word'];?>
+                </section>
+                <section class="share-one space5">
+                    <span class="name">适合年龄</span>
+                    <span class="range"><?php echo $res['age_for'];?></span>
+                </section>
+                <div class="share-title">活动内容</div>
+                <section>
+                    <?php echo $res['process'];?>
+                </section>
+                <div class="share-title">图文详情</div>
+                <section>
+                    <?php echo $res['information'];?>
+                </section>
+                <div class="share-title">活动组织者</div>
+                <section class="place">
+                    <a class="name"
+                       href="/web/organizer?id=<?php echo $res['organizer']['organizer_id'] ?>"><?php echo $res['organizer']['name']?></a>
+                    <a class="address" href="#"><?php echo $res['organizer']['address']?><i></i></a>
+                    <a class="tel"
+                       href="tel:<?php echo $res['organizer']['phone'] ?>">联系电话<span><?php echo $res['organizer']['phone'] ? $res['organizer']['phone'] : '';?></span><i></i></a>
+                </section>
+                <div class="share-title">相关游玩地</div>
+                <section class="order-place">
+                    <?php foreach ($res['shop'] as $shop): ?>
+                        <a class="playground space5" href="/web/place?id=<?php echo $shop['shop_id']; ?>">
+                            <p class="title"><?php echo $shop['shop_name'];?></p>
+                            <p class="text"><?php echo $shop['circle'];?></p>
+                        </a>
+                    <?php endforeach;?>
+                </section>
+            </div>
+        <?php endif; ?>
+
+        <footer>
+            <!--<a class="btn" href="http://wan.deyi.com/app/index.php">报名参加</a>-->
+
+            <?php if (time() < $res['start_time']) : ?>
+                <a class="btn" href="#">开抢时间未到</a>
+            <?php else : ?>
+                <?php if ($res['g_buy']) : ?>
+                    <!--同玩底部----开始-->
+                    <a class="btn spree" href="<?php echo $this->toUrl; ?>">
+                        <span class="one">直接抢</span>
+                        <span class="two"><?php echo $res['price']; ?>元</span>
+                    </a>
+                    <a class="btn group"  id="touch">
+                        <span class="one">我要开团</span>
+                        <span class="two"><?php echo $res['g_limit'];?>人成团 <?php echo $res['g_price']; ?>元</span>
+                    </a>
+                    <!--同玩底部----结束-->
+                <?php else : ?>
+                    <a class="btn" href="<?php echo $this->toUrl; ?>" id="w_qiang">报名参加</a>
+                <?php endif; ?>
+            <?php endif; ?>
+        </footer>
+
+        <?php if ($res['g_buy']) : ?>
+            <div id="cover" style="display: none"></div>
+        <?php endif; ?>
+
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script>
+            $(function () {
+                $('#w_qiang').click(function () {
+                    var price =<?php echo (int)$res['price']?>;
+                    if (price <= 1) {
+                        var aa = window.confirm("想要不？要的话快来下载我啊，下载就能买1块钱的便宜货啦！一般人我不告诉他哦！");
+                        if (aa) {
+                            window.location.href = '/app/index.php'
+                            return false
+                        } else {
+                            return false;
+                        }
+                    }
+                })
+            })
+
+            wx.config({
+                // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，
+                // 可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                debug: false,
+                appId: '<?php echo $this->jsApi['appid'];?>', // 必填，公众号的唯一标识
+                timestamp: <?php echo $this->jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+                nonceStr: '<?php echo $this->jsApi['noncestr'];?>', // 必填，生成签名的随机串
+                signature: '<?php echo $this->jsApi['signature'];?>',// 必填，签名，见附录1
+                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+            });
+
+            wx.ready(function () {
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，
+                // 所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。
+                // 对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                wx.onMenuShareTimeline({
+                    title: '<?php echo $this->share['title'];?>', // 分享标题
+                    link: '<?php echo $this->share['toUrl'];?>', // 分享链接
+                    imgUrl: '<?php echo $this->share['img'];?>', // 分享图标
+                    success: function () {
+                        //alert('用户确认分享后执行的回调函数');
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+
+                //分享给朋友
+                wx.onMenuShareAppMessage({
+                    title: '<?php echo $this->share['title'];?>', // 分享标题
+                    desc: '', // 分享描述
+                    link: '<?php echo $this->share['toUrl'];?>', // 分享链接
+                    imgUrl: '<?php echo $this->share['img'];?>', // 分享图标
+                    type: '', // 分享类型,music、video或link，不填默认为link
+                    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                    success: function () {
+                        // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () {
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            document.getElementById("touch").ontouchstart = function(){
+                var isiOS = navigator.userAgent.match('iPad') || navigator.userAgent.match('iPhone') || navigator.userAgent.match('iPod'),
+                    isAndroid = navigator.userAgent.match('Android'),
+                    isDesktop = !isiOS && !isAndroid,
+                    e = navigator.userAgent ? navigator.userAgent.toLowerCase(): '',
+                    isWeChat = /micromessenger/.test(e) ? !0 : !1,
+                    isQQ   = /qq/.test(e) ? !0 : !1,
+                    appurl = 'type=goods&id=<?php echo $this->id; ?>';
+
+                if (isWeChat || isQQ) {
+                    document.getElementById('cover').style.display = document.getElementById('cover').style.display=='none'?'block':'none';
+                } else if (isiOS) {
+                    var loadDateTime = new Date();
+                    window.setTimeout(function() {
+                            var timeOutDateTime = new Date();
+                            if (timeOutDateTime - loadDateTime < 5000) {
+                                //玩翻天APP下载
+                                window.location.href = 'http://wan.deyi.com/app/index.php';
+                            } else {
+                                window.close();
+                            }
+                        },
+                        25);
+                    //iOS系统外部调用玩翻天APP
+                    window.location.href = 'deyiwanfantian://app?' + appurl;
+                } else if (isAndroid) {
+                    var state = null;
+                    try {
+                        //android系统外部调用玩翻天APP
+                        state = window.open('wanfantian://com.deyi.wanfantian?' + appurl);
+                    } catch(e) {}
+                    if (state) {
+                        window.close();
+                    } else {
+                        //玩翻天APP下载
+                        window.location.href = 'http://wan.deyi.com/app/index.php';
+                    }
+                } else if (isDesktop){
+                    return true;
+                }
+            };
+            document.getElementById('cover').ontouchstart = function () {
+                document.getElementById('cover').style.display = 'none';
+            }
+        </script>
+
+        <style>
+            img {
+                max-width: 100%;
+            }
+        </style>
+    </body>
+</html>

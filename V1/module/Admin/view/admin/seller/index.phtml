@@ -1,0 +1,92 @@
+<hgroup class="box">
+    <header>
+        <h3>商家管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/seller/new?city=<?php echo $city;?>">添加商家</a>
+        &nbsp;&nbsp;&nbsp;
+        <select id="cityChange">
+            <?php foreach($cityData as $k=>$v):?>
+                <option <?php echo ($city == $k) ?  'selected' : '';?> data-src="/wftadlogin/seller?city=<?php echo $k; ?>"><?php echo $v;?></option>
+            <?php endforeach;?>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+
+<div class="box">
+    <div class="box-title">
+        游玩地列表
+        <div style="float:right;margin-right:30px;">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="width:200px" placeholder="商家名称" name="k" value="">
+                <button class="ui-button submit" type="submit" >搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size2">商家ID</th>
+                <th class="size4">商家名称</th>
+                <th class="size3">商家类别</th>
+                <th class="size4">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $v): ?>
+                    <tr>
+                        <td class="size2"><?php echo $v->market_id; ?></td>
+                        <td class="size4"><a href="/wftadlogin/seller/new?id=<?php echo $v->market_id; ?>"><?php echo $v->market_name; ?></a></td>
+                        <td class="size3"><?php echo $v->market_type; ?></td>
+                        <td class="size4">
+                            <a class="ui-button" href="/wftadlogin/place?mid=<?php echo $v->market_id; ?>">所有游玩地</a>
+                            <a class="btn btn-success" href="/wftadlogin/coupons/new?mid=<?php echo $v->market_id; ?>">添加卡券</a>
+                            <a class="btn btn-info" href="/wftadlogin/order?mid=<?php echo $v->market_id;?>">订单</a>
+                            <a class="btn btn-primary" href="/wftadlogin/coupons?mid=<?php echo $v->market_id; ?>">所有卡券</a>
+                            <a class="btn btn-danger check_del" data-src="/wftadlogin/seller/deletemarket?mid=<?php echo $v->market_id;?>">删除</a>
+                            <a class="btn btn-success" href="/wftadlogin/place/new?mid=<?php echo $v->market_id; ?>">添加游玩地</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无游玩地 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <header>
+            <?php echo $this->pageData; ?>
+        </header>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        // 城市下拉
+        $('#cityChange').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        // 删除操作
+        $('.check_del').click(function() {
+            var that = this;
+            $.get($(this).attr('data-src'), function (result) {
+                if (result.status == 1) {
+                    $(that).closest('tr').remove();
+                } else {
+                    alert(result.message);
+                }
+            });
+            return false;
+        })
+
+        // todo 推送首页
+    })
+</script>

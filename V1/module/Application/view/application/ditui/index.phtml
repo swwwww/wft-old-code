@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta charset="utf-8">
+    <title>玩翻天礼品领取</title>
+    <script src="/js/jquery.min.js"></script>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            width: 100%;
+            min-width: 320px;
+            color: #545454;
+            font-family: 'Microsoft YaHei';
+            background-color: #fff;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-appearance: none;
+        }
+        .info{
+            margin-top: 20%;
+            font-size: 18px;
+            color: #ff895b;
+            line-height: 2;
+            text-align: center;
+        }
+        .info .tips{
+            font-size: 26px;
+        }
+        .button{
+            font-size: 18px;
+            margin-top: 20%;
+            text-decoration: none;
+            text-align: center;
+            line-height: 3;
+            display: block;
+            background-color: #ff895b;
+            color: #fff;
+        }
+        .cur{
+            font-size: 18px;
+            margin-top: 20%;
+            text-decoration: none;
+            text-align: center;
+            line-height: 3;
+            display: block;
+            background-color: #bfbfbf;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="info">
+    <span class="tips">恭喜您!</span><br>
+    获得由玩翻天提供的精美小礼品:<br>
+    小玩定制汤匙一份<br>
+</div>
+<a class="button <?php if($get_gift==0 and $can_get==1){}else{echo 'cur';}?>"><?php echo $message;?></a>
+</body>
+<script>
+    $(function(){
+
+        $('.button').click(function(){
+            $.get('/application/ditui/getgift',{'p':'<?php echo $p;?>','acid':<?php echo $acid;?>}, function (data) {
+                alert(data.message);
+                $('.button').addClass('cur');
+                window.location.reload()
+            },'json')
+        })
+    })
+
+</script>
+</html>

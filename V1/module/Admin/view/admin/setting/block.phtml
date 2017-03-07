@@ -1,0 +1,109 @@
+<hgroup class="box">
+    <header>
+        <h3>首页管理</h3>
+        &nbsp;&nbsp;&nbsp;
+        <select id="cityChange">
+            <?php foreach($cityData as $k=>$v):?>
+                <option <?php echo ($city == $k) ?  'selected' : '';?> data-src="/wftadlogin/setting/block?city=<?php echo $k; ?>"><?php echo $v;?></option>
+            <?php endforeach;?>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        首页列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size3">名称</th>
+                <th class="size1">编辑人</th>
+                <th class="size1">评论数</th>
+                <th class="size1">状态</th>
+                <th class="size1">性质</th>
+                <th class="size2">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row['id']; ?></td>
+                        <td class="size3">
+                            <?php if($row['type'] == 1):?>
+                            <a href="/wftadlogin/activity/new?aid=<?php echo $row['link_id']; ?>&city=<?php echo $row['city']; ?>">
+                                <?php elseif($row['type'] == 2):?>
+                                <a href="/wftadlogin/coupons/new?id=<?php echo $row['link_id']; ?>&mid=<?php echo $row['mid']; ?>">
+                                <?php elseif($row['type'] == 3):?>
+                                    <a href="/wftadlogin/news/new?nid=<?php echo $row['link_id']; ?>">
+                                <?php endif;?>
+                                <?php echo $row['title']; ?>
+                            </a>
+                        </td>
+                        <td class="size1"><?php echo $row['name']; ?></td>
+                        <td class="size1">
+                            <?php if($row['type'] == 1):?>
+                            <a href="/wftadlogin/post?type=activity&id=<?php echo $row['link_id']; ?>">
+                                <?php elseif($row['type'] == 2):?>
+                                <a href="/wftadlogin/post?type=coupon&id=<?php echo $row['link_id']; ?>">
+                                    <?php elseif($row['type'] == 3):?>
+                                    <a href="/wftadlogin/post?type=news&id=<?php echo $row['link_id']; ?>">
+                                        <?php endif;?>
+                                        <?php echo $row['post_num']; ?>
+                                    </a>
+                        </td>
+                        <td class="size1">
+                            <?php if($row['flag'] == 1):?>
+                                有效
+                            <?php else: ?>
+                                <span style="color:red">无效</span>
+                            <?php endif;?>
+                        </td>
+                        <td class="size1">
+                            <?php echo ($row['type'] == 1) ? '专题' : (($row['type'] == 2) ? '卡券' : '资讯')?>
+                        </td>
+                        <td class="size2">
+                            <input type="text" class="cssInput" style="width:45px" data-src="/wftadlogin/setting/block?type=3&bid=<?php echo $row['id']; ?>" value="<?php echo $row['block_order']; ?>">
+                            <a href="/wftadlogin/setting/block?bid=<?php echo $row['id']; ?>&type=2" class="ui-button">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无首页数据 你可以推送哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+<script>
+    $(function () {
+        // 城市下拉
+        $('#cityChange').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+        //排序
+        $(":input, .order").blur(function(){
+            $.get($(this).attr('data-src')+'&oid='+$(this).val(),
+            function(result){
+                if(result.status == 1){
+                    alert('ok');
+                    window.location.reload();
+                }
+            }, 'json'
+            );
+            return false;
+
+        });
+    })
+</script>

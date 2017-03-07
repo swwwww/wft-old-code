@@ -1,0 +1,252 @@
+<hgroup class="box">
+    <header>
+        <h3>首页管理</h3>
+        <i class="icon icon-list"></i>
+        &nbsp;&nbsp;&nbsp;
+        <select>
+                <option><?php echo $city;?></option>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：① <span style="color:green">有问题 请及时联系</span> ② 请及时 记得删除无效的</div>
+    </aside>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">
+        首页列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">id</th>
+                <th width="100">名称</th>
+                <th width="60">编辑人</th>
+                <th width="30">评论</th>
+                <th width="30">点击</th>
+                <th width="30">分享</th>
+                <th width="30">状态</th>
+                <th width="60" class="type_change">
+                    <select class="type_change">
+                        <option <?php echo (!isset($_GET['type']) || !$_GET['type']) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=0">全部</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=1">专题</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=2">卡券</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 3) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=3">资讯</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 4) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=4">游玩地</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 5) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=5">活动商品</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 7) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?type=7">评论</option>
+                    </select>
+                </th>
+                <th width="50">
+                    <select class="type_change">
+                        <option <?php echo (!isset($_GET['map']) || !$_GET['map']) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?map=0">全部</option>
+                        <option <?php echo (isset($_GET['map']) && $_GET['map'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?map=1">列表</option>
+                        <option <?php echo (isset($_GET['map']) && $_GET['map'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/firstpage?map=2">焦点图</option>
+                    </select>
+                </th>
+                <th width="150">推送说明 - 小玩说</th>
+                <th width="200">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td  width="15"><?php echo $row['id']; ?></td>
+                        <td  width="100">
+                            <?php if($row['type'] == 1):?>
+                            <a href="/wftadlogin/activity/new?aid=<?php echo $row['link_id']; ?>&city=<?php echo $row['city']; ?>">
+                                <?php elseif($row['type'] == 2):?>
+                                <a href="/wftadlogin/coupons/new?id=<?php echo $row['link_id']; ?>&mid=<?php echo $row['mid']; ?>">
+                                    <?php elseif($row['type'] == 3):?>
+                                    <a href="/wftadlogin/news/new?nid=<?php echo $row['link_id']; ?>">
+                                    <?php elseif($row['type'] == 4):?>
+                                    <a href="/wftadlogin/place/new?sid=<?php echo $row['link_id']; ?>">
+                                    <?php elseif($row['type'] == 5):?>
+                                    <a href="/wftadlogin/game/new?gid=<?php echo $row['link_id']; ?>">
+                                    <?php endif;?>
+                                <?php echo $row['title']; ?>
+                            </a>
+                        </td>
+                        <td  width="60"><?php echo $row['name']; ?></td>
+                        <td  width="30">
+                            <?php if($row['type'] == 1):?>
+                            <a href="/wftadlogin/post?type=activity&id=<?php echo $row['link_id']; ?>">
+                                <?php elseif($row['type'] == 2):?>
+                                <a href="/wftadlogin/post?type=coupon&id=<?php echo $row['link_id']; ?>">
+                                    <?php elseif($row['type'] == 3):?>
+                                    <a href="/wftadlogin/post?type=news&id=<?php echo $row['link_id']; ?>">
+                                        <?php elseif($row['type'] == 4):?>
+                                        <a href="/wftadlogin/post?type=place&id=<?php echo $row['link_id']; ?>">
+                                            <?php elseif($row['type'] == 5):?>
+                                            <a href="/wftadlogin/post?type=game&id=<?php echo $row['link_id']; ?>">
+                                        <?php endif;?>
+                                        <?php echo $row['post_num']; ?>
+                                    </a>
+                        </td>
+                        <td  width="30"><?php echo $row['click_num']; ?></td>
+                        <?php
+                            $type = '';
+
+                            if ($row['type'] == 1) {
+                                $type = 'activity';
+                            } elseif ($row['type'] == 2) {
+                                $type = 'coupon';
+                            } elseif ($row['type'] == 3) {
+                                $type = 'news';
+                            } elseif ($row['type'] == 4) {
+                                $type = 'shop';
+                            } elseif ($row['type'] == 5) {
+                                $type = 'game';
+                            } elseif ($row['type'] == 7) {
+                                $type = 'word';
+                            }
+                        ?>
+                        <td  width="30" data-id="<?php echo ($row['type'] == 7) ? $row['tip'] : $row['link_id']; ?>" data-type="<?php echo $type?>" class="share_number">0</td>
+                        <td  width="30">
+                            <?php if($row['flag'] == 1):?>
+                                有效
+                            <?php else: ?>
+                                <span style="color:red">无效</span>
+                            <?php endif;?>
+                        </td>
+                        <td  width="60">
+                            <?php echo ($row['type'] == 1) ? '专题' : (($row['type'] == 2) ? '卡券' : (($row['type'] == 3) ? '资讯' : (($row['type'] == 4) ? '游玩地' : (($row['type'] == 5) ? '活动' : '评论'))))?>
+                        </td>
+                        <td  width="50">
+                            <?php echo ($row['link_type'] == 1) ? '列表' : (($row['link_type'] == 2) ? '焦点图' : '')?>
+                        </td>
+                        <?php if($row['type'] == 7):?>
+                            <td  width="150" data-id="<?php echo $row['id']; ?>" >
+
+                            </td>
+                        <?php else:?>
+                            <td  width="150" data-id="<?php echo $row['id']; ?>" class="change_title">
+                                <?php echo $row['tip'] ? $row['tip'] : '<span style="color:#f0ad4e">修改</span>'; ?>
+                            </td>
+                        <?php endif;?>
+                        <td  width="200">
+                            <?php if($row['type'] == 7):?>
+                            <a href="/wftadlogin/firstpage/change?bid=<?php echo $row['id']; ?>&type=1" class="ui-button">删除</a>
+                            <?php else:?>
+                            <a style="background-color: green" href="/wftadlogin/firstpage/change?type=2&bid=<?php echo $row['id']; ?>&oid=<?php echo ($row['block_order'] == 399) ? 99 : 399; ?>&v=<?php echo ($row['block_order'] == 399) ? 2 : 1; ?>" class="ui-button"><?php echo ($row['block_order'] == 399) ? '取消置顶' : '置顶'; ?></a>
+                            <span data-src="/wftadlogin/firstpage/change?bid=<?php echo $row['id']; ?>&type=3&v=<?php echo ($row['link_type'] == 1) ? 2 : 1?>" class="ui-button check_v">
+                                <?php echo ($row['link_type'] == 1) ? '设为焦点图' : '设为列表'?>
+                            </span>
+                            <a href="/wftadlogin/firstpage/change?bid=<?php echo $row['id']; ?>&type=1" class="ui-button">删除</a>
+                            <a style="background-color: yellowgreen" href="/wftadlogin/firstpage/change?bid=<?php echo $row['id']; ?>&type=4&t=<?php echo ($row['block_order'] == 399) ? 0 : 1; ?>" class="ui-button">刷新上浮</a>
+
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无首页数据 你可以推送哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+
+<div class="modal fade" id="change_title" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>修改推送说明</h3>
+            </div>
+            <div class="modal-body">
+                <textarea type="text" style="width:300px;height:200px" value="" id="title_do"></textarea>
+                <span data-id="0" class="btn btn-primary btn-sm" id="title_change">提交</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(this).attr('data-id');
+            var type = $(this).attr('data-type');
+            $(v).load('/wftadlogin/index/sharedata?type='+ type +'&id=' + id);
+        })
+
+        //修改标题
+        $('.change_title').click(function () {
+            $('#title_change').attr('data-id', $(this).attr('data-id'));
+            $("#change_title").modal()
+        });
+
+        $('#title_change').click(function () {
+            var title = $('#title_do').val();
+            var bid =  $(this).attr('data-id');
+            if (title && bid) {
+                 $.get('/wftadlogin/firstpage/change?type=5&bid='+ bid +'&title=' + title, function (result) {
+                    if (result.status == 1) {
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+
+                });
+            }
+            return false;
+        });
+
+        //设为焦点图
+        $(".check_v").click(function(){$.get($(this).attr('data-src'),
+                function(result){
+                    if(result.status == 1){
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                }, 'json'
+            );
+            return false;
+        });
+
+        /*  //排序
+         $(":input, .order").blur(function(){
+         $.get($(this).attr('data-src')+'&oid='+$(this).val(),
+         function(result){
+         if(result.status == 1){
+         window.location.reload();
+         }
+         }, 'json'
+         );
+         return false;
+         });*/
+
+
+
+
+        /*document.getElementById("click").onclick=function(){
+            var text=document.getElementById("t");
+            var val=text.innerHTML;
+            text.innerHTML="<input type='text' id='n' value="+val+" />";
+            document.getElementById("n").addEventListener("blur",function(e){
+                text.innerHTML=document.getElementById("n").value;
+            });
+        };*/
+
+
+    })
+</script>

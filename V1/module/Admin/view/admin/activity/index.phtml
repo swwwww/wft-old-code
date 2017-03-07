@@ -1,0 +1,161 @@
+<hgroup class="box">
+    <header>
+        <h3>专题管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/activity">专题列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $activity_name = null;
+
+        if (isset($_GET['activity_name']) && $_GET['activity_name']) {
+            $activity_name = $_GET['activity_name'];
+        }
+
+    ?>
+    <table class="table">
+
+        <tr>
+            <th width="160">专题名称</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="activity_name" placeholder="专题名称" value="<?php echo $activity_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/activity" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        专题列表
+    </div>
+    <table class="table">
+            <tr>
+                <th scope="col">专题id</th>
+                <th scope="col">专题名称</th>
+                <th scope="col">城市 <?php echo $filtercity; ?></th>
+                <th scope="col">
+                    <select class="type_change">
+                        <option <?php echo (!isset($_GET['type']) || !$_GET['type']) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?type=0">全部</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 3) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?type=3">一般专题</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?type=1">一元手慢无</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?type=2">周末去哪儿</option>
+                    </select>
+                </th>
+                <th scope="col">
+                    <select class="type_show">
+                        <option <?php echo (!isset($_GET['view']) || !$_GET['view']) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=0">所有</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=1">混合, 游玩地优先</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=2">混合, 商品优先</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 3) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=3">仅游玩地</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 4) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=4">仅商品</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 5) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=5">混合, 活动优先</option>
+                        <option <?php echo (isset($_GET['view']) && $_GET['view'] == 6) ? 'selected' : ''; ?> data-src="/wftadlogin/activity?view=6">仅活动</option>
+                    </select>
+                </th>
+                <!--<th scope="col">编辑人</th>-->
+                <th scope="col">关联商品</th>
+                <th scope="col">关联游玩地</th>
+
+                <!--<th scope="col">评论数量</th>-->
+                <th scope="col">点击次数</th>
+                <th scope="col">分享次数</th>
+                <th scope="col">状态</th>
+                <th scope="col">操作</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['id']; ?></td>
+                    <td><a href="/wftadlogin/activity/new?aid=<?php echo $v['id']; ?>"><?php echo $v['ac_name']; ?></a></td>
+                    <td><?php echo $city[$v['ac_city']]; ?></td>
+                    <td><?php echo $type[$v['ac_type']]?></td>
+                    <td><?php echo $viewType[$v['view_type']]?></td>
+                    <!--<td><?php /*echo $v->admin_name; */?></td>-->
+                    <td class="link_good">0</td>
+                    <td class="link_shop">0</td>
+                    <!--<td><a href="/wftadlogin/post?type=activity&id=<?php /*echo $v->id; */?>"><?php /*echo $v->post_number; */?></a></td>-->
+                    <td><?php echo $v['activity_click']; ?></td>
+                    <td class="share_number">0</td>
+                    <td scope="col">
+                        <?php
+                            if ($v['status'] == -1) {
+                                echo '下架';
+                            } elseif ($v['s_time'] == 0) {
+                                echo '正在进行.长';
+                            } elseif ($v['s_time'] > time()) {
+                                echo '未开始';
+                            } elseif ($v['e_time'] < time()) {
+                                echo '已过期';
+                            } else {
+                                echo '正在进行';
+                            }
+                        ?>
+                    </td>
+                    <td>
+                      <!--  <a class="btn btn-danger" href="/wftadlogin/activity/changeActivity?aid=<?php /*echo $v['id'];*/?>&status=<?php /*echo $v['status']; */?>&type=1"><?php /*echo ($v['status'] == 0) ? '取消发布' : '发布';*/?></a>-->
+                        <?php /*if(isset($_GET['type']) && $_GET['type'] == 3):*/?><!--
+                            <a href="/wftadlogin/activity/dosort?type=2&id=<?php /*echo $v->id;*/?>&ac_sort=<?php /*echo $v->ac_sort;*/?>" class="btn btn-primary"><?php /*echo ($v->ac_sort) ? '置顶' : '取消置顶';*/?></a>
+                        --><?php /*endif;*/?>
+                        <!--<a href="/wftadlogin/firstpage/link?lid=<?php /*echo $v['id'];*/?>&type=1" class="btn btn-primary">推送首页</a>-->
+                        <a href="/wftadlogin/activity/find?aid=<?php echo $v['id'];?>&cid=<?php echo $v['discovery'];?>" class="btn btn-primary"><?php echo ($v['discovery'] == 2) ? '取消发现' : '推送发现';?> </a>
+                        <a class="btn btn-danger" href="/wftadlogin/activity/changeActivity?aid=<?php echo $v['id'];?>&type=2" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <div>
+        <?php echo $this->pagedata; ?>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/index/sharedata?type=activity&id=' + id);
+        })
+
+        //获取关联商品
+        $.each($('.link_good'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/activity/getlink?type=game&id=' + id);
+        })
+
+        //获取关联游玩地
+        $.each($('.link_shop'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/activity/getlink?type=place&id=' + id);
+        })
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //展示类别筛选
+        $('.type_show').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+    });
+
+</script>

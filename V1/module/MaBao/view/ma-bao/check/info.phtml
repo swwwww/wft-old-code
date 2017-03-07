@@ -1,0 +1,9 @@
+<div style="height: 30px;width: 100%">
+
+</div>
+<?php foreach($imgData as $img):?>
+    <div style = "width:800px;margin: 0 auto;">
+        <img  style=" width: 100%;margin-bottom: 10px;" src="<?php echo $this->url. $img->url;?>" />
+    </div>
+
+<?php endforeach;?>

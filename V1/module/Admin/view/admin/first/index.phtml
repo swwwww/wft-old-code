@@ -1,0 +1,36 @@
+<hgroup class="box">
+    <header>
+        <h3>首页管理</h3>
+        <i class="icon icon-list"></i>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">
+        模块列表
+        <?php echo $filtercity; ?>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="30">类型</th>
+                <th width="30">模块</th>
+                <th width="30">内容数量</th>
+                <th width="50">更新时间</th>
+                <th width="30">操作</th>
+            </tr>
+                <?php foreach ($data as $key=>$row): ?>
+                    <tr style="text-align: left">
+                        <td  width="30"><?php echo $row['word']; ?></td>
+                        <td  width="30"><?php echo $row['name']; ?></td>
+                        <td  width="30"><?php echo $row['number']; ?></td>
+                        <td  width="50"><?php echo $row['time']; ?></td>
+                        <td  width="30"><a class="ui-button" href="/wftadlogin/first/list?type=<?php echo $key;?>">修改数据</a></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>

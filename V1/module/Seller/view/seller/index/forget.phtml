@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>忘记密码</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body>
+<form action="javascript:void(0)" class="fg-form">
+    <fieldset>
+        <input class="text" name="user" type="text" placeholder="请输入用户名/ID" id="user">
+    </fieldset>
+    <fieldset>
+        <input class="text fg-text" name="tel" type="text" placeholder="请输入手机号" id="phone">
+        <input type="button" value="获取验证码" class="phone_code_call button" id="get_vcode_btn" style="pointer-events: auto;">
+    </fieldset>
+    <fieldset>
+        <input class="text"  name="code" type="text" placeholder="请输入验证码" id="code">
+        <aside class="lf-error password-error"></aside>
+    </fieldset>
+    <fieldset>
+        <input class="text"  name="new_pwd" type="password" placeholder="请重新输入密码" id="new_pwd">
+        <aside class="lf-error password-error"></aside>
+    </fieldset>
+    <fieldset>
+        <input class="button gf-button" type="button" value="确定" id="forgetBtn"/>
+    </fieldset>
+</form>
+<footer class="footer">
+    <img class="in-logo" src="/img/logo_m.gif" />
+    <h4>孩子们的游戏管家</h4>
+</footer>
+<div class="check-win" id="check-win">
+    <div class="check-win-box" id="check-win-box">
+        <!--tips-->
+        <div class="check-win-list check-win-tips">
+            <div id="loginTip" class="wx_text">
+                <i></i>
+            </div>
+            <a class="check-win-close">确定</a>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+
+</html>

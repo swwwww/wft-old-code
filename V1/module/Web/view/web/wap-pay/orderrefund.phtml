@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信退款</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<header>
+    <a href="/web/wappay/orderavailable">待使用</a>
+    <a href="/web/wappay/orderhistory">已使用</a>
+    <a class="active" href="/web/wappay/orderrefund">退款</a>
+</header>
+<div id="order-refund" class="space10">
+
+    <?php foreach ($data as $k => $v): ?>
+        <section class="order-invalid" data-id="<?php echo $v['rid']; ?>" data-type="<?php echo $v['order_type']; ?>">
+            <a class="arrow" href=""></a>
+
+            <p><?php echo $v['title'];?></p>
+
+            <div>
+                <span class="price">￥<?php echo $v['price'];?></span>
+                <a class="status"><?php echo $v['status'];?></a>
+            </div>
+        </section>
+    <?php endforeach;?>
+
+
+</div>
+<script src="/js/jquery.min.js"></script>
+
+<script>
+
+
+    $(function () {
+        $('.order-invalid').click(function () {
+            var order_sn = $(this).attr('data-id');
+            var order_type = $(this).attr('data-type');
+
+            if (order_type == 2) {
+                window.location.href = '/web/wappay/orderactivity?orderId=' + order_sn;
+            } else {
+                window.location.href = '/web/wappay/orderticket?orderId=' + order_sn;
+            }
+
+            return false;
+        })
+    })
+</script>
+</body>
+</html>

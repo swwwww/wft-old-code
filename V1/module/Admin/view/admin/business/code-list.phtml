@@ -1,0 +1,235 @@
+<hgroup class="box">
+    <header>
+        <h3>商家账户</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:void(0)"><?php echo $organizerData->name;?></a>
+    </header>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $good_name = null;
+        $good_id = null;
+        $type_name = null;
+        $order_id = null;
+        $code_number = null;
+        $buy_start = null;
+        $buy_end = null;
+        $back_start = null;
+        $back_end = null;
+        $check_start = null;
+        $check_end = NULL;
+        $code_status = 0;
+
+        if (isset($_GET['good_name']) && $_GET['good_name']) {
+            $good_name = $_GET['good_name'];
+        }
+
+        if (isset($_GET['type_name']) && $_GET['type_name']) {
+            $type_name = $_GET['type_name'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['code_number']) && $_GET['code_number']) {
+            $code_number = $_GET['code_number'];
+        }
+
+        if (isset($_GET['good_id']) && $_GET['good_id']) {
+            $good_id = $_GET['good_id'];
+        }
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['back_start']) && $_GET['back_start']) {
+            $back_start = $_GET['back_start'];
+        }
+
+        if (isset($_GET['back_end']) && $_GET['back_end']) {
+            $back_end = $_GET['back_end'];
+        }
+
+        if (isset($_GET['check_start']) && $_GET['check_start']) {
+            $check_start = $_GET['check_start'];
+        }
+
+        if (isset($_GET['check_end']) && $_GET['check_end']) {
+            $check_end = $_GET['check_end'];
+        }
+
+        if (isset($_GET['code_status']) && $_GET['code_status']) {
+            $code_status = $_GET['code_status'];
+        } else {
+            $code_status = 1;
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">商品名称</th>
+            <th>
+                <input type="text" class="cssInput" style="width:150px" name="good_name" value="<?php echo $good_name;?>">
+                商品id:
+                <input type="text" class="cssInput" style="width:80px" name="good_id" value="<?php echo $good_id;?>">
+            </th>
+            <th width="160">套系名称</th>
+            <th>
+                <input type="text" class="cssInput" style="width:80px"  name="type_name" value="<?php echo $type_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用码状态</th>
+            <th>
+                <select name="code_status">
+                    <option value="5" <?php echo ($code_status == 5) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($code_status == 1) ? 'selected' : '';?>>已使用</option>
+                    <option value="2" <?php echo ($code_status == 2) ? 'selected' : '';?>>已提交结算</option>
+                    <option value="3" <?php echo ($code_status == 3) ? 'selected' : '';?>>已受理结算</option>
+                    <option value="4" <?php echo ($code_status == 4) ? 'selected' : '';?>>已结算</option>
+                </select>
+            </th>
+            <th width="160">使用时间</th>
+            <th>
+                <input name="check_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_start;?>">
+                <input name="check_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">订单号</th>
+            <th>
+                <input type="text" class="cssInput" name="order_id" value="<?php echo $order_id;?>">
+            </th>
+            <th width="160">使用码</th>
+            <th>
+                <input type="text" class="cssInput" name="code_number" value="<?php echo $code_number;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="organizer_id" value="<?php echo $organizerData->id;?>">
+                <a href="/wftadlogin/business/codeList?organizer_id=<?php echo $organizerData->id;?>" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/business/outAudit?organizer_id=<?php echo $organizerData->id;?>" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="100">验证码</th>
+                <th width="100">订单号</th>
+                <th width="100">用户id</th>
+                <th width="100">用户名</th>
+                <th width="60">用户手机号</th>
+                <th width="150">商品名称</th>
+                <th width="150">套系名称</th>
+                <th width="100">售卖单价</th>
+                <th width="100">结算单价</th>
+                <th width="100">购买时间</th>
+                <th width="100">使用时间</th>
+                <th width="100">审核状态</th>
+                <th width="150">验证码状态</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">  </td>
+
+                    <td width="100">
+                        <?php echo $row['id'].$row['password']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['order_sn']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['user_id']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['username']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['phone']; ?>
+                    </td>
+                    <td width="150">
+                        <?php echo $row['coupon_name']; ?>
+                    </td>
+                    <td width="100"><?php echo $row['price_name']; ?></td>
+                    <td width="100"><?php echo $row['coupon_unit_price']; ?></td>
+                    <td width="100"><?php echo $row['account_money']; ?></td>
+                    <td width="100"><?php echo date('Y-m-d H:i:s',$row['dateline']); ?></td>
+                    <td width="100"><?php echo $row['use_datetime'] ? date('Y-m-d H:i:s',$row['use_datetime']) : ''; ?></td>
+                    <td width="100"><?php echo ($row['check_status'] == 2) ? '已审核' : '未审核'; ?></td>
+                    <td width="100">
+                        <?php
+                            if ($row['test_status'] == 0) {
+                                echo '已使用';
+                            } elseif ($row['test_status'] == 3) {
+                                echo '已提交结算';
+                            } elseif ($row['test_status'] == 4) {
+                                echo '已受理结算';
+                            } elseif ($row['test_status'] == 5) {
+                                echo '已结算';
+                            }
+                        ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+            <button  data-src="/wftadlogin/business/audit"  class="ui-button" id="mark-check">所选项提交结算</button>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+        //提交结算
+        $('#mark-check').click(function() {
+            if (confirm('确定将所有选中的订单确认提交结算？不可恢复')) {
+                $('#out-data-form').attr('action', $(this).attr('data-src'));
+                $('#out-data-form').submit();
+                $('#out-data-form').attr('action', '');
+            }
+        });
+
+    });
+</script>
+
+
+
+

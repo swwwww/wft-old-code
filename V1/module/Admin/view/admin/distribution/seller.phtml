@@ -1,0 +1,114 @@
+<hgroup class="box">
+    <header>
+        <h3>分销</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/seller">销售员管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/withdraw">提现管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/orderList">订单列表</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/statistics">业绩统计</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $username = null;
+        $uid = null;
+        $phone = NULL;
+
+        if (isset($_GET['username']) && $_GET['username']) {
+            $username = $_GET['username'];
+        }
+
+        if (isset($_GET['uid']) && $_GET['uid']) {
+            $uid = $_GET['uid'];
+        }
+
+        if (isset($_GET['phone']) && $_GET['phone']) {
+            $phone = $_GET['phone'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="username" value="<?php echo $username;?>">
+            </th>
+            <th width="160">用户uid</th>
+            <th>
+                <input type="text" class="cssInput" name="uid" value="<?php echo $uid;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户手机号</th>
+            <th>
+                <input name="phone" type="text" class="cssInput" style="width:190px"  value="<?php echo $phone;?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/distribution/seller" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">销售员列表</div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">用户uid</th>
+                <th scope="col">城市</th>
+                <th scope="col">用户名</th>
+                <th scope="col">用户手机号</th>
+                <th scope="col">推广订单数</th>
+                <th scope="col">累计销售额</th>
+                <th scope="col">累计总收益</th>
+                <th scope="col">收益账户余额</th>
+                <th scope="col">操作</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['uid']; ?></td>
+                    <td><?php echo $v['city']; ?></td>
+                    <td><?php echo $v['username']; ?></td>
+                    <td><?php echo $v['phone']; ?></td>
+                    <td><?php echo $v['order_number']; ?></td>
+                    <td><?php echo $v['total_sell']; ?></td>
+                    <td><?php echo $v['total_arrived']; ?></td>
+                    <td><?php echo $v['account_money']; ?></td>
+                    <td>
+                        <?php if($v['is_seller'] == 1):?>
+                        <a class="ui-button" href="/wftadlogin/distribution/sellMan?uid=<?php echo $v['uid']; ?>&man_type=2">取消销售员</a>
+                        <?php endif;?>
+                        <?php if($v['is_seller'] == 2):?>
+                            <a class="ui-button" href="/wftadlogin/distribution/sellMan?uid=<?php echo $v['uid']; ?>&man_type=3">设为销售员</a>
+                        <?php endif;?>
+                        <a class="ui-button" href="/wftadlogin/distribution/deduct?uid=<?php echo $v['uid']; ?>">扣除收益</a>
+                        <a class="ui-button" href="/wftadlogin/distribution/withdraw?uid=<?php echo $v['uid']; ?>">提现记录</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+

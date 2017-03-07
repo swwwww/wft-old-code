@@ -1,0 +1,680 @@
+
+<hgroup class="box">
+    <header>
+        <h3>财务</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/finance/auditOrder">订单管理</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $good_name = null;
+    $order_sn = null;
+    $user_name = null;
+    $shop_name = null;
+    $buy_start = null;
+    $buy_end = null;
+    $close_start = null;
+    $close_end = NULL;
+    $back_start = null;
+    $back_end = NULL;
+    $city = null;
+    $pageNum = 10;
+
+    if (isset($_GET['game_name']) && $_GET['game_name']) {
+        $good_name = $_GET['game_name'];
+    }
+
+    if (isset($_GET['order_sn']) && $_GET['order_sn']) {
+        $order_sn = $_GET['order_sn'];
+    }
+
+    if (isset($_GET['shop_id']) && $_GET['shop_id']) {
+        $shop_name = $_GET['shop_id'];
+    }
+
+    if (isset($_GET['user_id']) && $_GET['user_id']) {
+        $user_name = $_GET['user_id'];
+    }
+
+    if (isset($_GET['city']) && $_GET['city']) {
+        $city = $_GET['city'];
+    }
+
+
+    if (isset($_GET['trade_start_time']) && $_GET['trade_start_time']) {
+        $buy_start = $_GET['trade_start_time'];
+    }
+
+    if (isset($_GET['trade_end_time']) && $_GET['trade_end_time']) {
+        $buy_end = $_GET['trade_end_time'];
+    }
+
+    if (isset($_GET['close_start_time']) && $_GET['close_start_time']) {
+        $close_start = $_GET['close_start_time'];
+    }
+
+    if (isset($_GET['close_end_time']) && $_GET['close_end_time']) {
+        $close_end = $_GET['close_end_time'];
+    }
+
+    if (isset($_GET['sub_back_start_date']) && $_GET['sub_back_start_date']) {
+        $back_start = $_GET['sub_back_start_date'];
+    }
+
+    if (isset($_GET['sub_back_end_date']) && $_GET['sub_back_end_date']) {
+        $back_end = $_GET['sub_back_end_date'];
+    }
+
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="120">商品名</th>
+            <th>
+                <input type="text" class="cssInput" name="game_name" value="<?php echo $good_name;?>">
+            </th>
+            <th width="120">交易时间</th>
+            <th>
+                <input name="buy_start_date" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_start;?>">
+                <input name="buy_end_date" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_end;?>">
+            </th>
+            <th width="120">订单号</th>
+            <th>
+                <input type="text" class="cssInput" name="order_sn" value="<?php echo $order_sn;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">退款时间</th>
+            <th>
+                <input name="sub_back_start_date" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_start;?>">
+                <input name="sub_back_end_date" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_end;?>">
+            </th>
+
+            <th width="120">结算时间</th>
+            <th>
+                <input name="close_start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $close_start;?>">
+                <input name="close_end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $close_end;?>">
+            </th>
+            <th width="120">用户ID</th>
+            <th>
+                <input type="text" class="cssInput" name="user_id" value="<?php echo $user_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th colspan="" width="120">商家ID</th>
+            <th>
+                <input type="text" class="cssInput" name="shop_id" value="<?php echo $shop_name;?>">
+            </th>
+
+            <th width="160">城市</th>
+            <th>
+<!--                <input type="text" class="cssInput" name="city" value="--><?php //echo $city;?><!--">-->
+                <select name="city" id="">
+                    <option value="">全部</option>
+                    <option value="WH">武汉</option>
+                    <option value="CS">长沙</option>
+                    <option value="NJ">南京</option>
+                </select>
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/finance/auditOrder" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/finance/outOrder" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="50">交易时间</th>
+                <th width="50">交易号</th>
+                <th width="50">城市</th>
+                <th width="80">订单号</th>
+                <th width="80">用户ID</th>
+                <th width="150">入账</th>
+                <th width="150">出账</th>
+                <th width="100">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            交易渠道
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <?php function getaccounturl($url = array())
+                            {
+                                $_GET[key($url)] = $url[key($url)];
+                                return http_build_query($_GET);
+                            }
+
+                            ?>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_type=0">所有</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_type=1">支付宝</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_type=2">银联</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_type=3">微信</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_type=4">余额支付</a>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+                <th width="100">交易账号</th>
+                <th width="100">商家名</th>
+                <th width="100">商家ID</th>
+                <th width="200">商家名称</th>
+                <th width="100">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            审核状态
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <?php function geturl($url = array())
+                            {
+                                $_GET[key($url)] = $url[key($url)];
+                                return http_build_query($_GET);
+                            }
+
+                            ?>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?check_status=0">所有</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?check_status=1">未审核</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?check_status=2">已审核</a>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+                <th width="100">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            支付类型
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <?php function getweburl($url = array())
+                            {
+                                $_GET[key($url)] = $url[key($url)];
+                                return http_build_query($_GET);
+                            }
+
+                            ?>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=0">所有</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=1">待使用</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=2">已使用</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=3">已提交退款</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=4">已退款</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=5">已提交结算</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=6">已受理结算</a>
+                            </li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/finance/auditOrder?pay_status=7">已结算</a>
+                            </li>
+                        </ul>
+                    </div>
+                </th>
+                <th width="100">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <input type="checkbox" name="check_ids" value="<?php echo $row['id']; ?>" data-income="<?php echo $row['account_money'];?>" data-out="<?php echo sprintf('%.2f', $row['back_money']);?>" class="check_ids"></td>
+                    <td width="170"><?php echo date('Y-m-d H:i',$row['dateline']); ?></td>
+                    <td width="50">
+                        <?php echo $key;?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['order_city'];?>
+                    </td>
+                    <td width="50">
+                        <a href="/wftadlogin/order/info?order_sn=<?php echo $row['order_sn'];?>"><?php echo $row['order_sn']; ?></a>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['user_id'];?>
+                    </td>
+                    <td width="50"><?php echo $row['account_money']; ?></td>
+                    <td width="50"><?php echo ($row['back_money']);?></td>
+                    <td width="100"><?php echo $row['account_type']; ?></td>
+                    <td width="100"><?php echo $row['account']; ?></td>
+                    <td width="150"><?php echo $row['shop_name']; ?></td>
+                    <td width="150"><?php echo $row['shop_id']; ?></td>
+                    <td width="80"><?php echo $row['coupon_name']; ?></td>
+                    <td width="100"><?php echo ($row['check_status'] == 2) ? '已审核' : '未审核'; ?></td>
+                    <td width="100">
+                        <?php
+                        if ($row['status'] == 0) {
+                            echo '待使用';
+                        } elseif ($row['status'] == 1) {
+                            if ($row['force'] == 0) {
+                                echo '已使用';
+                            } elseif ($row['force'] == 1) {
+                                echo '已提交退款';
+                            } elseif ($row['force'] == 2) {
+                                echo '已受理退款';
+                            } elseif ($row['force'] == 3) {
+                                echo '已退款';
+                            }
+                        } elseif ($row['status'] == 2) {
+                            echo '已退款';
+                        } elseif ($row['status'] == 3) {
+                            if ($row['test_status'] == 1) {
+                                echo '已受理退款';
+                            } else {
+                                echo '已提交退款';
+                            }
+                        }
+                        $order_stay = '';
+                        if ($row['test_status'] == 3) {
+                            $order_stay = '已提交结算';
+                        } elseif ($row['test_status'] == 4) {
+                            $order_stay = '已受理结算';
+                        } elseif ($row['test_status'] == 5) {
+                            $order_stay = '已结算';
+                        }
+                        echo $order_stay;
+                        ?>
+                    </td>
+                    <td width="300">
+                        <?php if($row['check_status'] == 1):?>
+                    <a href="/wftadlogin/finance/approve?type=1&id=<?php echo $row['id']; ?>"  class="login btn">审批到账</a>
+                        <?php endif;?>
+
+<!--                        --><?php //if($row['check_status'] == 2 && $row['status'] == 1):?>
+<!--                            <a href="javascript:void(0)" data-src="/wftadlogin/finance/approve?type=3&id=--><?php //echo $row['id']; ?><!--" class="login btn">批准结算</a>-->
+<!--                        --><?php //endif;?>
+
+<!--                        --><?php //if($row['check_status'] == 2 && (($row['status'] == 1 && $row['force'] == 1) || ($row['status'] == 3 && $row['test_status']==0))):?>
+<!--                            <a href="javascript:void(0)" data-src="/wftadlogin/finance/approve?type=2&id=--><?php //echo $row['id']; ?><!--" class="login btn">客服同意退款</a>-->
+<!--                        --><?php //endif;?>
+
+<!--                        --><?php //if($row['check_status'] == 2 && $row['status'] == 2):?>
+<!--                            <a href="javascript:void(0)" data-src="/wftadlogin/finance/approve?type=3&id=--><?php //echo $row['id']; ?><!--" class="login btn">客服提交结算</a>-->
+<!--                        --><?php //endif;?>
+
+                        <?php if($row['check_status'] == 2 && $row['test_status'] == 3):?>
+                            <a href="javascript:void(0)" data-src="/wftadlogin/finance/approve?type=4&id=<?php echo $row['id']; ?>" class="login btn">受理结算</a>
+                        <?php endif;?>
+                        <?php if($row['check_status'] == 2 && $row['test_status'] == 4):?>
+                            <a href="javascript:void(0)" data-src="/wftadlogin/finance/approve?type=5&id=<?php echo $row['id']; ?>" class="login btn">已结算</a>
+                        <?php endif;?>
+
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-all">全选
+        <button onclick="if(confirm('审批到账?')==false) return false;" class="ui-button" id="approve-by">审批到账</button>
+        <button onclick="if(confirm('受理结算?')==false) return false;" class="ui-button" id="accept-account">受理结算</button>
+        <button onclick="if(confirm('已结算?')==false) return false;" class="ui-button" id="accounted ">已结算</button>
+        <div id="tongji">
+            <div>
+                <span>总计订单数：<mark id="order_sum">0</mark></span>
+                <span>支付数量：<mark id="pay_sum">0</mark></span>
+            </div>
+            <div>
+                <span>入账数额：<mark id="sumIncome">0</mark></span>
+                <span>出账数额：<mark id="sumOut">0</mark></span>
+            </div>
+        </div>
+        <input type="hidden" name="sum_income" value="<?php echo $sum_income;?>" id="sum_income">
+        <input type="hidden" name="sum_out" value="<?php echo $sum_out;?>" id="sum_out">
+        <input type="hidden" name="count" value="<?php echo $count;?>" id="count">
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<style>
+    .btn-info {
+        background-image: linear-gradient(to bottom, #5bc0de 0px, #2aabd2 100%);
+        background-repeat: repeat-x;
+        border-color: #28a4c9;
+    }
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .cssInput{
+        width:300px;
+    }
+     #tongji{
+         padding:5px 5px;
+         margin: 5px 5px;
+     }
+    #tongji span{
+        color:red;
+        font-size:16px;
+        padding: 10px;
+    }
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3>单个验证码退费操作</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="" id="zjh" method="post">
+            <ol>
+                <li><a href="javascript:void(0)"  id="zjt" class="ui-button">直接退</a></li>
+                <li><input name="money" type="text " /> <button  type="submit">提交</button></li>
+            </ol>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //全选和全不选
+        var count = $("#count").val(),
+            sum_income = $("#sum_income").val(),
+            sum_out=$("#sum_out").val();
+
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $('#order_sum').text(count);
+                $("#pay_sum").text(count);
+                $("#sumIncome").text(sum_income);
+                $("#sumOut").text(sum_out);
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $('#order_sum').text(0);
+                $("#pay_sum").text(0);
+                $("#sumIncome").text(0.00);
+                $("#sumOut").text(0.00);
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+
+        //批量审批到账
+        $('#approve-by').click(function() {
+            if (confirm('确定将所有选中的订单审批到账？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/finance/approve?type=1';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + '@';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&id=' + id;
+                }
+            }
+        });
+
+        //批量受理结算
+        $('#accept-account').click(function() {
+            if (confirm('确定将所有选中的订单受理结算？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/finance/approve?type=4';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + '@';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&id=' + id;
+                }
+            }
+        });
+
+        //已结算
+        $('#accounted').click(function() {
+            if (confirm('确定将所有选中的订单已结算？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/finance/approve?type=5';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + '@';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&id=' + id;
+                }
+            }
+        });
+
+    });
+</script>
+
+<script>
+    $(function () {
+//
+//        $('.login').click(function(){ //jquery的点击事件
+//            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+//            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+//            var url = $(this).attr('data-src');
+//            $('#zjt').attr('href', url);
+//            $('#zjh').attr('action', url);
+//
+//        })
+//        $('.close-window .close').click(function(){
+//            $('.body-color').fadeOut(100);//
+//            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+//        })
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+    });
+</script>
+
+
+
+

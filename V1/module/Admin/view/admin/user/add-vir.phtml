@@ -1,0 +1,151 @@
+<hgroup class="box">
+    <header>
+        <h3>添加虚拟用户</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.back(-1)">返回</a>
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+<form class="box box-form" action="/wftadlogin/user/saveVir" method="post">
+    <table class="table">
+        <?php if($userData):?>
+        <tr>
+            <th width="160">用户uid</th>
+            <th colspan="3">
+                 <?php echo $userData->uid; ?>
+            </th>
+        </tr>
+        <?php endif;?>
+
+        <tr>
+            <th width="160">用户名</th>
+            <th colspan="3">
+                <input name="user_name" style="width:120px" class="cssInput" value="<?php echo $userData ? $userData->username : '';?>">
+                <span style="color:red">必填</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th>用户头像</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="img" value="<?php echo $userData ? $userData->img : '';?>" />
+                    <span>　　样片封面图请上传：<mark>120*120px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload1" src="<?php echo $userData ? $userData->img : '';?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户性别</th>
+            <th colspan="3">
+                <select name="child_sex">
+                    <option value="2" <?php echo ($userData && $userData->child_sex == 2) ? 'selected' : ''; ?>>女</option>
+                    <option value="1" <?php echo ($userData && $userData->child_sex == 1) ? 'selected' : ''; ?>>男</option>
+                </select>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">宝宝姓名</th>
+            <th colspan="3">
+                <input name="baby_name" class="textInput" value="<?php echo $babyData ? $babyData->baby_name : '';?>">
+                <span style="color:red">必填</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th>宝宝图片<span style="line-height: 15px;color: red">（选填）</span></th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" class="hidden" name="baby_img" value="<?php echo $babyData ? $babyData->img : '';?>" />
+                    <span>　　样片封面图请上传：<mark>120*120px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload2" src="<?php echo $babyData ? $babyData->img : '';?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">宝宝性别</th>
+            <th colspan="3">
+                <select name="baby_sex">
+                    <option value="2" <?php echo ($babyData && $babyData->baby_sex == 2) ? 'selected' : ''; ?>>女</option>
+                    <option value="1" <?php echo ($babyData && $babyData->baby_sex == 1) ? 'selected' : ''; ?>>男</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">宝宝生日</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo $babyData ? date('Y-m-d', $babyData->baby_birth) : date('Y-m-d', time() - 15552000);?>" name="baby_birth">
+                <input type="time" value="<?php echo $babyData ? date('H:i', $babyData->baby_birth) : '08:00';?>" name="baby_birth1">　
+                <span style="color:red">必填</span>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="uid" value="<?php echo $userData ? $userData->uid : '';?>">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+</body>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $(function () {
+
+        //上传图片
+        $('#fileupload1').fileupload({
+            url: '/wftadlogin/index/upload',
+            dataType: 'json',
+            done: function (e, data) {
+                if (data.result.status == 1) {
+                    $("input[name='img']").attr('value', data.result.url);
+                    $(".fileupload1").attr('src' , data.result.url);
+                } else {
+                    alert(data.result.response_params.message);
+                }
+            }
+        });
+
+        $('#fileupload2').fileupload({
+            url: '/wftadlogin/index/upload',
+            dataType: 'json',
+            done: function (e, data) {
+                if (data.result.status == 1) {
+                    $("input[name='baby_img']").attr('value', data.result.url);
+                    $(".fileupload2").attr('src' , data.result.url);
+                } else {
+                    alert(data.result.response_params.message);
+                }
+            }
+        });
+    })
+</script>

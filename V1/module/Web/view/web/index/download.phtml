@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天app下载</title>
+    <link type="text/css" rel="stylesheet" href="/css/web-style.css" />
+    <style>
+        #zz {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            position: fixed;
+            filter: alpha(opacity=90);
+            -moz-opacity: 0.9;
+            opacity: 0.9;
+            text-align: right;
+        }
+
+        #zz img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="all" class="download">
+    <div class="container">
+        <a class="dl-btn icon d-btn" id="down_url" href="#">点击下载</a>
+        <a class="t-btn" href="javascript:history.go(-1);">不了，谢谢！</a>
+    </div>
+</div>
+<script>
+    if (navigator.userAgent.match(/micromessenger/i)) {
+        document.write("<div id='zz'><img src='/images/zz.png'></div>");
+    } else {
+        if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+            document.getElementById('down_url').href="https://itunes.apple.com/cn/app/de-yi-sheng-huo-lun-tan/id950652997?mt=8";
+        } else if (navigator.userAgent.match(/android/i)) {
+            document.getElementById('down_url').href="http://wft.deyi.com/download/wft.apk";
+        } else{
+            window.location.href="/download/index.html";
+        }
+    }
+</script>
+</body>
+</html>

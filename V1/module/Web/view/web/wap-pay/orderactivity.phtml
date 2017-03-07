@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信订单详情</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+    <style type="text/css">
+        .pop-up{
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 8;
+        }
+        .win-box {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            z-index: 9;
+        }
+
+        .win-con {
+            display: none;
+            position: relative;
+            margin: 30% auto 0;
+            width: 80%;
+            z-index: 9;
+        }
+
+        .win-con .pic,.win-con .pic img{
+            width: 100%;
+            height: auto;
+        }
+        .close-btn{
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 1px solid #eee;
+            color: #999;
+            font-size: 20px;
+            position: absolute;
+            right: -12px;
+            top: -12px;
+        }
+    </style>
+
+</head>
+<body>
+<div id="order-activity" class="space10">
+    <section class="activity-info">
+        <div class="title">
+            <span class="sold-price">￥<?php echo $res['price'];?></span>
+
+            <div class="discount">
+                <mark><?php echo $res['discount'];?>折</mark>
+                <span class="mark-price">￥<?php echo $res['money'];?></span>
+            </div>
+            <span class="shop-name"><?php echo $res['title'];?></span>
+        </div>
+        <ul class="info-more">
+            <li class="buy">
+                <p>已报名</p>
+
+                <p class="numb"><?php echo $res['buy'];?></p>
+            </li>
+            <li class="remain">
+                <p>剩余</p>
+
+                <p class="numb"><?php echo $res['total_num'] - $res['buy'];?></p>
+            </li>
+            <li class="limit">
+                <p>每机限制</p>
+
+                <p class="numb"><?php echo $res['limit_num'];?></p>
+            </li>
+        </ul>
+    </section>
+
+    <?php foreach ($codes as $v): ?>
+        <section class="order-valid">
+            <div>
+                <span class="name">参与方式：</span>
+                <span class="detail"><?php echo $orderGameInfo->type_name;?></span>
+            </div>
+            <div>
+                <span class="name">出行日期：</span>
+                <span class="detail"><?php echo date('Y-m-d', $orderGameInfo->start_time)?>
+                    ~ <?php echo date('Y-m-d', $orderGameInfo->end_time)?></span>
+            </div>
+            <div>
+                <span class="name">活动地点：</span>
+                <span class="detail"><?php echo $orderGameInfo->address;?></span>
+            </div>
+            <div>
+                <span class="name">验证码：</span>
+                <span class="detail"><?php echo $v['id'] . $v['password'];?></span>
+                <?php if($res['refund_time'] > time()):?>
+                <a class="btn <?php echo $v['status']==0?'return':'used'?>" href="#"  data-order_sn="<?php echo $orderData['order_sn']; ?>" data-password="<?php echo $v['id'] . $v['password']; ?>"
+                   data-refund="<?php echo ($res['refund_time'] > time() ? 1 : 2); ?>"><?php if($v['status']==0){echo '退订';}else{echo $codeStatus[$v['status']];} ?></a>
+                <?php endif;?>
+            </div>
+        </section>
+    <?php endforeach;?>
+
+    <h4>小玩说</h4>
+    <section class="order-detail">
+        <?php echo $res['editor_word'];?>
+    </section>
+    <section class="order-oneline">
+        <span class="name">适合年龄</span>
+        <span class="detail"><?php echo $res['age_for'];?></span>
+    </section>
+    <h4>活动流程</h4>
+    <section class="order-detail">
+        <?php echo $res['process'];?>
+    </section>
+    <h4>图文说明</h4>
+    <section class="order-detail">
+        <?php echo $res['information'];?>
+    </section>
+    <h4>活动组织者</h4>
+    <section class="order-shop">
+        <a class="name"
+           href="/web/organizer?id=<?php echo $res['organizer']['organizer_id'] ?>"><?php echo $res['organizer']['name']?></a>
+        <a class="address" href="#"><?php echo $res['organizer']['address']?><i></i></a>
+        <a class="tel"
+           href="tel:<?php echo $res['organizer']['phone'] ?>">联系电话<span><?php echo $res['organizer']['phone'] ? $res['organizer']['phone'] : '';?></span><i></i></a>
+    </section>
+    <h4>相关游玩地</h4>
+    <?php foreach ($res['shop'] as $shop): ?>
+        <section class="order-place">
+            <a class="playground space5" href="/web/place?id=<?php echo $shop['shop_id']; ?>">
+                <p class="title"><?php echo $shop['shop_name'];?></p>
+
+                <p class="text"><?php echo $shop['circle'];?></p>
+            </a>
+        </section>
+    <?php endforeach;?>
+</div>
+<div id="fade" class="pop-up"></div>
+<div class="win-box">
+    <div id="tip" class="win-con">
+        <div class="pic"><img src="/img/new_weixin.jpg"></div>
+<!--        <a href="javascript:;" class="close-btn" id="close-btn">×</a>-->
+    </div>
+</div>
+
+
+</body>
+
+
+
+<script src="/js/jquery.min.js"></script>
+<script>
+
+
+    $(function () {
+
+        "use strict";
+        <?php if($subscribe==0 and $is_pay==1){echo "show('tip','fade');";}?>
+
+        document.getElementById('close-btn').addEventListener('click', function () {
+            hide('tip','fade');
+        }, false);
+
+        //弹出隐藏层
+        function show(show_div,hide_div){
+            document.getElementById(show_div).style.display='block';
+            document.getElementById(hide_div).style.display='block' ;
+        }
+
+        //关闭弹出层
+        function hide(show_div,hide_div)
+        {
+            document.getElementById(show_div).style.display='none';
+            document.getElementById(hide_div).style.display='none';
+        }
+
+
+
+        $('.return').click(function () {
+
+           // var title = $(this).parent().parent().find('.coupon_title').text();
+
+
+            var order_sn = $(this).attr('data-order_sn');
+            var password = $(this).attr('data-password');
+
+            if ($(this).attr('data-refund') == 1) {
+                var message = '亲爱的小玩家，您已取消参加本次活动，订单费用将在1-3个工作日退回至玩翻天账户，在退款订单详情页面可申请原路退回';
+            } else {
+                var message = '亲爱的小玩家，您已取消参加本次活动，特价商品，恕不接受退款申请哦，下次别放我鸽子哈！';
+            }
+
+            var aa = window.confirm(message);
+            if (aa) {
+                $(this).text('请稍候..').css({'background-color': '#ccc'}).attr({"disabled": "disabled"});
+            } else {
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "/pay/index/backpay",
+                //        dataType:"json",
+                async: true,
+                data: {
+                    'order_sn': order_sn,
+                    'password': password
+
+                },
+                headers: {
+                    "VER": 8
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        alert(result.response_params.message);
+                    } else {
+
+                        //todo 成功
+                        alert('提交成功');
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+
+
+                }
+            });
+
+            /************ 生成订单 end ************/
+            return false;
+        });
+
+
+    })
+</script>
+
+
+</html>

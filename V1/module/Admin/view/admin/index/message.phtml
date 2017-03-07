@@ -1,0 +1,32 @@
+<h1>
+    发送短信记录
+</h1>
+<br>
+
+<table class="table">
+
+    <tr>
+        <td>用户id</td>
+        <td>订单号</td>
+        <td>短信类型</td>
+        <td>短信内容</td>
+        <td>手机号</td>
+        <td>发送状态</td>
+        <td>发送时间</td>
+    </tr>
+    <?php foreach ($data as $v): ?>
+        <tr>
+            <td><?php echo $v->uid; ?></td>
+            <td><?php echo 'WFT' . $v->order_sn; ?></td>
+            <td><?php echo $v->m_type == 1 ? '快到期提醒' : '其他'; ?></td>
+            <td><?php echo $v->message; ?></td>
+            <td><?php echo $v->phone; ?></td>
+            <td><?php echo $v->status == 1 ? '发送成功' : '发送失败'; ?></td>
+            <td><?php echo date('Y-m-d H:i:s', $v->dateline); ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<div>
+    <?php echo $pagedata; ?>
+</div>

@@ -1,0 +1,60 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <?php if($type == 1):?>
+        <li><a href="/wftadlogin/game/index">商品管理</a></li>
+        <li><a href="/wftadlogin/good/new?gid=<?php echo $objectData->id;?>"><?php echo $objectData->title; ?></a></li>
+        <li class="active">添加虚拟评论</li>
+        <?php else:?>
+            <li><a href="/wftadlogin/excercise/index">活动管理</a></li>
+            <li><a href="/wftadlogin/excercise/edit?id=<?php echo $objectData->id; ?>"><?php echo $objectData->name; ?></a></li>
+            <li class="active">添加虚拟评论</li>
+        <?php endif;?>
+    </ul>
+</div>
+
+<form class="box box-form" action="/wftadlogin/consult/saveVirPost?type=<?php echo $type; ?>" method="post">
+    <table class="table">
+
+        <tr>
+            <th width="160">评分</th>
+            <th colspan="3">
+                <select name="star">
+                    <option value="5">5</option>
+                    <option value="4">4</option>
+                    <option value="3">3</option>
+                    <option value="2">2</option>
+                    <option value="1">1</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">内容</th>
+            <th colspan="3" width="600"><span><mark>请上传1M以内的图片</mark></span>
+                <script type="text/plain" id="myEditorVir" style="width:600px;height:240px;"></script>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="object_id"  value="<?php echo $objectData->id;?>">
+                <?php if($type == 2):?>
+                <input type="hidden" name="eid"  value="<?php echo $eventId;?>">
+                <?php endif;?>
+                <input type="hidden" name="uid"  value="<?php echo $uid;?>">
+                <input type="hidden" name="city"  value="<?php echo $objectData->city;?>">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UE.getEditor('myEditorVir');
+
+</script>
+
+
+

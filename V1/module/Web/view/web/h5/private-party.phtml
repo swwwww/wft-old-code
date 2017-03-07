@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>玩翻天定制包场</title>
+    <link href="/css/wap/style.css" rel="stylesheet"/>
+    <style>
+        .pp-title p{
+            margin-bottom: 10px;
+        }
+        .pp-title h2{
+            margin-bottom:10px;
+            text-align: center;
+            color: #fa6e51;
+            margin-top: -15px;
+        }
+        .pp-form p{
+            text-align: center;
+        }
+        .pp-form p a{
+            color: #fa6e51;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header class="pp-title">
+        <h2>组团去遛娃咯</h2>
+        <p>
+            好玩到飞起的活动，我们想组团去玩、定制我们的专场！
+        </p>
+        <div style="margin-top:10px;">
+            <p>在玩翻天，您可以：</p>
+            <p>1、与亲朋好友包场</p>
+            <p>2、幼儿园定制</p>
+            <p>3、企业定制</p>
+        </div>
+    </header>
+    <aside class="pp-condition" style="margin-top:-10px;">每场至少20个家庭</aside>
+    <form class="pp-form">
+
+        <fieldset>
+            <input type="text" id="name" name="name" placeholder="姓名" autocomplte="off"/>
+        </fieldset>
+        <fieldset>
+            <input type="text" id="phone" name="phone" placeholder="手机号" autocomplte="off"/>
+        </fieldset>
+        <fieldset>
+            <input type="text" id="num" name="num" placeholder="参与家庭数" autocomplte="off"/>
+        </fieldset>
+        <fieldset class="tips">
+            现在提交您的相关信息，小玩将在2个工作日内联系您
+        </fieldset>
+        <fieldset>
+            <a class="submit" id="submitBtn" href="javascript:void(0);">提交</a>
+        </fieldset>
+        <p>紧急需求请电联:
+            <a href="tel:400-800-7221">400-800-7221</a>
+        </p>
+        <input type="hidden" name="coupon_id" value="<?php echo $id;?>" id="coupon_id">
+    </form>
+    <div class="error-tips" id="loginTip"></div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+    (function(){
+        'use strict';
+        var loginTip = $("#loginTip"),
+            name = $("#name"),
+            nameReg = /^[\u4E00-\u9FA5]+$/,
+            phone = $("#phone"),
+            num = $("#num"),
+            phoneReg = /^1\d{10}$/,
+            submitBtn = $("#submitBtn"),
+            ppForm = $(".pp-form");
+
+        submitBtn.on("click",function (e) {
+            e.preventDefault();
+            submitBtn.attr('disabled', true);
+
+            var nameValue = $.trim(name.val()),
+                numValue = $.trim(num.val()),
+                phoneValue = $.trim(phone.val());
+
+            if (nameValue == "") {
+                loginTip.text("您还未输入姓名");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', false);
+                },4000);
+                return false;
+            }
+            if (!nameReg.test(nameValue)) {
+                loginTip.text("请输入中文名字");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', true);
+                },4000);
+                return false;
+            }
+
+            if (phoneValue == "") {
+                loginTip.text("您还未输入手机号");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', true);
+                },4000);
+                phone.focus();
+                return false;
+            }
+            if (!phoneReg.test(phoneValue)) {
+                loginTip.text("您输入手机号有误");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', true);
+                },4000);
+                phone.focus();
+                return false;
+            }
+
+            if (numValue == "") {
+                loginTip.text("您还未输入参与家庭数");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', true);
+                },4000);
+                num.focus();
+                return false;
+            }
+
+            if (numValue <20) {
+                loginTip.text("每场至少20个家庭");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                    submitBtn.attr('disabled', true);
+                },4000);
+                num.focus();
+                return false;
+            }
+
+            submitBtn.text("提交中...");
+            submitBtn.addClass("grey");
+
+            $.post('/web/h5/privatepartyreg?p=<?php echo $_GET['p'];?>', ppForm.serialize(), function (data) {
+                if (data.response_params.status == 0) {
+                    loginTip.text(data.response_params.message);
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                        submitBtn.attr('disabled', true);
+                    },4000);
+                    return false;
+                } else if(data.error_code==0) {
+                    loginTip.text(data.error_msg);
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                        submitBtn.attr('disabled', true);
+                    },4000);
+                    return false;
+                }else{
+                    submitBtn.text("提交成功");
+                    submitBtn.removeClass("grey");
+                    var id = $("#coupon_id").val();
+                    //提交成功跳转地址
+                    if(id>0){
+                        window.location.href="/web/organizer/shops?id="+id;
+                    }
+                }
+            }, "json");
+        });
+    }());
+</script>
+</html>

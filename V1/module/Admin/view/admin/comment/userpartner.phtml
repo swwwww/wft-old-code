@@ -1,0 +1,63 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/circle">圈子管理</a></li>
+        <li><?php echo $userData->username.'的玩伴';?> </li>
+    </ul>
+</div>
+
+
+<div class="box">
+    <div class="box-title">
+
+        <div style="float:left;margin-right:30px">
+            <a href="/wftadlogin/circle/userpartner?uid=<?php echo $userData->uid;?>&type=follow" class="ui-button">关注</a>
+        </div>
+        <div style="float:left;margin-right:30px">
+            <a href="/wftadlogin/circle/userpartner?uid=<?php echo $userData->uid;?>&type=followed" class="ui-button">被关注</a>
+        </div>
+        <div style="float:left;margin-right:30px">
+            <a href="/wftadlogin/circle/userpartner?uid=<?php echo $userData->uid;?>&type=partner" class="ui-button">玩伴(双向关注)</a>
+        </div>
+    </div>
+    <div>
+
+            <table class="table">
+                <tr>
+                    <th scope="col">用户ID</th>
+                    <th scope="col">用户名</th>
+                    <th scope="col">手机号</th>
+                    <th scope="col">是否在线</th>
+                    <th scope="col">注册类型</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">注册时间</th>
+                    <th scope="col">设备</th>
+
+                </tr>
+                <?php $login_type = array(
+                    'qq' => 'QQ',
+                    'weixin' => '微信',
+                    'sinaweibo' => '微博',
+                    'deyi' => '得意',
+                    'phone' => '本地',
+                    'weixin_wap'=>'微信平台'
+                ); ?>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                        <td><?php echo $v->uid; ?></td>
+                        <td><?php echo $v->username; ?></td>
+                        <td><?php echo $v->phone; ?></td>
+                        <td><?php echo $v->is_online == 1 ? '在线' : '下线'; ?></td>
+                        <td><?php echo $login_type[$v->login_type]; ?></td>
+                        <td><?php echo $v->status == 1 ? '正常' : '禁用'; ?></td>
+                        <td><?php echo date('Y-m-d H:i:s', $v->dateline); ?></td>
+                        <td><?php echo  $v->device_type; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+
+            </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+

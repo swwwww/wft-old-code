@@ -1,0 +1,35 @@
+
+body,header,article,h1,h2,h3,h4,p,ul,li,dl,dd,dt { padding:0; margin:0;}
+ul,li { list-style:none;}
+img { border:0; vertical-align:text-bottom;}
+a { text-decoration:none; color:#1b7bd3; outline: none; }
+a:hover { text-decoration:underline;}
+body { font:1em/1.5em Verdana, Geneva, sans-serif; color:#666; background:#dcdcdc;}
+.clearfix{clear: both;overflow: hidden;zoom:1;}
+/**/
+.article dl {
+    overflow:hidden;
+    padding:9px 30px;
+    margin-bottom:5px;
+    height:105px;
+}
+.article dl.iosbox{ background:#fff url(app_r3_c3.png) no-repeat 20px; padding-top:15px;}
+.article dl.iosbox span{ color:#999; font-weight:500;  font-size:0.6em}
+.article dl.androbox{ background:#fff url(app_r8_c2.png) no-repeat 20px; padding-top:25px;}
+.article dl.otherbox{ background:#fff url(app_r13_c4.png) no-repeat 20px;padding-top:25px;}
+
+
+.article dl dt {
+    padding-top:5px;
+    padding-left:25px;
+    color:#000;
+    font-weight:700;
+    font-size:0.8em;
+    margin-left: 49px;
+    background:url(app_r2_c9.png) no-repeat left;
+}
+.article dl dd { margin-left:49px;}
+
+
+
+/* CSS Document */

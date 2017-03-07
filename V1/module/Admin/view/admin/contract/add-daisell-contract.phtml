@@ -1,0 +1,132 @@
+<hgroup class="box">
+    <header>
+        <h3>添加代销合同</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/contract">返回合同列表</a>
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+<form class="box box-form" action="/wftadlogin/contract/save" method="post" id="save-contract-form">
+
+    <table class="table">
+        <tr id="s-organizer-view">
+            <th width="160">合作商家</th>
+            <th colspan="3">
+                <input class="orTz" type="text" class="cssInput" style="width:190px"  value="">
+                <div></div>
+                <input name="mid" type="hidden" id="organizer-id" class="cssInput" style="width:190px"  value="">
+                <div id="account"></div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">经办人</th>
+            <th colspan="3">
+                <select name="business_id">
+                    <?php foreach($marketer as $te):?>
+                        <option value="<?php echo $te->id;?>"><?php echo $te->admin_name;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">录入人</th>
+            <th colspan="3">
+                <?php echo $_COOKIE['user'];?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">生效日期</th>
+            <th colspan="3">
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">合同描述</th>
+            <th colspan="3">
+                <textarea name="information" class="cssTextArea"></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">类别</th>
+            <th colspan="3">
+                代销合同
+                <input name="contracts_type" type="hidden" value="3">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="cid" value="">
+                <button type="submit" class="btn btn-primary" id="save-contract">添加商品</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+</body>
+
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+<script>
+    (function () {
+
+        //保存提交
+        $('#save-contract').click(function () {
+            $.post('/wftadlogin/contract/save', $('#save-contract-form').serialize(), function (data) {
+                if (data.status == 1) {
+                    if (data.fid) {
+                        window.location.href = "/wftadlogin/contract/good?cid=" + data.fid;
+                    } else {
+                        alert('保存成功');
+                    }
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        //搜索商家的
+        $('#s-organizer-view').on('input propertychange', '.orTz', function () {
+            var k = $(this).val();
+            var that =  $(this).next();
+            that.empty();
+            $.post('/wftadlogin/contract/getOrganizer?type=2&k='+ k, "que=1",
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div class="xiala" data-name="' + entry['name'] + '" data-sid="' + entry['sid'] + '" data-account="' + entry['account'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+                    })
+                }, 'json'
+            );
+        });
+
+        $('#s-organizer-view').on('click','.xiala',function() {
+            var shop_name = $(this).attr('data-name');
+            var shop_id = $(this).attr('data-sid');
+            $('.orTz').val(shop_name);
+            $('#organizer-id').val(shop_id);
+            $(this).parent('div').empty();
+            $('#account').append($(this).attr('data-account'));
+
+        });
+    }());
+</script>

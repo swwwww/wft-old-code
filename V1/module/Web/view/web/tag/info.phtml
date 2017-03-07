@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $title;?></title>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/index.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,' + "minimum-scale = "+s+", maximum-scale = "+s+",";if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<a id="download" href="http://play.wanfantian.com/location/redirectHome" title="">
+    <img src="/images/wap/newbanner.png" alt=""/>
+</a>
+<main class="align fixed-top" id="content"></main>
+<script id="test" type="text/html">
+    <header class="header top">
+        <a class="header-title">{{title}}</a>
+        <a class="header-user" href="/web/wappay/my" title=""></a>
+    </header>
+    <section class="wrapper sp-top">
+        <figure class="sp-header">
+            <img src="{{cover}}"/>
+            <figcaption class="sp-details">
+                {{introduce}}
+            </figcaption>
+        </figure>
+        <div class="sp-category">
+            <a class="item {{if view_type==1 || view_type==3}}active{{/if}}" href="/web/tag/info?id={{id}}&show=place" title="" data-show="place" id="place">游玩地</a>
+            <a class="item {{if view_type==5 || view_type==6}}active{{/if}}" href="/web/tag/info?id={{id}}&show=excercise" title="" data-show="activity" id="excercise">活动</a>
+            <a class="item {{if view_type==2 || view_type==4}}active{{/if}}" href="/web/tag/info?id={{id}}&show=good" title="" data-show="good" id="good">票券</a>
+        </div>
+        <div class="sp-choose place" style="display: none;">
+            <a class="item active hot" href="/web/tag/info?id={{id}}&show=place&order=hot" title="" data-show="place" data-order="hot" >最热门</a>|
+            <a class="item good_num" href="/web/tag/info?id={{id}}&show=place&order=good_num" title="" data-show="place" data-order="good_num">有票优先</a>|
+            <a class="item close" href="/web/tag/info?id={{id}}&show=place&order=close" title="" data-show="place" data-order="close" >离我最近</a>
+        </div>
+
+        <div class="sp-choose excercise" style="display: none;">
+            <a class="item active hot" href="/web/tag/info?id={{id}}&show=excercise&order=hot" title="" data-show="excercise" data-order="hot" >最热门</a>|
+            <a class="item good_num" href="/web/tag/info?id={{id}}&show=excercise&order=good_num" title="" data-show="excercise" data-order="good_num">有票优先</a>|
+        </div>
+
+
+        <div class="sp-choose good" style="display: none;">
+        <a class="item active hot" href="/web/tag/info?id={{id}}&show=good&order=hot" title=""  data-show="good" data-order="hot">最热门</a>|
+        <a class="item good_num" href="/web/tag/info?id={{id}}&show=good&order=good_num" title=""  data-show="good" data-order="good_num">有票优先</a>
+        </div>
+    </section>
+    {{include 'list'}}
+</script>
+<script id="list" type="text/html">
+    <section class="wrapper">
+        <div class="sp-main" id="con-container">
+            <div class="inner">
+                <div class="list">
+                    {{each place_list}}
+                    <div class="item place" style="width:100%;{{if view_type ==2 || view_type ==5 || view_type==6 || view_type==4}}display: none;{{/if}}">
+                        <a class="" title="" href="/web/place/index?id={{$value.place_id}}">
+                            <figure>
+                                <img class="img" src="{{$value.place_cover}}"/>
+                                <figcaption class="title">{{$value.place_name}}</figcaption>
+                            </figure>
+                            <p class="info">{{$value.editor_word}}</p>
+                        </a>
+                        <aside class="aside">
+                            <span class="left">&yen; <mark>{{$value.place_price}}</mark></span>
+                            {{if $value.circle}}
+                            <span class="right"><i></i>{{$value.circle}}</span>
+                            {{/if}}
+                        </aside>
+                    </div>
+                    {{/each}}
+                    {{each excercise_list}}
+                    <div class="item excercise" style="width:100%;{{if view_type ==1 || view_type ==2 || view_type==3 || view_type==4}}display: none;{{/if}}">
+                        <a class="" title="" href="/web/kidsplay/info?id={{$value.exc_id}}">
+                            <figure>
+                                <img class="img" src="{{$value.cover}}"/>
+                                <figcaption class="title">{{$value.exc_name}}</figcaption>
+                            </figure>
+                            <p class="info">{{$value.editor_word}}</p>
+                        </a>
+                        <aside class="aside">
+                            <span class="left">&yen; <mark>{{$value.low_price}}</mark></span>
+                            {{if $value.circle}}
+                            <span class="right"><i></i>{{$value.circle}}</span>
+                            {{/if}}
+                        </aside>
+                    </div>
+                    {{/each}}
+                    {{each good_list}}
+                    <div class="item good" style="width:100%;{{if view_type ==1 || view_type ==5 || view_type==3 || view_type==6}}display: none;{{/if}}">
+                        <a class="" title="" href="/web/organizer/shops?id={{$value.good_id}}">
+                            <figure>
+                                <img class="img" src="{{$value.good_cover}}"/>
+                                <figcaption class="title">{{$value.good_name}}</figcaption>
+                            </figure>
+                            <p class="info">{{$value.editor_word}}</p>
+                        </a>
+                        <aside class="aside">
+                            <span class="left">&yen; <mark>{{$value.good_price}}</mark></span>
+                            {{if $value.circle}}
+                            <span class="right"><i></i>{{$value.circle}}</span>
+                            {{/if}}
+                        </aside>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </section>
+</script>
+<script id="place_more" type="text/html">
+    {{each place_list}}
+    <div class="item place" style="width:100%">
+        <a class="" title="" href="/web/place/index?id={{$value.place_id}}">
+            <figure>
+                <img class="img" src="{{$value.place_cover}}"/>
+                <figcaption class="title">{{$value.place_name}}</figcaption>
+            </figure>
+            <p class="info">{{$value.editor_word}}</p>
+        </a>
+        <aside class="aside">
+            <span class="left">&yen; <mark>{{$value.place_price}}</mark></span>
+            <span class="right"><i></i>{{$value.circle}}</span>
+        </aside>
+    </div>
+    {{/each}}
+</script>
+<script id="good_more" type="text/html">
+    {{each good_list}}
+    <div class="item good" style="width:100%;">
+        <a class="" title="" href="/web/organizer/shops?id={{$value.good_id}}">
+            <figure>
+                <img class="img" src="{{$value.good_cover}}"/>
+                <figcaption class="title">{{$value.good_name}}</figcaption>
+            </figure>
+            <p class="info">{{$value.editor_word}}</p>
+        </a>
+        <aside class="aside">
+            <span class="left">&yen; <mark>{{$value.good_price}}</mark></span>
+            <span class="right"><i></i>{{$value.circle}}</span>
+        </aside>
+    </div>
+    {{/each}}
+</script>
+<script id="excercise_more" type="text/html">
+    {{each excercise_list}}
+    <div class="item excercise" style="width:100%;{{if view_type ==1 || view_type ==2 || view_type==3 || view_type==4}}display: none;{{/if}}">
+        <a class="" title="" href="/web/kidsplay/info?id={{$value.exc_id}}">
+            <figure>
+                <img class="img" src="{{$value.cover}}"/>
+                <figcaption class="title">{{$value.exc_name}}</figcaption>
+            </figure>
+            <p class="info">{{$value.editor_word}}</p>
+        </a>
+        <aside class="aside">
+            <span class="left">&yen; <mark>{{$value.low_price}}</mark></span>
+            <span class="right"><i></i>{{$value.circle}}</span>
+        </aside>
+    </div>
+    {{/each}}
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+    var id = GetQueryString('id');
+    var show = GetQueryString('show');
+
+    if(id == 566){
+        show = show == null ? 'good' : show;
+    }else{
+        show = show == null ? 'excercise' : show;
+    }
+    var order = GetQueryString('order');
+
+    $.ajax({
+        type: "POST",
+        url: "/topic/index/info",
+        dataType:"json",
+        async: false,
+        data:{'id':id,'show':show,'order':order},//测试数据id
+        headers: {
+            "VER": 10
+        },
+        success: function (result) {
+            if (result.response_params.status == 0) {
+                //alert(result.response_params.message);
+            } else {
+                //todo 成功
+                //window.location.href = "";
+                //console.log(result.response_params);
+                var html = template('test', result.response_params);
+                document.getElementById('content').innerHTML = html;
+                showType(show);
+                //加载更多
+                var counter = 1;
+                // dropload
+                var dropload = $('.inner').dropload({
+                    scrollArea : window,
+                    domDown : {
+                        domClass   : 'dropload-down',
+                        domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                        domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                        domNoData  : '<div class="dropload-noData">暂无数据</div>'
+                    },
+                    loadDownFn : function(me){
+                        counter++;
+                        $.ajax({
+                            type: "POST",
+                            url: "/topic/index/info",
+                            dataType:"json",
+                            async: true,
+                            data:{'id':id,'show':show,'order':order,'page':counter},//测试数据id
+                            headers: {
+                                "VER": 10
+                            },
+                            success: function(data){
+                                // 为了测试，延迟1秒加载
+                                var len=0;
+                                if(show=='good'){
+                                    len= data.response_params.good_list.length;
+                                        $('.list').append(template('good_more', data.response_params));
+                                        // 每次数据加载完，必须重置
+                                        me.resetload();
+                                }else if(show=='excercise'){
+                                    len= data.response_params.excercise_list.length;
+                                        $('.list').append(template('excercise_more', data.response_params));
+                                        // 每次数据加载完，必须重置
+                                        me.resetload();
+                                }else if(show=='place'){
+                                    len= data.response_params.place_list.length;
+                                        $('.list').append(template('place_more', data.response_params));
+                                        // 每次数据加载完，必须重置
+                                        me.resetload();
+                                }
+
+                                if(len==0){
+                                    // 锁定
+                                    me.lock();
+                                    // 无数据
+                                    me.noData();
+                                    return;
+                                }
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown){
+//                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                me.resetload();
+                            }
+                        });
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+            if (XMLHttpRequest.status == 401) {
+                //todo 跳转授权页面
+                //alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+            }
+            else if (XMLHttpRequest.status == 403) {
+                window.location.href = '<?php echo $authorUrl;?>';
+//                alert('接口验证失败，非法访问');
+            }
+            else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                alert('请求参数错误:' + XMLHttpRequest.error_msg);
+            }
+            else {
+                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+            }
+
+        }
+    });
+
+    function showType(show){
+        if(show=='good'){
+            $("#good").addClass('active');
+            $(".good").show();
+            $(".place").hide();
+            $(".excercise").hide();
+            $("#place").removeClass('active');
+            $("#excercise").removeClass('active');
+            $("."+order).addClass('active').siblings().removeClass('active');
+        }else if(show=='excercise'){
+            $("#excercise").addClass('active');
+            $(".excercise").show();
+            $(".good").hide();
+            $(".place").hide();
+            $("#good").removeClass('active');
+            $("#place").removeClass('active');
+            $("."+order).addClass('active').siblings().removeClass('active');
+        } else if(show=='place'){
+            $("#place").addClass('active');
+            $(".place").show();
+            $(".good").hide();
+            $(".excercise").hide();
+            $("#good").removeClass('active');
+            $("#excercise").remove('active');
+            $("."+order).addClass('active').siblings().removeClass('active');
+        }
+
+    }
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = '//hm.baidu.com/hm.js?a1b66f5bbc7b8808ef15aef7c152d9eb';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</html>

@@ -1,0 +1,102 @@
+<hgroup class="box">
+    <header>
+        <h3>个人信息</h3>
+        <i class="icon icon-add"></i>
+        <!--        <a href="/wftadlogin/authmenu/new">添加菜单资源</a>-->
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+            <li><a href="/wftadlogin/user/info?uid=<?php echo $userData->uid; ?>">基本信息</a></li>
+            <li><a href="/wftadlogin/user/order?uid=<?php echo $userData->uid; ?>">订单</a></li>
+            <li><a href="/wftadlogin/user/speak?uid=<?php echo $userData->uid; ?>">用户发言</a></li>
+            <li><a href="/wftadlogin/user/integral?uid=<?php echo $userData->uid; ?>">积分</a></li>
+            <li><a href="/wftadlogin/user/balance?uid=<?php echo $userData->uid; ?>">余额</a></li>
+            <li><a href="/wftadlogin/user/cashCoupon?uid=<?php echo $userData->uid; ?>">现金券</a></li>
+            <li><a href="/wftadlogin/user/qualify?uid=<?php echo $userData->uid; ?>">抢购资格</a></li>
+            <li><a href="/wftadlogin/user/partner?uid=<?php echo $userData->uid; ?>">玩伴</a></li>
+            <li><a href="/wftadlogin/user/favorite?uid=<?php echo $userData->uid; ?>">收藏</a></li>
+            <li><a href="/wftadlogin/user/travel?uid=<?php echo $userData->uid; ?>">出行人</a></li>
+            <li><a href="/wftadlogin/user/address?uid=<?php echo $userData->uid; ?>">地址</a></li>
+        </ul>
+    </div>
+</hgroup>
+
+<header class="box-title">用户基本信息</header>
+<table class="table">
+
+    <tr>
+        <th width="160">用户id</th>
+        <th colspan="3">
+            <?php echo $userData->uid;?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">用户名</th>
+        <th colspan="3">
+            <?php echo $userData->username;?>
+        </th>
+    </tr>
+    <tr>
+        <th width="160">用户等级</th>
+        <th colspan="3">
+            <?php echo $memberData['member_level'] > 0 ? 'VIP会员' : '普通会员';?>
+        </th>
+    </tr>
+    <tr>
+        <th width="160">手机号</th>
+        <th colspan="3">
+            <?php echo $userData->phone;?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">注册城市</th>
+        <th colspan="3">
+            <?php echo $city[$userData->city];?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">注册时间</th>
+        <th colspan="3">
+            <?php echo date('Y-m-d', $userData->dateline);?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">注册邀请人</th>
+        <th colspan="3">
+            <?php if($inviteData):?>
+                <a href="/wftadlogin/user/info?uid=<?php echo $inviteData['uid']; ?>"><?php echo $inviteData['username']; ?></a>
+            <?php endif;?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">用户头像</th>
+        <th colspan="3">
+            <a target="_blank" href="<?php echo $userData->img ? $userData->img : ''; ?>">点击查看</a>
+        </th>
+    </tr>
+</table>
+
+<header class="box-title">宝宝基本信息</header>
+<table class="table">
+    <tr>
+        <th>宝宝姓名</th>
+        <th>宝宝性别</th>
+        <th>宝宝年龄</th>
+        <th>宝宝头像</th>
+    </tr>
+    <?php foreach($babyData as $baby):?>
+        <tr>
+            <td><?php echo $baby->baby_name?></td>
+            <td><?php echo ($baby->baby_sex == 1) ? '男' : '女'; ?></td>
+            <td><?php echo date('Y-m-d', $baby->baby_birth)?></td>
+            <td><a target="_blank" href="<?php echo $baby->img ? $baby->img : '';?>">查看</a></td>
+        </tr>
+    <?php endforeach;?>
+</table>
+

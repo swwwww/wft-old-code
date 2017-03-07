@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>邀请好友送好礼啦！好玩热门的遛娃活动、优惠门票，都在玩翻天！快来领取吧~
+    </title>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="/css/invite.css" rel="stylesheet"/>
+    <script>
+        function InviteShare(app,title,url,img,content){
+            //app 参数列表
+            //0 多选 1 微信 2 朋友圈 3 新浪微博 4 QQ
+            var url = url;
+            var app = app;
+            var title = title;
+            var img = img;
+            var content = content;
+
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                window.location.href = 'webshare$$app='+app+'&title='+title+'&url='+url+'&img='+img+'&content='+content;
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.webShare(app,url,title,content,img);
+            } else{
+                //                alert('不是手机浏览器')
+            }
+        }
+    </script></head>
+<body style="background-color: #af1827;">
+<section id="inv" class="inv">
+    <div class="inv-all" style="background: url('<?php echo $rule->banner_img; ?>') ; background-repeat: no-repeat; background-position: center center; background-size: cover;">
+        <div class="inv-money">
+            <span class="inv-money-font">点击下面，邀请好友，赢取积分</span>
+            <img style="display: none;" src="<?php echo $this->domain ;?>/images/applogo.png" />
+            <div class="inv-money-click">
+                <a
+                    onclick="InviteShare(1,'<?php echo $rule->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$rule->share_img;?>','<?php echo $rule->share_desc;?>')"
+                    class="inv-money-wec inv-money-a" href="#">
+                    <i class="inv-money-img inv-money-chat"></i>
+                    微信
+                </a>
+                <a
+                    onclick="InviteShare(2,'<?php echo $rule->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$rule->share_img;?>','<?php echo $rule->share_desc;?>')"
+                    class="inv-money-fir inv-money-a" href="#">
+                    <i class="inv-money-img inv-money-fir"></i>
+                    朋友圈
+                </a>
+                <a
+                    onclick="InviteShare(4,'<?php echo $rule->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$rule->share_img;?>','<?php echo $rule->share_desc;?>')"
+                    class="inv-money-qq inv-money-a" href="#">
+                    <i class="inv-money-img inv-money-Q"></i>
+                    QQ
+                </a>
+                <a class="inv-money-code inv-money-a check-code">
+                    <i class="inv-money-img inv-money-sao"></i>
+                    当面扫
+                </a>
+            </div>
+        </div>
+        <div class="inv-font">
+            <a class="inv-font-prize">详细规则</a>
+            <a  href="/webinvite/index/award?p=<?php echo $p; ?>" class="inv-font-rule">我的奖励</a>
+        </div>
+    </div>
+</section>
+
+<!--弹出层活动规则及温馨提示框-->
+<div class="rule">
+    <div class="rule-popup">
+        <div class="rule-popup-content">
+            <div class="rule-popup-title">活动规则</div>
+<?php $i = 1; ?>
+            <p><?php echo $i++; ?>.分享邀请给朋友，TA在注册后会获得<?php echo $reciever_tip; ?>，你会获得<?php echo $inviter_tip; ?></p>
+            <?php if($inviter_award_limit): ?>
+            <p><?php echo $i++; ?>.TA在玩翻天的首单完成后，你也将获得现金奖励，单次最高达<?php echo $inviter_award_limit; ?>元。</p>
+            <?php endif; ?>
+            <p><?php echo $i++; ?>.邀请新用户成功越多，获得积分、现金奖励越多。</p>
+            <div class="rule-popup-title">温馨提示</div>
+            <p>1、该邀请活动为新用户专享，每人每设备只能兑换一个。</p>
+            <p>2、每用户每天最高<?php echo $rule->invite_per_day; ?>个邀请有奖机会。</p>
+            <br/>
+
+            <?php //echo $rule->banner; ?>
+            <div id="close-btn">关闭</div>
+            <div class="circle-top"></div>
+            <div class="circle-right"></div>
+            <div class="circle-bottom"></div>
+            <div class="circle-left"></div>
+        </div>
+    </div>
+</div>
+
+<!--    扫一扫弹窗-->
+<div class="scan">
+    <div class="scan-popup">
+        <div class="scan-popup-content">
+            <P><span>扫一扫</span><br/>领取<?php echo $reciever_tip; ?></P>
+            <img src="/application/index/phpqrcode?code=<?php echo $inviteUrl; ?>"/>
+            <div id="close-btn2">关闭</div>
+            <div class="circle-top"></div>
+            <div class="circle-right"></div>
+            <div class="circle-bottom"></div>
+            <div class="circle-left"></div>
+        </div>
+    </div>
+</div>
+
+<div class="matte"></div>
+<script src="/js/order-center/zepto.js" type="text/javascript"></script>
+<script>
+    (function(){
+        $(".inv-font-prize").on("tap",function(){
+            $(".rule").show();
+            $(".matte").show();
+        });
+        $("#close-btn").on("tap",function(){
+            $(".rule").hide();
+            $(".matte").hide();
+        });
+        $(".inv-money-code").on("tap",function(){
+            $(".scan").show();
+            $(".matte").show();
+        });
+        $("#close-btn2").on("tap",function(){
+            $(".scan").hide();
+            $(".matte").hide();
+        })
+    })();
+</script>
+</body>
+<script type="text/javascript" src="/invite/main.min.js"></script>
+<?php echo $this->partial('web-invite/index/sharejs.phtml'); ?>
+</html>

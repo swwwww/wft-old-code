@@ -1,0 +1,107 @@
+<?php
+$action = '评论列表';
+$this->headTitle($action);
+?>
+<!--面包屑-->
+<ol class="breadcrumb">
+    <li><a href="/wftadlogin/">Home</a></li>
+    <li><a href="/wftadlogin/post">评论列表</a></li>
+</ol>
+
+<h2>添加评论</h2>
+<form action="" method="post">
+
+
+    <input type="hidden" value="<?php echo $pid;?>" name="pid">
+    <textarea name="editorValue" class="form-control"></textarea>
+
+    <div id="l_upload" style="min-height: 150px;">
+        <div class="panel panel-default img-box img-upload" style="width:130px;height:130px;float: left;">
+            点击上传图片
+        </div>
+    </div>
+
+    <br>
+
+    <p>
+        <input type="submit" value="提交" class="btn btn-primary">
+    </p>
+
+</form>
+
+<script type="text/javascript" src="/js/plupload.full.min.js"></script>
+<script>
+    (function () {
+
+
+        var upload = $('#l_upload'),
+            buttons = upload.find('.img-upload'),
+            maxCount = 10,
+            uploaded = upload.find('.img-box').length - 1,
+            uploader = new plupload.Uploader({
+                runtimes: "html5,flash,silverlight,html4",
+
+                browse_button: [].slice.call(buttons),
+
+                url: '/wftadlogin/index/upload',
+                flash_swf_url: '/js/Moxie.swf',
+                file_data_name: 'file',  //键名
+                multi_selection: true,
+                unique_names: true,
+                dragdrop: true,
+                filters: {
+                    max_file_size: '150kb',
+                    mime_types: [
+                        {title: "Image files", extensions: "jpg,gif,png"},
+                    ]
+                },
+                multipart_params: {
+                    type: 'post', //水印
+                    use_id: <?php echo $pid;?>
+                }
+            }),
+            imgContainer = '<div class="panel panel-default img-box"  style="float: left;text-align: center;line-height: 130px;position: relative;"><img class="img-thumb" width="130"; height="130" src="{url}" /><div class="close">&times;</div><div class="coverset"  style="position:absolute;z-index: 2;opacity: 1;top:50px;left:30px;color:red"></div></div>';
+
+        uploader.init();
+
+        uploader.bind('FilesAdded', function (up, files) {
+            var extra;
+            extra = uploaded + files.length - maxCount;
+
+            //如果选择图片过多
+            if (extra > 0) {
+                $.each(files.splice(maxCount - uploaded, extra), function (index, file) {
+                    up.removeFile(file);
+                });
+            }
+
+            uploaded += files.length;
+
+            setTimeout(function () {
+                up.start();
+            }, 10);
+        });
+
+        uploader.bind('FileUploaded', function (up, file, data) {
+            var json = $.parseJSON(data.response),
+                img = $(imgContainer.replace(/{url}/g, json.url));
+
+            upload.prepend(img);
+        });
+
+        uploader.bind('UploadComplete', function () {
+            if (uploaded === 10) {
+                buttons.hide();
+            }
+        });
+
+
+        upload.on('click', '.close', function (e) {
+            if (uploaded === 10) {
+                buttons.show();
+            }
+            uploaded--;
+            $(e.target).parent().remove();
+        });
+    }());
+</script>

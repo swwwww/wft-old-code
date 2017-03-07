@@ -1,0 +1,59 @@
+<section class="container" id="crumbs">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="crumbs">当前位置：
+                <span><?php echo ($type == 2) ? '<a href="/www/index/school">遛娃学院</a>' : '<a href="/">用户版</a>'?></span>&nbsp;&gt;&nbsp;
+                <a href="javascript:void(0)">热门推荐</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!--crumbs end-->
+
+<!--content list start-->
+<section class="container">
+    <?php foreach($data as $vet):?>
+        <div class="row list-info">
+            <div class="col-md-6 col-sm-6 center-img">
+                <a class="leftImg" href="#">
+                    <img src="<?php echo $vet['thumb_url'];?>" class="img-responsive hlist-img">
+                </a>
+            </div>
+            <div class="col-md-6 col-sm-6">
+                <div class="rightText">
+                    <h4><a href="<?php echo $vet['url'];?>"><?php echo $vet['title'];?></a></h4>
+                    <p><?php echo date('Y-m-d', $vet['dateline']);?></p>
+                    <p><span><?php echo $vet['type_name'];?></span></p>
+                </div>
+            </div>
+        </div>
+    <?php endforeach;?>
+</section>
+<section class="container" id="page">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 center-img">
+            <style>
+                /**
+                    兼容分页样式
+                */
+                 .pagination li.active a {
+                    background: #FF8634;
+                    border-color: #fff;
+                 }
+
+                 .pagination li a {
+                     color: #666;
+                     border: 1px solid #FFAE77;
+                     /*position : relative;*/
+                 }
+
+                 .pagination li span {
+                     color: #FFAE77;
+                     border: 1px solid #FFAE77;
+                 }
+            </style>
+            <?php echo $page;?>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,322 @@
+<table class="table">
+    <tr>
+        <th width="160">商品id</th>
+        <th colspan="3">
+            <?php echo $goodData->id;?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">商品名称</th>
+        <th colspan="3">
+            <?php echo $goodData->title;?>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">商品状态</th>
+        <th colspan="3">
+            <?php echo 1;?>
+        </th>
+    </tr>
+</table>
+<div class="box">
+    <div class="box-title">
+        咨询列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="100">咨询时间</th>
+                <th width="100">用户</th>
+                <th width="250">内容</th>
+                <th width="250">客服回复</th>
+                <th width="100">
+                    <select class="type_change">
+                        <?php
+                            $type = $_GET['type'];
+                        ?>
+                        <option <?php echo !$type ? 'selected' : ''; ?> data-src="/wftadlogin/game/consult?gid=<?php echo $goodData->id;?>">回复_全部</option>
+                        <option <?php echo ($type == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game/consult?gid=<?php echo $goodData->id;?>&type=1">已回复</option>
+                        <option <?php echo ($type == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/game/consult?gid=<?php echo $goodData->id;?>&type=2">未回复</option>
+                    </select>
+                </th>
+                <th width="100">状态</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <?php echo $row['_id']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo date('Y-m-d', $row['dateline']); ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['username']; ?>
+                    </td>
+                    <td width="250">
+                        <a href="/wftadlogin/consult/consultInfo?id=<?php echo $row['_id'];?>"><?php echo $row['msg']; ?></a>
+                    </td>
+                    <td width="250">
+                        <?php echo $row['reply']['msg']; ?>
+                    </td>
+                    <td width="100">
+                        <?php
+                            if(isset($row['reply']['msg']) && $row['reply']['msg']) {
+                                echo '已回复';
+                            } else {
+                                echo '未回复';
+                            }
+                        ?>
+                    </td>
+                    <td width="100">
+                        <?php
+                            if($row['status'] == 0) {
+                                echo '隐藏';
+                            } elseif ($row['status'] == 1) {
+                                echo '正常状态';
+                            } elseif ($row['status'] == 2) {
+                                echo '置顶';
+                            }
+
+                        ?>
+                    </td>
+                    <td width="150">
+                        <?php
+                            if($row['status'] == 0) {
+                                echo '<a class="ui-button" href="/wftadlogin/consult/update?type=same&id='. $row['_id'] .'">取消隐藏</a>';
+                                echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=up&id='. $row['_id'] .'">置顶</a>';
+                            } elseif ($row['status'] == 1) {
+                                echo '<a class="ui-button" href="/wftadlogin/consult/update?type=hidden&id='. $row['_id'] .'">隐藏</a>';
+                                echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=up&id='. $row['_id'] .'">置顶</a>';
+                            } elseif ($row['status'] == 2) {
+                                echo '<a class="ui-button" href="/wftadlogin/consult/update?type=hidden&id='. $row['_id'] .'">隐藏</a>';
+                                echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=same&id='. $row['_id'] .'">取消置顶</a>';
+                            }
+                        ?>
+                        <?php if(!$row['reply']['uid']):?>
+                            <span class="ui-button reply-consult" data-id="<?php echo $row['_id']; ?>">回复</span>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3>回复</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="/wftadlogin/consult/reply" id="save-consult-form" method="post">
+            <ol>
+                <li>回复：</li>
+                <li><textarea name="info" class="cssTextArea" ></textarea></li>
+                <li>
+                    <input type="hidden" name="mid" value="" id="consult-id">
+                    <button type="submit" class="ui-button" id="save-consult-reply">提交</button>
+                </li>
+            </ol>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        /*//保存提交
+        $('#save-consult-reply').click(function () {
+            $.post('/wftadlogin/consult/reply', $('#save-consult-form').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });*/
+
+
+        //是否回复
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //回复
+        $('.reply-consult').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+            var id = $(this).attr('data-id');
+            $('#consult-id').attr('value', id);
+
+
+        })
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+    });
+</script>
+
+

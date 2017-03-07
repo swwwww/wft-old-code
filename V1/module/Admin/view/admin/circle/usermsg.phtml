@@ -1,0 +1,187 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/circle">圈子管理</a></li>
+        <li><a href="/wftadlogin/circle?id=<?php echo $social['cid'];?>"><?php echo $social['c_name'];?></a></li>
+        <li><a href="/wftadlogin/circle/user?id=<?php echo $social['cid'];?>">用户列表</a></li>
+        <li><?php echo $social['username'].'所有';?><?php echo ($type=='word') ? '发言' : (($type=='reply') ? '回复' : '点赞');?></li>
+    </ul>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        <?php echo ($type=='word') ? '发言' : (($type=='reply') ? '回复' : '点赞');?>列表
+        <div style="float:right;margin-right:30px">
+            <a href="/wftadlogin/circle/usermsg?id=<?php echo $social['cid'];?>&uid=<?php echo $social['uid'];?>&type=prise" class="ui-button">点赞</a>
+        </div>
+        <div style="float:right;margin-right:30px">
+            <a href="/wftadlogin/circle/usermsg?id=<?php echo $social['cid'];?>&uid=<?php echo $social['uid'];?>&type=reply" class="ui-button">回复</a>
+        </div>
+        <div style="float:right;margin-right:30px">
+            <a href="/wftadlogin/circle/usermsg?id=<?php echo $social['cid'];?>&uid=<?php echo $social['uid'];?>&type=word" class="ui-button">发言</a>
+        </div>
+    </div>
+    <div>
+        <?php if($type=='word'):?>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th width="15">id</th>
+                    <th width="100">发表用户</th>
+                    <th width="100">发布时间</th>
+                    <th width="120">圈子</th>
+                    <th width="200">标题/内容摘要</th>
+                    <th width="100">状态</th>
+                    <th width="50">点赞人数</th>
+                    <th width="50">回复数</th>
+                    <th width="200">操作</th>
+                </tr>
+                <?php if ($data->count()): ?>
+                    <?php foreach ($data as $row): ?>
+                        <tr style="text-align: left">
+                            <td  width="15"><?php echo $row['_id']; ?></td>
+                            <td  width="100"><?php echo $row['username']; ?></td>
+                            <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                            <td  width="120"><a href="/wftadlogin/circle/new?id=<?php echo $row['cid'];?>"><?php echo $row['c_name']; ?></a></td>
+                            <td  width="200">
+                                <a href="/wftadlogin/circle/wordinfo?id=<?php echo $row['_id'];?>">
+                                    <?php
+                                    if($row['title']) {
+                                        echo $row['title'];}
+                                    else {
+                                        $st = '';
+                                        foreach($row['msg'] as $v) {
+                                            if ($v['t'] == 1 && $v['val']) {
+                                                echo $st = $v['val'];
+                                                break;
+                                            }
+                                        }
+                                        if (!$st) {
+                                            echo '内容无';
+                                        }
+                                    };
+                                    ?>
+                                </a>
+                            </td>
+                            <td  width="60"><?php echo ($row['status'] == 2) ? '置顶' : (($row['status'] == 1) ? '正常发表' : '隐藏'); ?></td>
+                            <td  width="50" class="share_prise">0</td>
+                            <td  width="50" class="share_reply">0</td>
+                            <td  width="200">
+                                <a href="/wftadlogin/circle/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 2) ? 'reset' : 'up'; ?>" class="ui-button"><?php echo ($row['status'] == 2) ? '取消置顶' : '置顶'; ?></a>
+                                <a href="/wftadlogin/circle/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 0) ? 'reset' : 'hidden'; ?>" class="ui-button"><?php echo ($row['status'] == 0) ? '取消隐藏' : '隐藏'; ?></a>
+                                <a href="/wftadlogin/circle/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=del" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7"><p>暂无<?php echo ($type=='word') ? '发言' : (($type=='reply') ? '回复' : '点赞');?></p></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        <?php endif;?>
+
+        <?php if($type=='reply'):?>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th width="15">id</th>
+                    <th width="100">回复时间</th>
+                    <th width="100">回复主贴</th>
+                    <th width="200">回复内容</th>
+                    <th width="200">状态</th>
+                    <th width="200">操作</th>
+                </tr>
+                <?php if ($data->count()): ?>
+                    <?php foreach ($data as $row): ?>
+                        <tr style="text-align: left">
+                            <td  width="15"><?php echo $row['_id']; ?></td>
+                            <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                            <td  width="100"><a href="/wftadlogin/circle/wordinfo?id=<?php echo $row['mid'];?>" ><?php echo $row['title']; ?></a></td>
+                            <td  width="200"><?php
+                                foreach($row['msg'] as $v) {
+                                    if ($v['t'] == 1 && $v['val']) {
+                                        echo $st = $v['val'];
+                                        break;
+                                    }
+                                }
+                                ?></td>
+                            <td  width="200"><?php echo ($row['status'] == 2) ? '置顶' : (($row['status'] == 1) ? '正常' : '隐蔽'); ?></td>
+                            <td  width="200">
+                                <a href="/wftadlogin/circle/updateReply?id=<?php echo $row['_id']; ?>&type=<?php echo ($row['status'] >= 1) ? 'hidden' : 'reset';?>" class="ui-button"><?php echo ($row['status'] >= 1) ? '隐蔽' : '取消隐蔽';?></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7"><p>暂无回复</p></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        <?php endif;?>
+
+        <?php if($type=='prise'):?>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th width="15">id</th>
+                    <th width="100">点赞时间</th>
+                    <th width="100">点赞主贴</th>
+                </tr>
+                <?php if ($data->count()): ?>
+                    <?php foreach ($data as $row): ?>
+                        <tr style="text-align: left">
+                            <td  width="15"><?php echo $row['_id']; ?></td>
+                            <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                            <td  width="100"><a href="/wftadlogin/circle/wordinfo?id=<?php echo $row['object_id'];?>" class="share_prise" data-id="<?php echo $row['object_id'];?>"></a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7"><p>暂无点赞</p></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        <?php endif;?>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<?php if($type=='prise'):?>
+    <script>
+        $(function () {
+            //获取点赞主贴标题
+            $.each($('.share_prise'), function (k, v) {
+                var id = $(this).attr('data-id');
+                $(v).load('/wftadlogin/circle/getMsgShare?type=prise&id=' + id);
+            })
+        })
+    </script>
+<?php endif;?>
+
+<?php if($type=='prise'):?>
+    <script>
+        $(function () {
+
+            //获取点赞
+            $.each($('.share_prise'), function (k, v) {
+                var cid = $(v).parent().find('td:first').html();
+                $(v).load('/wftadlogin/circle/getWordShare?type=prise&cid=' + cid);
+            })
+
+            //获取回复
+            $.each($('.share_reply'), function (k, v) {
+                var cid = $(v).parent().find('td:first').html();
+                $(v).load('/wftadlogin/circle/getWordShare?type=reply&cid=' + cid);
+            })
+
+        })
+    </script>
+<?php endif;?>
+
+
+

@@ -1,0 +1,642 @@
+<script>
+    $(document).on("click", ".select_item", function () {
+        var item_id = $(this).attr('data-id');
+        $('.select_item').removeClass("selected");
+        $(".select-panel").hide();
+        $("#select-panel_" + item_id).show();
+        $(this).addClass("selected");
+    });
+</script>
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+
+    .selected {
+        color: white;
+        background-color: red;
+    }
+
+    .select_item {
+        padding: 0 10px 0 10px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .select_item:hover {
+        background-color: red;
+        color: white;
+        text-decoration: none;
+    }
+
+    .table-price-item {
+        width: 100%;
+        margin-bottom: 20px;
+        border-top: 1px solid #ddd;
+    }
+
+    .table-price-item tr {
+        line-height: 35px;
+    }
+
+    .table-price-item th,td {
+        padding: 8px;
+    }
+
+    .span-title {
+        float: left;
+    }
+
+    .button-title {
+        margin-top: 9px !important;
+        margin-left: 20px !important;
+        float: left;
+    }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>添加活动</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/excercise">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form id="aform" class="box box-form" action="/wftadlogin/excercise/eventsave" method="post">
+    <header class="box-title">
+        <a class="select_item selected" data-id="baseinfo">基本信息</a>
+        <a class="select_item" data-id="remark">活动描述</a>
+        <a class="select_item" data-id="priceitem">收费项设置</a>
+    </header>
+    <div style="height:auto;weight:100%;" class="select-panel" id="select-panel_baseinfo">
+        <table class="table">
+            <tr>
+                <th width="160">活动名称</th>
+                <th colspan="3"><input type="text" class="cssInput" name="name" value="" check3="required"/>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">自定义标签</th>
+                <th colspan="3">
+                    <input type="text" class="cssInput tags_input" value=""/>
+                    <input class="btn btn-primary tags_but" type="button" value="添加" /><span style="color: #555">&nbsp;可以留空</span>
+                    <div id="custom_tags">
+
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">遛娃师类型</th>
+                <th colspan="3">
+                    <select name="teacher_type">
+                        <?php foreach($teacher as $tk => $t): ?>
+                        <option value ="<?php echo $tk; ?>"><?php echo $t; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th width="109">适合年龄</th>
+                <th colspan="3" width="600">
+                    开始年龄：
+                    <select name="start_age">
+                        <?php for ($i = 0; $i <= 2.5; $i = $i + 0.5): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                            </option>
+                        <?php endfor; ?>
+                        <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                    结束年龄：
+                    <select name="end_age">
+                        <option value="100">以上
+                        </option>
+                        <?php for ($i = 0.5; $i <= 2.5; $i = $i + 0.5): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                            </option>
+                        <?php endfor; ?>
+                        <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                            </option>
+                        <?php endfor; ?>
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">集合说明</th>
+                <th colspan="3">
+                    <textarea name="meeting_desc" rows="5" cols="80" class="csstextarea"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">集合地点</th>
+                <th colspan="3">
+                    <input type="text" class="cssInput meetting_input" value=""/>
+                    <input class="btn btn-primary meet_but" type="button" value="添加" /><span style="color: #555">&nbsp;可以留空</span>
+                    <div id="meeting">
+
+                        <?php foreach($meeting as $g): ?>
+                            <input type="checkbox" checked name="meeting[]" value='<?php echo $g; ?>' /><?php echo $g; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">咨询电话</th>
+                <th colspan="3"><input type="text" class="cssInput" name="phone" value=""/>
+                </th>
+            </tr>
+            <!--        <tr>-->
+            <!--            <th width="160">联系方式</th>-->
+            <!--            <th colspan="3">-->
+            <!--                <input type="radio" checked class="" name="contact" value="1"/>是-->
+            <!--                <input type="radio" class="" name="contact" value="0"/>否-->
+            <!--            </th>-->
+            <!--        </tr>-->
+            <tr id="some_place">
+                <th width="160">游玩地</th>
+                <th colspan="3">
+                    <input id="ad-place-view" type="text" class="cssInput" value="" /> <input class="btn btn-primary" type="button" value="添加" />
+                    <div id="places">
+
+                    </div>
+                    <div id="adds">
+                            <?php
+                            foreach($place as $g): ?>
+                                <input type="checkbox" checked name="places[]" value='<?php echo $g['id'] ?>' /><?php echo $g['title'] ?>
+                            <?php endforeach; ?>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">短信自定义内容</th>
+                <th colspan="3">
+                    <textarea name="message_custom_content" rows="8" cols="80" class="csstextarea"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">满减优惠</th>
+                <th colspan="3">
+                    每满<input type="text" style="width: 100px;" class="cssInput" name="full_price" value="0"/>
+                    <select name="welfare_type">
+                        <option value ="0">元</option>
+                        <option value ="1">人</option>
+                    </select>
+                    减<input style="width: 100px;" type="text" class="cssInput" name="less_price" value="0"/>元
+                </th>
+            </tr>
+            <tr>
+                <th width="160">评论积分</th>
+                <th colspan="3">
+                    是否奖励
+                    <input type="radio" class="" name="comment_integral" value="1"/>是
+                    <input type="radio" checked class="" name="comment_integral" value="0"/>否
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input style="width: 100px;" type="text" class="cssInput" name="integral_multiple" value="0"/>倍
+                </th>
+            </tr>
+            <tr>
+                <th width="160">是否给予分享奖励</th>
+                <th colspan="1">
+                    <input type="radio" class="" name="share_reward" value="1"/>是
+                    <input type="radio" checked class="" name="share_reward" value="0"/>否
+                <th colspan="1">
+                <th colspan="1">
+                </th>
+            </tr>
+            <tr>
+                <th width="160">特例商品</th>
+                <th colspan="1">
+                    <input type="radio" <?php if($ebt->excepted): ?>checked="true" <?php endif; ?> class="" name="excepted" value="1"/>是
+                    <input type="radio" <?php if(!$ebt->excepted): ?>checked="true" <?php endif; ?> class="" name="excepted" value="0"/>否
+                <th colspan="1"></th>
+                <th colspan="1">
+                </th>
+            </tr>
+            <tr>
+                <th width="160">特权标签</th>
+                <th colspan="3">
+                    <div id="">
+                        <?php
+                        foreach($config_special_labels as $key=>$val): ?>
+                            <input type="checkbox" name="special_labels[]" value='<?php echo $val['id'] ?>' /><?php echo $val['tag_name'] ?>
+                        <?php endforeach; ?>
+                    </div>
+                </th>
+            </tr>
+        </table>
+    </div>
+    <div  style="height:auto;weight:100%;display:none;" class="select-panel" id="select-panel_remark">
+        <table class="table">
+            <tr>
+                <th width="160">小玩说</th>
+                <th colspan="3">
+                    <textarea name="introduction" rows="8" cols="80" class="csstextarea"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">注意事项</th>
+                <th colspan="3">
+                    <textarea class="cssTextArea" name="attention"></textarea>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">活动亮点</th>
+                <th colspan="3" width="600">
+                    <script type="text/plain" name="highlights" id="myEditor" style="width:600px;height:240px;"></script>
+                </th>
+            </tr>
+
+        </table>
+
+        <header class="box-title">
+            <span class="span-title">行程安排</span>
+            <span class="ui-button button-title" id="add-travel">添加日行程</span>
+        </header>
+        <table class="table">
+            <tr>
+                <th width="200px" >行程名称</th>
+                <th width="200px" colspan="2" >开始时间</th>
+                <th width="200px" colspan="2" >结束时间</th>
+                <th width="200px" >行程安排</th>
+                <th width="200px" >操作</th>
+            </tr>
+            <tr id="range" class="range">
+                <th colspan="1">
+                    <select name="schedule_name[]">
+                        <?php for($i=1;$i<32;$i++): ?>
+                        <option value="<?php echo $i; ?>" >第<?php echo $i; ?>天</option>
+                        <?php endfor; ?>
+                    </select>
+                </th>
+                <th colspan="1">
+                    <input type="hidden" style="width: 150px;" value="1970-01-01" name="start_day[]"></th>
+                <th><input type="time" style="width: 150px;" value="" name="start_time[]">
+                </th>
+                <th colspan="1">
+                    <input type="hidden" style="width: 150px;" value="1970-01-01" name="end_day[]"></th>
+                <th><input type="time" style="width: 150px;" value="" name="end_time[]">
+                </th>
+                <th colspan="1"><textarea class="cssTextArea" style="height:60px" name="schedule[]"></textarea></th>
+                <th colspan="1">
+    <!--                <span  class="ui-button">删除</span>-->
+                </th>
+            </tr>
+        </table>
+        <table class="table">
+            <tr>
+                <th width="160">封面图</th>
+                <th colspan="3">
+                    <fieldset>
+                        <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                            <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                            <input type="file" id="fileupload" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                        </div>
+                        <input type="hidden" name="cover" value="<?php echo $data->cover; ?>" />
+                        <span>　750*375
+                    </fieldset>
+                    <br />
+                    <div>
+                        <img width="750" height="375" id="img" class="fileupload" src="<?php echo $data->cover; ?>">
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160">缩略图</th>
+                <th colspan="3">
+                    <fieldset>
+                        <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                            <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                            <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                        </div>
+                        <input type="hidden" name="thumb" value="" />
+                        <span>　120*120
+                    </fieldset>
+                    <br />
+                    <div>
+                        <img width="120" height="120" id="img2" class="fileupload" src="">
+                    </div>
+                </th>
+            </tr>
+        </table>
+    </div>
+    <div  style="height:auto;weight:100%;display:none;" class="select-panel" id="select-panel_priceitem">
+        <table class="table-price-item">
+            <tr class="charge">
+                <th colspan="1">
+                    保险与人数
+                </th>
+                <th colspan="1">保险：
+                    <select name="insurance_id">
+                        <?php foreach ($baoyoulist as $v): ?>
+                            <option value="<?php echo $v['RateCode']; ?>"><?php echo "{$v['PlanName']}({$v['DayRange']}天)"; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </th>
+                <th colspan="1">最少数量：<input style="width: 100px;" type="text" class="cssInput" name="least_number" value=""></th>
+                <th colspan="1">最佳数量：<input style="width: 100px;" type="text" class="cssInput" name="perfect_number" value=""></th>
+                <th colspan="1">最多数量：<input style="width: 100px;" type="text" class="cssInput" name="most_number" value=""></th>
+                <th colspan="1" style="display:none;">虚拟票成人：<input style="width: 100px;" type="text" class="cssInput" name="vir_ault" value="0"></th>
+                <th colspan="1" style="display:none;">虚拟票儿童：<input style="width: 100px;" type="text" class="cssInput" name="vir_child" value="0"></th>
+                <!--        <th colspan="1">虚拟票：<input style="width: 100px;" type="text" class="cssInput" name="vir_number" value=""></th>-->
+            </tr>
+        </table>
+        <header class="box-title">
+            <span class="span-title">收费项</span>
+            <span class="ui-button button-title" id="add-charge">添加收费项</span>
+        </header>
+        <table class="table-price-item charge">
+            <tr>
+                <th colspan="7">
+                    项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：<input style="width: 300px;" type="hidden" class="cssInput" name="price_name[]" value="无">
+                    <select name="selectp[]" onchange="showinput(this);">
+                        <?php
+                            foreach ($p_name as $k => $v) {
+                        ?>
+                            <option value="<?php echo $k; ?>"><?php echo "{$v}"; ?></option>
+                        <?php
+                            }
+                        ?>
+                    </select>
+                </th>
+            </tr>
+            <tr class="charge1">
+                <th colspan="1">单价（含保险）：<input style="width: 100px;" type="text" class="cssInput" name="price[]" value=""></th>
+                <th colspan="1">出行人数成人：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_ault[]" value=""></th>
+                <th colspan="1">儿童：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_child[]" value=""></th>
+                <th colspan="1">限购最多：<input style="width: 100px;" type="text" class="cssInput" name="most[]" value=""></th>
+                <th colspan="1">最少：<input style="width: 100px;" type="text" class="cssInput" name="least[]" value="">份</th>
+                <th colspan="1">销售员单份收益：<input style="width: 100px;" type="text" class="cssInput" name="single_income[]" value="">元</th>
+                <th colspan="1">
+                    <div style="width:52px;"></div>
+                </th>
+            </tr>
+        </table>
+
+        <header class="box-title">
+            <span class="span-title">其它费用</span>
+            <span class="ui-button button-title" id="add-othercharge">添加其他费用</span>
+        </header>
+        <table class="table">
+            <tr>
+                <th width="200px" >项目</th>
+                <th width="200px" >单价</th>
+                <th width="200px" >操作</th>
+            </tr>
+            <tr id="othercharge" style="display: none" class="othercharge"></tr>
+            <tr id="othercharge0" class="othercharge">
+                <th colspan="1">
+                    <input type="text" class="cssInput" style="width: 200px;" name="o_price_name[]" value="">
+
+                </th>
+                <th colspan="1"><input type="text" class="cssInput" style="width: 200px;" name="o_price[]" value=""></th>
+                <th colspan="1">
+                    <span  onclick="otherchargedelete(0)"  class="ui-button">删除</span>
+                </th>
+            </tr>
+        </table>
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">
+                </th>
+            <th colspan="3">
+                <button id="asubmit" type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+
+    var mcks = new Array();
+    $('.meet_but').on('click',function() {
+        meetting_input = $('.meetting_input').val();
+
+        meetting_input = meetting_input.replace(/"([^"]*)"/g, "$1");
+        meetting_input = meetting_input.replace(/<([^"]*)>/g, "$1");
+        meetting_input = meetting_input.replace(/'([^"]*)'/g, "$1");
+
+        if(meetting_input==''){
+            alert('集合地不能为空');return;
+        }
+        var b = $.inArray(meetting_input,mcks);
+        if(b == -1){
+            str = '<input type="checkbox" checked name="meeting[]" value="' +
+            meetting_input+
+            '" />'+meetting_input+'&nbsp;&nbsp;&nbsp;';
+            $('#meeting').append(str);
+            mcks.push(meetting_input);
+        }
+        console.log(mcks);
+    });
+
+    var tags = new Array();
+    $('.tags_but').on('click',function() {
+        tags_input = $('.tags_input').val();
+
+        tags_input = tags_input.replace(/"([^"]*)"/g, "$1");
+        tags_input = tags_input.replace(/<([^"]*)>/g, "$1");
+        tags_input = tags_input.replace(/'([^"]*)'/g, "$1");
+
+        if(tags_input==''){
+            alert('标签不要为空');return;
+        }
+        var b = $.inArray(tags_input,tags);
+        if(b == -1){
+            str = '<input type="checkbox" checked name="custom_tags[]" value="' +
+            tags_input+
+            '" />'+tags_input+'&nbsp;&nbsp;&nbsp;';
+            $('#custom_tags').append(str);
+            tags.push(tags_input);
+        }
+        console.log(tags);
+    });
+
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $("#img").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='thumb']").attr('value', data.result.url);
+                $("#img2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    //实例化编辑器
+    var um = UE.getEditor('myEditor');
+
+
+    $('#add-charge').on('click',function() {
+        var n = $('.charge').length;
+        var charge = $('.charge').eq(n-1);
+        var html = '' +
+        '<table  id="charge'+n+'"  class="table-price-item charge">'+
+            '<tr>'+
+                '<th colspan="7">'+
+                    '项&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;目：<input style="width: 300px;" type="hidden" class="cssInput" name="price_name[]" value="无">'+
+                    '<select name="selectp[]" onchange="showinput(this);">'+
+                    <?php foreach ($p_name as $k => $v): ?>
+                        '<option value="<?php echo $k; ?>"><?php echo "{$v}"; ?></option>'+
+                    <?php endforeach; ?>
+                    '</select>' +
+                '</th>' +
+            '</tr>' +
+            '<tr class="charge1">' +
+                '<th colspan="1">单价（含保险）：<input style="width: 100px;" type="text" class="cssInput" name="price[]" value=""></th>'+
+                '<th colspan="1">出行人数成人：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_ault[]" value=""></th>' +
+                '<th colspan="1">儿童：<input style="width: 100px;" type="text" class="cssInput" name="price_item_person_child[]" value=""></th>' +
+                '<th colspan="1">限购最多：<input style="width: 100px;" type="text" class="cssInput" name="most[]" value=""></th>'+
+                '<th colspan="1">最少：<input style="width: 100px;" type="text" class="cssInput" name="least[]" value="">份</th>'+
+                '<th colspan="1">销售员单份收益：<input style="width: 100px;" type="text" class="cssInput" name="single_income[]" value="">元</th>' +
+                '<th colspan="1">'+
+                    '<input onclick="chargedelete('+n+')"  style="margin-top:0 !important" type="button" class="ui-button" value="删除" />' +
+                '</th>'+
+            '</tr>' +
+        '</table>';
+        charge.after(html);
+    });
+
+    var chargedelete = function(n){
+        var charge = $('#charge'+n);
+        charge.remove();
+    };
+
+
+
+    $('#add-othercharge').on('click',function() {
+        var n = $('.othercharge').length;
+        var charge = $('.othercharge').eq(n-1);
+        var html = '<tr id="othercharge'+n+'" class="othercharge">'+
+            '<th colspan="1"><input type="text" class="cssInput" style="width: 200px;" name="o_price_name[]" value=""></th>'+
+        '<th colspan="1"><input type="text" class="cssInput" style="width: 200px;" name="o_price[]" value=""></th>'+
+        '<th colspan="1">'+
+        '<span onclick="otherchargedelete('+n+')" class="ui-button">删除</span>'+
+        '</th>'+
+        '</tr>';
+        charge.after(html);
+    });
+
+    var otherchargedelete = function(n){
+        var ocharge = $('#othercharge'+n);
+        ocharge.remove();
+    };
+
+    $('#add-travel').on('click',function() {
+        var n = $('.range').length;
+        var range = $('.range').eq(n-1);
+        var html = '<tr id="range'+n+'" class="range"><th>' +
+            '<select name="schedule_name[]">' +
+            <?php for($i=1;$i<32;$i++): ?>
+            '<option value="<?php echo $i; ?>" >第<?php echo $i; ?>天</option>' +
+        <?php endfor; ?>
+        '</select></th><th>' +
+            '<input type="hidden" style="width: 150px;" value="1970-01-01" name="start_day[]"><th>' +
+            ' <input type="time" style="width: 150px;" value="" name="start_time[]"><th>' +
+            '<input type="hidden" style="width: 150px;" value="1970-01-01" name="end_day[]"><th>' +
+            ' <input type="time" style="width: 150px;" value="" name="end_time[]"><th>' +
+            '<textarea class="cssTextArea" style="height:60px" name="schedule[]"></textarea><th>' +
+            '<span onclick="rangedelete('+n+')" class="ui-button">删除</span></th></tr>';
+        range.after(html);
+    });
+
+    $("#ad-place-view").bind("propertychange input",function(){
+        var k = $(this).val();
+        var that =  $("#places");
+        that.empty();
+        $.get('/wftadlogin/place/getShop?k='+ k,
+            function(result){
+                $.each(result.data,function(entryIndex,entry){
+                    var html = '<div onclick="add_place($(this))" class="xiala" data-name="' + entry['name']
+                        + '" data-sid="' + entry['sid'] + '">';
+                    html += entry['name'] + '</div>';
+                    that.append(html);
+
+                })
+            }, 'json'
+        );
+    });
+
+    var checkeds = new Array();
+    add_place = function(obj){
+        var that =  $("#adds");
+        var b = $.inArray(obj.attr('data-sid'),checkeds);
+        console.log(obj.attr('data-sid'));
+        if(b == -1){
+            var html = '<input type="checkbox" checked name="places[]" value='+ obj.attr('data-sid') +' /> '+obj.attr('data-name');
+            checkeds.push(obj.attr('data-sid'));
+            that.append(html);
+        }
+        $("#place").empty();
+    }
+
+    var rangedelete = function(n){
+        var range = $('#range'+n);
+        range.remove();
+    };
+
+    var showinput = function(obj){
+        var k = $(obj).val();
+        if(k == 99){
+            $(obj).prev().attr('type','text');
+        }else{
+            $(obj).prev().attr('type','hidden');
+        }
+    };
+
+    //保存提交
+    $('#asubmit').click(function () {
+        $.post('/wftadlogin/excercise/save', $('#aform').serialize(), function (data) {
+            if (data.status > 1) {
+
+                window.location.href="/wftadlogin/excercise";
+
+                var r=confirm("保存成功,是否添加对应的场次？")
+                if (r==true) {
+                    window.location.href="/wftadlogin/excercise/newe?id="+data.status;
+                } else {
+                    window.location.href="/wftadlogin/excercise";
+                }
+            } else {
+                alert(data.message);
+            }
+        }, 'json');
+        return false;
+    });
+
+
+    $('body').bind('click',function(e){
+        var place = $('#places');
+        var that = $('.xiala');
+        if(!(e.target == that && $.contains(that, e.target))) {
+            place.empty();
+        }
+    })
+</script>

@@ -1,0 +1,59 @@
+<form class="box box-form" action="/wftadlogin/organizer/saveAccount" method="post">
+    <header class="box-title"><a href="/wftadlogin/organizer/new?oid=<?php echo $organizerData->id; ?>">修改商家</a>　　　　<a href="/wftadlogin/organizer/account?oid=<?php echo $organizerData->id;?>">商家账号</a></header>
+    <table class="table">
+        <tr>
+            <th width="160">名称</th>
+            <th colspan="3">
+                <?php echo $organizerData->name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">汇款通知电话</th>
+            <th colspan="3" width="600">
+                <input type="text" class="cssInput" style="width:200px" name="notification_phone" value="<?php echo $accountData ? $accountData->notification_phone : ''; ?>">　<span style="color:red">没有电话请勿填写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开户人</th>
+            <th colspan="3" width="600">
+                <input type="text" <?php echo ($accountData && $accountData->bank_user && !$right)? 'disabled' : '' ;?> class="cssInput" style="width:360px" name="bank_user" value="<?php echo $accountData ? $accountData->bank_user : ''; ?>">　<span style="color:red">没有请勿填写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开户行</th>
+            <th colspan="3" width="600">
+                <input type="text" <?php echo ($accountData && $accountData->bank_name && !$right)? 'disabled' : '' ;?> class="cssInput" style="width:280px" name="bank_name" value="<?php echo $accountData ? $accountData->bank_name : ''; ?>">　<span style="color:red">没有请勿填写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开户支行</th>
+            <th colspan="3" width="600">
+                <input type="text" <?php echo ($accountData && $accountData->bank_address && !$right)? 'disabled' : '' ;?> class="cssInput" style="width:280px" name="bank_address" value="<?php echo $accountData ? $accountData->bank_address : ''; ?>">　<span style="color:red">没有请勿填写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">卡号</th>
+            <th colspan="3" width="600">
+                <input type="text" <?php echo ($accountData && $accountData->bank_card && !$right)? 'disabled' : '' ;?> class="cssInput" style="width:280px" name="bank_card" value="<?php echo $accountData ? $accountData->bank_card : ''; ?>">　<span style="color:red">没有请勿填写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th></th>
+            <th colspan="3">
+                <input type="hidden" name="organizer_id"  value="<?php echo  $organizerData->id;?>">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+
+

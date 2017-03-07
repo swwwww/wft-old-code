@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo $share_title;?></title>
+    <link href="/invite/style.css" rel="stylesheet"/>
+    <script>
+        function InviteShare(app,title,url,img,content){
+            //app 参数列表
+            //0 多选 1 微信 2 朋友圈 3 新浪微博 4 QQ
+            var url = url;
+            var app = app;
+            var title = title;
+            var img = img;
+            var content = content;
+
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                window.location.href = 'webshare$$app='+app+'&title='+title+'&url='+url+'&img='+img+'&content='+content;
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.webShare(app,url,title,content,img);
+            } else{
+    //                alert('不是手机浏览器')
+            }
+        }
+    </script>
+</head>
+<body>
+<style>
+    .check-win-list.check-win-rule p {margin: 0px 30px 5px 30px;}
+    .check-win-list.check-win-rule {padding-top: 10px;}
+</style>
+    <header class="sh-header" <?php if(!empty($this->bannerImg)) : ?>style="background: #fff url(<?php echo $this->bannerImg;?>) no-repeat center center; background-size: contain; position: relative;"<?php endif;?>>
+<!--        <a class="sh-logo" href="">-->
+<!--            <img src="/invite/img/logo.gif">-->
+<!--        </a>-->
+        <a class="check-rule sh-rule" title="活动详情">活动详情&gt;&gt;</a>
+    </header>
+    <section class="sh-share">
+        <h3><i></i>点击下方&nbsp;&nbsp;邀请好友</h3>
+        <article class="sh-fx">
+            <a class="sh-code check-code">当面扫</a>
+            <a class="sh-chat" onclick="InviteShare(1,'<?php echo $this->layout()->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$this->layout()->share_img;?>','<?php echo $this->layout()->share_desc;?>')">微信</a>
+            <a class="sh-qq" onclick="InviteShare(4,'<?php echo $this->layout()->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$this->layout()->share_img;?>','<?php echo $this->layout()->share_desc;?>')">QQ</a>
+            <a class="sh-pyq" onclick="InviteShare(2,'<?php echo $this->layout()->share_title;?>','<?php echo $this->inviteUrl;?>','<?php echo $this->domain.$this->layout()->share_img;?>','<?php echo $this->layout()->share_desc;?>')">朋友圈</a>
+        </article>
+    </section>
+    <aside><a class="my-prize" href="/webinvite/index/award?p=<?php echo $p; ?>" title="">我的奖励</a></aside>
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--rule-->
+            <div class="check-win-list check-win-rule">
+                <?php
+                if(!empty($this->rule)) :
+                    $rules = preg_split('/\r\n/',$this->rule);
+                    foreach($rules as $rule){
+                        // todo something eg: echo $name;
+                        echo '<p>'.$rule.'</p>';
+                    }
+                    //echo $this->rule;
+                endif;?>
+                <a class="check-win-close">确定</a>
+            </div>
+            <!--code-->
+            <div class="check-win-list check-win-code">
+                <h3>扫一扫</h3>
+                <p>领取<?php if(!empty($this->awardWord)): echo $this->awardWord; endif;?></p>
+                <div class="check-code"><?php if(!empty($this->inviteUrl)) :?><img src="<?php echo '/application/index/phpqrcode?code='.$inviteUrl;?>"/><?php endif;?></div>
+                <a class="check-win-close">取消</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/invite/main.min.js"></script>
+<?php echo $this->partial('web-invite/index/sharejs.phtml'); ?>
+</html>

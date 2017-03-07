@@ -1,0 +1,379 @@
+<style>
+    .table .inviteTitle{text-align: left;}
+    .table th,.table td{ border:1px solid #eee;text-align: center;}
+    .submit{text-align: center;margin: 20px 0 20px 0;}
+    .ui-button{width: 360px;height: 30px;}
+</style>
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li><a href="/wftadlogin/setting">系统设置</a></li>
+        <li><a href="/wftadlogin/invite">邀约管理</a></li>
+        <li class="active">邀约设置</li>
+    </ul>
+</div>
+
+<hgroup class="box">
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>数值设置</div>
+    </aside>
+</hgroup>
+
+<!--<table class="table">
+    <tr>
+        <th>id</th>
+        <th>名称</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+        <th>操作</th>
+    </tr>
+    <?php /*foreach ($data as $m=>$v): */?>
+        <tr>
+            <th><?php /*echo $v['id']; */?></th>
+            <th><a target="_blank" href="/wftadlogin/setting/install?act=view&id=<?php /*echo $v['id']; */?>"><?php /*echo $v['name']; */?></a></th>
+            <th><?php /*echo date('Y-m-d H:i:s', $v['width']);*/?></th>
+            <th><?php /*echo date('Y-m-d H:i:s', $v['height']);*/?></th>
+            <th>
+                <?php /*if($m>0):*/?>
+                <a href="/wftadlogin/setting/install?act=update&id=<?php /*echo $v['id']; */?>" class="btn btn-primary">刷新上浮</a>
+                <?php /*endif;*/?>
+                <a href="/wftadlogin/setting/install?act=del&id=<?php /*echo $v['id']; */?>" class="btn btn-danger">删除</a>
+            </th>
+        </tr>
+    <?php /*endforeach; */?>
+</table>
+-->
+<form action="/wftadlogin/invite" method="get" class="form-inline">
+    <table class="table">
+        <tr>
+        <th class="inviteTitle" colspan="4" style="background-color: #D6CEC9;color: #4F463D;font-weight: bold;line-height: 40px;height: 40px;padding-left: 20px;overflow: hidden;">触发事件1：新用户接受邀请并注册</th>
+        </tr>
+        <tr>
+            <th colspan="4">
+                <tr>
+                    <th scope="col">角色</th>
+                    <th scope="col">奖励类型</th>
+                    <th scope="col" id="coupon_1">票券ID</th>
+                    <th scope="col">奖励金额</th>
+                </tr>
+                <tr>
+                    <td>邀请人</td>
+                    <td>
+                        <select name="r_inviter_type" class="type" id="type_1" data-id="1" class="sel">
+                            <option value="0" <?php echo ($data->r_inviter_type == 0) ? 'selected' : '';?>>积分</option>
+                            <option value="1" <?php echo ($data->r_inviter_type == 1) ? 'selected' : '';?>>现金券</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div id="coupon_id_1">
+                            <?php
+                                if(!empty($data->r_inviter_couponid) && isset($data->r_inviter_couponid)):
+                                    foreach(json_decode($data->r_inviter_couponid,true) as $r_inviter_couponids):
+                            ?>
+                            <input name="r_inviter_couponid[]" type="text" class="cssInput" style="width:80px"  value="<?php echo $r_inviter_couponids;?>">
+                            <?php
+                                    endforeach;
+                                else:
+                             ?>
+                                    <input name="r_inviter_couponid[]" type="text" class="cssInput" style="width:80px"  value="">
+                            <?php
+                                endif;
+                            ?>
+<!--                            <a href="javascript:void(0);" class="addCoupon" data-name="r_inviter_couponid">添加组合</a>
+                            <a href="javascript:void(0);" class="delCoupon">删除组合</a>-->
+                        </div>
+<!--                        <input name="r_inviter_couponid[]" type="text" class="cssInput" style="width:80px"  value="--><?php //echo json_decode($data->r_inviter_couponid,true)[1];?><!--">-->
+                    </td>
+                    <td>
+                        <input name="r_inviter_award" type="text" class="cssInput" style="width:80px"  value="<?php echo $data->r_inviter_award;?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td>受邀人</td>
+                    <td>
+                        <select name="r_reciever_type" class="type" id="type_2" data-id="2" class="sel">
+                            <option value="0" <?php echo ($data->r_reciever_type == 0) ? 'selected' : '';?>>积分</option>
+                            <option value="1" <?php echo ($data->r_reciever_type == 1) ? 'selected' : '';?>>现金券</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div id="coupon_id_2">
+                            <?php
+                            if(!empty($data->r_reciever_couponid) && isset($data->r_reciever_couponid)):
+                                foreach(json_decode($data->r_reciever_couponid,true) as $r_reciever_couponids):
+                                    ?>
+                                    <input name="r_reciever_couponid[]" type="text" class="cssInput" style="width:80px"  value="<?php echo $r_reciever_couponids;?>">
+                                <?php
+                                endforeach;
+                            else:
+                                ?>
+                                <input name="r_reciever_couponid[]" type="text" class="cssInput" style="width:80px"  value="">
+                            <?php
+                            endif;
+                            ?>
+<!--                            <a href="javascript:void(0);" class="addCoupon" data-name="r_reciever_couponid">添加组合</a>
+                            <a href="javascript:void(0);" class="delCoupon">删除组合</a>-->
+                        </div>
+                    </td>
+                    <td>
+                        <input name="r_reciever_award" type="text" class="cssInput" style="width:80px"  value="<?php echo $data->r_reciever_award;?>">
+                    </td>
+                </tr>
+            </th>
+        </tr>
+        <tr>
+            <th class="inviteTitle" colspan="4" style="background-color: #D6CEC9;color: #4F463D;font-weight: bold;line-height: 40px;height: 40px;padding-left: 20px;overflow: hidden;">触发事件2：新用户首单购买</th>
+        </tr>
+        <tr>
+            <th colspan="4">
+                <tr>
+                    <th scope="col">角色</th>
+                    <th scope="col">奖励类型</th>
+                    <th scope="col">填写比例</th>
+                    <th scope="col">最高限额</th>
+                </tr>
+                <tr>
+                    <td>邀请人</td>
+                    <td>
+                        现金
+                        <input name="f_inviter_type" type="hidden" class="cssInput" style="width:80px"  value="3">
+                    </td>
+
+                    <td>
+                        <input name="f_inviter_award" type="text" class="cssInput" style="width:80px"  value="<?php echo $data->f_inviter_award;?>">%
+                    </td>
+
+                    <td>
+                        <input name="f_inviter_award_limit" type="text" class="cssInput" style="width:80px"  value="<?php echo $data->f_inviter_award_limit;?>">
+                    </td>
+                </tr>
+
+            </th>
+        </tr>
+
+        <tr>
+            <th class="inviteTitle" colspan="4" style="background-color: #D6CEC9;color: #4F463D;font-weight: bold;line-height: 40px;height: 40px;padding-left: 20px;overflow: hidden;">触发事件3：新用户下载（暂时为新注册用户默认获取"一元商品特权"资格券）</th>
+        </tr>
+        <tr>
+            <th colspan="4">
+                <tr>
+                    <th scope="col">角色</th>
+                    <th scope="col">奖励类型</th>
+                    <th scope="col" id="coupon_2">票券ID</th>
+                    <th scope="col">数量/价格</th>
+                </tr>
+                <tr>
+                    <td>受邀人</td>
+                    <td>
+                        <select name="d_reciever_type" class="type" id="type_3" data-id="3" class="sel">
+                            <option value="0" <?php echo ($data->d_reciever_type == 0) ? 'selected' : '';?>>积分</option>
+                            <option value="1" <?php echo ($data->d_reciever_type == 1) ? 'selected' : '';?>>现金券</option>
+                            <option value="2" <?php echo ($data->d_reciever_type == 2) ? 'selected' : '';?>>资格券</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div id="coupon_id_3">
+                            <?php
+                            if(!empty($data->d_reciever_couponid) && isset($data->d_reciever_couponid)):
+                                foreach(json_decode($data->d_reciever_couponid,true) as $d_reciever_couponids):
+                                    ?>
+                                    <input name="d_reciever_couponid[]" type="text" class="cssInput" style="width:80px"  value="<?php echo $d_reciever_couponids;?>">
+                                <?php
+                                endforeach;
+                            else:
+                                ?>
+                                <input name="d_reciever_couponid[]" type="text" class="cssInput" style="width:80px"  value="">
+                            <?php
+                            endif;
+                            ?>
+<!--                            <a href="javascript:void(0);" class="addCoupon" data-name="d_reciever_couponid">添加组合</a>
+                            <a href="javascript:void(0);" class="delCoupon">删除组合</a>-->
+                        </div>
+                    </td>
+                    <td>
+                        <input name="d_reciever_award" type="text" class="cssInput" style="width:80px"  value="<?php echo $data->d_reciever_award;?>">
+                    </td>
+                </tr>
+            </th>
+        </tr>
+        <tr>
+            <th class="inviteTitle" colspan="4" style="background-color: #D6CEC9;color: #4F463D;font-weight: bold;line-height: 40px;height: 40px;padding-left: 20px;overflow: hidden;">奖励与提醒次数设置</th>
+        </tr>
+        <tr>
+            <th width="220">每日邀约获得奖励次数限额</th>
+            <th colspan="3" width="600">
+                <input class="form-control" name="invite_per_day" value="<?php echo $data->invite_per_day;?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="200">用户提醒间隔天数</th>
+            <th colspan="3" width="600">
+                <input class="form-control" name="remind_per_day" value="<?php echo $data->remind_per_day;?>">
+            </th>
+        </tr>
+
+</table>
+            <div class="inviteTitle" colspan="4" style="background-color: #D6CEC9;color: #4F463D;font-weight: bold;line-height: 40px;height: 40px;padding-left: 20px;overflow: hidden;">内容修改</div>
+            <fieldset style="margin-top: 10px;">
+                <div style="font-weight: bold;margin-bottom: 10px;">邀约好友广告图</div>
+<!--                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">-->
+<!--                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>-->
+<!--                    <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>-->
+<!--                </div>-->
+<!---->
+<!--                <input type="hidden" name="banner_img" value="--><?php //echo $data->banner_img;?><!--" />-->
+<!--                <span>　　请上传：<mark>640 × 1008</mark>的“<mark><b>jpg png</b></mark>”格式。</span>-->
+            </fieldset>
+            <br />
+
+            <div>
+                <img width="320px" height="180px" class="fileupload1" src="<?php echo $data->banner_img;?>">
+            </div>
+            <div style="font-weight: bold;margin: 15px 0px 10px 0px;">活动规则文案</div>
+            <textarea cols="80" rows="10" name="banner"><?php echo $data->banner;?></textarea>
+
+    <div style="font-weight: bold;margin: 15px 0px 10px 0px;">社交分享</div>
+    <fieldset style="margin-top: 10px;">
+        <div style="font-weight: bold;margin-bottom: 10px;">分享图片</div>
+<!--        <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">-->
+<!--            <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>-->
+<!--            <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>-->
+<!--        </div>-->
+<!---->
+<!--        <input type="hidden" name="share_img" value="--><?php //echo $data->share_img;?><!--" />-->
+<!--        <span>　　请上传：<mark>200 × 200</mark>的“<mark><b>jpg</b></mark>”格式。</span>-->
+    </fieldset>
+    <br />
+
+    <div>
+        <img width="100px" height="100px" class="fileupload2" src="<?php echo $data->share_img;?>">
+    </div>
+    <div style="font-weight: bold;margin: 15px 0px 10px 0px;">标题文案</div>
+    <input name="share_title" type="text" class="cssInput" style="width:240px"  value="<?php echo $data->share_title;?>"><span style="margin-left: 10px;color:#d43f3a;font-weight:bold;">*15字以内</span>
+    <div style="font-weight: bold;margin: 15px 0px 10px 0px;">内容文案</div>
+    <textarea cols="80" rows="10" name="share_desc"><?php echo $data->share_desc;?></textarea>
+    <div class="submit">
+        <button type="submit" class="ui-button"><a style="color: #ffffff" href="javascript:history.go(-1)">后退</a></button>
+
+    </div>
+
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload?type=contract',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='banner_img']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload?boot=out',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='share_img']").attr('value', data.result.url);
+                $(".fileupload2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $(function (){
+        var arr1 = [[1], [2], [3]];
+        $.each(arr1, function (name,val) {
+            var r_inviter_type = $('#type_'+val).val();
+            if(r_inviter_type == 0){
+                $('#coupon_id_'+val).hide();
+            }else if(r_inviter_type == 1){
+
+                $('#coupon_id_'+val).show();
+            }else{
+                $('#coupon_id_'+val).hide();
+            }
+        });
+
+
+
+    });
+        $(".type").change(function(){
+             var r_inviter_type = $(this).val();
+             var id = $(this).attr('data-id');
+             console.log($(this).attr('data-id'));
+             if(r_inviter_type == 0){
+                 $('#coupon_id_'+id).hide();
+             }else if(r_inviter_type == 1){
+                 $('#coupon_id_'+id).show();
+             }else{
+                 $('#coupon_id_'+id).hide();
+             }
+        });
+
+
+/*
+    $('.addCoupon').click(function(){
+        var type_name = $(this).attr('data-name');
+        $(this).before('<input name="'+ type_name +'[]" type="text" class="cssInput" style="width:80px"  value="">&nbsp;');
+    });
+
+    $('.delCoupon').click(function(){
+        $(this).parent().find('>input:last').remove();
+    });
+*/
+
+
+/*
+
+    $('#fileupload3').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover3']").attr('value', data.result.url);
+                $(".fileupload3").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload4').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover4']").attr('value', data.result.url);
+                $(".fileupload4").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload5').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover5']").attr('value', data.result.url);
+                $(".fileupload5").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+*/
+
+
+</script>

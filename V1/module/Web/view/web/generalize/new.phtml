@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/h5/ground.css" rel="stylesheet"/>
+    <title>感谢扫码</title>
+</head>
+<body>
+    <header class="header">
+        <h2>恭喜你获得<?php echo $old?'':'新用户'; ?>大礼包</h2>
+    </header>
+    <section class="wrapper">
+        <ul class="gift-new">
+            <?php if($cc): ?>
+                <li class="item">
+                    <img src="/images/ground/yellow.png">
+                    <div class="info">
+                        <h3>现金券</h3>
+                        <p>&yen;<span><?php echo (int)$cc->price; ?></span>.00</p>
+                        <p><?php echo $cc->title; ?></p>
+                    </div>
+                </li>
+            <?php endif; ?>
+            <?php if($bcv): ?>
+            <li class="item">
+                <img src="/images/ground/red.png">
+                <div class="info">
+                    <h3>现金</h3>
+                    <p>首单返利<?php echo $bcv; ?>%</p>
+                    <p>最高<?php echo $bcm; ?>元</p>
+                </div>
+            </li>
+            <?php endif; ?>
+            <?php if($q): ?>
+            <li class="item">
+                <img src="/images/ground/blue.png">
+                <div class="info">
+                    <h3>资格券</h3>
+                    <p>一元商品</p>
+                    <p>秒杀资格券</p>
+                </div>
+            </li>
+            <?php endif; ?>
+        </ul>
+    </section>
+    <aside class="edit">
+
+        <a class="btn" href="http://wan.wanfantian.com/app/index.php" title="">现在就去APP</a>
+        <?php if( $old and $cid): ?>
+        <a class="btn" href="/web/wappay/nindex" title="">就在微信购买</a>
+        <?php else: ?>
+        <a class="btn" href="/web/wappay/nindex" title="">就在微信购买</a>
+        <?php endif; ?>
+    </aside>
+</body>
+</html>

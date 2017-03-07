@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>武汉十佳遛娃基地评选</title>
+    <link href="/activity/px/css/h5-selection.css" rel="stylesheet"  type="text/css"/>
+    <script src="/js/jquery.min.js"></script>
+
+    <style>
+        .pagination {
+            display: block;
+            color: #fff;
+            margin-left: 40%;
+
+        }
+        .pagination li{
+            display: inline;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+<div class="banner">
+    <img src="/activity/px/images/banner.png"/>
+</div>
+
+<?php if(!$_GET['noNav']):?>
+    <div class="rank">
+        <div class="rank-title">
+            <div class="rank-title-browse">
+                <span>围观人次<br/><mark><?php echo $set->view_number;?></mark></span>
+            </div>
+            <div class="rank-title-vote">
+                <span>投票人次<br/><mark><?php echo $set->vote_number;?></mark></span>
+            </div>
+            <a class="myprize-link" href="/activity/pingxuan/myprize">
+                <span>我的奖品</span>
+            </a>
+        </div>
+    </div>
+
+<?php endif;?>
+
+
+<?php echo $this->content;?>
+
+<div class="item-action">
+    <a href="/activity/pingxuan?type=%E5%84%BF%E7%AB%A5%E4%B9%90%E5%9B%AD">全部商家</a>
+    <a class="get" href="/activity/pingxuan/prizedraw">
+        <img src="/activity/px/images/circle.png" />
+        <p>我要抽奖</p>
+    </a>
+    <a href="/activity/pingxuan/bustop?type=儿童乐园">实时排名</a>
+</div>
+<script src="/activity/px/js/zepto.js"></script>
+<script>
+    (function(){
+        var oNav =$("#oNav"),
+            oA = oNav.find("a"),
+            sec = $("section");
+        for(var i = 0; i < oA.length; i++){
+            oA[i].onclick = function(){
+                for(var i = 0; i < oA.length; i++){
+                    if(oA[i] == this){
+                        oA[i].className = "add";
+                        sec[i].style.display = "block";
+                    }else{
+                        oA[i].className = "";
+                        sec[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    })();
+</script>
+</body>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?a1b66f5bbc7b8808ef15aef7c152d9eb";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script>
+
+    $(function () {
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '<?php echo $jsApi['appid'];?>', // 必填，公众号的唯一标识
+            timestamp: <?php echo $jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+            nonceStr: '<?php echo $jsApi['noncestr'];?>', // 必填，生成签名的随机串
+            signature: '<?php echo $jsApi['signature'];?>',// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+        wx.ready(function () {
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            wx.onMenuShareTimeline({
+                title: '<?php echo $share_title;?>', // 分享标题
+                link: '<?php echo $share_url;?>', // 分享链接
+                imgUrl: '<?php echo $share_img;?>', // 分享图标
+                success: function () {
+                    //alert('用户确认分享后执行的回调函数');
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: '<?php echo $share_title;?>', // 分享标题
+                desc: '<?php echo $share_desc;?>', // 分享描述
+                link: '<?php echo $share_url;?>', // 分享链接
+                imgUrl: '<?php echo $share_img;?>', // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+
+
+        });
+    })
+
+
+   
+</script>
+
+
+</html>

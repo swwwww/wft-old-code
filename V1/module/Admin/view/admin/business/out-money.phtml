@@ -1,0 +1,42 @@
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/business/accountList">返回商家账户</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：
+        </div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/business/saveOutMoney" method="post">
+    <header class="box-title"></header>
+    <table class="table">
+        <tr>
+            <th width="120px">转账金额:</th>
+            <th colspan="3">
+                <input type="text" name="money" class="cssInput" value="">
+            </th>
+        </tr>
+        <tr>
+            <th width="109">转账原因:</th>
+            <th colspan="3" width="300">
+                <input type="text" name="reason" class="cssInput" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109"></th>
+            <th colspan="3" width="300">
+                <input type="hidden" name="organizer_id" value="<?php echo $organizer_id;?>">
+                <button type="submit">提交</button>
+            </th>
+        </tr>
+
+    </table>
+
+</form>
+

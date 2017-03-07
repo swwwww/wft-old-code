@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>点评</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        #tipsDia{display: none; width: 60%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+    </style>
+</head>
+<body>
+<section id="commentList">
+    <?php if(!$data):?>
+        <div class="nodata" style="text-align: center;"><img src="/images/wap/nodata.gif" /></div>
+    <?php else:?>
+    <?php foreach($data as $k=>$v):?>
+        <div class="comment">
+            <a href="/web/kidsplay/commendinfo?pid=<?php echo $v['id'];?>">
+                <div class="review-content-comment">
+                    <img src="<?php echo $v['author_img'];?>" />
+                                <span>
+                                    <mark class="review-content-comment-id"><?php echo $v['author'];?></mark>
+                                    <mark class="review-content-comment-time"><?php echo date("Y-m-d",$v['dateline']);?></mark>
+                                </span>
+                    <p>
+                        <?php foreach($v['message'] as $val):?>
+                            <?php if($val['t']==1):?>
+                                <?php echo $val['val'];?>
+                            <?php endif;?>
+                        <?php endforeach;?>
+                    </p>
+                </div>
+                <div class="comment-pic">
+                    <ul style="display: block">
+                        <?php foreach($v['message'] as $pic):?>
+                        <?php if($pic['t']==2):?>
+                        <li style="height: auto;">
+                            <img src="<?php echo $server_utl.$pic['val']; ?>" alt="">
+                        </li>
+                            <?php endif;?>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            </a>
+        <p class="comment-title"><?php echo $v['event_name'];?></p>
+        <div class="comment-btn">
+                <span class="comment-btn-write" mid="<?php echo $v['id'];?>">
+                    <a href="/web/kidsplay/commendinfo?pid=<?php echo $v['id'];?>"><mark><?php echo $v['reply_number'];?></mark></a>
+                </span>
+                <span class="comment-btn-like" mid="<?php echo $v['id'];?>">
+                    <a class="<?php echo $v['is_like']==1 ? 'active' : '';?>"><mark class="like_num"><?php echo $v['like_number'];?></mark></a>
+                </span>
+        </div>
+    </div>
+    <?php endforeach;?>
+    <?php endif;?>
+</section>
+<input type="hidden" name="bid" id="bid" value="<?php echo $bid;?>">
+<?php if($bud_log>0):?>
+<a id="commentFixed" href="/web/organizer/review?id=<?php echo $eid;?>&type=7&bid=<?php echo $bid;?>">
+    <span>说点什么...</span>
+    <mark>点评</mark>
+</a>
+<?php endif;?>
+<div id="tipsDia"></div>
+</body>
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script>
+    (function(){
+        var tipsDia = $("#tipsDia");
+//点赞和取消点赞
+        $('.comment-btn-like').on("tap",function(e){
+            e.preventDefault();
+            var obj = $(this);
+            var mid = obj.attr('mid');
+            var data ={'mid':mid,'uid':<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>};
+            if(obj.find("a").hasClass('active')){
+                $.ajax({
+                    type: "POST",
+                    url: "/social/sendpost/deletelike",
+                    //        dataType:"json",
+                    async: true,
+                    data:data,
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },2000);
+                        } else if(result.response_params.message =='已经取消过了'){
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },2000);
+                        }else{
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },2000);
+                            obj.find('a').removeClass('active');
+                            var num = parseInt(obj.find('.like_num').text());
+                            obj.find('.like_num').text(parseInt(num)-1);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //alert('授权失败');
+                            // 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+                            alert('请求参数错误');
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+
+                });
+            }else{
+                $.ajax({
+                    type: "POST",
+                    url: "/social/sendpost/like",
+                    //        dataType:"json",
+                    async: true,
+                    data:data,
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },2000);
+                        } else if(result.response_params.message=='点赞成功'){
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },2000);
+                            obj.find('a').addClass('active');
+                            var num = parseInt(obj.find('.like_num').text());
+                            obj.find('.like_num').text(parseInt(num)+1);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //alert('授权失败');
+                            // 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+                            alert('请求参数错误');
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+
+                });
+            }
+        });
+    }());
+</script>
+</html>

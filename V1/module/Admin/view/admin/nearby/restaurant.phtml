@@ -1,0 +1,68 @@
+<hgroup class="box">
+    <header>
+        <h3>餐厅管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/nearby/new?type=1">添加餐厅</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        餐厅列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">id</th>
+                <th width="100">名称</th>
+                <th width="100">添加编辑</th>
+                <th width="200">地址</th>
+                <th width="100">添加时间</th>
+                <th width="80">经度</th>
+                <th width="80">纬度</th>
+                <th width="300">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="15">
+                        <?php echo $row['_id']; ?>
+                    </td>
+
+                    <td width="100">
+                        <?php echo $row['title']; ?>
+                    </td>
+
+                    <td width="100">
+                        <?php echo $row['editor']; ?>
+                    </td>
+
+                    <td width="200">
+                        <?php echo $row['address']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo date('Y-m-d H:i:s', $row['dateline']); ?>
+                    </td>
+                    <td width="80">
+                        <?php echo $row['addr']['coordinates'][0]; ?>
+                    </td>
+                    <td width="80">
+                        <?php echo $row['addr']['coordinates'][1]; ?>
+                    </td>
+
+                    <td width="300">
+                        <a href="/wftadlogin/nearby/update?type=del&id=<?php echo $row['_id']; ?>" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                        <a href="/wftadlogin/nearby/new?id=<?php echo $row['_id']; ?>" class="ui-button">查看</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>

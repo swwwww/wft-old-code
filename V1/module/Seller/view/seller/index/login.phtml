@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>玩翻天商家后台</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body>
+    <header class="in-header">
+        <img class="in-logo" src="/img/logo.gif" />
+        <h4>孩子们的游玩管家</h4>
+    </header>
+    <section class="in-form">
+        <form action="" id="form1">
+            <fieldset>
+                <h2>欢迎入驻玩翻天</h2>
+            </fieldset>
+<!--            <fieldset class="in-select">-->
+<!--                <div  id="select-box">-->
+<!--                    <span id="select">商家</span>-->
+<!--                    <ul id="select-ul">-->
+<!--                        <li>商家</li>-->
+<!--<!--                        <li>游玩地</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </fieldset>-->
+            <fieldset>
+                <input class="text in-tel" id="phone" name="tel" type="text" placeholder="请输入商家名/ID">
+            </fieldset>
+            <fieldset>
+                <input class="text in-password" id="password" name="password" type="password" placeholder="请输入支付密码">
+                <aside class="in-error password-error"></aside>
+            </fieldset>
+            <fieldset>
+                <div class="in-checkbox">
+                    <input type="checkbox" value="" name="choice_checkbox" id="checkbox">
+                </div>
+                <label class="in-title">记住密码</label>
+            </fieldset>
+            <fieldset class="in-submit">
+                <input id="submitBtn" class="submit button" type="button" value="登录">
+            </fieldset>
+            <fieldset>
+                <a class="left" href="/seller/index/forget" title="">忘记密码</a>
+                <a class="right" href="/seller/index/change" title="">修改密码</a>
+            </fieldset>
+        </form>
+    </section>
+
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--tips-->
+            <div class="check-win-list check-win-tips">
+                <div id="loginTip" class="wx_text">
+                    <i></i>
+                </div>
+                <a class="check-win-close">确定</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+</head>
+<body>
+<header id="header">
+    <div class="center">
+        <div id="header-tips">
+            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>
+            <h2 id="header-title">商家版</h2>
+        </div>
+        <div id="header-member">
+            <figure>
+                <a href="" title="user" class="portrait">
+                    <img alt="" src="/seller/images/demo01.png">
+                </a>
+                <figcaption>
+                    <a class="username" href="" title="世界儿童乐园">世界儿童乐园</a>
+                </figcaption>
+            </figure>
+            <nav id="header-nav">
+                <a class="set" href="#"></a>
+                <a class="exit" href="#"></a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div id="container" class="center">
+    <form class="forget-form" action="" method="post" h-com="select checkbox form" id="form1">
+        <fieldset>
+            <h2>修改密码</h2>
+        </fieldset>
+<!--        <fieldset>-->
+<!--            <div class="ui-select gf-select">-->
+<!--                <input type="hidden" name="typeid" value="0">-->
+<!--                <div class="ui-select-title" tabindex="1">商家</div>-->
+<!--                <ul class="ui-select-options ui-scroll ui-scroll-y ui-scroll-hidden" style="position: relative;">-->
+<!--                    <li data-value="1">商家</li>-->
+<!--                    <li data-value="2">游玩地</li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </fieldset>-->
+        <fieldset>
+            <label class="gf-title" for="lf-name">用户名/ID</label><input class="text" id="lf-name" name="name" type="text" placeholder="请输入用户名/ID">
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">原密码</label><input class="text"  name="pwd" type="password" placeholder="请输入原密码" id="old_pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">新密码</label><input class="text" id="new_pwd"  name="new_pwd" type="password" placeholder="请输入新密码">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">再次输入新密码</label><input class="text"  name="password" type="password" placeholder="请再次输入新密码" id="re_pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="button gf-button" type="button" value="确定" id="subBtn"/>
+        </fieldset>
+    </form>
+</div>
+<footer id="footer"></footer>
+</body>
+<template id="alert">
+    <div class="modal-alert">
+        <h1 class="modal-alert-title">{{message}}</h1>
+        <input class="button modal-alert-button modal-close" type="button" value="确定" />
+    </div>
+</template>
+<script src="/seller/js/jquery.js"></script>
+<script>
+    $(function(){
+
+        $("#subBtn").click(function(){
+            var user = $('#lf-name').val();
+            var old_pwd = $("#old_pwd").val();
+            var new_pwd = $("#new_pwd").val();
+            var re_pwd = $("#re_pwd").val();
+
+            if(!user){
+                alert('请输入用户名');
+                return false;
+            }
+            if(!old_pwd){
+                alert('请输入原密码');
+                return false;
+            }
+            if(!new_pwd){
+                alert('请输入新密码');
+                return false;
+            }
+            if(!re_pwd){
+                alert('请输入重复密码');
+                return false;
+            }
+            if(new_pwd != re_pwd){
+                alert('两次密码不相同');
+                return false;
+            }
+
+            $.post("/selleradmin/index/change",$("#form1").serialize(),function(data){
+                if(data.status==1){
+                    alert(data.message);
+                    window.location.href='/selleradmin/index/login';
+                }else{
+                    alert(data.message);
+                    window.location.reload();
+                }
+            });
+        });
+
+    })
+</script>
+</html>
+

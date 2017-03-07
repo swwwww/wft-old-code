@@ -1,0 +1,217 @@
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/organizerrecord/record" id="menu">商家账户交易流水</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $organizer_name = null;
+        $organizer_id = null;
+        $good_id = null;
+        $code_number = null;
+        $good_name = null;
+        $contract_no = null;
+        $time_start = null;
+        $time_end = null;
+        $action_type = 0;
+
+        if (isset($_GET['organizer_name']) && $_GET['organizer_name']) {
+            $organizer_name = $_GET['organizer_name'];
+        }
+
+        if (isset($_GET['good_name']) && $_GET['good_name']) {
+            $good_name = $_GET['good_name'];
+        }
+
+        if (isset($_GET['code_number']) && $_GET['code_number']) {
+            $code_number = $_GET['code_number'];
+        }
+
+        if (isset($_GET['good_id']) && $_GET['good_id']) {
+            $good_id = $_GET['good_id'];
+        }
+
+        if (isset($_GET['contract_no']) && $_GET['contract_no']) {
+            $contract_no = $_GET['contract_no'];
+        }
+
+        if (isset($_GET['organizer_id']) && $_GET['organizer_id']) {
+            $organizer_id = $_GET['organizer_id'];
+        }
+
+        if (isset($_GET['time_start']) && $_GET['time_start']) {
+            $time_start = $_GET['time_start'];
+        }
+
+        if (isset($_GET['time_end']) && $_GET['time_end']) {
+            $time_end = $_GET['time_end'];
+        }
+
+        if (isset($_GET['action_type']) && $_GET['action_type']) {
+            $action_type = $_GET['action_type'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">商家名</th>
+            <th>
+                <input type="text" class="cssInput" name="organizer_name" value="<?php echo $organizer_name;?>">
+            </th>
+            <th width="160">交易日期</th>
+            <th>
+                <input name="time_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_start;?>">
+                <input name="time_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商品id</th>
+            <th>
+                <input type="text" class="cssInput" name="good_id" value="<?php echo $good_id;?>">
+            </th>
+            <th width="160">交易类型</th>
+            <th>
+                <select name="action_type">
+                    <option value="0" <?php echo ($action_type == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($action_type == 1) ? 'selected' : '';?>>订单分润</option>
+                    <option value="2" <?php echo ($action_type == 2) ? 'selected' : '';?>>商家提现</option>
+                   <!-- <option value="3" <?php /*echo ($action_type == 3) ? 'selected' : '';*/?>>预付款</option>-->
+                    <option value="4" <?php echo ($action_type == 4) ? 'selected' : '';?>>预付款提现</option>
+                    <option value="5" <?php echo ($action_type == 5) ? 'selected' : '';?>>特殊退款</option>
+                    <option value="6" <?php echo ($action_type == 6) ? 'selected' : '';?>>订单充帐</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用码</th>
+            <th>
+                <input type="text" class="cssInput" name="code_number" value="<?php echo $code_number;?>">
+            </th>
+            <th width="160">商品名称</th>
+            <th>
+                <input type="text" class="cssInput" name="good_name" value="<?php echo $good_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商家id</th>
+            <th>
+                <input type="text" class="cssInput" name="organizer_id" value="<?php echo $organizer_id;?>">
+            </th>
+            <th width="160">合同编号</th>
+            <th>
+                <input type="text" class="cssInput" name="contract_no" value="<?php echo $contract_no;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/organizerrecord/record" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+                <input type="hidden" name="type" value="record">
+                <a href="javascript:void(0)" data-src="/wftadlogin/organizerrecord/outData" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">商家账户交易流水</div>
+    <div class="panel-body">
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">交易流水号</th>
+                <th scope="col">交易时间</th>
+                <th scope="col">交易类型</th>
+                <th scope="col">商家id</th>
+                <th scope="col">合同编号</th>
+                <th scope="col">商家名称</th>
+                <th scope="col">订单id</th>
+                <th scope="col">验证时间</th>
+                <th scope="col">交易金额</th>
+                <th scope="col">账户余额</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['flow_number']; ?></td>
+                    <td><?php echo date('Y-m-d H:i:s', $v['dateline']); ?></td>
+                    <td>
+                        <?php
+                            if ($v['action_type'] == 1) {
+                                if ($v['object_type'] == 1) {
+                                    echo '订单分润';
+                                } elseif ($v['object_type'] == 2) {
+                                    echo '预付款';
+                                } elseif ($v['object_type'] == 3) {
+                                    echo '订单冲账';
+                                }
+                            } elseif ($v['action_type'] == 2) {
+                                if ($v['object_type'] == 1) {
+                                    echo '预付款提现';
+                                } elseif ($v['object_type'] == 2) {
+                                    echo '商家提现';
+                                } elseif ($v['object_type'] == 3) {
+                                    echo '特殊退款';
+                                }
+                            }
+                        ?>
+                    </td>
+
+                    <td><?php echo $v['oid']; ?></td>
+                    <td><?php echo $v['contract_no']; ?></td>
+                    <td><?php echo $v['organizer_name']; ?></td>
+                    <td><?php echo ((($v['object_type'] == 1 || $v['object_type'] == 3) && $v['action_type'] == 1) || ($v['object_type'] == 3 && $v['action_type'] == 2)) ? $v['object_id'] : ''; ?></td>
+                    <td><?php echo $v['use_datetime'] ? date('Y-m-d H:i:s', $v['use_datetime']) : ''; ?></td>
+                    <td>
+                        <?php if($v['action_type'] == 1):?>
+                            <mark>+<?php echo $v['flow_money']; ?></mark>
+                            <?php else:?>
+                            <mark>-<?php echo $v['flow_money']; ?></mark>
+                        <?php endif;?>
+                    </td>
+                    <td><?php echo $v['surplus_money']; ?></td>
+
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+
+       <!-- <hgroup class="box">
+            <header>
+                 搜索结果 <?php /*echo $end['count']; */?>   入账  <?php /*echo $end['in']; */?> 出账  <?php /*echo $end['out']; */?>
+            </header>
+        </hgroup>-->
+        <div>
+            <?php echo $this->pageData; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+    });
+</script>
+
+

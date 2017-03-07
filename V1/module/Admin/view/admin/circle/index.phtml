@@ -1,0 +1,83 @@
+<hgroup class="box">
+    <header>
+        <h3>圈子管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/circle/choose">选择圈子</a>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/circle/myapply">我的圈子申请</a>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/circle/apply">申请圈子</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        圈子列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索圈子名称" name="k" value="">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size3">id</th>
+                <th class="size3">圈子名称</th>
+                <th class="size1">
+                    <select class="type_change">
+                        <option <?php echo (!isset($_GET['type']) || !$_GET['type']) ? 'selected' : ''; ?> data-src="/wftadlogin/circle?type=0">全部</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/circle?type=2">公开</option>
+                        <option <?php echo (isset($_GET['type']) && $_GET['type'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/circle?type=1">私密</option>
+                    </select>
+                </th>
+                <th class="size1">加入人数</th>
+                <th class="size1">发言数</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if ($data->count()): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size3"><?php echo $row['_id']; ?></td>
+                        <td class="size3"><a href="/wftadlogin/circle/new?id=<?php echo $row['_id']; ?>"><?php echo $row['title']; ?></a></td>
+                        <td class="size1"><?php echo $type[$row['type']]; ?></td>
+                        <td class="size1"><?php echo $row['people']; ?></td>
+                        <td class="size1"><?php echo $row['msg']; ?></td>
+                        <td class="size2">
+                            <!--<a href="/wftadlogin/news/update?nid=<?php /*echo $row->id;*/?>&type=<?php /*echo ($row->status == 1) ? 1 : 2*/?>" class="ui-button"><?php /*echo $row->status ? '取消发布': '发布';*/?></a>
+                            <a href="/wftadlogin/news/update?nid=<?php /*echo $row->id;*/?>&type=3" class="ui-button">删除</a>-->
+                            <a href="/wftadlogin/circle/new?id=<?php echo $row['_id']; ?>" class="ui-button">基本设置</a>
+                            <a href="/wftadlogin/circle/word?id=<?php echo $row['_id']; ?>" class="ui-button">发言管理</a>
+                            <a href="/wftadlogin/circle/user?id=<?php echo $row['_id']; ?>" class="ui-button">用户管理</a>
+                            <a href="/wftadlogin/circle/unuse?id=<?php echo $row['_id']; ?>&type=1" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无圈子 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+    })
+</script>

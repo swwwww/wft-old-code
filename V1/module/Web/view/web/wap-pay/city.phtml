@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>切换城市</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/index.css" rel="stylesheet"/>
+</head>
+<style type="text/css">
+    html{
+        height: 100%;
+    }
+</style>
+<body>
+<main class="align citylist" id="content">
+    <section class="wrapper">
+        <div class="cur-city">
+            <span class="tips">当前城市</span>
+            <span class="info right" id="baidu_geo">正在GPS定位中...</span>
+        </div>
+        <div class="open-city">
+            <div class="tips">已开通城市</div>
+            <ul class="list">
+                <?php foreach($data['hot_city'] as $v):?>
+                <li>
+                    <img src="<?php echo $v['city_img'];?>" alt="" class="city" data="<?php echo $v['name'];?>">
+                    <a class="city" href="/web/wappay/nindex?city=<?php echo $v['name'];?>" title="">
+<!--                        {{if $value.city_img}}-->
+<!--                        <img src="{{$value.city_img}}" />-->
+<!--                        {{else}}-->
+<!--                        {{/if}}-->
+                        <?php echo $v['name'];?>
+                    </a>
+                </li>
+               <?php endforeach;?>
+            </ul>
+        </div>
+    </section>
+    <aside class="more-city">
+        <p>更多城市即将开通</p>
+    </aside>
+    </main>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<!--<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>-->
+<script src="/js/wap/template.js"></script>
+<script>
+    $(function () {
+       var city = localStorage.getItem('MOBILE_CURRENTCITY') ? localStorage.getItem('MOBILE_CURRENTCITY') : localStorage.getItem('MOBILE_DEFAULTCITY');
+
+        $("#baidu_geo").html(city);
+        $(".list li img").click(function(){
+            var data=$(this).attr('data');
+            localStorage.setItem("selected_city",city);
+            window.location.href="/web/wappay/nindex?city="+data;
+        })
+
+    });
+</script>
+</html>
+

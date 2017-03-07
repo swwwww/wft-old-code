@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>领取奖励，来玩翻天一起快乐遛娃</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="/css/invite.css?t=333" rel="stylesheet" />
+<!--    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>-->
+</head>
+<body style="background-color: #d6292b;" >
+    <section id="inpr" class="inpr" >
+    	<div class="head">
+    		<i class="head-log"></i>
+    		<span class="head-font">玩翻天</span>
+    		<i class="head-home"></i>
+    	</div>
+        <div class="inpr-all">
+            <div class="inpr-info">
+                <img src="<?php echo $inviteImg; ?>" class="inpr-info-img">
+                <div class="inpr-info-font">
+                    <span class="inpr-info-msg">玩翻天小伙伴欢迎你！<br>这是你领到的现金劵哟！</span>
+                    <a id="more-info">
+                        <span class="inpr-info-det">活动详情 </span>
+                        <i class="inpr-info-arrow"></i>
+                    </a>
+                </div>
+            </div>
+           <div class="inpr-list">
+               <div class="inpr-tic">
+                    <span class="inpr-tic-num inpr-tic-pos">
+                   <mark class="numbers"><?php echo $ir->r_reciever_award; ?></mark>
+                   <mark class="inpr-tic-unit inpr-tic-pos"><?php echo $desc; ?></mark><br>
+                   <mark class="inpr-tic-font inpr-tic-pos">可兑换游玩门票</mark>
+                    </span>
+               </div>
+           </div>
+
+        </div>
+    </section>
+
+    <!--底部弹出层提示框-->
+    <section id="check" class="check">
+        <a id="gohref"  class="check-a">立即查看 是否到账</a>
+        <span class="check-font">
+            现金劵已放入账户
+            <a style="text-decoration:none" class="check-font-num"><?php echo $phone; ?></a>
+        </span>
+    </section>
+
+    <!--弹出层活动规则及温馨提示框-->
+    <div class="rule">
+        <div class="rule-popup">
+            <div class="rule-popup-content">
+                <div class="rule-popup-title">活动规则</div>
+<?php $i=1; ?>
+                <p><?php echo $i++; ?>.分享邀请给朋友，TA在注册后会获得<?php echo $reciever_tip; ?>，你会获得<?php echo $inviter_tip; ?></p>
+                <?php if($inviter_award_limit): ?>
+                    <p><?php echo $i++; ?>.TA在玩翻天的首单完成后，你也将获得现金奖励，单次最高达<?php echo $inviter_award_limit; ?>元。</p>
+                <?php endif; ?>
+                <p><?php echo $i++; ?>.邀请新用户成功越多，获得积分、现金奖励越多。</p>
+                <div class="rule-popup-title">温馨提示</div>
+                <p>1、该邀请活动为新用户专享，每人每设备只能兑换一个。</p>
+                <p>2、每用户每天最高<?php echo $ir->invite_per_day; ?>个邀请有奖机会。</p>
+                <br/>
+
+                <?php //echo $rule->banner; ?>
+                <div id="close-btn">关闭</div>
+                <div class="circle-top"></div>
+                <div class="circle-right"></div>
+                <div class="circle-bottom"></div>
+                <div class="circle-left"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="matte"></div>
+    <script src="/js/order-center/zepto.js" type="text/javascript"></script>
+    <script>
+        (function(){
+
+            $('#gohref').on("click",function(){
+                <?php if($agent == 'wx'): ?>
+                    window.location.href = 'http://wan.wanfantian.com/web/wappay/nindex';
+                <?php elseif($agent == 'wft'): ?>
+                if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                    document.location.href = 'user_login$$';
+                } else if (navigator.userAgent.match(/android/i)) {
+                    window.getdata.user_login();
+                }
+                <?php else: ?>
+                    document.location.href = '<?php echo $appdown; ?>';
+
+                <?php endif; ?>
+            });
+
+            $("#more-info").on("click",function(){
+                $(".rule").show();
+                $(".matte").show();
+            });
+            $("#close-btn").on("tap",function(){
+                $(".rule").hide();
+                $(".matte").hide();
+            })
+        })();
+    </script>
+</body>
+<?php echo $this->partial('web-invite/index/sharejs.phtml'); ?>
+</html>

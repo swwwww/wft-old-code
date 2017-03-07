@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>账户余额</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/my.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <nav class="ac-title">
+        <h2>账户余额</h2>
+        <div class="totle"><i>&yen;{{money}}</i></div>
+    </nav>
+    <section class="wrapper">
+        <h3 class="ac-detail">收支明细</h3>
+        <ul class="ac-list">
+            {{if flows}}
+            {{each flows}}
+            <li class="item">
+                <div class="source">
+                    <h4>{{$value.desc}}</h4>
+                    <span>余额：{{$value.surplus_money}}</span>
+                </div>
+                <div class="time">
+                    <time>{{$value.dateline}}</time>
+                    <span class="num">{{$value.flow_money}}</span>
+                </div>
+            </li>
+            {{/each}}
+            {{else}}
+                <div class="nodata"><img src="/images/wap/images/nodata.gif" /></div>
+            {{/if}}
+        </ul>
+    </section>
+    </script>
+<input type="hidden" id="uid" value="<?php echo $_COOKIE['uid'];?>">
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    $(function(){
+        $.ajax({
+            type:'POST',
+            url:"/user/account/index",
+            dataType:'json',
+            async: true,
+            data:{'uid':$('#uid').val()},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    //window.location.href = "";
+                    //console.log(result.response_params);
+                    for(var i=0;i<result.response_params.flows.length;i++){
+                        var info = result.response_params.flows[i];
+                        var d=new Date(parseInt(info.dateline)*1000);
+                        info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ d.getMinutes()+':'+ d.getSeconds();
+
+                    }
+
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+        })
+    })
+</script>
+</html>

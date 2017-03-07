@@ -1,0 +1,180 @@
+<hgroup class="box">
+    <header>
+        <h3>卡券管理</h3>
+        &nbsp;&nbsp;&nbsp;
+        <select id="cityChange">
+            <?php foreach ($cityData as $k => $v): ?>
+                <option <?php echo ($city == $k) ? 'selected' : ''; ?>
+                    data-src="/wftadlogin/coupons?city=<?php echo $k; ?>"><?php echo $v; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        卡券列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput" style="margin-top: 5px;width:200px" placeholder="搜索卡券名称" name="k"
+                       value="">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">卡券ID</th>
+                <th class="size2">类别</th>
+                <th class="size4">卡券名称</th>
+                <th class="size1">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            状态
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=0&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">所有</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=1&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">已结束</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=2&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">正在进行</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=3&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">未发布</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=4&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">即将开始</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="/wftadlogin/coupons?status=5&<?php unset($_GET['status'], $_GET['p']);
+                                                       echo http_build_query($_GET); ?>">即将上架</a></li>
+                        </ul>
+                    </div>
+                </th>
+                <th class="size1">价格</th>
+                <th class="size3">所属商家</th>
+                <th class="size1">存量</th>
+                <th class="size1">已售</th>
+                <th class="size1">虚拟票</th>
+                <th class="size2">评论</th>
+                <th class="size2">浏览</th>
+                <th class="size2">分享</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $v): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $v->coupon_id; ?></td>
+                        <td class="size2">
+                            <?php echo ($v->coupon_join) ? '合作' : '非合作'; ?>
+                        </td>
+                        <td class="size4">
+                            <a href="/wftadlogin/coupons/new?mid=<?php echo $v->coupon_marketid; ?>&id=<?php echo $v->coupon_id; ?>&city=<?php echo $city; ?>">
+                                <?php echo $v->coupon_name; ?>
+                            </a>
+                        </td>
+                        <td class="size1">
+                            <?php
+                            if (!$v->coupon_join) {
+
+                            } elseif ($v->coupon_status == 0) {
+                                echo '未发布';
+                            } elseif ($v->coupon_uptime > time()) {
+                                echo '即将上架';
+                            } elseif ($v->coupon_starttime > time()) {
+                                echo '即将开始';
+                            } elseif ($v->coupon_endtime < time() || $v->coupon_buy >= $v->coupon_total) {
+                                echo '已结束';
+                            } else {
+                                echo '正在进行';
+                            }
+                            ?>
+                        </td>
+                        <td class="size1"><?php echo $v->coupon_price; ?></td>
+                        <td class="size3"><a
+                                href="/wftadlogin/seller/marketlist?id=<?php echo $v->coupon_marketid; ?>"><?php echo $v->coupon_marketname; ?></a>
+                        </td>
+                        <td class="size1"><?php echo $v->coupon_total; ?></td>
+                        <td class="size1"><?php echo $v->coupon_buy; ?></td>
+                        <td class="size1"><?php echo $v->coupon_vir; ?></td>
+                        <td class="size2"><a
+                                href="/wftadlogin/post?id=<?php echo $v->coupon_id; ?>&type=coupon"><?php echo $v->post_number; ?></a>
+                        </td>
+                        <td class="size2"><?php echo $v->coupon_click; ?></td>
+                        <td class="size2 share_number">0</td>
+                        <td class="size3">
+                            <a class="btn btn-info" href="/wftadlogin/order?cid=<?php echo $v->coupon_id; ?>">订单</a>
+                            <a class="btn btn-danger"
+                               href="/wftadlogin/coupons/delete?cid=<?php echo $v->coupon_id; ?>">删除</a>
+                            <a class="btn btn-primary changer"
+                               href="/wftadlogin/coupons/change?type=1&cid=<?php echo $v->coupon_id; ?>&stu=<?php echo $v->coupon_status ? 0 : 1; ?>"><?php echo $v->coupon_status ? '取消发布' : '发布'; ?></a>
+                            <a class="btn btn-info changer"
+                               href="/wftadlogin/coupons/change?type=2&cid=<?php echo $v->coupon_id; ?>">置顶</a>
+                            <a href="/wftadlogin/firstpage/link?lid=<?php echo $v->coupon_id; ?>&type=2"
+                               class="ui-button">推送首页</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td><p>暂无卡券数据 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.btn-danger').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r == true) {
+                var url = $(this).attr('href');
+                $.get(url, function (result) {
+                    if (result.status == 1) {
+                        window.location.reload();
+                    }
+                });
+            }
+            return false;
+        })
+        $('.changer').click(function () {
+            var url = $(this).attr('href');
+            $.get(url, function (result) {
+                if (result.status == 1) {
+                    window.location.reload();
+                }
+            });
+            return false;
+        })
+
+        // 城市下拉
+        $('#cityChange').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/index/sharedata?type=coupon&id=' + id);
+        })
+    })
+</script>

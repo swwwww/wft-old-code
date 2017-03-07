@@ -1,0 +1,312 @@
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:void(0)">商品订单</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $user_name = null;
+        $user_phone = null;
+        $buy_start = null;
+        $buy_end = null;
+        $check_start = null;
+        $check_end = NULL;
+
+        if (isset($_GET['user_name']) && $_GET['user_name']) {
+            $user_name = $_GET['user_name'];
+        }
+
+        if (isset($_GET['user_phone']) && $_GET['user_phone']) {
+            $user_phone = $_GET['user_phone'];
+        }
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['check_start']) && $_GET['check_start']) {
+            $check_start = $_GET['check_start'];
+        }
+
+        if (isset($_GET['check_end']) && $_GET['check_end']) {
+            $check_end = $_GET['check_end'];
+        }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">购买时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_start;?>">
+                <input name="buy_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_end;?>">
+            </th>
+            <th width="160">验证时间</th>
+            <th>
+                <input name="check_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_start;?>">
+                <input name="check_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $check_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="user_name" value="<?php echo $user_name;?>">
+            </th>
+            <th width="160">用户手机号</th>
+            <th>
+                <input type="text" class="cssInput" name="user_phone" value="<?php echo $user_phone;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/order/goodOrder?good_id=<?php echo $goodData->id;?>" style="background-color: green" class="ui-button">清空所有选项</a>
+                <input type="hidden" name="good_id" value="<?php echo $goodData->id;?>">
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/order/outdata" style="background-color: green" id="out-data" class="ui-button">导出订单</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        订单列表
+    </div>
+    <div>
+        <!--<table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="50">订单号</th>
+                <th width="100">用户名</th>
+                <th width="100">用户手机号</th>
+                <th width="100">商品id</th>
+                <th width="100">购买时间</th>
+                <th width="200">验证时间</th>
+                <th width="200">商品名称</th>
+                <th width="150">套系</th>
+                <th width="150">数量</th>
+                <th width="100">入账</th>
+                <th width="100">出账</th>
+                <th width="100">手续费</th>
+                <th width="100">商家名称</th>
+                <th width="100">审核状态</th>
+                <th width="100">订单状态</th>
+                <th width="100">支付渠道</th>
+                <th width="100">支付账号</th>
+            </tr>
+            <?php /*foreach ($data as $key => $row): */?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <?php /*if($row['check_status'] == 2 && $row['pay_status'] > 1 &&  ($row['status'] == 1 || $row['status'] == 2) && $row['test_status'] < 3):*/?>
+                            <input type="checkbox" name="check_ids" value="<?php /*echo $row['id']; */?>">
+                        <?php /*else:*/?>
+                            &nbsp;
+                        <?php /*endif;*/?>
+                    </td>
+                    <td width="50"><a href="/wftadlogin/order/info?order_sn=<?php /*echo $row['order_sn'];*/?>"><?php /*echo $row['order_sn'] . ($row['buy_number'] > 1 ? '_'. $row['sort'] : ''); */?></a></td>
+                    <td width="100"><?php /*echo $row['username']; */?></td>
+                    <td width="100"><?php /*echo $row['buy_phone']; */?></td>
+                    <td width="100"><?php /*echo $row['coupon_id']; */?></td>
+                    <td width="100"><?php /*echo date('Y-m-d H:i',$row['dateline']); */?></td>
+                    <td width="200"><?php /*echo $row['use_datetime'] ? date('Y-m-d H:i',$row['use_datetime']) : ''; */?></td>
+                    <td width="200"><?php /*echo $row['coupon_name']; */?></td>
+                    <td width="150"><?php /*echo $row['price_name']; */?></td>
+                    <td width="150">1</td>
+                    <td width="100"><?php /*echo ($row['pay_status'] > 1) ? $row['coupon_unit_price'] : '' */?></td>
+                    <td width="100">
+                        <?php
+/*                            if (($row['status'] == 2 || $row['status'] == 3)) {
+                                echo $row['back_money'] ? $row['back_money'] : $row['coupon_unit_price'];
+                            }
+                        */?>
+                    </td>
+                    <td width="100"></td>
+                    <td width="100"><?php /*echo $row['name']; */?></td>
+                    <td width="100"><?php /*echo ($row['check_status'] == 1) ? '未审核' : '已审核'; */?></td>
+                    <td width="100">
+                        <?php
+/*                            if ($row['pay_status'] < 2) {
+                                echo '未支付';
+                            } elseif ($row['pay_status'] >= 2 && $row['status'] == 0) {
+                                echo '待使用';
+                            } elseif ($row['status'] == 1 && $row['test_status'] == 0) {
+                                echo '已使用';
+                            } elseif ($row['test_status'] == 0 && $row['status'] == 3) {
+                                echo '已提交退款';
+                            } elseif ($row['test_status'] == 1 && $row['status'] == 3) {
+                                echo '已受理退款';
+                            } elseif ($row['status'] == 2 && $row['test_status'] < 3) {
+                                echo '已退款';
+                            } elseif ($row['test_status'] == 3) {
+                                echo '已提交结算';
+                            } elseif ($row['test_status'] == 4) {
+                                echo '已受理结算';
+                            } elseif ($row['test_status'] == 5) {
+                                echo '已结算';
+                            }
+                        */?>
+                    </td>
+                    <td width="100"><?php /*echo $accountType[$row['account_type']]; */?></td>
+                    <td width="100"><?php /*echo $row['account']; */?></td>
+                </tr>
+            <?php /*endforeach; */?>
+            </tbody>
+        </table>-->
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="100">验证码</th>
+                <th width="150">订单号</th>
+                <th width="80">用户名</th>
+                <th width="80">用户手机号</th>
+                <th width="200">商品名</th>
+                <th width="150">套系</th>
+                <th width="150">购买时间</th>
+                <th width="150">验证时间</th>
+                <th width="100">验证码状态</th>
+                <th width="100">审核状态</th>
+                <th width="100">结算状态</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <?php if($row['check_status'] == 2 && $row['pay_status'] > 1 &&  ($row['status'] == 1 || $row['status'] == 2) && $row['test_status'] < 3):?>
+                            <input type="checkbox" name="check_ids" value="<?php echo $row['id']; ?>">
+                        <?php endif;?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['id']. $row['password']; ?>
+                    </td>
+                    <td width="150">
+                        <a href="/wftadlogin/order/info?order_sn=<?php echo $row['order_sn'];?>"><?php echo $row['order_sn']; ?></a>
+                    </td>
+                    <td width="80"><?php echo $row['username']; ?></td>
+                    <td width="80"><?php echo $row['buy_phone']; ?></td>
+                    <td width="200"><?php echo $row['coupon_name']; ?></td>
+                    <td width="150"><?php echo $row['price_name']; ?></td>
+                    <td width="150"><?php echo date('Y-m-d H:i',$row['dateline']); ?></td>
+                    <td width="150"><?php echo $row['use_datetime'] ? date('Y-m-d H:i',$row['use_datetime']) : ''; ?></td>
+                    <td width="100"><?php echo $this->code_status[$row['status']]; ?></td>
+                    <td width="100"><?php echo ($row['check_status'] == 2) ? '已审核' : '未审核'; ?></td>
+                    <td width="100">
+                        <?php
+                            $order_stay = '';
+                            if ($row['test_status'] == 3) {
+                                $order_stay = '已提交结算';
+                            } elseif ($row['test_status'] == 4) {
+                                $order_stay = '已受理结算';
+                            } elseif ($row['test_status'] == 5) {
+                                $order_stay = '已结算';
+                            }
+                            echo $order_stay;
+                        ?>
+                    </td>
+                    <td width="150">
+                        <?php if($row['check_status'] == 2 && $row['pay_status'] > 1 &&  ($row['status'] == 1 || $row['status'] == 2) && $row['test_status'] < 3):?>
+                            <a href="/wftadlogin/code/check?type=3&id=<?php echo $row['id']; ?>" class="ui-button">提交结算</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-all">全选
+        <button class="ui-button" id="mark-check">提交结算</button>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="100">销售数量</th>
+                <th width="100">销售金额</th>
+                <th width="100">退款数量</th>
+                <th width="100">退款金额</th>
+                <th width="100">剩余数量</th>
+                <th width="100">手续费</th>
+                <th width="100">收入合计</th>
+            </tr>
+                <tr style="text-align: left">
+                    <td width="100"><?php echo $count['sale_num']; ?></td>
+                    <td width="100"><?php echo $count['sale_money']; ?></td>
+                    <td width="100"><?php echo $count['back_num']; ?></td>
+                    <td width="100"><?php echo $count['back_money']; ?></td>
+                    <td width="100"><?php echo $count['out_num']; ?></td>
+                    <td width="100"> </td>
+                    <td width="100"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //全选和全不选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //提交结算
+        $('#mark-check').click(function() {
+            if (confirm('确定将所有选中的订单提交结算？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/code/check?type=3';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + '@';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&id=' + id;
+                }
+            }
+        });
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+    });
+</script>
+
+

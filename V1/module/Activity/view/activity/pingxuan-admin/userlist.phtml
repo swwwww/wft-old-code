@@ -1,0 +1,50 @@
+
+
+<div class="box">
+    <div class="box-title">
+        参与用户列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="50">用户名</th>
+                <th width="50">open_id</th>
+                <th width="50">unionid</th>
+                <th width="100">参与时间</th>
+                <th width="100">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['id']; ?></td>
+                    <td width="50">
+                        <?php echo $row['name']; ?>
+                    </td>
+
+                    <td width="50">
+                        <?php echo $row['open_id']; ?>
+                    </td>
+
+
+                    <td width="50">
+                        <?php echo $row['unionid']; ?>
+                    </td>
+
+
+                    <td width="100">
+                        <?php echo date('Y-m-d H:i:s',$row['dateline']); ?>
+                    </td>
+
+                    <th width="100"><a class="ui-button" href="/activity/pingxuanadmin/userprize?unionid=<?php echo $row['unionid']; ?>">中奖奖品</a> <a class="ui-button" href="/activity/pingxuanadmin/prizelog?unionid=<?php echo $row['unionid'];?>">投票记录</a></th>
+
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->page; ?>
+        </footer>
+    </div>
+</div>
+

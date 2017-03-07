@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>订单列表</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="stylesheet" href="/css/wap/layout.css?ver=<?php echo time();?>" />
+    <link rel="stylesheet" href="/css/wap/custom.css">
+    <link rel="stylesheet" href="/css/wap/iosOverlay.css">
+    <script>
+        /*750页面自动缩放*/
+        (function() {
+            var w = window.screen.width,
+                s = w / 750,
+                u = navigator.userAgent,
+                m = '<meta name="viewport" content="width=750,';
+            if (/android (\d+\.\d+)/i.test(u)) {
+                if (parseFloat(RegExp.$1 > 2.3)) {
+                    m += "minimum-scale = " + s + ", maximum-scale = " + s + ","
+                }
+            } else {
+                m += "user-scalable=no,"
+            }
+            m += 'target-densitydpi=device-dpi">';
+            document.write(m)
+        }());
+    </script>
+</head>
+<body>
+<!--menu tab-->
+<nav id="menu" class="menu">
+    <div class="menu-list">
+        <ul class="menu-list-ul">
+            <li class="menu-list-li all sel_0">
+                <a href="/web/wappay/allorder">全部</a>
+            </li>
+            <li class="menu-list-li menu-wait-pay  sel_1">
+                <a href="/web/wappay/allorder?order_status=1">待付款</a>
+            </li>
+            <li class="menu-list-li menu-wait-use sel_2">
+                <a href="/web/wappay/allorder?order_status=2">待使用</a>
+            </li>
+            <li class="menu-list-li menu-wait-comm sel_3">
+                <a href="/web/wappay/allorder?order_status=3">待评价</a>
+            </li>
+            <li class="menu-list-li menu-refund sel_4">
+                <a href="/web/wappay/allorder?order_status=4">退款/返利</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<?php if(!$data):?>
+    <div class="nodata" style="text-align: center"><img src="/images/wap/nodata.gif" /></div>
+<?php else:?>
+    <div class="inner">
+        <div class="adv-list">
+            <?php foreach($data as $v):?>
+                <section class="order">
+                    <div class="order-head">
+    <span class="order-head-title">
+        <?php
+        if($v['order_type']==1){
+            echo '商品';
+        }elseif($v['order_type']==2){
+            echo '活动';
+        }elseif($v['order_type']==3){
+            echo '拼团';
+        }
+        ?>订单
+        <?php echo  $v['order_sn']?>
+<!--        --><?php //var_dump($v)?>
+    </span>
+                        <?php if($v['pay_status']==5 && $v['rebate']>0):?>
+                            <span class="order-head-notice">返利<?php echo $v['rebate'];?>元</span>
+                        <?php elseif($v['pay_status']==3 || $v['pay_status']==4):?>
+<!--                            --><?php //if($v['order_type']==2):?>
+<!--                                <span class="order-head-notice">活动组团失败，已自动退款</span>-->
+<!--                            --><?php //elseif($v['order_type']==3):?>
+<!--                                --><?php //if($v['join_number']<$v['limit_number']):?>
+<!--                                    <span class="order-head-notice">未达人数组团失败，已自动退款</span>-->
+<!--                                --><?php //else:?>
+<!--                                    <span class="order-head-notice">超时组团失败，已自动退款</span>-->
+<!--                                --><?php //endif;?>
+<!--                            --><?php //endif;?>
+                        <?php endif;?>
+                        <?php if($v['pay_status']==7 && $v['order_type']==3):?>
+                            <?php if($v['valid_time']<time()):?>
+                                <span class="order-head-notice">未在有效期内使用，商品已过期</span>
+                            <?php elseif($v['g_end_time']<time()):?>
+                                <span class="order-head-notice">未在指定时间参加，商品已过期</span>
+                            <?php endif;?>
+                        <?php endif;?>
+                        <span class="order-head-status">
+        <?php
+        if($v['pay_status']<2){
+//            echo '待付款';
+        }elseif($v['pay_status']==2){
+            if($v['order_type']==1){
+                echo '待使用';
+            }elseif($v['order_type']==2){
+                if($v['activity_start_time']<time() && $v['activity_end_time']>time() && $v['activity_join_number'] < $v['activity_least_number']){
+                    echo '报名中';
+                }else{
+                    echo '待出行';
+                }
+            }else{
+                if($v['valid_time']>time()){
+                    echo '组团中';
+                }else{
+                    echo '已成团';
+                }
+            }
+        }elseif($v['pay_status']==3){
+            echo '退款中';
+        }elseif($v['pay_status']==4){
+            echo '退款成功';
+        }elseif($v['pay_status']==5){
+
+            if($v['rebate']>0){
+                echo '已返利';
+            }elseif($v['comment']==1){
+                echo '已完成';
+            }else{
+                echo '待评价';
+            }
+
+        }elseif($v['pay_status']==6){
+            echo '已过期';
+        }elseif($v['pay_status']==7){
+            echo '组团中';
+        }
+        ?>
+    </span>
+                    </div>
+                    <a href="
+                    <?php
+                    if($v['pay_status']>=2){
+                        if($v['order_type']==2) {
+                            echo '/web/kidsplay/orderdetail?orderId='.$v['order_sn'];
+                        }else{
+                            echo '/web/wappay/orderdetail?orderId='.$v['order_sn'];
+                        }
+                    }else{
+                        echo '#';
+                    }
+                    ?>
+                    ">
+                        <div class="order-msg">
+                            <img src="<?php echo $v['img'];?>" class="order-msg-img">
+                            <div class="order-msg-info">
+                                <span class="order-msg-title"><?php echo $v['title'];?></span>
+                                <?php if($v['order_type']==1 && $v['pay_status']==2):?>
+                                    <span class="order-msg-time">兑换方式：<?php echo $v['order_method'];?></span>
+                                    <span class="order-msg-way">特别说明：<?php echo $v['use_time'];?></span>
+                                <?php elseif($v['order_type']==2):?>
+                                    <span class="order-msg-time">活动时间：<?php echo date("Y-m-d H:i",$v['start_time']);?> - <?php echo date('Y-m-d H:i',$v['end_time']);?></span>
+                                    <span class="order-msg-way">活动地点：<?php echo $v['activity_address'];?></span>
+                                    <?php if($v['pay_status']==2):?>
+                                        <span class="order-msg-addr">集合方式：<?php echo $v['activity_meeting'];?></span>
+                                    <?php endif;?>
+                                <?php elseif($v['order_type']==3 && $v['pay_status']!=0):?>
+                                    <span class="order-msg-time">活动时间：<?php echo date("Y-m-d H:i",$v['start_time']);?> - <?php echo date('Y-m-d H:i',$v['end_time']);?></span>
+                                    <span class="order-msg-way">活动地点：<?php echo $v['activity_address'];?></span>
+                                <?php endif;?>
+                            </div>
+                            <div class="order-msg-foot">
+                                <?php if($v['order_type']==2):?>
+                                    <p class="order-msg-num">出行人：<span id="order-num7"><?php echo $v['buy_number'];?></span></p>
+                                <?php else:?>
+                                    <p class="order-msg-num">数量：<span id="order-num1"><?php echo $v['buy_number'];?></span></p>
+                                <?php endif;?>
+                                <p class="order-msg-paid"><?php if($v['pay_status']<2){echo '金额';}else{echo '实付';}?><span id="order-paid1">￥<?php echo $v['money'];?></span></p>
+
+                                 <?php if($v['pay_status']<2):?>
+                                    <a href="javascript:;" id="doPay" data="<?php echo $v['order_sn'];?>">
+                                        <span class="order-msg-qcode">去支付</span>
+                                    </a>
+                                    <span class="order-msg-cancel" data-sn="<?php echo $v['order_sn'];?>" data-type="<?php echo $v['order_type'];?>">取消订单</span>
+                                <?php endif;?>
+
+                                <?php if($v['pay_status']==2):?>
+                                    <a href="/web/kidsplay/showcode?order_sn=<?php echo $v['order_sn'];?>&title=<?php echo $v['title'];?>&start_time=<?php echo $v['activity_start_time'];?>&end_time=<?php echo $v['activity_end_time'];?>&method=<?php echo $v['order_method'];?>&usetime=<?php echo $v['use_time'];?>&order_type=<?php echo $v['order_type'];?>&meet=<?php echo $v['activity_address'];?>&useaddr=<?php echo $v['use_address'];?>"><span class="order-msg-qcode">验证码</span></a>
+                                <?php elseif($v['pay_status']==5 && $v['comment']==0):?>
+                                    <a href="<?php if($v['order_type']==2){echo '/web/organizer/review?id='.$v['coupon_id'].'&type=7&order_sn='.$v['order_sn'];}else{echo '/web/organizer/review?id='.$v['coupon_id'].'&type=2&order_sn='.$v['order_sn'];};?>">
+                                        <span class="order-msg-qcode">去评价</span>
+                                    </a>
+<!--                                    <span class="order-msg-cancel" data-sn="--><?php //echo $v['order_sn'];?><!--" data-type="--><?php //echo $v['order_type'];?><!--">删除订单</span>-->
+                                <?php endif;?>
+                            </div>
+                        </div>
+                    </a>
+                </section>
+            <?php endforeach;?>
+        </div>
+    </div>
+<?php endif;?>
+<script id="more" type="text/html">
+    {{each response_params}}
+    <section class="order">
+        <div class="order-head">
+    <span class="order-head-title">
+        {{if $value.order_type==1}}商品订单{{else if $value.order_type==2}}活动订单{{else}}拼团订单{{/if}}
+    </span>
+            {{if $value.pay_status==5 && $value.rebate>0}}
+            <span class="order-head-notice">返利{{$value.rebate}}元</span>
+            {{else if $value.pay_status==3 || $value.pay_status==4}}
+            {{if $value.order_type==2}}
+            <span class="order-head-notice">活动组团失败，已自动退款</span>
+            {{else if $value.order_type==3}}
+            {{if $value.join_number>$value.limit_number}}
+            <span class="order-head-notice">未达人数组团失败，已自动退款</span>
+            {{else}}
+            <span class="order-head-notice">超时组团失败，已自动退款</span>
+            {{/if}}
+            {{/if}}
+            {{else if $value.pay_status==7 && $value.order_type==3}}
+            {{if $value.valid_time < time}}
+            <span class="order-head-notice">未在有效期内使用，商品已过期</span>
+            {{else if $value.g_end_time < time}}
+            <span class="order-head-notice">未在指定时间参加，商品已过期</span>
+            {{/if}}
+            {{/if}}
+            <span class="order-head-status">
+        {{if $value.pay_status < 2}}
+           <!-- 待付款-->
+        {{else if $value.pay_status==2}}
+            {{if $value.order_type==1}}
+                待使用
+            {{else if $value.order_type==2}}
+                {{if $value.over_time > time && $value.activity_join_number < $value.activity_least_number}}
+                    报名中
+                {{else}}
+                    待出行
+                {{/if}}
+            {{else}}
+                {{if $value.valid_time > time}}
+                    组团中
+                {{else}}
+                    已成团
+                {{/if}}
+            {{/if}}
+        {{else if $value.pay_status==3}}
+            退款中
+        {{else if $value.pay_status==4}}
+            已退款
+        {{else if $value.pay_status==5}}
+            {{if $value.rebate>0}}
+                已返利
+            {{else if $value.comment==1}}
+                已完成
+            {{else}}
+                待评价
+            {{/if}}
+        {{else if $value.pay_status==6}}
+            已过期
+        {{else if $value.pay_status==7}}
+            组团中
+        {{/if}}
+    </span>
+        </div>
+        <a href="{{if $value.order_type==2}}/web/kidsplay/orderdetail?debug=1&orderId={{$value.order_sn}}{{else}}/web/wappay/orderdetail?orderId={{$value.order_sn}}{{/if}}">
+            <div class="order-msg">
+                <img src="{{$value.img}}" class="order-msg-img">
+                <div class="order-msg-info">
+                    <span class="order-msg-title">{{$value.title}}</span>
+                    {{if $value.order_type==1 && $value.pay_status==2}}
+                    <span class="order-msg-time">兑换方式：{{$value.order_method}}</span>
+                    <span class="order-msg-way">特别说明：{{$value.use_time}}</span>
+                    {{else if $value.order_type==2}}
+                    <span class="order-msg-time">活动时间：<?php echo date("m-d H",$v['activity_start_time']).':00';?> - <?php echo date('H',$v['activity_end_time']).':00';?></span>
+                    <span class="order-msg-way">活动地点：{{$value.activity_address}}</span>
+                    {{if $value.pay_status==2}}
+                    <span class="order-msg-addr">集合方式：{{$value.activity_meeting}}</span>
+                    {{/if}}
+                    {{else if $value.order_type==3 && $value.pay_status==0}}
+                    <span class="order-msg-time">活动时间：<?php echo date("m-d H",$v['activity_start_time']).':00';?> - <?php echo date('H',$v['activity_end_time']).':00';?></span>
+                    <span class="order-msg-way">活动地点：<?php echo $v['activity_address'];?></span>
+                    {{/if}}
+                </div>
+                <div class="order-msg-foot">
+                    {{if $value.order_type==2}}
+                    <p class="order-msg-num">出行人：<span id="order-num7">{{$value.buy_number}}</span></p>
+                    {{else}}
+                    <p class="order-msg-num">数量：<span id="order-num1">{{$value.buy_number}}</span></p>
+                    {{/if}}
+                    <p class="order-msg-paid">{{if $value.pay_status < 2}}金额{{else}}实付{{/if}}<span id="order-paid1">￥{{$value.money}}</span></p>
+
+                     {{if $value.pay_status<2}}
+                    <a href="javascript:;" id="doPay" data="{{$value.order_sn}}">
+                        <span class="order-msg-qcode">去支付</span>
+                    </a>
+                    <span class="order-msg-cancel" data-sn="{{$value.order_sn}}" data-type="{{$value.order_type}}">取消订单</span>
+                    {{/if}}
+
+                    {{if $value.pay_status==2}}
+                    <a href="/web/kidsplay/showcode?order_sn={{$value.order_sn}}&title={{$value.title}}&start_time={{$value.activity_start_time}}&end_time={{$value.activity_end_time}}&method={{$value.order_method}}&usetime={{$value.use_time}}&order_type={{$value.order_type}}&meet={{$value.activity_address}}&useaddr={{$value.use_address}}"><span class="order-msg-qcode">验证码</span></a>
+                    {{else if $value.pay_status==5 && $value.comment==0}}
+                    <a href="{{if $value.order_type==2}}/web/organizer/review?id={{$value.coupon_id}}&type=7&order_sn={{$value.order_sn}}{{else}}/web/organizer/review?id={{$value.coupon_id}}&type=2&order_sn={{$value.order_sn}}{{/if}}">
+                        <span class="order-msg-qcode">去评价</span>
+                    </a>
+                    {{/if}}
+                </div>
+            </div>
+        </a>
+    </section>
+    {{/each}}
+</script>
+
+<!--取消确定弹窗-->
+<section class="mark-pos cancel" style="display: none">
+    <div class="cancel-head"></div>
+    <div class="cancel-foot">
+        <a class="cancel-foot-cancel" id="js_cancel">取消</a>
+        <a class="cancel-foot-sure" id="js_sure">确定</a>
+    </div>
+</section>
+
+<!--遮罩层-->
+<div class="mark" id="mark_share" style="display: none"></div>
+<input type="hidden" name="order_status" id="order_status" value="<?php echo $order_status;?>">
+</body>
+<script src="/js/zepto1.1.6.min.js?ver=<?php echo time();?>" type="text/javascript"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script src="/js/wap/plugin/custom.js"></script>
+<script src="/js/wap/plugin/iosOverlay.js"></script>
+<script src="/js/wap/plugin/spin.min.js"></script>
+<script src="/js/wap/plugin/prettify.js"></script>
+<script>
+    (function(){
+//        document.cookie='open_id=oBzdouDW7_CB-Sbby1dlk9bu-ebE;path=/';
+//        document.cookie='phone=13871281565;path=/';
+//        document.cookie='token=2a51400ae195e7999af09197e6b53e49;path=/';
+//        document.cookie='uid=70623;path=/';
+        /*获取导航栏*/
+        var oli = $("#menu li"),
+            status = $("#order_status").val();
+        $('.sel_'+status).siblings().removeClass("menu-list-cur");
+        $('.sel_'+status).addClass("menu-list-cur");
+
+        /*获取模块*/
+        var sec = new Array();
+        sec[0] = $(".order");
+        sec[1] = $(".order-unPaying");
+        sec[2] = $(".order-unUsing");
+        sec[3] = $(".order-unComm");
+        sec[4] = $(".order-refunding");
+
+        /*待付款、待使用、待评价、退款/返利相互切换*/
+        for(var i = 1; i < oli.length; i++){
+            oli[i].onclick = function () {
+                for(var i = 0; i < oli.length; i++){
+                    if(oli[i] == this){
+//                        oli[i].className  = "menu-list-cur";
+                        $(this).addClass("menu-list-cur");
+                        sec[i].css('display',"inline-block");
+                    }else {
+                        oli[i].className  = "menu-list-li";
+                    }
+                }
+            }
+        }
+
+        $("#doPay").click(function(){
+            var order_sn = $(this).attr("data");
+            console.log()
+            $.post("/web/wappay/dopay",{"order_sn":order_sn},function(d){
+                if(d.response_params.status==1){
+                    var payData = d.response_params.payData;
+                    var orderData = d.response_params.orderData;
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady', weixinpay(payData,orderData), false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady', weixinpay(payData,orderData));
+                            document.attachEvent('onWeixinJSBridgeReady', weixinpay(payData,orderData));
+                        }
+                    }else{
+                        weixinpay(payData,orderData);
+                    }
+                }
+            },'json')
+        });
+
+        /*add
+         * 点击取消订单弹窗中的按钮响应函数
+         * */
+
+        var btnCanOrder = $('.order-msg-cancel');
+        var btnCancel = $('#js_cancel');
+        var btnSure = $('#js_sure');
+        var order_sn;
+        var type;
+        btnCanOrder.on('tap', function () {
+            order_sn = $(this).attr('data-sn');
+            type = $(this).attr('data-type');
+            var title = $(this).text();
+            $('.cancel-head').text(title);
+            $('#mark_share').show();
+            $('.cancel').show();
+//                console.log(oSec);
+
+            btnSure.on('tap',function(){
+                console.log(order_sn);
+                console.log(type);
+                $.ajax({
+                    type: "POST",
+                    url: "/pay/excercise/cancelOrder",
+                    dataType:'json',
+                    async: true,
+                    data:{'order_sn':order_sn,'type': type,'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function(result){
+                        console.log(result);
+                        if (result.response_params.status == 0) {
+                            alert(result.response_params.message);
+//                                        window.location.reload();
+                        }
+                        else if(result.response_params.status==1){
+                            //todo 成功
+                            alert(result.response_params.message);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+//                        console.log("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+//                            alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+//                    alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+                });
+                $('.mark').hide();
+                $('.cancel').hide();
+//            console.log(oSec);
+                /*点击取消订单弹出窗的确定按钮后*/
+            });
+
+            btnCancel.on('tap', function(){
+                $('.mark').hide();
+                $('.cancel').hide();
+            });
+        });
+
+
+
+        //加载更多
+        var counter = 1;
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh" style="font-size: 24px;height:50px;line-height: 50px;text-align: center;margin-bottom: 20px;margin-top: 10px;">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load" style="font-size: 24px;height:50px;line-height: 50px;text-align: center;margin-bottom: 20px;margin-top: 10px;"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData" style="font-size: 24px;height:50px;line-height:50px;text-align: center;margin-bottom: 20px;margin-top: 10px;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/user/orderlist",
+                    dataType:'json',
+                    async: true,
+                    data:{'order_status':status,'page': counter,'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function(data){
+                        var len= data.response_params.length;
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.adv-list').append(template('more', data));
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },500);
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                            return;
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+//                            alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+//                    alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                    }
+                });
+            }
+        });
+    }());
+
+    $(window).scroll(function(){
+        var leare=$(".left_area");
+        var neare=$("#self_intro");
+
+        var pageTop=document.body.scrollHeight;
+
+        var currTop=document.documentElement.scrollTop+document.body.scrollTop;
+
+        if(currTop >= (pageTop-50)){
+            leare.removeClass("scrollMove");
+            neare.removeClass("scrollMove");
+        }
+    });
+
+    function weixinpay(payData,orderData) {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+                "appId": ""+payData.appId+"",     //公众号名称，由商户传入
+                "timeStamp": ""+payData.timeStamp+"",         //时间戳，自1970年以来的秒数
+                "nonceStr": ""+payData.nonceStr+"", //随机串
+                "package": ""+payData.package+"",
+                "signType": ""+payData.signType+"",         //微信签名方式:
+                "paySign": ""+payData.paySign+"" //微信签名
+            },
+            function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                    loadingSuccess('支付成功');
+                    if(group_id){
+                        window.location.href='/web/organizer/shops?id='+orderData.coupon_id+'&group_id='+group_id;
+                    }else{
+                        window.location.href='/web/wappay/orderdetail?orderId='+orderData.order_sn;
+                    }
+//                    window.location.href='/web/wappay/newallorders';  //个人中心
+                    return false;
+
+                } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                    var ask = confirm('取消支付');
+                    if(ask){
+                        if(group_id){
+                            $.ajax({
+                                type: "POST",
+                                url: "/pay/index/cleanorder",
+                                dataType:"json",
+                                async: true,
+                                data: {
+                                    'order_sn':orderData.order_sn
+                                },
+                                headers: {
+                                    "VER": 10
+                                },
+                                success: function (result) {
+                                    if (result.response_params.status == 0) {
+                                        alert(result.response_params.message);
+                                    } else {
+                                        window.location.href="/web/wappay/nindex"
+                                    }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                    if (XMLHttpRequest.status == 401) {
+                                        //todo 跳转授权页面
+                                        alert(XMLHttpRequest.responseJSON.message);
+                                        window.location.href = '<?php echo $authorUrl;?>';
+                                    }
+                                    else if (XMLHttpRequest.status == 403) {
+                                        alert('接口验证失败，非法访问');
+                                    }
+                                    else if (XMLHttpRequest.status == 400) {
+                                        //                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                        alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                                    }
+                                    else {
+                                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                    }
+                                }
+                            });
+                        }else{
+                            window.location.href="/web/wappay/orderwait";
+                        }
+                    }
+                } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+                    loadingErr('支付失败');
+                } else {
+                    loadingErr('其他错误:'+res.err_msg);
+                }
+            }
+        );
+    }
+</script>
+</html>

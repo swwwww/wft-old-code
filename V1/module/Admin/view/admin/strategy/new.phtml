@@ -1,0 +1,124 @@
+<hgroup class="box">
+    <header>
+        <h3>游玩地</h3>
+        <i class="icon icon-list"></i>
+        添加攻略
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/strategy/save" method="post" id="strategy_save">
+    <header class="box-title"><?php echo $strategyData ? '修改':'添加';?>攻略</header>
+    <table class="table">
+        <tr>
+            <th width="160">提供者uid</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:60px" name="give_uid" value="<?php echo ($strategyData && $strategyData->give_uid) ? $strategyData->give_uid : ''; ?>">
+                <span><mark>可不填</mark</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">提供者姓名</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="give_name" value="<?php echo $strategyData ? $strategyData->give_username : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th>提供者头像 </span></th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" class="hidden" name="img" value="<?php echo $strategyData ? $strategyData->give_image : '';?>" />
+                    <span>　　请上传：<mark>120*120px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload" src="<?php echo $strategyData ? $strategyData->give_image : '';?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">适合月份</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:40px" name="suit_month" value="<?php echo $strategyData ? $strategyData->suit_month : ''; ?>"><span><mark>月</mark></span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">标题</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="title" value="<?php echo $strategyData ? $strategyData->title : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">图文详情</th>
+            <th colspan="3" width="600">
+                <script type="text/plain" id="myEditor" style="width:600px;height:240px;"><?php echo $strategyData ? htmlspecialchars_decode($strategyData->information) : '<p>这里我可以写一些输入提示</p>';?></script>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="id" value="<?php echo $strategyData ? $strategyData->id : 0;?>">
+                <input type="hidden" name="sid" value="<?php echo  $shopData->shop_id;?>">
+                <button id="ti-strategy" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $(function () {
+        //实例化编辑器
+        var um = UE.getEditor('myEditor');
+
+        // post提交
+        $('#ti-strategy').click(function () {
+            $.post('/wftadlogin/strategy/save', $('#strategy_save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+
+</script>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='img']").attr('value', data.result.url);
+                $(".fileupload").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+</script>
+
+
+

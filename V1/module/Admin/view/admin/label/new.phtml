@@ -1,0 +1,311 @@
+<hgroup class="box">
+    <header>
+        <h3>分类管理</h3>
+        <i class="icon icon-list"></i>
+
+        <a href="/wftadlogin/label<?php if($_COOKIE['city']==1): ?>/main<?php endif; ?>">返回分类列表</a>
+    </header>
+<!--    <aside class="tips">-->
+<!--        <i class="icon icon-notice"></i>-->
+<!--        <div>温馨提示：在 <mark><b>--><?php //echo $city;?><!--</b></mark>地区-->
+<!--        </div>-->
+<!--    </aside>-->
+</hgroup>
+<form class="box box-form" action="/wftadlogin/label/save" method="post" id="news-save">
+    <header class="box-title"><?php echo count($data)?'修改分类':'添加分类';?></header>
+    <table class="table">
+    <tr>
+        <th width="160">分类名称</th>
+        <th colspan="3"><input type="text" class="cssInput" name="tag_name" value="<?php echo $data ? $data->tag_name : ''; ?>">
+        </th>
+    </tr>
+    <?php if($_COOKIE['city']!=1){ ?>
+        <tr>
+            <th width="160">总站名称</th>
+            <th colspan="3"><input disabled type="text" class="cssInput" name="tag_name" value="<?php echo $pdata ? $pdata->tag_name : ''; ?>">
+            </th>
+        </tr>
+    <?php
+    }
+    ?>
+    <tr>
+        <th width="160">分类描述</th>
+        <th colspan="3" width="600">
+            <textarea class="cssTextArea" name="description"><?php echo $data ? $data->description : '';?></textarea>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">分类类型</th>
+        <th colspan="3" width="600">
+            <select name="label_type">
+                <?php foreach($labelType as $zer=>$type):?>
+                <option <?php echo $data ? (($data->label_type == $zer) ? 'selected' : '') : ''; ?> value="<?php echo $zer;?>"><?php echo $type;?></option>
+                <?php endforeach;?>
+            </select>　
+        </th>
+    </tr>
+
+    <tr>
+        <th>封面图</th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" name="cover" value="<?php echo count($data) ? $data->cover : '';?>" />
+                <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="240px" height="120px" class="fileupload1" src="<?php echo count($data) ? $data->cover : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th>圆形图</th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+                <input type="hidden" class="hidden" name="surface_plot" value="<?php echo count($data) ? $data->coin : '';?>" />
+                <span>　　请上传：<mark>140*140px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>100kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="114px" height="114px" class="fileupload2" src="<?php echo count($data) ? $data->coin : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <?php /*if($data):*/?><!--
+        <tr>
+            <th>游玩地列表</th>
+            <th colspan="3"><a href="/wftadlogin/label/link?lid=<?php /*echo $data->id; */?>" class="ui-button">关联游玩地</a></th>
+        </tr>
+        <tr>
+            <th> </th>
+            <?php /*if(count($shopData)):*/?>
+                <th>
+                    <table class="table" align="center">
+                        <tr>
+                            <td width="80">游玩地id</td>
+                            <td width="200">游玩地名称</td>
+                            <td width="200">关联原因</td>
+                            <td width="80">排序</td>
+                            <td width="120">操作</td>
+                        </tr>
+                        <?php /*foreach($shopData as $val):*/?>
+                            <tr class="li_mer">
+                                <td width="80"><?php /*echo $val['shop_id'];*/?></td>
+                                <td width="200"><a href="/wftadlogin/place/new?sid=<?php /*echo $val['shop_id'];*/?>"><?php /*echo $val['shop_name'];*/?></a></td>
+                                <td width="200" data-url="/wftadlogin/label/linkDo?type=2&lid=<?php /*echo $data->id;*/?>&sid=<?php /*echo $val['shop_id'];*/?>" class="change_title"><?php /*echo $val['words'] ? $val['words'] : $val['editor_word'];*/?></td>
+                                <td width="80"><input data-src="/wftadlogin/label/linkDo?type=1&lid=<?php /*echo $data->id;*/?>&sid=<?php /*echo $val['shop_id'];*/?>" class="order" value="<?php /*echo $val['sort']*/?>"></td>
+                                <td width="120">
+                                    <span data-src="/wftadlogin/label/linkDo?type=4&lid=<?php /*echo $data->id;*/?>&object_id=<?php /*echo $val['shop_id'];*/?>" class="btn btn-danger delete-link check_del">删除关联</span>
+                                </td>
+                            </tr>
+                        <?php /*endforeach;*/?>
+                    </table>
+                </th>
+            <?php /*endif;*/?>
+        </tr>
+        --><?php /*endif;*/?>
+
+    </table>
+    <input type="hidden" name="lid"  value="<?php echo $data ? $data->id : '';?>">
+    <input type="hidden" name="city"  value="<?php echo $data ? $data->city : $_COOKIE['city'];?>">
+    <span type="submit" class="btn btn-primary" id="ti-new">提交</span>
+</form>
+
+<?php if($data):?>
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+
+        <li><a class="btn btn-info" href="/wftadlogin/label/link?lid=<?php echo $data->id; ?>" class="ui-button">关联游玩地</a></li>
+        <li><a class="btn btn-info" href="/wftadlogin/label/linkg?lid=<?php echo $data->id; ?>">添加商品</a></li>
+    </ul>
+</div>
+
+    <div class="panel panel panel-primary" style="width:500px;float:left">
+        <tr>
+            <th width="109">游玩地</th>
+            <?php if(count($shopData)):?>
+                <th>
+                    <table class="table" align="center">
+                        <tr>
+                            <td width="80">游玩地id</td>
+                            <td width="200">游玩地名称</td>
+                            <td width="200">关联原因</td>
+                            <td width="80">排序</td>
+                            <td width="120">操作</td>
+                        </tr>
+                        <?php foreach($shopData as $val):?>
+                            <tr class="li_mer">
+                                <td width="80"><?php echo $val['shop_id'];?></td>
+                                <td width="200"><a href="/wftadlogin/place/new?sid=<?php echo $val['shop_id'];?>"><?php echo $val['shop_name'];?></a></td>
+                                <td width="200" data-url="/wftadlogin/label/linkDo?type=2&lid=<?php echo $data->id;?>&sid=<?php echo $val['shop_id'];?>" class="change_title"><?php echo $val['words'] ? $val['words'] : $val['editor_word'];?></td>
+                                <td width="80"><input data-src="/wftadlogin/label/linkDo?type=1&lid=<?php echo $data->id;?>&sid=<?php echo $val['shop_id'];?>" class="order" value="<?php echo $val['sort']?>"></td>
+                                <td width="120">
+                                    <span data-src="/wftadlogin/label/linkDo?type=4&lid=<?php echo $data->id;?>&object_id=<?php echo $val['shop_id'];?>" class="btn btn-danger delete-link check_del">删除关联</span>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                    </table>
+                </th>
+            <?php endif;?>
+        </tr>
+    </div>
+
+    <div class="panel panel panel-primary" style="width:500px;float:left">
+        <tr>
+            <th width="109">
+                商品列表
+            </th>
+            <?php if(count($gameData)):?>
+                <th>
+                    <table class="table" align="center">
+                        <tr>
+                            <td width="80">商品id</td>
+                            <td width="350">商品名称</td>
+                            <td width="90">商品状态</td>
+                            <td width="350">操作</td>
+                        </tr>
+                        <?php foreach($gameData as $val):?>
+                            <tr class="li_mer">
+                                <td width="80"><?php echo $val['id'];?></td>
+                                <td width="350"><a href="/wftadlogin/game/new?gid=<?php echo $val['id'];?>"><?php echo $val['title'];?></a></td>
+                                <td width="90">
+                                    todo
+                                </td>
+
+                                <td width="250">
+                                    <a href="/wftadlogin/label/dogame?lid=<?php echo $data->id;?>&gid=<?php echo $val['id'];?>&type=del" class="btn btn-danger">删除关联</a>
+                                    <span data-src="/wftadlogin/activity/dosort?type=1&id=<?php echo $val['id']; ?>&ac_sort=<?php echo $val['ac_sort'];?>" class="btn btn-primary check_up"><?php echo ($val['ac_sort']) ? '置顶' : '取消置顶';?></span>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                    </table>
+                </th>
+            <?php endif;?>
+        </tr>
+    </div>
+<?php endif;?>
+
+
+<div class="modal fade" id="change_title" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>关联原因</h3>
+            </div>
+            <div class="modal-body">
+                <textarea class="cssTextArea" value="" id="title_do"></textarea> <span data-url="0" class="btn btn-primary btn-sm" id="title_change">提交</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+       /* limitMultiFileUploadSize: 1,
+        limitMultiFileUploadSizeOverhead: 30,
+        maxFileSize : 34,
+        autoUpload: true,
+        acceptFileTypes:  /(\.|\/)(gpg|jpeg|png)$/i,
+        maxNumberOfFiles : 1,*/
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='surface_plot']").attr('value', data.result.url);
+                $(".fileupload2").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+
+    });
+</script>
+
+<script>
+    $(function () {
+        $('#ti-new').click(function () {
+            $.post('/wftadlogin/label/save', $('#news-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+
+        //删除关联
+        $('.check_del').click(function() {
+            $.get($(this).attr('data-src'));
+            $(this).closest('.li_mer').remove();
+            return false;
+        })
+
+        //修改关联原因
+        $('.change_title').click(function () {
+            $('#title_change').attr('data-url', $(this).attr('data-url'));
+            $("#change_title").modal()
+        });
+
+        $('#title_change').click(function () {
+            $.post(
+                $(this).attr('data-url'),
+                {words:$('#title_do').val()},
+                function (result) {
+                    if (result.status == 1) {
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+            });
+            return false;
+        });
+
+          //排序
+         $(":input, .order").blur(function(){
+             $.get($(this).attr('data-src')+'&oid='+$(this).val(),
+                 function(result){
+                     if(result.status == 1){
+                        window.location.reload();
+                     } else {
+                         alert(result.message);
+                     }
+                 }, 'json'
+             );
+             return false;
+         });
+    })
+</script>
+
+
+

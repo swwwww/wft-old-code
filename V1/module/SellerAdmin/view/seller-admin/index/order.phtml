@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+    <script src="/seller/js/modernizr.js"></script>
+</head>
+<body>
+<header id="header">
+    <div class="center">
+        <div id="header-tips">
+            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>
+            <h2 id="header-title">商家版</h2>
+        </div>
+        <div id="header-member">
+            <figure>
+                <a href="" title="" class="portrait">
+                    <img alt="" src="/seller/images/demo01.png">
+                </a>
+                <figcaption>
+                    <a class="username" title="世界儿童乐园" href="">世界儿童乐园</a>
+                </figcaption>
+            </figure>
+            <nav id="header-nav">
+                <a class="set" href=""></a>
+                <a class="exit" href=""></a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div id="container" class="center">
+    <nav id="navigator">
+        <ul>
+            <li>
+                <a class="user-self" href="/selleradmin/index/info" title="">
+                    <i></i>首页
+                </a>
+            </li>
+            <li>
+                <a class="user-order active" href="/selleradmin/index/order" >
+                    <i></i>订单
+                </a>
+            </li>
+            <li>
+                <a class="user-shops" href="/selleradmin/index/shops" >
+                    <i></i>分店管理
+                </a>
+            </li>
+            <li>
+                <a class="user-info" href="/article.html" >
+                    <i></i>基本信息
+                </a>
+            </li>
+            <li>
+                <a class="user-account" href="/account.html" >
+                    <i></i>绑定银行账号
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main id="content">
+        <header id="top-nav">
+            <nav id="top-nav-crumb">
+                <a href="/selleradmin/index/info">首页</a>
+                <span>&gt;</span>
+                <a href="">订单管理</a>
+<!--                <span>&gt;</span>-->
+<!--                <span>{商品名}的订单</span>-->
+            </nav>
+
+            <div class="sale-sum">
+                <span>售出票数：</span><?php echo $this->sale_num;?>,总营业额： <?php echo $this->sale_cash;?>
+            </div>
+        </header>
+        <form class="order-form" action="" h-com="time select form" method="get" id="form1">
+            <?php
+                $order_sn = null;
+                $username = null;
+                $dateline = null;
+                $order_status = null;
+
+                if(isset($_GET['order_sn']) && $_GET['order_sn'])
+                {
+                    $order_sn = $_GET['order_sn'];
+                }
+
+                if(isset($_GET['username']) && $_GET['username'])
+                {
+                    $username = $_GET['username'];
+                }
+
+                if(isset($_GET['dateline']) && $_GET['dateline'])
+                {
+                    $dateline = $_GET['dateline'];
+                }
+
+                if(isset($_GET['order_status']) && $_GET['order_status'])
+                {
+                    $order_status = $_GET['order_status'];
+                }
+            ?>
+                <fieldset>
+                    <label class="gf-title">订单号</label>
+                    <input class="text" type="text" name="order_sn" value="" placeholder="请输入订单号" tabindex="1">
+                </fieldset>
+
+                <fieldset>
+                    <label class="gf-title">用户名</label>
+                    <input class="text" type="text" name="username" value="" placeholder="请输入用户名" tabindex="1">
+                </fieldset>
+
+                <fieldset>
+                    <label class="gf-title">选择日期</label>
+                    <input class="text ui-time" type="text" name="dateline"
+                           value="" readonly placeholder="2015-12-30"/>
+                </fieldset>
+
+                <fieldset>
+                    <label class="gf-title">订单状态</label>
+                    <div class="ui-select gf-select">
+                        <input type="hidden" name="typeid" value="0" id="order_status">
+                        <div class="ui-select-title" tabindex="1">请选择订单状态</div>
+                        <ul class="ui-select-options ui-scroll ui-scroll-y ui-scroll-hidden" style="position: relative;" name="order_sn">
+                            <li data-value="1">所有</li>
+                            <li data-value="2">待使用</li>
+                            <li data-value="3">已使用</li>
+                            <li data-value="4">退款</li>
+                        </ul>
+                    </div>
+                </fieldset>
+                <fieldset class="search">
+                    <input class="button reset" type="reset" value="清空所有选项">
+                    <input class="submit button" type="button" value="查询">
+                    <input class="button export" type="button" value="导出">
+                </fieldset>
+            </form>
+            <section class="wrapper">
+                <div class="tab gf-all">
+                    <div class="tab-toggle gf-tabs">
+                        <a class="tab-switch " data-status="1" id="status_1">所有</a>
+                        <a class="tab-switch" data-status="2" id="status_2">待使用</a>
+                        <a class="tab-switch" data-status="3" id="status_3">已使用</a>
+                        <a class="tab-switch" data-status="4" id="status_4">退款</a>
+                    </div>
+                    <div class="tab-item gf-con">
+                        <table class="main-list slide" width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tbody>
+                            <tr>
+                                <th class="borderb">订单编号</th>
+                                <th class="borderb">套系</th>
+                                <th class="borderb">使用地址</th>
+                                <th class="borderb">金额</th>
+                                <th class="borderb">购买</th>
+                                <th class="borderb">使用</th>
+                                <th class="borderb">退款</th>
+                                <th class="borderb">购买时间</th>
+                                <th class="borderb">使用时间</th>
+                                <th class="borderb">退款时间</th>
+                                <th class="borderb">用户名</th>
+                            </tr>
+                            <?php if(count($data)):?>
+                            <?php foreach($data as $v):?>
+                            <tr>
+                                <td><?php echo $v['order_sn'];?></td>
+                                <td><?php echo $v['type_name'];?></td>
+                                <td><?php echo $v['address'];?></td>
+                                <td><?php echo $v['account_money'];?></td>
+                                <td><?php echo $v['buy_number'];?></td>
+                                <td><?php echo $v['use_number'];?></td>
+                                <td><?php echo $v['back_number'];?></td>
+                                <td>
+                                    <div><?php echo date("Y-m-d H:i:s",$v['dateline']);?></div>
+                                </td>
+                                <td>
+                                    <div><?php echo date("Y-m-d H:i:s",$v['use_dateline']);?></div>
+                                </td>
+                                <td>
+                                    <div><?php echo $v['back_time']>0 ? date("Y-m-d H:i:s",$v['back_time']) : "";?></div>
+                                </td>
+                                <td><?php echo $v['username'];?></td>
+                            </tr>
+                            <?php endforeach;?>
+                            <?php endif;?>
+                            </tbody>
+                         </table>
+                    </div>
+                </div>
+            </section>
+    </main>
+</div>
+<footer id="footer"></footer>
+</body>
+<template id="alert">
+    <div class="modal-alert">
+        <h1 class="modal-alert-title">{{message}}</h1>
+        <input class="button modal-alert-button modal-close" type="button" value="确定" />
+    </div>
+</template>
+<script src="/seller/js/jquery.js"></script>
+<script src="/seller/js/lodash.js"></script>
+<script src="/seller/js/horcrux.js"></script>
+<script src="/seller/js/components.js" charset="utf-8"></script>
+<script>
+    $(function(){
+        var type = GetQueryString('typeid');
+        if(!type){
+            type=1;
+        }
+        $("#status_"+type).addClass('active');
+        $(".tab-switch").click(function(){
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+            var order_status = $(this).attr('data-status');
+            $("#order_status").val(order_status);
+            $("#form1").attr("action","/selleradmin/index/order").submit();
+        })
+    })
+
+    //获取url参数
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+</script>
+</html>
+

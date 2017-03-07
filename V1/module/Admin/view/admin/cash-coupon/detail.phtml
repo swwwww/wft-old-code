@@ -1,0 +1,225 @@
+<hgroup class="box">
+    <header>
+        <h3>现金券详情</h3>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span></div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/cashcoupon/detail" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $create_stime = null;
+    $create_etime = null;
+    $pay_stime = null;
+    $pay_etime = null;
+    $user = null;
+    $use_status = null;
+
+    if (isset($_GET['create_stime']) && $_GET['create_stime']) {
+        $create_stime = $_GET['create_stime'];
+    }
+    if (isset($_GET['create_etime']) && $_GET['create_etime']) {
+        $create_etime = $_GET['create_etime'];
+    }
+    if (isset($_GET['pay_stime']) && $_GET['pay_stime']) {
+        $pay_stime = $_GET['pay_stime'];
+    }
+    if (isset($_GET['pay_etime']) && $_GET['pay_etime']) {
+        $pay_etime = $_GET['pay_etime'];
+    }
+    if (isset($_GET['user']) && $_GET['user']) {
+        $user = $_GET['user'];
+    }
+    if (isset($_GET['use_status']) && $_GET['use_status']) {
+        $use_status = $_GET['use_status'];
+    }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">领券时间</th>
+            <th>
+                <input name="create_stime" type="date" class="cssInput" style="width:190px"
+                       value="<?php echo $create_stime; ?>">
+                <input name="create_etime" type="date" class="cssInput" style="width:190px"
+                       value="<?php echo $create_stime; ?>">
+            </th>
+            <th width="160">使用时间</th>
+            <th>
+                <input name="pay_stime" type="date" class="cssInput" style="width:190px"
+                       value="<?php echo $pay_stime; ?>">
+                <input name="pay_etime" type="date" class="cssInput" style="width:190px"
+                       value="<?php echo $pay_etime; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户ID/名称/手机号</th>
+            <th>
+                <input type="text" class="cssInput" name="user" value="<?php echo $user; ?>">
+            </th>
+            <th width="160">使用状态</th>
+            <th>
+                <select name="use_status" id="select">
+                    <option value="0" <?php echo ($use_status == 0) ? 'selected' : ''; ?>>全部</option>
+                    <option value="1" <?php echo ($use_status == 1) ? 'selected' : ''; ?>>待使用</option>
+                    <option value="2" <?php echo ($use_status == 2) ? 'selected' : ''; ?>>已使用</option>
+                    <option value="3" <?php echo ($use_status == 3) ? 'selected' : ''; ?>>已过期</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">
+                <input type="hidden" name="cid" value="<?php echo $_GET['cid']; ?>"/>
+                <input type="hidden" class="cssInput" name="out" id="out" value="0">
+            </th>
+            <th colspan="3">
+                <a href="/wftadlogin/cashcoupon/detail?cid=<?php echo $_GET['cid']; ?>" style="background-color: green"
+                   class="ui-button">清空所有选项</a>
+                <button id="tijiao" class="ui-button">提交</button>
+                <button id="out-data" style="background-color: green" class="ui-button">导出</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<header class="box-title">现金券详情</header>
+<table class="table">
+    <tbody>
+    <tr>
+        <th class="size1">编号</th>
+        <th class="size1">现金券名称</th>
+        <th class="size1">传播码</th>
+        <th class="size1">创建人</th>
+        <th class="size1">金额</th>
+        <th class="size1">总张数</th>
+        <th class="size1">已发放</th>
+        <th class="size1">已使用</th>
+        <th class="size1">有效期</th>
+        <th class="size1">使用范围</th>
+        <th class="size1">审核状态</th>
+        <th class="size1">累计推广费用</th>
+    </tr>
+    <tr style="text-align: left">
+        <td class="size1"><?php echo $data['id']; ?></td>
+        <td class="size1"><?php echo $data['title']; ?></td>
+        <td class="size1"><?php echo urldecode($data['diffuse_code']); ?></td>
+        <td class="size1"><?php echo $creator; ?></td>
+        <td class="size1"><?php echo $data['price']; ?></td>
+        <td class="size1"><?php echo $data['total']; ?></td>
+        <td class="size1"><?php echo $data['total'] - $data['residue']; ?></td>
+        <td class="size1"><?php echo $used; ?></td>
+        <td class="size1">
+            <?php
+            if ($data['time_type']) {//领券后
+                if ($data['after_hour'] < 24 or ($data['after_hour'] % 24)) {
+                    $dw = '小时';
+                    $hour = $data['after_hour'];
+                } elseif (($data['after_hour'] % 24) == 0) {
+                    $dw = '天';
+                    $hour = $data['after_hour'] / 24;
+                }
+                echo '领券后' . $hour . $dw . '有效';
+            } else {
+                echo date('Y-m-d H:i', $data['use_stime']) . '到<br>' . date('Y-m-d H:i', $data['use_etime']);
+            }
+            ?>
+        </td>
+        <td class="size1"><?php echo $use_range[$data['range']]; ?></td>
+
+        <td class="size1">
+            <?php if ($data['status'] === 0): ?>
+                未审核
+            <?php else: ?>
+                已审核
+            <?php endif; ?>
+        </td>
+        <td class="size1"><?php echo $freemoney; ?></td>
+    </tr>
+    </tbody>
+</table>
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">编号</th>
+                <th class="size1">领券时间</th>
+                <th class="size1">领券原因</th>
+                <th class="size1">领券用户</th>
+                <th class="size1">使用状态</th>
+                <th class="size1">使用时间</th>
+                <th class="size1">订单号</th>
+                <th class="size1">商品/活动名称</th>
+                <th class="size1">订单金额</th>
+                <th class="size1">支付金额</th>
+                <th class="size1">现金券金额</th>
+                <th class="size1">已使用金额</th>
+                <th class="size1">退款金额</th>
+                <th class="size1">推广费用</th>
+            </tr>
+            <?php if (count($ccu)): ?>
+                <?php foreach ($ccu as $key => $data): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $data['id']; ?></td>
+                        <td class="size1"><?php echo $data['create_time'] ? date('Y-m-d H:i',
+                                $data['create_time']) : ''; ?></td>
+                        <td class="size1"><?php echo $getinfo[$data['id']]; ?></td>
+                        <td class="size1"><a target="_blank"
+                                             href="/wftadlogin/user/info?uid=<?php echo $data['uid']; ?>"><?php echo array_key_exists($data['uid'],
+                                    $players) ? $players[$data['uid']] : ''; ?></a></td>
+                        <td class="size1"><?php echo $data['pay_time'] ? '已使用' : '待使用'; ?></td>
+                        <td class="size1"><?php echo $data['pay_time'] ? date('Y-m-d H:i',
+                                $data['pay_time']) : '--:--:--'; ?></td>
+                        <td class="size1">
+                            <?php if ($data['order_type'] == 2):
+                                $url = '/wftadlogin/order/info';
+                                $ourl = '/wftadlogin/good/new?gid=';
+                            elseif ($data['order_type'] == 3):
+                                $url = '/wftadlogin/excercise/orderinfo';
+                                $ourl = '/wftadlogin/excercise/edite?id=';
+                            endif; ?>
+                            <?php echo $data['order_id'] ? "<a target='_blank' href='{$url}?order_sn={$data['order_id']}'>{$data['order_id']}</a>" : '--'; ?>
+                        </td>
+                        <td class="size1">
+                            <?php echo $data['goods_name'] ? "<a target='_blank' href='{$ourl}{$data['goods_id']}'>{$data['goods_name']}</a>" : '--'; ?>
+                        </td>
+                        <td class="size1"><?php echo $data['order_money'] ?: 0; ?></td>
+                        <td class="size1"><?php echo $data['in_money'] ?: 0; ?></td>
+                        <td class="size1"><?php echo $data['cash_money'] ?: 0; ?></td>
+                        <td class="size1"><?php echo $data['used_money'] ?: 0; ?></td>
+                        <td class="size1"><?php echo $data['back_money'] ?: 0; ?></td>
+                        <td class="size1"><?php echo $data['free_money'] ?: 0; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无标签 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $('#out-data').click(function () {
+            $('#out').val(1);
+        })
+
+        $('#tijiao').click(function () {
+            $('#out').val(0);
+        })
+    })
+</script>

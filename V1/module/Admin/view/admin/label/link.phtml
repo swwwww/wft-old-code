@@ -1,0 +1,90 @@
+<ul class="breadcrumb">
+    <li>
+        <a href="#">Home</a><span class="divider"></span>
+    </li>
+    <li>
+        <span class="divider"><a href="/wftadlogin/label">标签管理</a></span>
+    </li>
+    <li class="active">关联游玩地</li>
+</ul>
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <form action="#" method="get">
+            <table border="0">
+                <tr>
+                    <td>
+                        <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="搜索游玩地名称" name="k" value="">
+                  <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit">搜索</button>
+                  </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden"  name="lid" value="<?php echo $_GET['lid'];?>">
+        </form>
+            <table class="table table-striped table-hover">
+                <tr>
+
+                    <th scope="col">ID</th>
+                    <th scope="col">游玩地名称</th>
+                    <th scope="col">操作</th>
+                </tr>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                     <!--   <th scope="col"><input type="checkbox" name="shop_id" <?php /*echo (in_array($v->shop_id, $link_ids)) ? "checked" : '';*/?> value="<?php /*echo $v->shop_id;*/?>"></th>
+                       --> <td><?php echo $v->shop_id; ?></td>
+                        <td><?php echo $v->shop_name; ?></td>
+                        <td><?php if(!in_array($v->shop_id, $link_ids)):?><span class="link-do" data-url="/wftadlogin/label/linkDo?type=3&sid=<?php echo $v->shop_id; ?>&lid=<?php echo $_GET['lid'];?>">添加</span><?php endif;?></td>
+                    </tr>
+                <?php endforeach; ?>
+
+            </table>
+        <?php echo$this->pageData; ?>
+    </div>
+</div>
+
+<div class="modal fade" id="change_title" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>添加原因</h3>
+            </div>
+            <div class="modal-body">
+                <textarea class="cssTextArea" value="" id="title_do"></textarea>
+                <span data-url="0" class="btn btn-primary btn-sm" id="word_change">提交</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $('.link-do').click(function () {
+        $('#word_change').attr('data-url', $(this).attr('data-url'));
+        $("#change_title").modal()
+    });
+
+   $('#word_change').click(function() {
+       $.post(
+           $(this).attr("data-url"),
+           {words:$('#title_do').val()},
+           function(result){
+               if(result.status == 1){
+                   alert('添加成功');
+                   window.location.href = result.url;
+               } else {
+                   alert(result.message);
+               }
+           }, 'json'
+       );
+       return false;
+   });
+
+</script>
+

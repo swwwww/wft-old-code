@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>手机验证</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/common.css" rel="stylesheet"/>
+    <link href="/css/my.css" rel="stylesheet"/>
+</head>
+<body>
+<main class="align" id="content">
+    <section class="wrapper">
+        <form id="register" action="" method="post" class="register-form">
+            <div class="item item-username">
+                <label>手机</label>
+                <input id="phone" class="" name="phone" type="text" placeholder="请输入手机号" autofocus="" required="">
+            </div>
+            <div class="item input-info">
+                <label>验证码</label>
+                <input id="code" class="" type="text" size="11" maxlength="6" autocomplete="off" placeholder="请输入验证码" name="code">
+                <a id="captcha" class="captcha" href="javascript:;" style="pointer-events: auto;">获取</a>
+            </div>
+            <div id="loginTip"></div>
+            <div class="item-btns">
+                <a class="btn-login btn-disabled" href="javascript:;" id="loginBtn" data-uid="<?php echo $uid>0 ? $uid : 0;?>">提交</a>
+            </div>
+        </form>
+        <input type="hidden" name="ver_url" value="<?php echo $this->ver_url;?>" id="ver_url">
+        <input type="hidden" name="wap" value="<?php echo $this->wap;?>" id="wap">
+        <input type="hidden" name="city" value="<?php echo $this->city;?>" id="city">
+        <input type="hidden" name="tourl" value="<?php echo $this->tourl;?>" id="tourl">
+        <input type="hidden" name="backurl" value="<?php echo urlencode($this->backurl);?>" id="backurl">
+        <input type="hidden" name="type" value="<?php echo $this->type;?>" id="type">
+        <input type="hidden" name="order_sn" value="<?php echo $this->order_sn;?>" id="order_sn">
+        <input type="hidden" name="group_buy_id" value="<?php echo $this->group_buy_id;?>" id="group_buy_id">
+    </section>
+</main>
+</body>
+<!--<script type="text/javascript" src="./public/js/main.min.js"></script>-->
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js?ver=<?php echo time();?>"></script>
+</html>

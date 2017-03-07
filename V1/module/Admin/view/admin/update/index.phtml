@@ -1,0 +1,43 @@
+<hgroup class="box">
+    <header>
+        <h3>升级管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.back(-1)">返回</a>
+
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+
+<a class="btn btn-default" href="updateEdit" >新增版本</a>
+<a class="btn btn-danger" href="updateSave?all_update=1" onclick="return confirm('Yes/No');">所有版本强制升级到最新版</a>
+
+
+    <table  class="table" >
+        <tr>
+            <td width="100px;">版本号</td>
+            <td width="100px;">VersionCode</td>
+            <td width="100px;">升级提示</td>
+            <td width="100px;">此版本是否强制升级</td>
+            <td width="100px;">时间</td>
+            <td width="100px;">状态</td>
+            <td width="100px;">操作</td>
+        </tr>
+        <?php foreach ($data as $v):?>
+            <tr>
+                <td><?php echo 'V'.$v['version_name']?></td>
+                <td><?php echo $v['version_code']?></td>
+                <td><?php echo $v['version_info']?></td>
+                <td><?php  echo $v['old_update']==1?'是':'否';?></td>
+                <td><?php  echo date('Y-m-d H:i:s',$v['dateline']);?></td>
+                <td><?php echo $v['status']==1?'正常':'删除';?></td>
+                <td width="200px;"><a href="updateEdit?id=<?php echo $v['id'];?>">修改</a>|<a onclick="return confirm('Yes/No');" href="updateDel?id=<?php echo $v['id'];?>">删除</a>|<a onclick="return confirm('Yes/No');" href="re?status=1&id=<?php echo $v['id'];?>">恢复</a></td>
+            </tr>
+        <?php endforeach;?>
+
+    </table>
+
+
+</body>

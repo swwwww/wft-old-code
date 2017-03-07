@@ -1,0 +1,53 @@
+<hgroup class="box">
+    <header>
+        <h3>专题管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/activity/new?aid=<?php echo $aid?>">返回专题</a>
+    </header>
+</hgroup>
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <form action="#" method="get">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="搜索要添加的游玩地名称" name="k" value="">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit">搜索要添加的游玩地名称</button>
+                      </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden"  name="aid" value="<?php echo $aid;?>">
+            </form>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th scope="col">游玩地id</th>
+                    <th scope="col">游玩地名称</th>
+                    <th scope="col">所属商家名称</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">操作</th>
+                </tr>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                        <td><?php echo $v->shop_id; ?></td>
+                        <td><?php echo $v->shop_name; ?></td>
+                        <td><?php echo $v->shop_mid; ?></td>
+                        <td><?php echo in_array($v->shop_id, $placeIds) ? '已经关联了' : ''; ?></td>
+                        <td>
+                            <?php if(!in_array($v->shop_id, $placeIds)):?>
+                            <a class="btn btn-primary" href="/wftadlogin/activity/doplace?aid=<?php echo $aid;?>&pid=<?php echo $v->shop_id; ?>&type=add">添加到专题</a>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title><?php echo $res['title']; ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/css/web-new-style.css" />
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body>
+<div id="all" class="share">
+    <div class="container" style="padding-bottom: 0px;">
+        <div class="details-img"><img src="<?php echo $res['cover']; ?>" /></div>
+        <div class="detail-title ic"><?php echo $res['title']; ?></div>
+        <div class="item-title"><i class="title2 icon"></i>小玩说：</div>
+        <div class="item-detail1 ic bg1"><?php echo $res['introduce']; ?></div>
+        <?php if($res['reference_price']):?>
+        <div class="item-title1 ic">
+            <i class="title1 icon"></i>参考价格<span class="right"><?php echo $res['reference_price']; ?>元</span>
+        </div>
+        <?php endif;?>
+        <div class="item-title1 ic">
+            <i class="title1 icon"></i>适合年龄<span class="right"><?php echo $res['for_age']; ?></span>
+        </div>
+        <div class="item-title1">
+            <i class="title1 icon"></i>小编攻略
+        </div>
+        <div class="item-detail1 ic bg1"><?php echo htmlspecialchars_decode($res['information']);?></div>
+        <div class="item-title"><i class="title2 icon"></i>适用场地</div>
+        <?php if($res['address']['type'] == 1):?>
+            <section class="shop-list ib bg1">
+                <div class="shop1">
+                    <div class="shop-detail sb bg2">
+                        <a class="add"><?php echo $res['address']['mes']['name']; ?><i class="icon show-map" data-name="<?php echo $res['address']['mes']['name']; ?>" data-x="<?php echo $res['address']['mes']['x']; ?>" data-y="<?php echo $res['address']['mes']['y']; ?>"></i></a>
+                    </div>
+                </div>
+            </section>
+        <?php elseif($res['address']['type'] == 2):?>
+            <?php foreach($res['address']['mes'] as $zer):?>
+            <section class="shop-list ib bg1">
+                <div class="shop">
+                    <div class="shop-name sb">
+                        <h3><?php echo $zer->shop_name; ?></h3>
+                        <h4>营业时间：<?php echo date('H:i', $zer->shop_open);?>-<?php echo date('H:i', $zer->shop_close);?></h4>
+                    </div>
+                    <div class="shop-detail sb bg2">
+                        <a class="add sb"><?php echo $zer->shop_address; ?><i class="icon show-map" data-name="<?php echo $zer->shop_name; ?>" data-x="<?php echo $zer->addr_x; ?>" data-y="<?php echo $zer->addr_y; ?>"></i></a>
+                        <a class="tel" href="tel:<?php echo $zer->shop_phone; ?>">联系电话：<?php echo $zer->shop_phone; ?><i class="icon"></i></a>
+                    </div>
+                </div>
+            </section>
+                <?php endforeach;?>
+        <?php endif;?>
+        <?php if(count($res['post'])):?>
+        <div id="commented" class="comment">
+            <div class="item-title"><i class="title3 icon"></i>评论</div>
+            <ul class="list-articles">
+                <?php foreach($res['post'] as $ver):?>
+                <li>
+                    <a class="info-portrait"><img src="<?php echo $ver['author_img'] ? $ver['author_img'] : '/images/ico_avatar_default.png';?>"></a>
+                    <article class="info-content">
+                        <a class="info-user"><?php echo $ver['author'];?></a>
+                        <span class="info-role"><?php echo $ver['dateline'];?></span>
+                        <p class="info-article"><?php echo $ver['message'];?></p>
+                        <figure class="info-thumbs">
+                            <?php foreach($ver['img_list'] as $ker):?>
+                            <a class="info-thumb"><img class="show-pic" data-src="<?php echo $ker;?>" src="<?php echo $ker;?>"></a>
+                            <?php endforeach;?>
+                        </figure>
+                    </article>
+                </li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+        <a class="all-comment show-mes" href="javascript:void(0)" data-id="<?php echo $res['nid'];?>">全部评论数（<?php echo $res['post_num']; ?>）</a>
+        <?php else:?>
+        <a class="all-comment send-mes" href="javascript:void(0)" data-id="<?php echo $res['nid'];?>" >暂无评论，欢迎首发</a>
+        <?php endif;?>
+    </div>
+    <footer id="comment" class="bg1" style="position: relative"><a class="btn-comment send-mes" href="javascript:void(0)" data-id="<?php echo $res['nid'];?>">写评论</a></footer>
+</div>
+</body>
+<script type="text/javascript">
+    (function() {
+        $('.show-map').click(function() {
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location ="dizhix$$" + $(this).attr('data-x') + "$$dizhiy$$" + $(this).attr('data-y') + "$$dizhiname$$" + $(this).attr('data-name');
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.showmap($(this).attr('data-x'), $(this).attr('data-y'), $(this).attr('data-name'));
+            } else{
+                return false;
+            }
+        });
+
+        $('.show-pic').click(function() {
+            var src = '';
+            if($(this).attr('data-src').indexOf(".thumb.jpg") > 0) {
+                src = $(this).attr('data-src').substring(0, $(this).attr('data-src').indexOf(".thumb.jpg"));
+            } else {
+                src = $(this).attr('data-src');
+            }
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location = 'chakandatu$$' + src;
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.showimg(src);
+            } else{
+                return false;
+            }
+        });
+
+        $('.send-mes').click(function() {
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location = 'fabiaopinlun$$' + $(this).attr('data-id');
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.sendcomment($(this).attr('data-id'))
+            } else{
+                return false;
+            }
+        });
+
+        $('.show-mes').click(function() {
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location = 'chakanpinlun$$' + $(this).attr('data-id');
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.allcomment($(this).attr('data-id'));
+            } else{
+                return false;
+            }
+        });
+
+    })();
+</script>
+</html>

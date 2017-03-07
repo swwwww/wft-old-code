@@ -1,0 +1,408 @@
+<hgroup class="box">
+    <header>
+        <h3>卡券管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/coupons?city=<?php echo $city['mark']; ?>">返回卡券列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：<?php echo count($data) ? '修改' : '添加'; ?>的卡券为
+            <mark><b><?php echo $city['name']; ?></b></mark>
+            地区 的卡券
+        </div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/coupons/save" method="post" id="coupon-save">
+    <header class="box-title"><?php echo count($data) ? '修改卡券' : '添加卡券'; ?></header>
+    <table class="table">
+        <tr>
+            <th width="120px">所属商户:</th>
+            <th colspan="3">
+                <span style="color: red"><?php echo $marketData->market_name; ?></span>
+                <input type="hidden" name="coupon_marketname" value="<?php echo $marketData->market_name; ?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="109">所属分店:</th>
+            <th colspan="3" width="300">
+                <input id="checkAll" type="checkbox" name="shop_total">&nbsp;&nbsp;&nbsp;所有店铺
+            </th>
+        </tr>
+        <tr>
+            <th width="109"></th>
+            <th colspan="3">
+                <?php foreach ($shops as $val): ?>
+                    <div style="width:200px;height:20px;float:left;margin-right:15px;text-align:left;overflow: hidden">
+                        <input
+                            name="shopIds[]" <?php echo ($data && json_decode($data->coupon_shopid) && in_array($val->shop_id, json_decode($data->coupon_shopid))) ? 'checked' : ''; ?>
+                            value="<?php echo $val->shop_id ?>" type="checkbox"/>
+                        <?php echo $val->shop_name; ?>
+                    </div>
+                    <input type="hidden" name="shop_totals[]" value="<?php echo $val->shop_id ?>">
+                <?php endforeach; ?>
+            </th>
+        </tr>
+        <tr>
+            <th width="120px">卡券名称:</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="coupon_name"
+                       value="<?php echo count($data) ? $data->coupon_name : ''; ?>">
+                　　卡券类别: <select name="coupon_typename">
+                    <?php foreach ($this->couponType as $k => $v): ?>
+                        <option <?php echo ($data && $data->coupon_typename == $v) ? 'selected' : '' ?>
+                            value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">是否合作:</th>
+            <th colspan="3">
+                <select id="coupon_join" name="coupon_join">
+                    <option <?php echo $data ? (($data->coupon_join == 1) ? 'selected' : '') : ''; ?> value="1">合作商品
+                    </option>
+                    <option <?php echo $data ? (($data->coupon_join == 0) ? 'selected' : '') : ''; ?> value="0">未合作商品
+                    </option>
+                </select>　
+            </th>
+        </tr>
+
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+        <tr class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+            <th width="120px">购买提醒:</th>
+            <th colspan="3">
+                <textarea class="cssTextArea"
+                          name="coupon_remind"><?php echo $data ? $data->coupon_remind : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">价格:</th>
+            <th colspan="3">
+                　<input type="text" class="cssInput" style="width:60px" name="coupon_price" style="width: 100"
+                        value="<?php echo $data ? (float)$data->coupon_price : ''; ?>">元
+
+                <span class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">原价:　<input
+                        type="text" class="cssInput" style="width:60px" name="coupon_originprice" style="width: 100"
+                        value="<?php echo $data ? (float)$data->coupon_originprice : ''; ?>">元</span>
+            </th>
+        </tr>
+        <tr class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+            <th width="120px">票数：</th>
+            <th colspan="3">
+            <span>
+                可卖份数&nbsp;
+                <input type="text" class="cssInput" name="coupon_total" style="width: 60px"
+                       value="<?php echo $data ? $data->coupon_total : ''; ?>">份　
+                每机限购&nbsp;
+                <input type="text" class="cssInput" name="coupon_limitnum" style="width: 60px"
+                       value="<?php echo $data ? $data->coupon_limitnum : 3; ?>">份　
+                虚拟票&nbsp;
+                <input type="text" class="cssInput" name="coupon_vir" style="width: 60px"
+                       value="<?php echo ($data && $data->coupon_vir) ? $data->coupon_vir : ''; ?>">份
+          </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">限制：</th>
+            <th colspan="3">
+            <span class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+                预约&nbsp;
+                <select name="coupon_appointment">
+                    <option <?php echo $data ? (($data->coupon_appointment == 1) ? 'selected' : '') : ''; ?> value="1">
+                        无需预约
+                    </option>
+                    <option <?php echo $data ? (($data->coupon_appointment == 2) ? 'selected' : '') : ''; ?> value="2">
+                        需要预约
+                    </option>
+                </select>　
+                分享限制&nbsp;
+                <select name="coupon_share">
+                    <option <?php echo $data ? (($data->coupon_share == 1) ? 'selected' : '') : ''; ?> value="1">直接开抢
+                    </option>
+                    <option <?php echo $data ? (($data->coupon_share == 2) ? 'selected' : '') : ''; ?> value="2">分享后开抢
+                    </option>
+                </select>　
+                新用户专享&nbsp;
+                <select name="new_user">
+                    <option <?php echo $data ? (($data->new_user == 1) ? 'selected' : '') : ''; ?> value="1">新用户专享
+                    </option>
+                    <option <?php echo (!$data || $data->new_user == 0) ? 'selected' : ''; ?> value="0">默认</option>
+                </select>　
+                允许评论&nbsp;
+                <select name="allow_post">
+                    <option <?php echo $data ? (($data->allow_post == 1) ? 'selected' : '') : ''; ?> value="1">允许评论
+                    </option>
+                    <option <?php echo $data ? (($data->allow_post == 0) ? 'selected' : '') : ''; ?> value="0">不允许评论
+                    </option>
+                </select>　
+                截止时间退款&nbsp;
+                    <input type="date" value="<?php echo $data ? date('Y-m-d', $data->refund_time) : date('Y-m-d', time()+31536000);?>" name="refund_time">
+                    <input type="time" value="<?php echo $data ? date('H:i', $data->refund_time) : '06:00';?>" name="refund_timel">
+
+            </span>
+            </th>
+        </tr>
+
+        <tr class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+            <th width="120px">上架时间：</th>
+            <th colspan="3">
+                <input type="date"
+                       value="<?php echo $data ? date('Y-m-d', $data->coupon_uptime) : date('Y-m-d', time()); ?>"
+                       name="coupon_uptime">
+                <input type="time" value="<?php echo $data ? date('H:i', $data->coupon_uptime) : '06:00'; ?>"
+                       name="coupon_uptimel">
+            </th>
+        </tr>
+
+        <tr class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+            <th width="120px">开始 结束时间：</th>
+            <th colspan="3">
+            <span>
+                开始时间&nbsp;
+                <input type="date"
+                       value="<?php echo $data ? date('Y-m-d', $data->coupon_starttime) : date('Y-m-d', time()); ?>"
+                       name="coupon_starttime">
+                <input type="time" value="<?php echo $data ? date('H:i', $data->coupon_starttime) : '08:00'; ?>"
+                       name="coupon_starttimel">　
+                结束时间&nbsp;
+                <input type="date"
+                       value="<?php echo $data ? date('Y-m-d', $data->coupon_endtime) : date('Y-m-d', time() + 259200); ?>"
+                       name="coupon_endtime">
+                <input type="time" value="<?php echo $data ? date('H:i', $data->coupon_endtime) : '23:59'; ?>"
+                       name="coupon_endtimel">
+          </span>
+            </th>
+        </tr>
+
+        <tr class="<?php echo ($data && $data->coupon_join == 0) ? 'hidden' : ''; ?> join">
+            <th width="109">卡券使用到期时间</th>
+            <th colspan="3" width="300">
+                <input type="date"
+                       value="<?php echo $data ? date('Y-m-d', $data->coupon_close) : date('Y-m-d', time() + 864000); ?>"
+                       name="coupon_close">
+                <input type="time" value="<?php echo $data ? date('H:i', $data->coupon_close) : '20:00'; ?>"
+                       name="coupon_closel"> <span style="color: red">时间都是 24小时制</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">适合年龄</th>
+            <th colspan="3" width="600">
+                开始年龄：
+                <select name="age_min">
+                    <?php for ($i = 0; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option <?php echo ($data && (string)$i === $data->age_min) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option <?php echo ($data && (string)$i === $data->age_min) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                </select>
+                结束年龄：
+                <select name="age_max">
+                    <option <?php echo (!$data || 100 == $data->age_max) ? 'selected' : ''; ?>
+                        value="100">以上
+                    </option>
+                    <?php for ($i = 0.5; $i <= 2.5; $i = $i + 0.5): ?>
+                        <option <?php echo ($data && (string)$i === $data->age_max) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                    <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                        <option <?php echo ($data && (string)$i === $data->age_max) ? 'selected' : ''; ?>
+                            value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                        </option>
+                    <?php endfor; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">使用时间</th>
+            <th colspan="3" width="600">
+                <input type="text" class="form-control" name="use_time"
+                       value="<?php echo $data ? $data->use_time : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">小编说</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea"
+                          name="editor_word"><?php echo $data ? $data->editor_word : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">使用说明</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea"
+                          name="attend_method"><?php echo $data ? $data->attend_method : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">注意事项</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea"
+                          name="matters_attention"><?php echo $data ? $data->matters_attention : ''; ?></textarea>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">图文详情</th>
+            <th colspan="3" width="600">
+                <script type="text/plain" id="myEditor"
+                        style="width:600px;height:240px;"> <?php echo $data ? htmlspecialchars_decode($data->coupon_description) : '<p>这里我可以写一些输入提示</p>'; ?></script>
+            </th>
+        </tr>
+
+        <tr>
+            <th>封面图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" name="coverset" value="<?php echo $data ? $data->coupon_cover : ''; ?>"/>
+                    <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="240px" height="120px" class="fileupload1"
+                         src="<?php echo count($data) ? $data->coupon_cover : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>缩略图 <span style="line-height: 15px;color: red">（选填）</span></th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" class="hidden" name="coupon_thumb"
+                           value="<?php echo count($data) ? $data->coupon_thumb : ''; ?>"/>
+                    <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload2"
+                         src="<?php echo count($data) ? $data->coupon_thumb : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <input type="hidden" name="coupon_id" value="<?php echo $data ? $data->coupon_id : 0; ?>">
+        <input type="hidden" name="coupon_marketid" value="<?php echo $marketData->market_id; ?>">
+
+    </table>
+    <a href="#" class="btn btn-primary" id="ti-coupon">提交</a>
+</form>
+
+<script>
+    $(function () {
+        // 合作 非合作
+        $('#coupon_join').change(function () {
+            if ($(this).find("option:selected").attr('value') == 0) {
+                $(".join").attr("class", "hidden join");
+            } else {
+                $(".join").removeClass('hidden');
+            }
+            return false;
+        })
+
+        //提交
+        $('#ti-coupon').click(function () {
+            var that = $(this);
+            that.attr('disabled', 'true');
+            $.post('/wftadlogin/coupons/save', $('#coupon-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.history.go(-1);
+                    //window.location.href="/wftadlogin/coupons";
+                } else {
+                    alert(data.message);
+                    that.attr('disabled', false);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+</script>
+
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='coverset']").attr('value', data.result.url);
+                $(".fileupload1").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        /*limitMultiFileUploadSize: 1,
+         limitMultiFileUploadSizeOverhead: 30,
+         maxFileSize : 34,
+         //autoUpload: false,
+         acceptFileTypes:  /(\.|\/)(gpg|jpeg|png)$/i,
+         maxNumberOfFiles : 1,*/
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='coupon_thumb']").attr('value', data.result.url);
+                $(".fileupload2").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UE.getEditor('myEditor');
+
+</script>
+<script>
+    (function () {
+        $('#checkAll').click(function () {
+            if ($(this).prop("checked") == false) {
+                $("[name='shopIds[]']").prop("checked", false);//取消全选
+            } else {
+                $("[name='shopIds[]']").prop("checked", true);//全选
+            }
+        })
+    }());
+</script>
+

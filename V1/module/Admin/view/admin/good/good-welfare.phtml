@@ -1,0 +1,279 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/game">返回商品列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+
+<header class="box-title">
+       <a href="/wftadlogin/good/new?type=basis&gid=<?php echo $goodData->id?>">商品--基本信息</a>
+　　　　<a href="/wftadlogin/good/new?type=info&gid=<?php echo $goodData->id?>">商品描述</a>        　　
+        <?php if($goodData->is_together == 1):?><?php if($goodData->need_use_time): ?><a href="/wftadlogin/good/priceInfo?gid=<?php echo $goodData->id?>">商品——价格套系</a><?php endif?><?php endif?>　　　　
+    　　　　<a href="/wftadlogin/good/new?type=welfare&gid=<?php echo $goodData->id?>">商品--奖励与返利</a>　　　　
+    <?php if(in_array($goodData->id, array(2010, 1987, 2091))):?>
+        <a href="/wftadlogin/good/new?type=code&gid=<?php echo $goodData->id?>">商品--美团码发送情况</a>
+    <?php endif?>
+</header>
+
+<br />
+
+<header class="box-title">是否给予点评现金奖</header>
+<form action="/wftadlogin/good/saveAward" method="post">
+　　　
+        否: <input type="radio" checked="true" <?php echo ($goodData->post_award == 1) ? 'checked' : ''; ?> name="post_award" value="1" />　
+        是: <input type="radio" <?php echo ($goodData->post_award == 2) ? 'checked' : ''; ?> name="post_award" value="2" />
+
+        <input type="hidden" name="gid" value="<?php echo $goodData->id?>" />
+        <button type="submit" class="ui-button">修改</button>
+
+</form>
+
+<br />
+
+<?php if($goodData->is_together == 1 && !$goodData->g_buy):?>
+<header class="box-title">现金券奖励 　　 <a class="ui-button" href="/wftadlogin/welfare/cashCoupon?gid=<?php echo $goodData->id;?>">添加现金券奖励</a></header>
+<table class="table">
+    <tr>
+        <th>详情</th>
+        <th>金额</th>
+        <th>发放节点</th>
+        <th>范围</th>
+        <th>共多少张</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <?php foreach($welfareCashData as $cash):?>
+        <tr>
+            <td width="80">
+                <?php echo $cash->cash_coupon_name;?>
+            </td>
+            <td width="80">
+                <?php echo $cash->cash_coupon_price;?>
+            </td>
+            <td width="80">
+                <?php
+                    if ($cash->give_type == 1) {
+                        echo '购买完成';
+                    } elseif ($cash->give_type == 2) {
+                        echo '使用验证';
+                    } elseif ($cash->give_type == 3) {
+                        echo '提交评论';
+                    }
+                ?>
+            </td>
+            <td width="80">
+                <?php foreach(json_decode($cash->use_range)  as $ran):?>
+                    <?php echo $ran. '<br />';?>
+                <?php endforeach;?>
+            </td>
+            <td width="80">
+                <?php echo $cash->total_num;?>
+            </td>
+            <td width="80">
+                <?php
+                    if ($cash->status == 1) {
+                        echo '待审核';
+                    } elseif ($cash->status == 2) {
+                        echo '已审核';
+                    }
+                ?>
+            </td>
+
+            <td width="80">
+                <a class="ui-button" href="/wftadlogin/welfare/cashCoupon?gid=<?php echo $goodData->id;?>&wid=<?php echo $cash->id;?>">修改</a>
+                <a class="ui-button" href="/wftadlogin/welfare/deleteCashCoupon?id=<?php echo $cash->id;?>">删除</a>
+            </td>
+        </tr>
+    <?php endforeach;?>
+</table>
+<?php endif;?>
+
+<?php if($goodData->is_together == 1 && !$goodData->g_buy):?>
+<header class="box-title">现金返利奖励 　　<a class="ui-button" href="/wftadlogin/welfare/rebate?gid=<?php echo $goodData->id?>">添加返利奖励</a></header>
+<table class="table">
+    <tr>
+        <th>方式</th>
+        <th>总金额</th>
+        <th>单次金额</th>
+        <th>发放节点</th>
+        <th>范围</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    <?php foreach($welfareRebateData as $rebate):?>
+    <tr>
+
+            <td width="80">
+                <?php
+                    if ($rebate->rebate_type == 1) {
+                        echo '不可提现现金';
+                    } elseif ($rebate->rebate_type == 2) {
+                        echo '可提现现金';
+                    }
+                ?>
+            </td>
+            <td width="80"><?php echo $rebate->total_num * $rebate->single_rebate;?></td>
+            <td width="80"><?php echo $rebate->single_rebate;?></td>
+            <td width="80">
+                <?php
+                    if ($rebate->give_type == 1) {
+                        echo '购买完成';
+                    } elseif ($rebate->give_type == 2) {
+                        echo '使用验证';
+                    } elseif ($rebate->give_type == 3) {
+                        echo '提交评论';
+                    }
+                ?>
+            </td>
+            <td width="80">
+                 <?php foreach(json_decode($rebate->use_range)  as $range):?>
+                     <?php echo $range. '<br />';?>
+                 <?php endforeach;?>
+            </td>
+            <td width="80">
+                <?php
+                    if ($rebate->status == 1) {
+                        echo '待审核';
+                    } elseif ($rebate->status == 2) {
+                        echo '已审核';
+                    }
+                ?>
+            </td>
+
+            <td width="80">
+                <a class="ui-button" href="/wftadlogin/welfare/rebate?gid=<?php echo $goodData->id;?>&wid=<?php echo $rebate->id;?>">修改</a>
+                <a class="ui-button" href="/wftadlogin/welfare/deleteRebate?id=<?php echo $rebate->id;?>">删除</a>
+            </td>
+
+    </tr>
+    <?php endforeach;?>
+</table>
+<?php endif;?>
+
+<header class="box-title">积分奖励　 </header>
+
+<div>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th width="50">id</th>
+            <th width="80">奖励对象</th>
+            <th width="170">奖励基础积分倍数</th>
+            <th width="80">每个用户限额多少份</th>
+            <th width="170">总积总份数</th>
+            <th width="170">操作</th>
+        </tr>
+        <?php if($welfareData['share']):?>
+            <tr>
+                <td width="50"><?php echo $welfareData['share']->id;?></td>
+                <td width="80"><?php echo '分享'; ?></td>
+                <th width="170"><?php echo $welfareData['share']->double;?></th>
+                <th width="80"><?php echo $welfareData['share']->limit_num;?></th>
+                <th width="170"><?php echo $welfareData['share']->total_num;?></th>
+                <th width="170">
+                    <a class="ui-button" target="_blank" href="/wftadlogin/welfare/new?id=<?php echo $welfareData['share']->id;?>">修改</a>
+                    <!--<a class="ui-button" href="/wftadlogin/welfare/deleteIntegral?id=<?php /*echo $welfareData['share']->id;*/?>">删除</a>-->
+                </th>
+            </tr>
+        <?php else:?>
+            <form class="box box-form" action="/wftadlogin/welfare/save" method="post">
+                <tr>
+                    <td width="50"></td>
+                    <td width="80"><?php echo '分享'; ?></td>
+                    <th width="170">
+                        <select name="double">
+                            <option value="1">1倍</option>
+                            <option value="2">2倍</option>
+                            <option value="3">3倍</option>
+                            <option value="4">4倍</option>
+                            <option value="5">5倍</option>
+                        </select>
+                    </th>
+                    <th width="80"><input type="text" name="limit_num" value="1"></th>
+                    <th width="170"><input type="text" name="total_num" value="1000"></th>
+                    <th width="170">
+                        <input type="hidden" name="welfare_type" value="4">
+                        <input type="hidden" name="object_type" value="2">
+                        <input type="hidden" name="object_id" value="<?php echo $goodData->id?>">
+                        <button type="submit">保存</button>
+                    </th>
+                </tr>
+            </form>
+        <?php endif;?>
+        <?php if($welfareData['post']):?>
+            <tr>
+                <td width="50"><?php echo $welfareData['post']->id;?></td>
+                <td width="80"><?php echo '评论'; ?></td>
+                <th width="170"><?php echo $welfareData['post']->double;?></th>
+                <!--<th width="80"><?php /*echo $welfareData['post']->limit_num;*/?></th>
+                <th width="170"><?php /*echo $welfareData['post']->total_num;*/?></th>-->
+                <th width="170">
+                    <a class="ui-button" target="_blank" href="/wftadlogin/welfare/new?id=<?php echo $welfareData['post']->id;?>">修改</a>
+                    <!--<a class="ui-button" href="/wftadlogin/welfare/deleteIntegral?id=<?php /*echo $welfareData['post']->id;*/?>">删除</a>-->
+                </th>
+            </tr>
+        <?php else:?>
+            <form class="box box-form" action="/wftadlogin/welfare/save" method="post">
+                <tr>
+                    <td width="50"></td>
+                    <td width="80"><?php echo '评论'; ?></td>
+                    <th width="170">
+                        <select name="double">
+                            <option value="1">1倍</option>
+                            <option value="2">2倍</option>
+                            <option value="3">3倍</option>
+                            <option value="4">4倍</option>
+                            <option value="5">5倍</option>
+                        </select>
+                    </th>
+                    <th width="80"><input type="text" name="limit_num" value="10"></th>
+                    <th width="170"><input type="text" name="total_num" value="10000"></th>
+                    <th width="170">
+                        <input type="hidden" name="welfare_type" value="3">
+                        <input type="hidden" name="object_type" value="2">
+                        <input type="hidden" name="object_id" value="<?php echo $goodData->id?>">
+                        <button type="submit">保存</button>
+                    </th>
+                </tr>
+            </form>
+        <?php endif;?>
+        </tbody>
+    </table>
+
+    <table class="table">
+        <form class="box box-form" action="/wftadlogin/good/saveBuyIntegral" method="post">
+            <tr>
+                <th width="150">购买奖励积分倍数</th>
+                <th colspan="1" width="80">
+                    <input type="text" name="buy_integral" value="<?php echo (float)$goodData->buy_integral?>">
+                </th>
+                <th width="170">
+                    <input type="hidden" name="id" value="<?php echo $goodData->id?>">
+                    <button class="ui-button" type="submit">修改</button>
+                </th>
+            </tr>
+
+         </form>
+
+        <form class="box box-form" action="/wftadlogin/good/saveCashShare" method="post">
+        <tr>
+            <th width="160">是否可以分享红包
+            <th colspan="1" width="600">
+                <input name="cash_share" type="radio" value="1" <?php if($goodData->cash_share):?> checked <?php endif; ?> /> 是 &nbsp;&nbsp;&nbsp;
+                <input name="cash_share" type="radio" value="0" <?php if(!$goodData->cash_share):?> checked <?php endif; ?> /> 否
+            </th>
+            <th width="170">
+                <input type="hidden" name="goodid" value="<?php echo $goodData->id?>">
+                <button class="ui-button" type="submit">修改</button>
+            </th>
+        </tr>
+        </form>
+    </table>
+</div>
+
+

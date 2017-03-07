@@ -1,0 +1,106 @@
+<script src="/js/echarts.min.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<!-- 为 ECharts 准备一个具备大小（宽高）的Dom -->
+<div id="users" style="width: 1200px;height:400px;"></div>
+<div id="apis" style="width: 1200px;height:400px;"></div>
+<div id="orders" style="width: 1200px;height:400px;"></div>
+<script type="text/javascript">
+
+    $(function () {
+
+        var users =<?php echo $users;?>;
+        var orders =<?php echo $orders;?>;
+        var api_num=<?php echo $api_num;?>
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('users'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '每月用户增长与订单量'
+            },
+            tooltip: {},
+            legend: {
+                data: ['用户增长', '每月订单量']
+            },
+            xAxis: {
+                data: users['time']
+            },
+            yAxis: {},
+            series: [
+                {
+                    name: '用户增长',
+                    type: 'bar',
+                    data: users['user_count']
+                },
+                {
+                    name: '每月订单量',
+                    type: 'bar',
+                    data: users['order_count']
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+
+        /********************* 接口访问  *********************/
+            // 销售总额
+        var apis = echarts.init(document.getElementById('apis'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '接口访问次数'
+            },
+            tooltip: {},
+            legend: {
+                data: ['接口访问']
+            },
+            xAxis: {
+                data: api_num['time']
+            },
+            yAxis: {},
+            series: [{
+                name: '接口访问',
+                type: 'bar',
+                data: api_num['request_count']
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        apis.setOption(option);
+
+
+        <?php if($_GET['all']):?>
+        // 销售总额
+        var ordersChart = echarts.init(document.getElementById('orders'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: '销售总额'
+            },
+            tooltip: {},
+            legend: {
+                data: ['销售总额']
+            },
+            xAxis: {
+                data: orders['time']
+            },
+            yAxis: {},
+            series: [{
+                name: '销售总额',
+                type: 'bar',
+                data: orders['order_money_count']
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        ordersChart.setOption(option);
+
+
+        <?php endif;?>
+
+
+
+    });
+
+</script>
+

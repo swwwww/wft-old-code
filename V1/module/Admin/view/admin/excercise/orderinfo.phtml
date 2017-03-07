@@ -1,0 +1,400 @@
+<style>
+    .price th{
+        border:1px solid #9e9e9e;
+        text-align: center;
+    }
+    .price td{
+        text-align: center;
+        border:1px solid #9e9e9e;
+
+    }
+
+    .ui-button:hover {
+        background-color: #3FB1FF;
+        border-color: #43A9E9;
+        text-decoration: none;
+    }
+    .ui-button {
+        border-radius: 4px;
+        padding: 10px 50px 10px 50px;
+        font-size: 12px;
+        color: #fff;
+        border: 1px solid #FCF8E3;
+        background-color: #9CCC65;
+        cursor: pointer;
+        outline: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        text-decoration: none;
+    }
+    .back{
+        background-color: #ABABAB;
+    }
+
+    .back:hover {
+        background-color: #E96843;
+        border-color: #E96843;
+        text-decoration: none;
+    }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>活动订单详情</h3>
+<!--        <i class="icon icon-list"></i>-->
+<!--        <a href="javascript:void(0)">订单详情</a>-->
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/excercise/codeinfo?order_sn=<?php echo $orderData->order_sn;?>">验证码信息</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/excercise/policyinfo?order_sn=<?php echo $orderData->order_sn;?>">出行人信息</a>
+        <i class="icon icon-add"></i>
+        <a href="javascript:history.go(-1)">返回上一页</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        订单信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">订单号</th>
+            <th colspan="3">
+                <?php echo $orderData->order_sn;?>
+            </th>
+        </tr>
+<!-- 付款状态 ;0未付款;1付款中;2已付款 3  退款中 4 退款成功 5已使用 6已过期 7团购中 -->
+        <tr>
+            <th width="160">订单状态</th>
+            <th colspan="3">
+                <?php
+                $res=\Deyi\OrderAction\OrderInfo::getOrderStatus($orderData->pay_status, $orderData->buy_number, $orderData->backing_number, $orderData->back_number, $orderData->use_number);
+                echo $res['desc'].' '.(($res['back_desc']=='无')?'':$res['back_desc']);
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">下单时间</th>
+            <th colspan="3">
+                <?php echo date('Y-m-d H:i:s', $orderData->dateline);?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">交易号</th>
+            <th colspan="3">
+                <?php echo $orderData->trade_no;?>
+            </th>
+        </tr>
+        <?php /*if($orderData->use_number == $orderData->buy_number):*/?><!--
+            <tr>
+                <th width="160"></th>
+                <th colspan="3">
+                    <a class="ui-button" href="/wftadlogin/order/backDeposit?order_sn=<?php /*echo $orderData->order_sn;*/?>">退押金</a>
+                </th>
+            </tr>
+        --><?php /*endif;*/?>
+    </table>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        用户信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">用户名</th>
+            <th colspan="3">
+                <?php echo $orderData->username;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户id</th>
+            <th colspan="3">
+                <?php echo $orderData->user_id;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户等级</th>
+            <th colspan="3">
+                <?php echo $data_member['member_level'] > 0 ? 'VIP会员' : '普通会员';?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">购买关联 手机号</th>
+            <th colspan="3">
+                <?php echo $orderData->buy_phone;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">支付方式</th>
+            <th colspan="3">
+                <?php echo $orderData->account_type;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">支付账号</th>
+            <th colspan="3">
+                <?php echo $orderData->account;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">实际支付</th>
+            <th colspan="3">
+                <?php echo $orderData->real_pay + $orderData->account_money;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">订单明细</th>
+
+            <th>
+            </th>
+
+        </tr>
+
+        <tr>
+            <th colspan="2">
+                <table class="price">
+                    <tr>
+                        <th width="160">项目类型</th>
+                        <th width="160">名称</th>
+                        <th width="160">单价(含保险)</th>
+                        <th width="100">数量</th>
+                        <th width="100">保险天数</th>
+                        <th width="100">会员价</th>
+                        <th width="100">小计</th>
+                        <th width="100">总价</th>
+                        <th width="100">亲子游资格</th>
+                        <th width="100">优惠项目</th>
+                        <th width="100">券</th>
+                        <th width="100">退费</th>
+                        <th width="100">退其他</th>
+                        <th width="100">实付</th>
+                    </tr>
+                    <?php
+                        $n = 0;
+                        foreach($data_price as $price) {
+                    ?>
+                        <tr>
+                            <td><?php echo $price['is_other'] == 1 ? '其他费用' : '收费项';?></td>
+                            <td><?php echo $price['price_name'];?></td>
+                            <td><?php echo $price['price'];?></td>
+                            <td><?php echo $price['buy_num'];?></td>
+                            <td><?php echo $price['is_other'] == 0 ? $rateday : '-';?></td>
+                            <td><?php echo $price['free_coupon_need_count'] ? $price['free_coupon_need_count'] . '次<br/>亲子游资格' : '-';?></td>
+                            <td><?php echo $price['price_count'];?></td>
+                            <?php
+                                if ($n == 0) {
+                            ?>
+                            <td rowspan="<?php echo count($data_price);?>"><?php printf('%.2f', $data_pay_price_count);?></td>
+                            <td rowspan="<?php echo count($data_price);?>"><?php echo $data_free_item['free_coupon'] > 0 ? $data_free_item['free_coupon'] . '次<br/>-' . sprintf('%.2f', $data_free_item['free_money']) : '-';?></td>
+                            <td rowspan="<?php echo count($data_price);?>">
+                                <?php
+                                    if ($excerciseData[0]['full_price'] > 0) {
+                                ?>
+                                满<?php echo $excerciseData[0]['full_price'];?>减去<?php echo $excerciseData[0]['less_price'];?><br/>
+                                <?php
+                                    }
+                                ?>
+
+                                <?php echo '-'.floor(($data_pay_price_count)/$excerciseData[0]['full_price'])*$excerciseData[0]['less_price'];?>
+                            </td>
+                            <td rowspan="<?php echo count($data_price);?>"><?php echo $orderData->voucher > 0 ? '-'.$orderData->voucher : 0;?><br/>现金券</td>
+                            <td rowspan="<?php echo count($data_price);?>"><?php printf('%.2f', $backAll);?></td>
+                            <td rowspan="<?php echo count($data_price);?>"><?php echo $backOther > 0 ? $backOther . '次<br/>亲子游资格' : '-';?></td>
+                            <td rowspan="<?php echo count($data_price);?>"><?php echo bcsub(bcadd($orderData->real_pay , $orderData->account_money, 2), $backAll, 2); ?></td>
+                            <?php
+                                }
+                            ?>
+                        </tr>
+                    <?php
+                            $n++;
+                        }
+                    ?>
+                </table>
+            </th>
+
+        </tr>
+
+
+    </table>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        活动信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">活动ID</th>
+            <th colspan="3">
+                <?php echo $excerciseData[0]['id'];?>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">场次ID</th>
+            <th colspan="3">
+                <?php echo $excerciseData[0]['eid'];?>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">活动名称</th>
+            <th colspan="3">
+                <?php echo $excerciseData[0]['name'];?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">参加场次</th>
+            <th colspan="3">
+                <?php echo date('Y-m-d H:i:s', $excerciseData[0]['start_time']);?>~<?php echo date('Y-m-d H:i:s', $excerciseData[0]['end_time']);?>
+                第<?php echo $excerciseData[0]['no']; ?>期
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">游玩地</th>
+            <th colspan="3">
+                <?php echo $orderData->shop_name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">遛娃师类型</th>
+            <th colspan="3">
+                <?php
+                echo $excerciseData[0]['teacher_type'];
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">适合年龄</th>
+            <th colspan="3">
+                <?php
+                echo $excerciseData[0]['start_age'];
+                ?>-<?php
+                echo $excerciseData[0]['end_age'];
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">集合地点</th>
+            <th colspan="3">
+                <?php
+                echo $excerciseData[0]['meeting'];
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">参加福利</th>
+            <th colspan="3">
+                <?php
+                echo $excerciseData[0]['welfare'];
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">咨询电话</th>
+            <th colspan="3">
+                <?php
+                echo $excerciseData[0]['phone'];
+                ?>
+            </th>
+        </tr>
+
+    </table>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        操作记录
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="100">交易流水号</th>
+                <th width="150">时间</th>
+                <th width="150">操作</th>
+                <th width="50">交易金额</th>
+                <th width="150">操作人员</th>
+                <th>　　</th>
+            </tr>
+            <?php foreach ($actionData as $row): ?>
+                <tr style="text-align: left">
+                    <td width="100"><?php echo $orderData->trade_no;?></td>
+                    <td width="150"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                    <td width="150"><?php echo $row['action_note']; ?></td>
+                    <td width="50"><?php
+                        if($row['play_status'] == 2) {// 付款成功
+                            echo $orderData->real_pay + $orderData->account_money;
+                        } elseif ($row['play_status'] == 4 || $row['play_status'] == 12) { // 退款成功
+                            echo '-'. $orderData->coupon_unit_price;
+                        } elseif ($row['play_status'] == 10) { // 结算
+                            echo '-'. $orderData->coupon_unit_price;
+                        }
+                        ?></td>
+                    <td width="150"><?php echo $row['action_user_name']; ?></td>
+                    <td>
+                        <?php if($change_back && $row['play_status'] == 14):?>
+                            <a href="/wftadlogin/YardsCode/updateSpecial?id=<?php echo $row['code_id']?>&order_id=<?php echo $row['order_id']?>"  class="ui-button">修改退款金额</a>
+                        <?php endif;?>
+
+                        <?php if ($row['back_flag'] == 1) {?>
+                            <a onclick="if(confirm('确定要驳回提交退款?')==false)return false;" href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&type=2&object_type=1" class="ui-button">驳回提交退款</a>
+                        <?php };?>
+
+                        <?php if ($row['back_flag'] == 2) {?>
+                            <a onclick="if(confirm('确定要驳回受理退款?')==false)return false;" href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&type=2&object_type=1" class="ui-button">驳回提交退款</a>
+                        <?php };?>
+
+                        <?php if ($row['back_flag'] == 3) {?>
+                            <a onclick="if(confirm('确定要驳回受理退款?')==false)return false;" href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&type=2&object_type=2" class="ui-button">驳回受理退款</a>
+                        <?php };?>
+
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php if($orderData['pay_status']==2): ?>
+            <button style="background-color: #ABABAB" class="ui-button" id="">验证</button>
+        <?php else: ?>
+            <button onclick="if(confirm('验证该订单所有验证码?')==false) return false;" class="ui-button" id="validate">验证</button>
+        <?php endif; ?>
+        <button onclick="if(confirm('退款整个订单?')==false) return false;" class="ui-button back" id="back">全部提交退款</button>
+    </div>
+</div>
+<input type="hidden" id="order_sn" name="order_sn" value="<?php echo $orderData->order_sn;?>">
+<script>
+    var order_sn = $('#order_sn').val();
+    $('#validate').click(function() {
+        if (confirm('确定将改订单所有验证码批量验证？不可恢复')) {
+            var href = '/wftadlogin/excercise/validate?type=1&tips=1';//跳转的链接
+
+            window.location.href = href + '&order_sn=' + order_sn;
+        }
+    });
+
+    $("#back").click(function(){
+        if (confirm('确定将改订单退费？不可恢复')) {
+            var href = '/wftadlogin/excercise/back?type=1';//跳转的链接
+            window.location.href = href + '&order_sn=' + order_sn;
+        }
+    })
+</script>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html <?php echo !isset($_GET['isweb']) ? 'id="qiang"' : ''; ?>>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title><?php echo '惊爆价' . $res['price'] . '元 ' . '"' . $res['title'] . '"' . '-玩翻天'; ?></title>
+    <link type="text/css" rel="stylesheet" href="/css/web-place-style.css">
+</head>
+<body>
+<?php if (!isset($_GET['isweb'])) : ?>
+<a id="top-fixed" href="http://wan.deyi.com/app/index.php">
+    <p>玩翻天——孩子们的游玩管家。<br/>下载app，获得更多优惠！</p>
+</a>
+<?php endif; ?>
+
+<div class="wrapper">
+    <section class="detail-one">
+        <span class="sold-price">￥<?php echo $res['price']?></span>
+        <?php if ($res['coupon_join']): ?>
+            <div class="discount">
+                <mark><?php echo $res['discount']?>折</mark>
+                <span class="mark-price">￥<?php echo $res['originalprice']?></span>
+            </div>
+        <?php else: ?>
+            <span class="sold-text">参考价</span>
+        <?php endif;?>
+        <span class="shop-name"><?php echo $res['title']?></span>
+    </section>
+    <?php if ($res['coupon_join']): ?>
+        <ul class="detail-more">
+            <li class="buy">
+                <p>已购买</p>
+
+                <p class="numb"><?php echo $res['buy']?></p>
+            </li>
+            <li class="remain">
+                <p>剩余</p>
+
+                <p class="numb"><?php echo $res['residue']?></p>
+            </li>
+            <li class="finish">
+                <p>结束时间</p>
+
+                <p class="numb"><?php echo $res['res_time'];?></p>
+            </li>
+        </ul>
+    <?php endif;?>
+    <div class="detail-title">小玩说</div>
+    <section class="space10">
+        <?php echo $res['editor_word']?>
+    </section>
+    <section class="detail-one space5">
+        <span class="name">适合年龄</span>
+        <span class="range"><?php echo $res['for_age']?></span>
+    </section>
+    <section class="detail-one">
+        <span class="name">使用时间</span>
+        <span class="range"><?php echo $res['use_time']?></span>
+    </section>
+    <div class="detail-title">使用说明</div>
+    <section>
+        <?php echo $res['attend_method']?>
+    </section>
+    <div class="detail-title">注意事项</div>
+    <section>
+        <?php echo $res['matters_attention']?>
+    </section>
+    <div class="detail-title">图文详情</div>
+    <section>
+        <?php echo $res['description']?>
+    </section>
+    <?php if (count($res['shop_list'])): ?>
+        <div class="detail-title">适用游玩地</div>
+        <?php foreach ($res['shop_list'] as $val): ?>
+            <section class="place">
+                <a class="name" href="/web/place?id=<?php echo $val['shop_id']; ?>"><?php echo $val['shopname'];?></a>
+                <a class="address" href="#"><?php echo $val['address'];?><i></i></a>
+                <a class="tel"
+                   href="tel:<?php echo $val['phone']; ?>">联系电话<span><?php echo $val['phone'];?></span><i></i></a>
+            </section>
+        <?php endforeach; ?>
+    <?php endif;?>
+    <?php if (count($res['coupon_list'])): ?>
+        <div class="detail-title">相关票券</div>
+        <?php foreach ($res['coupon_list'] as $value): ?>
+            <a class="shop space5" href="/web/coupon?id=<?php echo $value['coupon_id']; ?>">
+            <span class="photo">
+                <img src="<?php echo $value['coupon_img'] ?>">
+            </span>
+
+                <div class="detail">
+                    <p class="title"><?php echo $value['coupon_name'] ?></p>
+
+                    <p class="text">
+                        <span class="sold">￥<?php echo $value['coupon_price'] ?></span>
+                        <mark><?php echo $value['discount'] ?>折</mark>
+                        <?php if ($value['surplus']): ?>
+                            <span class="ticket">有票</span>
+                        <?php endif;?>
+                    </p>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    <?php endif;?>
+</div>
+<?php if (!isset($_GET['isweb'])) : ?>
+<footer>
+
+    <!--            <a class="btn-qiang" href="http://wan.deyi.com/app/index.php">抢</a>-->
+
+    <?php if (time() < $res['coupon_starttime']): ?>
+        <a class="btn-qiang" href="#">开抢时间未到</a>
+    <?php else: ?>
+        <a class="btn-qiang" href="<?php echo $toUrl; ?>" id="w_qiang">抢<?php /*echo $res['price']*/?></a>
+    <?php endif;?>
+
+</footer>
+<?php endif; ?>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/jquery.min.js"></script>
+
+<script>
+
+    $(function () {
+        $('#w_qiang').click(function () {
+            var price =<?php echo (int)$res['price']?>;
+            if (price <= 1) {
+                var aa = window.confirm("想要不？要的话快来下载我啊，下载就能买1块钱的便宜货啦！一般人我不告诉他哦！");
+                if (aa) {
+                    window.location.href = '/app/index.php'
+                    return false
+                } else {
+                    return false;
+                }
+            }
+        })
+    })
+
+
+    wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: '<?php echo $jsApi['appid'];?>', // 必填，公众号的唯一标识
+        timestamp: <?php echo $jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+        nonceStr: '<?php echo $jsApi['noncestr'];?>', // 必填，生成签名的随机串
+        signature: '<?php echo $jsApi['signature'];?>',// 必填，签名，见附录1
+        jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(function () {
+        // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+        wx.onMenuShareTimeline({
+            title: '<?php echo $share['title'];?>', // 分享标题
+            link: '<?php echo $share['toUrl'];?>', // 分享链接
+            imgUrl: '<?php echo $share['img'];?>', // 分享图标
+            success: function () {
+                //alert('用户确认分享后执行的回调函数');
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        //分享给朋友
+        wx.onMenuShareAppMessage({
+            title: '<?php echo $share['title'];?>', // 分享标题
+            desc: '', // 分享描述
+            link: '<?php echo $share['toUrl'];?>', // 分享链接
+            imgUrl: '<?php echo $share['img'];?>', // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+
+    });
+</script>
+
+<style>
+    img {
+        max-width: 100%;
+    }
+</style>
+</body>
+</html>

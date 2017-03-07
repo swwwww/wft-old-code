@@ -1,0 +1,117 @@
+<hgroup class="box">
+    <header>
+        <h3><?php echo isset($type)?'特权标签':'标签(属性)'; ?></h3>
+        <i class="icon icon-add"></i>
+        <a href="javascript:void(0)" id="new-tag"><?php echo isset($type)?'特权标签':'标签'; ?></a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        新增/修改
+    </div>
+    <div>
+        <form action="/wftadlogin/tag/save" method="post">
+            <input type="hidden" class="form-control" value="<?php echo $row->id; ?>" name="id">
+            <table class="table">
+                <tbody>
+
+                <tr>
+                    <th>标签名称</th>
+                    <th><input type="text" class="form-control" value="<?php echo $row->tag_name; ?>" name="tag_name">
+                    </th>
+                </tr>
+
+
+                <tr>
+                    <th>描述</th>
+                    <th><input type="text" class="form-control" value="<?php echo $row->desc; ?>" name="desc"></th>
+                </tr>
+                <tr>
+                    <th>上传图片</th>
+                    <th>
+                        <!-- 上传按钮 -->
+                        <div class="btn btn-success fileinput-button">
+                            <span> 上传 </span>
+                            <input type="file" id="fileupload1" name="file"/>
+                        </div>
+                        <!-- 存放表单 -->
+                        <input type="hidden" id="upload_input_1" name="img" value="<?php echo $row->img ?>"/>
+                        <!-- 展示标签 -->
+                        <img width="240px" height="120px" class="upload_img_1" src="<?php echo $row->img ?>">
+
+                    </th>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="row">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+
+        </form>
+
+
+    </div>
+</div>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $(".upload_img_1").attr('src', data.result.url);
+                $("#upload_input_1").attr('value', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>
+<style>
+    /*
+     * jQuery File Upload Plugin CSS
+     * https://github.com/blueimp/jQuery-File-Upload
+     *
+     * Copyright 2013, Sebastian Tschan
+     * https://blueimp.net
+     *
+     * Licensed under the MIT license:
+     * http://www.opensource.org/licenses/MIT
+     */
+
+    .fileinput-button {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+    .fileinput-button input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        opacity: 0;
+        -ms-filter: 'alpha(opacity=0)';
+        font-size: 200px !important;
+        direction: ltr;
+        cursor: pointer;
+    }
+
+    /* Fixes for IE < 8 */
+    @media screen\9 {
+        .fileinput-button input {
+            filter: alpha(opacity=0);
+            font-size: 100%;
+            height: 100%;
+        }
+    }
+</style>
+

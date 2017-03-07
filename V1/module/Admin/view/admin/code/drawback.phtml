@@ -1,0 +1,294 @@
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/code/drawback">商品退款</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/code/back">原路返回退款</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/yards/backlist">活动退款</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $good_name = null;
+        $order_id = null;
+        $good_id = null;
+        $buy_start = null;
+        $buy_end = null;
+        $back_true_end = null;
+        $back_true_start= null;
+        $draw_start = null;
+        $draw_end = NULL;
+        $pageNum = 10;
+        $trade_way = 0;
+        $code_status = 0;
+        $abnormal = 0;
+        $is_online = 0;
+
+        if (isset($_GET['page_num']) && $_GET['page_num']) {
+            $pageNum = $_GET['page_num'];
+        }
+
+        if (isset($_GET['good_name']) && $_GET['good_name']) {
+            $good_name = $_GET['good_name'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['good_id']) && $_GET['good_id']) {
+            $good_id = $_GET['good_id'];
+        }
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['back_true_end']) && $_GET['back_true_end']) {
+            $back_true_end = $_GET['back_true_end'];
+        }
+
+        if (isset($_GET['back_true_start']) && $_GET['back_true_start']) {
+            $back_true_start = $_GET['back_true_start'];
+        }
+
+        if (isset($_GET['draw_start']) && $_GET['draw_start']) {
+            $draw_start = $_GET['draw_start'];
+        }
+
+        if (isset($_GET['draw_end']) && $_GET['draw_end']) {
+            $draw_end = $_GET['draw_end'];
+        }
+
+        if (isset($_GET['trade_way']) && $_GET['trade_way']) {
+            $trade_way = $_GET['trade_way'];
+        }
+
+        if (isset($_GET['code_status']) && $_GET['code_status']) {
+            $code_status = $_GET['code_status'];
+        }
+
+        if (isset($_GET['abnormal']) && $_GET['abnormal']) {
+            $abnormal = $_GET['abnormal'];
+        }
+
+        if (isset($_GET['is_online']) && $_GET['is_online']) {
+            $is_online = $_GET['is_online'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">商品名称</th>
+            <th>
+                <input type="text" class="cssInput" style="width:250px" name="good_name" value="<?php echo $good_name;?>">
+                &nbsp;&nbsp;&nbsp;商品id&nbsp;<input type="text" class="cssInput" style="width:50px" name="good_id" value="<?php echo $good_id;?>">
+            </th>
+            <th width="160">订单号</th>
+            <th>
+                <input type="text" class="cssInput" style="width:80px"  name="order_id" value="<?php echo $order_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">订单交易时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_start;?>">
+                <input name="buy_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_end;?>">
+            </th>
+            <th width="160">确定退款时间</th>
+            <th>
+                <input name="back_true_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_true_start;?>">
+                <input name="back_true_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_true_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">受理退款时间</th>
+            <th colspan="3">
+                <input name="draw_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $draw_start;?>">
+                <input name="draw_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $draw_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">状态</th>
+            <th colspan="3">
+                <select name="trade_way">
+                    <option value="0" <?php echo ($trade_way == 0) ? 'selected' : '';?>>交易渠道_全部</option>
+                    <option value="1" <?php echo ($trade_way == 1) ? 'selected' : '';?>>交易渠道_支付宝</option>
+                    <option value="2" <?php echo ($trade_way == 2) ? 'selected' : '';?>>交易渠道_银联</option>
+                    <option value="3" <?php echo ($trade_way == 3) ? 'selected' : '';?>>交易渠道_新微信网页</option>
+                    <option value="5" <?php echo ($trade_way == 5) ? 'selected' : '';?>>交易渠道_微信app</option>
+                    <option value="4" <?php echo ($trade_way == 4) ? 'selected' : '';?>>交易渠道_旧微信网页</option>
+                    <option value="6" <?php echo ($trade_way == 6) ? 'selected' : '';?>>交易渠道_用户账户</option>
+                </select>
+
+                <select name="code_status">
+                    <?php
+                        if(!isset($_GET['code_status'])) {
+                            $code_status = 4;
+                        }
+                    ?>
+                    <option value="0" <?php echo ($code_status) ? 'selected' : '';?>>全部</option>
+                    <option value="4" <?php echo ($code_status == 4) ? 'selected' : '';?>>状态_已受理退款</option>
+                    <option value="5" <?php echo ($code_status == 5) ? 'selected' : '';?>>状态_已退款</option>
+                </select>
+
+                <select name="page_num">
+                    <option value="10" <?php echo ($pageNum == 10) ? 'selected' : '';?>>展示个数_10</option>
+                    <option value="50" <?php echo ($pageNum == 50) ? 'selected' : '';?>>展示个数_50</option>
+                    <option value="100" <?php echo ($pageNum == 100) ? 'selected' : '';?>>展示个数_100</option>
+                    <option value="150" <?php echo ($pageNum == 150) ? 'selected' : '';?>>展示个数_150</option>
+                </select>
+
+                <select name="abnormal">
+                    <option value="0" <?php echo (!$abnormal) ? 'selected' : '';?>>全部_是否特殊退款</option>
+                    <option value="1" <?php echo ($abnormal == 1) ? 'selected' : '';?>>状态_特殊退款</option>
+                    <option value="2" <?php echo ($abnormal == 2) ? 'selected' : '';?>>状态_正常退款</option>
+                </select>　　
+                <select name="is_online">
+                    <option value="0" <?php echo (!$is_online) ? 'selected' : '';?>>全部_是否线下退款</option>
+                    <option value="1" <?php echo ($is_online == 1) ? 'selected' : '';?>>线下退款</option>
+                </select>
+
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/code/drawback" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/code/outDraw" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        使用码列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="100">交易时间</th>
+                <th width="100">确定退款时间</th>
+                <th width="100">受理退款时间</th>
+                <th width="100">验证码</th>
+                <th width="150">交易号</th>
+                <th width="100">订单号</th>
+                <th width="100">支付金额</th>
+                <th width="100">现金券金额</th>
+                <th width="100">购买数量</th>
+                <th width="100">出账金额</th>
+                <th width="100">交易渠道</th>
+                <th width="60">用户id</th>
+                <th width="100">用户名</th>
+                <th width="150">商品名称</th>
+                <th width="150">特殊退款原因</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left" class="ter-change" >
+                    <td width="50"></td>
+                    <td width="100">
+                        <?php echo date('Y-m-d H:i:s',$row['dateline']); ?>
+                    </td>
+                    <td width="100">
+                        <?php echo  $row['back_time']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['accept_time'] ? date('Y-m-d H:i:s',$row['accept_time']) : ''; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['id'].$row['password']; ?>
+                    </td>
+                    <td width="150">
+                        <?php echo $row['trade_no']; ?>
+                    </td>
+                    <td width="100"><a href="/wftadlogin/order/info?order_sn=<?php echo $row['order_sn'];?>"><?php echo $row['order_sn']; ?></a></td>
+                    <td width="100"><?php echo $row['real_pay'] + $row['account_money']; ?></td>
+                    <td width="100"><?php echo $row['voucher']; ?></td>
+                    <td width="100"><?php echo $row['buy_number']; ?></td>
+                    <td width="100">
+                        <?php
+                            echo floatval($row['back_money']);
+                        ?>
+                    </td>
+                    <td width="100"><?php echo $tradeWay[$row['account_type']]; ?></td>
+                    <td width="60"><?php echo $row['user_id']; ?></td>
+                    <td width="100"><?php echo $row['username']; ?></td>
+                    <td width="150"><?php echo $row['coupon_name']; ?></td>
+                    <td width="150"><?php echo $row['special_reason']; ?>
+                    </td>
+                    <td width="150">
+                        <?php if(!in_array($row['id'], $code_minute)) {?>
+                            <?php if($row['force'] == 2):?>
+                                <?php if($row['error']):?>
+                                <span class="ui-button">退款失败</span>
+                                <?php elseif(($row['account_type'] == 'alipay' && $row['dateline'] < time()-7776000) OR ($row['account_type'] == 'union' && ($row['dateline'] < time()-31536000 || $row['dateline'] < 1455379200)) OR (($row['account_type'] == 'weixin' OR $row['account_type'] == 'new_jsapi') && $row['dateline'] < time()-31536000) OR $row['account_type'] == 'jsapi'):?>
+                                    <a class="ui-button" href="/wftadlogin/code/offlineBack?id=<?php echo $row['id'];?>">线下退款</a>
+                                <?php else:?>
+                                    <?php if(isset($_GET['wcz']) && ($_GET['wcz'] == 100)):?>
+                                    <a class="ui-button" href="/wftadlogin/code/offlineBack?id=<?php echo $row['id'];?>">线下退款</a>
+                                    <?php endif;?>
+                                    <span>待处理</span>
+                                   <!-- <a style="background-color: green" onclick="if(confirm('确定退款?')==false)return false;" href="/wftadlogin/code/draw?type=1&id=<?php /*echo $row['id']; */?>" class="ui-button">确认退款</a>-->
+                                <?php endif;?>
+                            <?php endif;?>
+                        <?php } else {?>
+                        <?php echo '提交中'; }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <div class="box-title">
+            统计该条件下的订单个数为 <?php echo $count['order_number']; ?>
+            支付金额为 <?php echo $count['order_money']; ?>
+            使用码个数为 <?php echo $count['code_num']; ?>
+            待退款金额为 <?php echo $count['back_money']; ?>
+            已退款金额为 <?php echo $count['backed_money']; ?>
+        </div>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+    });
+</script>
+
+
+
+

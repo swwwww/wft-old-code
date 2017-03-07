@@ -1,0 +1,111 @@
+<hgroup class="box">
+    <header>
+        <h3>分类管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/label">返回分类列表</a>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span> </div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div >
+        <table class="table">
+            <tbody>
+
+            <tr>
+                <th  width="100">id</th>
+                <th  width="100">分类名</th>
+                <th  width="100">类型</th>
+                <th  width="300">描述</th>
+                <th  width="100">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td ><?php echo $row['id']; ?></td>
+                        <td >
+                                <?php echo $row['tag_name']; ?>
+                        </td>
+                        <td ><?php echo $labelType[$row['label_type']];?></td>
+                        <td style="text-align: left" class="size2"><?php echo $row['description'];?></td>
+                        <td >
+                            <?php if(in_array($row['id'],$pid)): ?>
+                            <a href="#" class="ui-button">已使用</a>
+                                <?php else: ?>
+                                <a href="/wftadlogin/label/douse?lid=<?php echo $row['id']; ?>" class="ui-button">使用</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无标签 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(function () {
+        //设为焦点图
+        $(".check_v").click(function(){$.get($(this).attr('data-src'),
+            function(result){
+                if(result.status == 1){
+                    window.location.reload();
+                } else {
+                    alert(result.message);
+                }
+            }, 'json'
+        );
+            return false;
+        });
+
+        /*  //排序
+         $(":input, .order").blur(function(){
+         $.get($(this).attr('data-src')+'&oid='+$(this).val(),
+         function(result){
+         if(result.status == 1){
+         window.location.reload();
+         }
+         }, 'json'
+         );
+         return false;
+         });*/
+
+
+
+
+        /*document.getElementById("click").onclick=function(){
+         var text=document.getElementById("t");
+         var val=text.innerHTML;
+         text.innerHTML="<input type='text' id='n' value="+val+" />";
+         document.getElementById("n").addEventListener("blur",function(e){
+         text.innerHTML=document.getElementById("n").value;
+         });
+         };*/
+
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/index/sharedata?type=tag&id=' + id);
+        })
+
+
+
+    })
+</script>

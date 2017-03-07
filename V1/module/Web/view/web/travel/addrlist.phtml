@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>地址管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/order-center.css" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<?php if($data):?>
+    <?php foreach($data as $v):?>
+        <div class="address-info">
+            <div class="addr">
+                <p><span class="address-name"><?php echo $v['name'];?></span><span class="address-tel"><?php echo $v['phone'];?></span></p>
+                <p class="address-line"><span class="address-position"><?php echo $v['province'].$v['city'].$v['region'].$v['address'];?></span></p>
+            </div>
+            <div class="address-btn">
+                <input type="radio" class="choose" name="address" value="<?php echo $v['id'];?>" <?php if($v['is_default']==1){echo "checked='checked'";}?>/>
+                <label for="choose" class="address_check">
+                    <span class="address-select">设为默认</span>
+                </label>
+                <a class="address-edit" href="/web/travel/editaddr?id=<?php echo $v['id'];?>">编辑</a>
+                <a class="address-del" href="javascript:;" data="<?php echo $v['id']?>">删除</a>
+            </div>
+        </div>
+    <?php endforeach;?>
+<?php endif;?>
+<div id="tipsDia"></div>
+<input type="hidden" name="linker_id" id="linker_id" value="<?php echo $data[0]['id'];?>">
+<input type="hidden" name="type" id="type" value="<?php echo $type;?>">
+<a class="add-list" href="/web/travel/editaddr?type=1">+新建收货地址</a>
+<script src="/js/zepto1.1.6.min.js"></script>
+<script>
+    (function () {
+        var isTouch = ("ontouchend" in document ? "touchend" : "tap"),
+            loginTip = $("#tipsDia"),
+            linker_id = $("#linker_id").val(),
+            linker_name = $(".address-name").text(),
+            linker_phone = $(".address-tel").text();
+
+        if(linker_id==0){
+            localStorage.setItem("default_linker_name",linker_name);
+            localStorage.setItem("default_linker_tel",linker_phone);
+        }
+
+
+        $(".address_check").on(isTouch, function (e) {
+            e.preventDefault();
+            var id = $(this).parent().find('input').val();
+            if(id>0){
+                $.ajax({
+                    type:'POST',
+                    url:"/user/phone/setdefault",
+                    dataType:'json',
+                    async: true,
+                    data:{"id":id,"uid":<?php echo $_COOKIE['uid'];?>},
+                    headers: {
+                        "VER": 10
+                    },
+                    beforeSend:function(){
+                        loginTip.text("正在操作...");
+                        loginTip.show();
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+                        } else if(result.response_params.status == 1) {
+                            //todo 成功
+                            //window.location.href = "";
+                            //console.log(result.response_params);
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+                            window.location.reload();
+                        }
+                    },
+
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+                })
+            }else{
+                loginTip.text("请完善联系人信息");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                },2000);
+            }
+        });
+
+        $(".addr").on(isTouch,function(e){
+            e.preventDefault();
+            var type = $("#type").val();
+            var id = $(this).siblings().find("input").val();
+            if(type==1){
+                if(id>0){
+                    $.ajax({
+                        type:'POST',
+                        url:"/user/phone/setdefault",
+                        dataType:'json',
+                        async: true,
+                        data:{"id":id,"uid":<?php echo $_COOKIE['uid'];?>},
+                        headers: {
+                            "VER": 10
+                        },
+
+                        success: function (result) {
+                            if (result.response_params.status == 0) {
+
+                            } else if(result.response_params.status == 1) {
+                                window.location.href=document.referrer;
+
+                            }
+                        },
+
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                            if (XMLHttpRequest.status == 401) {
+                                //todo 跳转授权页面
+                                //alert(XMLHttpRequest.responseJSON.message);
+                                window.location.href = '<?php echo $authorUrl;?>';
+                            }
+                            else if (XMLHttpRequest.status == 403) {
+                                alert('接口验证失败，非法访问');
+                            }
+                            else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                            }
+                            else {
+                                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+
+        $(".address-del").on(isTouch,function(e){
+            e.preventDefault();
+            var addr_id = $(this).attr('data');
+            if(addr_id>0){
+                $.ajax({
+                    type:'POST',
+                    url:"/user/phone/deletephone",
+                    dataType:'json',
+                    async: true,
+                    data:{"id":addr_id},
+                    headers: {
+                        "VER": 10
+                    },
+                    beforeSend:function(){
+                        loginTip.text("正在删除...");
+                        loginTip.show();
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+                        } else if(result.response_params.status == 1) {
+                            //todo 成功
+                            //window.location.href = "";
+                            //console.log(result.response_params);
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+                            window.location.reload();
+                        }
+                    },
+
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+                })
+            }else{
+                loginTip.text("请完善联系人信息");
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                },2000);
+            }
+        })
+    }());
+</script>
+</body>
+</html>
+

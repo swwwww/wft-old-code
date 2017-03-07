@@ -1,0 +1,493 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/good/new?type=together">添加非合作商品</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+    $good_name = null;
+    $business = null;
+
+    if (isset($_GET['good_name']) && $_GET['good_name']) {
+        $good_name = $_GET['good_name'];
+    }
+
+    if (isset($_GET['business']) && $_GET['business']) {
+        $business = $_GET['business'];
+    }
+
+    ?>
+    <table class="table">
+
+        <tr>
+            <th width="160">经办人</th>
+            <th colspan="2">
+                <input type="text" class="cssInput" name="business" placeholder="经办人" value="<?php echo $business;?>">
+            </th>
+            <th width="160">商品名称</th>
+            <th colspan="1">
+                <input type="text" class="cssInput" name="good_name" placeholder="商品名称" value="<?php echo $good_name;?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">
+                <?php
+                if (isset($_GET['together']) && $_GET['together']) {
+                    $together = $_GET['together'];
+                } else {
+                    $together = 0;
+                }
+                ?>是否合作：
+                <select class="together_change">
+                    <option <?php echo ($together == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/game?together=0&<?php unset($_GET['together'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">全部</option>
+                    <option <?php echo ($together == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game?together=1&<?php unset($_GET['together'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">合作</option>
+                    <option <?php echo ($together == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/game?together=2&<?php unset($_GET['together'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">非合作</option>
+                </select>
+            </th>
+            <th width="160">
+                <?php
+                if (isset($_GET['good_status']) && $_GET['good_status']) {
+                    $status = $_GET['good_status'];
+                } else {
+                    $status = 0;
+                }
+
+                $_GET['together'] = $together;
+                ?>商品状态：
+                <select class="status_change">
+                    <option <?php echo ($status == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=0&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">全部</option>
+                    <option <?php echo ($status == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=1&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">未发布</option>
+                    <option <?php echo ($status == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=2&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">未开始</option>
+                    <option <?php echo ($status == 3) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=3&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">在售</option>
+                    <option <?php echo ($status == 4) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=4&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">停止售卖</option>
+                    <option <?php echo ($status == 5) ? 'selected' : ''; ?> data-src="/wftadlogin/game?good_status=5&<?php unset($_GET['good_status'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">停止使用</option>
+                </select>
+            </th>
+            <th width="160">
+                <?php
+                if (isset($_GET['group']) && $_GET['group']) {
+                    $group = $_GET['group'];
+                } else {
+                    $group = 0;
+                }
+                $_GET['together'] = $together;
+                $_GET['good_status'] = $status;
+                ?>是否同玩：
+                <select class="group_change">
+                    <option <?php echo ($group == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/game?group=0&<?php unset($_GET['group'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">全部</option>
+                    <option <?php echo ($group == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game?group=1&<?php unset($_GET['group'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">是</option>
+                    <option <?php echo ($group == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/game?group=2&<?php unset($_GET['group'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">否</option>
+                </select>
+            </th>
+            <th width="160">
+                <?php
+                if (isset($_GET['order_change']) && $_GET['order_change']) {
+                    $order_change = $_GET['order_change'];
+                } else {
+                    $order_change = 0;
+                }
+
+                $_GET['together'] = $together;
+                $_GET['good_status'] = $status;
+                $_GET['group'] = $group;
+                ?>购买数量排序：
+                <select class="order_change">
+                    <option <?php echo ($order_change == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/game?order_change=0&<?php unset($_GET['order_change'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">全部</option>
+                    <option <?php echo ($order_change == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game?order_change=1&<?php unset($_GET['order_change'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">正序排列</option>
+                    <option <?php echo ($order_change == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/game?order_change=2&<?php unset($_GET['order_change'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">倒序排列</option>
+                </select>
+            </th>
+            <th width="160">
+                <?php
+                if (isset($_GET['lately']) && $_GET['lately']) {
+                    $lately = $_GET['lately'];
+                } else {
+                    $lately = 0;
+                }
+
+                $_GET['together'] = $together;
+                $_GET['good_status'] = $status;
+                $_GET['group'] = $group;
+                $_GET['lately'] = $lately;
+                ?>近期结束售卖：
+                <select class="order_change">
+                    <option <?php echo ($lately == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/game?lately=0&<?php unset($_GET['lately'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">全部</option>
+                    <option <?php echo ($lately == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/game?lately=1&<?php unset($_GET['lately'], $_GET['p']);
+                    echo http_build_query($_GET); ?>">一周以内</option>
+                </select>
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="4">
+                <a href="/wftadlogin/game" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+
+
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        商品列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size2">商品名称</th>
+                <th class="size2">最近结束售卖时间</th>
+                <th class="size1">城市</th>
+                <th class="size1">
+                    合作
+                </th>
+                <th class="size1">
+                    状态
+                </th>
+                <th class="size1">
+                    同玩
+                </th>
+                <th class="size1">经办人</th>
+                <th class="size1">剩余</th>
+                <th class="size1">
+                    购买量
+                </th>
+                <th class="size1">虚拟票</th>
+                <th class="size1">评论</th>
+                <th class="size1">分享</th>
+                <th class="size1">咨询</th>
+                <th class="size4">操作</th>
+            </tr>
+            <?php $gc = new \Deyi\GetCacheData\GoodCache(); ?>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id;?></td>
+                        <td class="size2"><a href="/wftadlogin/good/new?gid=<?php echo $row->id;?>"><?php echo $row->title?></a></td>
+                        <td class="size2"><?php echo $gc->getlastinfo($row->id); ?></td>
+                        <td class="size1"><?php echo $city[$row->city]; ?></td>
+                        <td class="size1"><?php echo ($row->is_together == 2) ? '非合作' : '合作'?></td>
+                        <td class="size1">
+                            <?php
+                                if ($row->status == -2) {
+                                    echo '已隐藏价格';
+                                } elseif ($row->status == 0) {
+                                    echo '未发布';
+                                } elseif ($row->status == 1 && $row->up_time > time()) {// 未开始
+                                    echo '未开始';
+                                } elseif ($row->ticket_num > $row->buy and $row->status == 1 && $row->up_time < time() && $row->down_time > time()) {// 在售卖
+                                    echo '在售卖';
+                                } elseif (($row->ticket_num == $row->buy) or ($row->status == 1 && $row->foot_time > time() && $row->down_time < time())) {// 停止售卖
+                                    echo '停止售卖';
+                                } elseif ($row->status == 1 && $row->foot_time < time() && $row->down_time < time()) {// 停止使用
+                                    echo '停止使用';
+                                }
+                            ?>
+                        </td>
+                        <td class="size1"><?php echo ($row->g_buy && ($row->down_time - time()) > 86400) ? '是' : '否';?></td>
+                        <td class="size1"><?php echo $row->business;?></td>
+                       <!-- <td class="size2"><?php /*echo date('Y-m-d H:i', $row->dateline);*/?></td>-->
+                        <td class="size1"><?php echo ($row->ticket_num - $row->buy_num);?></td>
+                        <td class="size1"><?php echo $row->buy_num;?></td>
+                        <td class="size1"><?php echo $row->coupon_vir;?></td>
+                        <td class="size1"><a href="/wftadlogin/game/post?gid=<?php echo $row->id;?>"><?php echo $row->post_number;?></a></td>
+                        <td class="size1 share_number">0</td>
+                        <td class="size1"><a href="/wftadlogin/game/consult?gid=<?php echo $row->id;?>"><?php echo $row->consult_num; ?></a></td>
+                        <td class="size4">
+
+                            <?php if($row->status != -2):?>
+                                <a onclick= "if(confirm( '<?php echo $row->status ? '确定取消发布' : '确定发布'; ?>')==false)return   false; " href="/wftadlogin/good/publish?gid=<?php echo $row->id;?>&status=<?php echo $row->status ;?>" class="ui-button"><?php echo $row->status ? '取消发布' : '发布'; ?></a>
+
+                                <a href="/wftadlogin/game/delete?gid=<?php echo $row->id;?>" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                                <a href="/wftadlogin/game/order?good_id=<?php echo $row->id?>" class="ui-button">订单详情</a>
+
+                                <?php if($row->g_buy && ($row->down_time - time()) > 86400):?>
+                                    <a href="/wftadlogin/good/play?gid=<?php echo $row->id?>&type=1" onclick="if(confirm('确定取消同玩?')==false)return false;" class="ui-button">取消同玩</a>
+                                <?php elseif($row->is_together == 1 && $row->for_new == 2 && $row->share == 1 ):?>
+                                    <a href="javascript:void(0)" data-src="/wftadlogin/good/play?gid=<?php echo $row->id;?>&type=2" class="login ui-button">设为同玩</a>
+                                <?php endif;?>
+
+                                <?php if($row->status == 0):?>
+                                    <a href="/wftadlogin/game/hidden?type=1&gid=<?php echo $row->id;?>" class="ui-button">隐藏价格</a>
+                                <?php endif;?>
+                            <?php else:?>
+                                <a href="/wftadlogin/game/order?good_id=<?php echo $row->id?>" class="ui-button">订单详情</a>
+                                <a href="/wftadlogin/game/delete?gid=<?php echo $row->id;?>" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                                <a href="/wftadlogin/game/hidden?type=2&gid=<?php echo $row->id;?>" class="ui-button">取消隐藏价格</a>
+                            <?php endif;?>
+
+                        
+                                <a href="/wftadlogin/Insurance/index?good_id=<?php echo $row->id?>" class="ui-button">投保情况</a>
+
+                            <a target="_blank" href="/wftadlogin/consult/virPost?type=good&id=<?php echo $row->id?>" class="ui-button">添加评论</a>
+
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无活动 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3>设为同玩</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="post" id="zjh" method="post">
+            <ol>
+                <li> 同玩套系名称<input name="g_set_name" type="text " /></li>
+                <li> 成团人数<input name="g_limit" type="text " /></li>
+                <li> 成团价格<input name="g_price" type="text " /></li>
+                <li>
+                    团长是否有奖励
+                    否: <input type="radio" checked="true" name="award" value="0" />
+                    是: <input type="radio" name="award" value="1" />
+                </li>
+                <li> 现金券
+                    <select name="cash_coupon_id">
+                        <?php foreach($cashCoupon as $cash):?>
+                            <option  value="<?php echo $cash->id?>"><?php echo $cash->title;?></option>
+                        <?php endforeach;?>
+                    </select>
+                </li>
+                <li> <button  type="submit">提交</button></li>
+            </ol>
+        </form>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //获取分享记录
+        $.each($('.share_number'), function (k, v) {
+            var id = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/index/sharedata?type=game&id=' + id);
+        })
+
+        //弹窗
+        $('.login').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-src');
+            $('#zjh').attr('action', url);
+
+
+        })
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+
+        //展示筛选
+        $('.together_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        $('.group_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        $('.status_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        $('.order_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+    })
+</script>
+

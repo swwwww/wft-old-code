@@ -1,0 +1,98 @@
+<hgroup class="box">
+    <header>
+        <h3>返利设置</h3>
+        <i class="icon icon-list"></i>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/welfare/keep" method="post" id="welfare_save">
+    <header class="box-title">新增返利奖励</header>
+    <table class="table">
+        <tr>
+            <th width="160">返利类型</th>
+            <th colspan="3">
+                <select name="rebate_type">
+                    <option <?php echo ($welfare && $welfare->rebate_type == 1) ? 'selected' : ''; ?> value="1">不可提现</option>
+                    <option <?php echo ($welfare && $welfare->rebate_type == 2) ? 'selected' : ''; ?> value="2">可提现</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">返利时间</th>
+            <th colspan="3">
+                <select name="give_type">
+                    <option <?php echo ($welfare && $welfare->give_type == 1) ? 'selected' : ''; ?> value="1">购买完成</option>
+                    <option <?php echo ($welfare && $welfare->give_type == 2) ? 'selected' : ''; ?> value="2">使用验证</option>
+                    <option <?php echo ($welfare && $welfare->give_type == 3) ? 'selected' : ''; ?> value="3">提交评论</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">产生的套系</th>
+            <th colspan="3">
+                <?php foreach($goodInfoData as $info): ?>
+                    <input <?php echo ($welfare && in_array($info->id, array_flip(json_decode($welfare->use_range, true)))) ? 'checked' : ''; ?> type="checkbox" name="range[<?php echo $info->id;?>]" value="<?php echo $info->price_name;?>"  />
+                    <?php echo '地点: '. $info->shop_name. '__价格系列: '.$info->price_name. '__时间:'. date('Y-m-d', $info->start_time). '到'. date('Y-m-d', $info->end_time); ?><br />
+                <?php endforeach; ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">创建人</th>
+            <th colspan="3">
+                 <?php echo $welfare ? $welfare->editor : $_COOKIE['user'];?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">返利总次数</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="total_num" value="<?php echo $welfare ? $welfare->total_num : '';?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">单个金额</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="single_rebate" value="<?php echo $welfare ? $welfare->single_rebate : '';?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="id" value="<?php echo $welfare ? $welfare->id : '';?>">
+                <input type="hidden" name="gid" value="<?php echo $gameData->id; ?>">
+                <button id="ti-welfare" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $(function () {
+
+        // post提交
+        $('#ti-welfare').click(function () {
+            $.post('/wftadlogin/welfare/keep', $('#welfare_save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+
+</script>
+
+
+

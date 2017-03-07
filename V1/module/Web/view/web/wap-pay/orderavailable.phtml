@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信待使用</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<header>
+    <a class="active" href="/web/wappay/orderavailable">待使用</a>
+    <a href="/web/wappay/orderhistory">已使用</a>
+    <a href="/web/wappay/orderrefund">退款</a>
+</header>
+
+<div id="order-available" class="space10">
+
+
+    <?php foreach ($data as $k => $v): ?>
+
+        <?php if ($v['order_type'] == 1): ?>
+            <section class="order-valid">
+                <div class="title">
+                    <a class="arrow" href="/web/wappay/orderticket?orderId=<?php echo $v['order_sn']; ?>"></a>
+
+                    <p class="coupon_title"><?php echo $v['title'];?></p>
+                </div>
+                <div>
+                    <span class="name">有效期：</span>
+                    <span
+                        class="detail"><?php echo date('Y-m-d', $v['coupon_starttime']);?>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<?php  echo date('Y-m-d', $v['coupon_close']); ?></span>
+                </div>
+                <div>
+                    <span class="name">验证码：</span>
+                    <span class="detail"><?php echo $v['password'];?></span>
+
+                    <a class="btn <?php echo $v['status'] == 0 ? 'return' : 'used' ?>"
+                       href="#" data-password="<?php echo $v['password']; ?>"
+                       data-order_sn="<?php echo $v['order_sn']; ?>"
+                       data-refund="<?php echo $v['refund']; ?>"><?php if ($v['status'] == 0) {
+                            echo '退订';
+                        } else {
+                            echo $codeStatus[$v['status']];
+                        } ?></a>
+                </div>
+                <div class="qrcode"><img src="/application/index/phpqrcode?code=<?php echo $v['password']; ?>"/></div>
+            </section>
+        <?php else: ?>
+            <section class="order-valid">
+                <div class="title">
+                    <a class="arrow" href="/web/wappay/orderactivity?orderId=<?php echo $v['order_sn']; ?>"></a>
+
+                    <p class="coupon_title"><?php echo $v['title'];?></p>
+                </div>
+                <div>
+                    <span class="name">参与方式：</span>
+                    <span class="detail"><?php echo $v['type_name'];?></span>
+                </div>
+                <div>
+                    <span class="name">出行日期：</span>
+                    <span class="detail"><?php echo date('Y-m-d', $v['start_time']);?>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<?php echo date('Y-m-d', $v['end_time']); ?></span>
+                </div>
+                <div>
+                    <span class="name">活动地点：</span>
+                    <span class="detail"><?php echo $v['address'];?></span>
+                </div>
+                <div>
+                    <span class="name">验证码：</span>
+                    <span class="detail"><?php echo $v['password'];?></span>
+                    <?php if($v['refund_time'] > time()):?>
+                    <a class="btn <?php echo $v['status'] == 0 ? 'return' : 'used' ?>"
+                       href="#" data-password="<?php echo $v['password']; ?>"
+                       data-order_sn="<?php echo $v['order_sn']; ?>"
+                       data-refund="<?php echo $v['refund']; ?>">
+                        <?php if ($v['status'] == 0) {
+                            echo '退订';
+                        } else {
+                            echo $codeStatus[$v['status']];
+                        } ?>
+                    </a>
+                    <?php endif;?>
+
+                </div>
+                <div class="qrcode"><img src="/application/index/phpqrcode?code=<?php echo $v['password']; ?>"/></div>
+            </section>
+        <?php endif; ?>
+
+
+    <?php endforeach;?>
+
+
+</div>
+<script src="/js/jquery.min.js"></script>
+<script>
+
+
+    $(function () {
+        $('.return').click(function () {
+
+            var title = $(this).parent().parent().find('.coupon_title').text();
+
+
+            var order_sn = $(this).attr('data-order_sn');
+            var password = $(this).attr('data-password');
+
+            if ($(this).attr('data-refund') == 1) {
+                var message = '亲爱的小玩家，您已取消参加' + title + '，订单费用将在1-3个工作日退回至玩翻天账户，在退款订单详情页面可申请原路退回';
+            } else {
+                var message = '亲爱的小玩家，您已取消参加' + title + '，特价商品，恕不接受退款申请哦，下次别放我鸽子哈！';
+            }
+
+            var aa = window.confirm(message);
+            if (aa) {
+                $(this).text('请稍候..').css({'background-color': '#ccc'}).attr({"disabled": "disabled"});
+            } else {
+                return false;
+            }
+
+
+            $.ajax({
+                type: "POST",
+                url: "/pay/index/backpay",
+                //        dataType:"json",
+                async: true,
+                data: {
+                    'order_sn': order_sn,
+                    'password': password
+
+                },
+                headers: {
+                    "VER": 8
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        alert(result.response_params.message);
+                    } else {
+
+                        //todo 成功
+                        alert('提交成功');
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+
+
+                }
+            });
+
+            /************ 生成订单 end ************/
+            return false;
+        });
+
+
+    })
+</script>
+</body>
+</html>

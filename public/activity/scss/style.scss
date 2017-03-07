@@ -1,0 +1,892 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+$imgpath: 'img/';
+
+html {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #eb5042;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    color: #734620;
+    font: 14px "Microsoft YaHei", "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
+    background: url($imgpath + "fu.png") no-repeat center;
+    background-size: contain;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+}
+
+ul, li {
+    list-style: none;
+}
+
+img {
+    border: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+input, label, select {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+input, fieldset {
+    border: 0;
+}
+
+i {
+    font-style: normal;
+}
+
+$textbg: #f7e632;
+
+%btn {
+    height: 30px;
+    line-height: 27px;
+    border: 1px solid #9d821b;
+    background-color: #f7f03b;
+    display: inline-block;
+    padding: 0 10px;
+    box-shadow: 0 -3px 0 #b39522 inset;
+    border-radius: 7px 7px 7px 7px;
+    background-clip: padding-box;
+    color: #e08b1b;
+}
+
+%dialog {
+    display: none;
+    z-index: 200;
+    width: 70%;
+    background: #ff5134;
+    border-radius: 10px 10px 10px 10px;
+    background-clip: padding-box;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    padding: 10px;
+
+    & .closeDia {
+        width: 35px;
+        height: 35px;
+        background: url($imgpath + "close.png") no-repeat 0 0;
+        position: absolute;
+        right: -16px;
+        top: -16px;
+        background-size: 35px 35px;
+    }
+}
+
+@mixin position($pos: absolute, $top: null, $right: null, $bottom: null, $left: null) {
+    position: $pos;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+@mixin iconbtn($name) {
+    background-image: url($imgpath + 'iconbtn.png');
+    background-repeat: no-repeat;
+    background-size: 34%;
+
+    @if(none == $name) {
+
+    }@else if(help == $name) {
+        background-position: center 10%;
+    }@else if(mito == $name) {
+        background-position: center 83%;
+    }
+}
+
+@mixin icongame($name) {
+    background-image: url($imgpath + 'icongame.png');
+    background-repeat: no-repeat;
+    //background-size: 100px 400px;
+    background-size: 80%;
+
+    @if(none == $name) {
+
+    }@else if(tle == $name) {
+        background-position: center 1%;
+    }@else if(dyyb ==$name) {
+        background-position: left 6%;
+    }@else if(yboth == $name) {
+        background-position: left 15%;
+    }@else if(xd == $name) {
+        background-position: left 24%;
+    }@else if(xy == $name) {
+        background-position: left 37%;
+    }@else if(arrowy == $name) {
+        background-position: center -345px;
+    }@else if(arrowr == $name) {
+        background-position: center -366px;
+    }@else if(bag == $name) {
+        background-position: center 63%;
+    }@else if(book == $name) {
+        background-position: center 84%;
+    }
+}
+
+@mixin icontext($name) {
+    background-image: url($imgpath + 'icontext.png');
+    background-repeat: no-repeat;
+    background-size: 66%;
+    @if(none == $name) {
+
+    }@else if(rule == $name) {
+        background-position: center 6%;
+    }@else if(rank == $name) {
+        background-position: center 34%;
+    }@else if(mybox == $name) {
+        background-position: center 62%;
+    }@else if(bag == $name) {
+        background-position: center 94%;
+    }
+}
+
+/*公用样式*/
+.bg {
+    width: 100%;
+    min-height: 100%;
+    @include position(absolute, 0, null, null, 0);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background: url($imgpath + "bgmid.png") repeat-y center;
+    background-size: 100% auto;
+
+    &:before {
+        content: '';
+        display: block;
+        width: 100%;
+        padding-top: 15.8%;
+        @include position(absolute, 0, null, null, 0);
+        background: url($imgpath + 'bgtop.png') no-repeat top center;
+        background-size: 100%;
+    }
+    &:after {
+        content: '';
+        display: block;
+        width: 100%;
+        padding-top: 15.80%;
+        background: url($imgpath + 'bgbottom.png') no-repeat bottom center;
+        background-size: 100%;
+        @include position(absolute, null, null, 0, 0);
+    }
+
+    &-content {
+        position: relative;
+        padding: 6% 0 8%;
+        z-index: 9;
+    }
+
+    &-mid {
+        @include position(absolute, 50%, null, null, 50%);
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    @media screen and (max-height: 600px){
+        &-index {
+            padding-top: 0;
+        }
+    }
+}
+
+.btnbox {
+    width: 70%;
+    margin: 0 15%;
+    overflow: hidden;
+    .btn {
+        @extend %btn;
+
+        &:nth-of-type(1) {
+            float: left;
+        }
+        &:nth-of-type(2) {
+            float: right;
+        }
+    }
+
+    .indexlb {
+        width: 56px;
+        text-align: center;
+    }
+}
+
+.index {
+    @include position(relative, 0, null, null, 50%);
+    width: 100%;
+    padding-top: 124%;
+    background: url($imgpath + "indexbg.png") no-repeat center top;
+    background-size: 90%;
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+
+    & .startbtn {
+        @include position(absolute, 39%, null, null, 50%);
+        width: 100%;
+        padding-top: 14%;
+        background: url($imgpath + "startbtn.png") no-repeat center;
+        background-size: 46%;
+        transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%, 0);
+    }
+
+    & p {
+        @include position(absolute, 50%, null, null, 50%);
+        transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%, 0);
+        color: #fff;
+        font-size: 12px;
+
+        &:nth-of-type(2) {
+            @include position(absolute, 96%, null, null, 50%);
+        }
+    }
+
+    & .help,
+    & .mito {
+        width: 100%;
+        padding-top: 10%;
+        transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%, 0);
+    }
+
+    & .help {
+        @include position(absolute, 43%, null, null, 50%);
+        @include iconbtn(help);
+    }
+
+    & .mito {
+        @include position(absolute, 51%, null, null, 50%);
+        @include iconbtn(mito);
+    }
+}
+
+.game {
+    width: 100%;
+    height: 100%;
+    background: #eb5042 url($imgpath + "bg.jpg") no-repeat center top;
+    background-size: contain;
+    position: relative;
+    overflow: hidden;
+
+    & .panel {
+        width: 100%;
+        height: 30px;
+        overflow: hidden;
+        @include position(absolute, 2%, null, null, 0);
+
+        & .time,
+        & .score {
+            float: left;
+            width: 35%;
+            height: 30px;
+            line-height: 30px;
+            background-color: #ffe400;
+            border-radius: 5px 5px 5px 5px;
+            background-clip: padding-box;
+            overflow: hidden;
+            color: #915006;
+            padding-left: 2%;
+            font-weight: bold;
+            box-sizing: border-box;
+
+            & span {
+                display: inline-block;
+                float: right;
+                width: 60%;
+                height: 24px;
+                line-height: 24px;
+                text-align: center;
+                margin: 3px 6px 3px 0;
+                background-color: #feb200;
+                border-radius: 5px 5px 5px 5px;
+                background-clip: padding-box;
+
+                & i {
+                    font-weight: bold;
+                }
+            }
+        }
+
+        & .time {
+            margin: 0 3% 0 12%;
+        }
+
+        & .score {
+            margin: 0 12% 0 3%;
+        }
+    }
+
+    & .toprope {
+        @include position(absolute, 11%, null, null, 0);
+        width: 100%;
+        height: 9px;
+        background: url($imgpath + "toprope.png") repeat-x center top;
+        background-size: 9px 9px;
+    }
+
+    &-content {
+        width: 23%;
+        padding-top: 37%;
+        @include position(absolute, 10%, null, null, 0);
+
+        .xdbox,
+        .xybox,
+        .ybbox,
+        .ybothbox,
+        .ybklbox,
+        .ybfhbox {
+            position: absolute;
+            width: 100%;
+            top: 0;
+
+            & i {
+                display: block;
+                width: 25%;
+                background: url($imgpath + "clinch.png") no-repeat;
+                background-size: 100%;
+                padding-top: 90%;
+                @include position(absolute, 0, null, null, 50%);
+                transform: translate(-50%, 0);
+                -webkit-transform: translate(-50%, 0);
+            }
+
+            & span {
+                display: block;
+                width: 100%;
+                @include position(absolute, null, null, 0, 50%);
+                transform: translate(-50%, 0);
+                -webkit-transform: translate(-50%, 0);
+            }
+        }
+
+        .xdbox {
+            padding-top: 163%;
+            .xd {
+                padding-top: 108%;
+                background: url($imgpath + "xd.png") no-repeat;
+                background-size: 100%;
+            }
+        }
+
+        .xybox {
+            padding-top: 171%;
+            .xy {
+                padding-top: 116%;
+                background: url($imgpath + "xy.png") no-repeat;
+                background-size: 100%;
+            }
+        }
+
+        .ybbox {
+            padding-top: 161%;
+            .yb {
+                padding-top: 100%;
+                background: url($imgpath + "yb.png") no-repeat;
+                background-size: 100%;
+            }
+        }
+
+        /*.ybothbox {
+            padding-top: 161%;
+            .yboth {
+                padding-top: 100%;
+                background: url($imgpath + "yboth.png") no-repeat;
+                background-size: 100%;
+            }
+        }*/
+        .ybklbox {
+            padding-top: 161%;
+            .ybkl {
+                padding-top: 100%;
+                background: url($imgpath + "ybkl.png") no-repeat;
+                background-size: 100%;
+            }
+        }
+        .ybfhbox {
+            padding-top: 161%;
+            .ybfh {
+                padding-top: 100%;
+                background: url($imgpath + "ybfh.png") no-repeat;
+                background-size: 100%;
+            }
+        }
+    }
+
+    .rope {
+        width: 25%;
+        padding-top: 66%;
+        @include position(absolute, 41%, null, null, 50%);
+        transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%,0);
+        background: url($imgpath + "rope.png") no-repeat;
+        background-size: 100%;
+    }
+    #bag {
+        width: 68%;
+        padding-top: 40%;
+        @include position(absolute, 65%, null, null, 50%);
+        transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%,0);
+        background: url($imgpath + "bag.png") no-repeat;
+        background-size: 100%;
+    }
+}
+
+.gameover {
+    color: #fff;
+    text-align: center;
+    & P {
+        font-size: 15px;
+        line-height: 24px;
+
+        & i {
+            font-size: 24px;
+        }
+    }
+
+    & a {
+        @extend %btn;
+        margin-top: 13px;
+        width: 70px;
+        &:nth-of-type(1) {
+            margin-top: 20px;
+        }
+    }
+}
+
+.takebag {
+    width: 100%;
+    & h4 {
+        width: 100%;
+        padding-top: 14%;
+        @include icontext(bag);
+    }
+
+    & p {
+        margin-top: 5px;
+        text-align: center;
+        font-size: 15px;
+        color: #fff;
+    }
+
+    & ul {
+        width: 100%;
+        padding: 0 5%;
+        margin-top: 5%;
+        overflow: hidden;
+        & li {
+            float: left;
+            margin: 10px 1%;
+            width: 28%;
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+
+            & div {
+                width: 100%;
+                padding-top: 100%;
+                @include icongame(bag);
+                background-size: 115%;
+                position: relative;
+
+                &.shake {
+                    animation: shake_box 0.1s ease-in-out;
+                    -webkit-animation: shake_box 0.1s ease-in-out 5;
+                }
+
+                & a.lucky {
+                    @include position(absolute, 0, 0);
+                    display: none;
+                    width: 100%;
+                    height: 127%;
+                    @include icongame(book);
+                    background-size: 115%;
+                    -webkit-animation: open 0.4s linear forwards;
+                    animation: open 0.4s linear forwards;
+
+                    & h3 {
+                        font-weight: normal;
+                        font-size: 12px;
+                        color: #000;
+                        text-align: center;
+                        margin: 20px 10px 0;
+
+                        @media screen and (max-width: 320px) {
+                            margin-top: 12px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    & .btnbox {
+        margin-top: 7%;
+    }
+}
+
+@keyframes shake_box{
+    0% {transform: translate(0px, 0px) rotate(0deg);}
+    20% {transform: translate(1.5px, -2.5px) rotate(-1.5deg);}
+    40% {transform: translate(-2.5px, 0.5px) rotate(-0.5deg);}
+}
+@-webkit-keyframes shake_box{
+    0% {-webkit-transform: translate(0px, 0px) rotate(0deg);}
+    20% {-webkit-transform: translate(1.5px, -2.5px) rotate(-1.5deg);}
+    40% {-webkit-transform: translate(-2.5px, 0.5px) rotate(-0.5deg);}
+}
+
+@-webkit-keyframes open{
+    0%{
+        -webkit-transform: scale(1,0);
+    }
+    100%{
+        -webkit-transform: scale(1,1);
+    }
+}
+
+.mybox,
+.rules,
+.rank {
+    & h4 {
+        width: 100%;
+        padding-top: 14%;
+    }
+}
+
+.mybox {
+    & h4 {
+        @include icontext(mybox);
+    }
+
+    & ul {
+        width: 70%;
+        margin: 0 15% 15px;
+
+        & li {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: $textbg;
+            color: #e18f1c;
+            & time {
+                display: block;
+                color: #734620;
+            }
+
+            & a {
+                display: block;
+            }
+        }
+    }
+
+    & .nodata {
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        color: #fff;
+        margin: 15px 0;
+    }
+
+    & .btnbox {
+        width: 80%;
+        margin: 0 10%;
+    }
+}
+
+.rules {
+    & h4 {
+        @include icontext(rule);
+    }
+
+    .content {
+        background-color: $textbg;
+        width: 70%;
+        margin: 10px 10%;
+        padding: 10px 5%;
+        & h3 {
+            font-weight: normal;
+            margin-top: 8px;
+        }
+
+        & p {
+            text-indent:2em;
+            margin-top: 8px;
+        }
+    }
+}
+
+.rank {
+    & h4 {
+        @include icontext(rank);
+    }
+
+    & .content {
+        background-color: $textbg;
+        width: 70%;
+        min-height: 286px;
+        margin: 10px 10%;
+        padding: 5%;
+
+        & ul {
+            border: 2px solid #734620;
+            padding: 5px 0;
+            max-height: 312px;
+            overflow: hidden;
+
+            & li {
+                line-height: 26px;
+
+                &:nth-of-type(1) {
+                    font-weight: bold;
+                }
+
+                &.self {
+                    border-top: 1px solid #734620;
+                }
+
+                & div {
+                    width: 56%;
+                    margin: 0 auto;
+                    position: relative;
+                    text-align: center;
+
+                    & span {
+                        width: 100%;
+                        display: block;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow:hidden;
+                    }
+
+                    &:before {
+                        content: attr(rank);
+                        @include position(absolute, 0, null, null, -40%);
+                    }
+                    &:after {
+                        content: attr(score);
+                        @include position(absolute, 0, -40%, null, null);
+                    }
+
+                    &:before,
+                    &:after {
+                        display: block;
+                        width: 40%;
+                        text-align: center;
+                    }
+                }
+
+                &.nodata {
+                    text-align: center;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+/*对话框*/
+.popup {
+    display: none;
+    @include position(fixed, 0, null, null, 0);
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 100;
+    -webkit-opacity: 0.8;
+    opacity: .8;
+    filter: alpha(opacity=80);
+}
+.gamepop {
+    display: block;
+}
+
+.gametip {
+    width: 70%;
+    padding: 8px 5%;
+    @include position(fixed, 20%, null, null, 10%);
+    z-index: 999;
+    background: repeating-linear-gradient(-30deg,
+            #eb5042, #eb5042 15px, #e04438 0, #e04438 30px);
+    background: -webkit-repeating-linear-gradient(-30deg,
+            #eb5042, #eb5042 15px, #e04438 0, #e04438 30px);
+    border-radius: 10px 10px 10px 10px;
+    background-clip: padding-box;
+
+    & h4 {
+        width: 60%;
+        padding-top: 12%;
+        margin: 0 auto;
+        @include icongame(tle);
+    }
+
+    & p {
+        line-height: 22px;
+        color: #fff;
+        margin-top: 5px;
+    }
+
+    & ul {
+        overflow: hidden;
+        & li {
+            width: 50%;
+            padding-top: 5px;
+            margin-top: 5px;
+            float: left;
+
+            &.tip_dyyb {
+                padding-top: 20%;
+                @include icongame(dyyb);
+            }
+            &.tip_yboth {
+                padding-top: 20%;
+                @include icongame(yboth);
+            }
+            &.tip_xd {
+                padding-top: 26%;
+                @include icongame(xd);
+            }
+            &.tip_xy {
+                padding-top: 27%;
+                @include icongame(xy);
+            }
+
+            & div {
+                width: 40px;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+                font-size: 12px;
+                margin: -38% 0 0 59%;
+                position: relative;
+
+                &.tagy {
+                    background-color: #ffea00;
+                    color: #4e2a13;
+                }
+                &.tagr {
+                    background-color: #f87400;
+                    color: #fff;
+                    margin-top: -49%;
+                }
+
+                &.tagy:after,
+                &.tagr:after {
+                    content: '';
+                    display: block;
+                    width: 100%;
+                    padding-top: 23%;
+                    @include position(absolute, 20px, null, null, -10px);
+                }
+                &.tagy:after {
+                    @include icongame(arrowy);
+                    background-size: 100px 750px;
+                }
+                &.tagr:after {
+                    @include icongame(arrowr);
+                    background-size: 100px 750px;
+                }
+            }
+        }
+    }
+}
+
+#infoDia {
+    @extend %dialog;
+    @include position(fixed, 30%, null, null, 50%);
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    overflow: hidden;
+
+    & p {
+        height: 25px;
+        margin: 0 auto 10px;
+        padding: 0 15px;
+        line-height: 25px;
+        overflow: hidden;
+        width: 160px;
+
+        & label {
+            float: left;
+            width: 50px;
+        }
+
+        & input {
+            float: left;
+            width: 100px;
+            height: 25px;
+            padding: 0 5px;
+            border: none;
+            border-radius: 5px 5px 5px 5px;
+            background-clip: padding-box;
+        }
+    }
+
+    & #submitbtn {
+        @extend %btn;
+        padding: 0 20px;
+    }
+
+    & .errortip {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+}
+
+.tipDia,
+.nonetwork {
+    @extend %dialog;
+    @include position(fixed, 30%, null, null, 50%);
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+}
+
+.tipDia {
+    & a {
+        @extend %btn;
+        margin-top: 10px;
+    }
+}
+
+.nonetwork {
+    & h3 {
+        text-align: center;
+        font-weight: normal;
+        margin-bottom: 15px;
+    }
+}
+
+.shareDia,
+.endDia {
+    @extend %dialog;
+    @include position(fixed, 0, null, null, 50%);
+    transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
+    background: none;
+    width: 100%;
+
+}
+
+.shareDia {
+    & img {
+        width: 100%;
+    }
+}
+
+.endDia {
+    & img {
+        width: 80%;
+    }
+}

@@ -1,0 +1,247 @@
+<form class="box box-form" action="/wftadlogin/contract/savePrice" id="form-sub" method="post">
+    <header class="box-title">价格方案　　
+        <a href="/wftadlogin/contract/contractGood?cid=<?php echo $goodData->contract_id; ?>">返回</a>
+    </header>
+    <table class="table">
+
+        <tr>
+            <th width="160">商品名称</th>
+            <th colspan="3">
+                 <?php echo $goodData->title;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">原价</th>
+            <th colspan="3">
+                <input type="text" style="width:80px" class="cssInput" name="money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">采购价(结算价)</th>
+            <th colspan="3">
+                <input type="text" style="width:80px" class="cssInput" name="account_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">售价</th>
+            <th colspan="3">
+                <input type="text" style="width:80px" class="cssInput" name="price" value="">
+            </th>
+        </tr>
+
+        <?php if($goodData->account_type != 3):?>
+            <tr>
+                <th width="160">预付金</th>
+                <th colspan="3">
+                    <input type="text" style="width:80px" class="cssInput" name="pre_money" value=""><mark>没有预付金请勿填写</mark>
+                </th>
+            </tr>
+        <?php endif;?>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="good_id" value="<?php echo $goodData->id; ?>">
+                <span id="sub-form" class="btn btn-primary">保存</span>
+            </th>
+        </tr>
+
+    </table>
+</form>
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3>售价小于结算价，确认要提交保存？</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <span class="yes ui-button">是</span>
+        <span class="no  ui-button">否</span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#sub-form').click(function(){
+            var price_money = $('#form-sub input[name="price"]').val();
+            var account_money = $('#form-sub input[name="account_money"]').val();
+
+            if (parseInt(price_money*100) < parseInt(account_money*100)) {
+                $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+                $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+                return false;
+            }
+            $('#form-sub').submit();
+        });
+
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+        $('.no').click(function() {
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+            return false;
+        });
+
+
+        $('.yes').click(function() {
+            $('#form-sub').submit();
+            return false;
+        });
+
+    });
+
+</script>
+
+

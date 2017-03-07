@@ -1,0 +1,370 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    color: #4C4B46;
+    background: #f0f0f0;
+    font: 12px 'Microsoft YaHei';
+    -webkit-text-size-adjust: none;
+    -webkit-overflow-scrolling: touch;
+}
+a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+ul, li {
+    list-style: none;
+}
+section {
+    display: block;
+    background: #fff;
+    padding: 5px 10px;
+    line-height: 20px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+}
+section img {
+    width: 100%;
+}
+.space10 {
+    margin-bottom: 10px;
+}
+.space5 {
+    margin-bottom: 5px;
+}
+.wrapper {
+    padding: 10px;
+}
+
+/* list */
+.share-list a {
+    display: block;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    overflow: hidden;
+    padding: 10px;
+}
+.share-list .portrait {
+    float: left;
+    height: 80px;
+    width: 80px;
+}
+.share-list .portrait img {
+    width: 100%;
+}
+.share-list .detail {
+    padding-left: 90px;
+}
+.share-list .title {
+    height: 34px;
+    color: #111;
+    font-size: 15px;
+    line-height: 17px;
+    overflow: hidden;
+}
+.share-list .time {
+    margin: 2px 0 5px;
+    color: #333;
+}
+.share-list .text {
+    height: 22px;
+    overflow: hidden;
+}
+.share-list .text .sold {
+    float: left;
+    color: #d83500;
+    font: 17px arial;
+    font-weight: bold;
+}
+.share-list .location {
+    float: right;
+    color: #333;
+    font-size: 12px;
+}
+
+/* index */
+
+.share-index .top {
+    line-height: 20px;
+}
+.share-index .top .shop-name {
+    display: block;
+    margin-right: 70px;
+    color: #333;
+    font-size: 14px;
+}
+.share-index .top .discount {
+    float: right;
+    width: 40px;
+    text-align: center;
+}
+.share-index .top mark {
+    float: left;
+    width: 25px;
+    height: 12px;
+    margin: 0 7px;
+    line-height: 12px;
+    background: #4BD1BA;
+    border-radius: 3px;
+    background-clip: padding-box;
+    color: #175E51;
+    font-size: 10px;
+    text-align: center;
+}
+.share-index .top .mark-price {
+    float: left;
+    color: #BABABA;
+    font-size: 11px;
+    line-height: 13px;
+    text-decoration: line-through;
+}
+.share-index .top .sold-price {
+    float: right;
+    color: #D83400;
+    font-size: 17px;
+}
+.top-more {
+    height: 49px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.top-more li {
+    float: left;
+    width: 33%;
+    height: 40px;
+    padding-top: 9px;
+    border-left: 1px solid #ddd;
+}
+.top-more li:first-child {
+    border: none;
+}
+.top-more li p {
+    color: #333;
+    text-align: center;
+}
+.top-more li p.numb {
+    color: #878787;
+    font-size: 14px;
+    font-weight: bold;
+}
+.top-more li p.numb span {
+    font-size: 12px;
+}
+.share-title {
+    height: 33px;
+    padding-left: 12px;
+    line-height: 33px;
+    color: #333;
+    font-size: 13px;
+    position: relative;
+}
+.share-title:before {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 14px;
+    background: #FFBF00;
+    border-radius: 5px;
+    background-clip: padding-box;
+    position: absolute;
+    top: 9px;
+    left: 0;
+}
+.share-one .name {
+    float: left;
+    color: #333;
+}
+.share-one .range {
+    float: right;
+    color: #FF7F00;
+}
+.place {
+    padding: 0;
+}
+.place a {
+    display: block;
+    height: 22px;
+    padding: 6px 10px;
+    color: #333;
+    line-height: 22px;
+    position: relative;
+}
+.place .name:before, .place .name:after, .share-detail .share-one:before, .share-detail .share-one:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    top: 15px;
+    right: 0;
+    border-radius: 1px;
+    background-clip: padding-box;
+    transform-origin: 1px 1px;
+    -webkit-transform-origin: 1px 1px;
+}
+.place .name:before, .share-detail .share-one:before {
+    transform: rotate(220deg);
+    -webkit-transform: rotate(220deg);
+    -ms-transform: rotate(220deg);
+}
+.place .name:after, .share-detail .share-one:after {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+}
+.place .address {
+    padding-right: 40px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.no-name .address {
+    border-top: none;
+}
+.place i {
+    width: 12px;
+    height: 12px;
+    padding-left: 15px;
+    border-left: 1px solid #d8dadb;
+    background: url("/images/share-icon.png") no-repeat;
+    background-size: 15px 60px;
+    position: absolute;
+    top: 12px;
+    right: 0;
+}
+.place .address i {
+    background-position: center 0;
+}
+.place .tel i {
+    background-position: center -24px;
+}
+.place .tel span {
+    color: #FF7F00;
+    padding-left: 10px;
+}
+.playground {
+    display: block;
+    background: #fff;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    color: #333;
+    line-height: 18px;
+    overflow: hidden;
+    position: relative;
+}
+.playground:first-child {
+    border: none;
+}
+.playground:before, .playground:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background: #999;
+    top: 25px;
+    right: 0;
+    border-radius: 1px;
+    background-clip: padding-box;
+    transform-origin: 1px 1px;
+    -webkit-transform-origin: 1px 1px;
+}
+.playground:before {
+    transform: rotate(220deg);
+    -webkit-transform: rotate(220deg);
+    -ms-transform: rotate(220deg);
+}
+.playground:after {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+}
+.playground .title {
+    font-size: 13px;
+}
+html#join, html#join body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+#join .wrapper {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    z-index: 1;
+    padding-bottom: 49px;
+    border-top: 1px solid #ddd;
+}
+#join footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 49px;
+    background: #f8f8f8;
+    border-top: 1px solid #b2b2b2;
+    z-index: 10;
+}
+#join footer .btn {
+    display: block;
+    width: 145px;
+    height: 35px;
+    line-height: 35px;
+    margin: 6px auto;
+    background: #FB6050;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* game */
+.share-detail .wrapper {
+    padding-top: 0;
+}
+.share-detail .photo, .share-detail .photo img {
+    display: block;
+    width: 100%;
+}
+.share-detail .share-one {
+    display: block;
+    background: #fff;
+    padding: 5px 10px;
+    color: #444;
+    line-height: 20px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    position: relative;
+}
+.share-detail .view {
+    color: #ff8000;
+}
+.share-detail .place {
+    border-top: none;
+}
+
+
+#top-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    background: url("/images/applogo.png") no-repeat rgba(0,0,0,0.7) 10px 5px;
+    background-size: 40px 40px;
+    z-index: 1111;
+}
+#top-fixed p {
+    padding: 5px 10px 0 60px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 20px;
+}

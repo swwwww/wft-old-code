@@ -1,0 +1,352 @@
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/account/balance">用户账户</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $user = null;
+        if (isset($_GET['user']) && $_GET['user']) {
+            $user = $_GET['user'];
+        }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="120">查找用户</th>
+            <th>
+                <input type="text" class="cssInput" name="user" value="<?php echo $user;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/account/balance" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+                <input type="hidden" name="type" value="balance">
+                <a href="javascript:void(0)" data-src="/wftadlogin/account/outData" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <header class="box-title">用户账户</header>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="120">用户ID</th>
+                <th width="120">用户名</th>
+                <th width="100">可提现余额</th>
+                <th width="100">不可提现余额</th>
+                <th width="100">账户总余额</th>
+                <th width="100">现金券余额</th>
+                <th width="100">免费玩次数</th>
+                <th width="100">状态</th>
+                <th width="200">操作</th>
+            </tr>
+            <?php foreach ($this->data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <?php echo $row['uid'];?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['username'];?>
+                    </td>
+                    <td width="100"><?php echo $row['can_back_money']; ?></td>
+                    <td width="50">
+                        <?php echo bcsub($row['now_money'] , $row['can_back_money'], 2);?>
+                    </td>
+                    <td width="100"><?php echo $row['now_money']; ?></td>
+                    <td width="100"><?php echo $row['coupon_cash']; ?></td>
+                    <td width="100"><?php echo $row['member_free_coupon_count_now']; ?></td>
+                    <td width="100">
+                        <?php
+                        if($row['status']==0){
+                            echo '冻结';
+                        }
+                        if($row['status']==1){
+                            echo '正常';
+                        }
+
+                        ?>
+                    </td>
+                    <td width="150">
+                        <?php if($row['status']==1):?>
+                            <span data-href="/wftadlogin/account/frozen?type=1&uid=<?php echo $row['uid']; ?>" class="ui-button frozen">冻结</span>
+                            <span data-href="/wftadlogin/account/giveCash?uid=<?php echo $row['uid']; ?>" class="ui-button take-cash">提现</span>
+                            <span data-href="/wftadlogin/account/getTemporaryMoney?uid=<?php echo $row['uid']; ?>" class="ui-button take-temporary">不可提现</span>
+                        <?php else:?>
+                            <span data-href="/wftadlogin/account/frozen?type=2&uid=<?php echo $row['uid']; ?>" class="ui-button frozen">开启</span>
+                        <?php endif;?>
+                        <a href="/wftadlogin/account/record?uid=<?php echo $row['uid']; ?>" class="ui-button">查看</a>
+
+                        <a href="/wftadlogin/account/frozenLog?uid=<?php echo $row['uid']; ?>" class="ui-button">查看冻结记录</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .hide-body2 {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3></h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="" id="zjh" method="post">
+            <ol>
+                <li><textarea name="mess" rows="7" cols="50"></textarea> </li>
+                <li> <button  type="submit">提交</button></li>
+            </ol>
+        </form>
+    </div>
+</div>
+
+<div class="hide-body2">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3></h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="" id="take-cash" method="post">
+            <ol>
+                <li>
+                    提现金额：
+                    <input  type="text" name="money" style="width:90px" class="cssInput">
+                </li>
+                <li>
+                    原因：
+                    <input  type="text" name="reason" style="width:140px" class="cssInput">
+                </li>
+                <li>
+                    <button type="submit">提交</button>
+                </li>
+
+            </ol>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //导出
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+        });
+
+        //冻结
+        $('.frozen').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-href');
+            $('#zjh').attr('action', url);
+
+        })
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+            $('.hide-body2').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+        //提现
+        $('.take-cash').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body2').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-href');
+            $('#take-cash').attr('action', url);
+
+        })
+
+        //提不可提现
+        $('.take-temporary').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body2').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-href');
+            $('#take-cash').attr('action', url);
+
+        })
+    });
+</script>
+
+
+
+

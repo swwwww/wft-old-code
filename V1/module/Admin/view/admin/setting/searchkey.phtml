@@ -1,0 +1,56 @@
+<hgroup class="box">
+
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：SOS</div>
+    </aside>
+</hgroup>
+
+<table class="table">
+    <tr>
+        <th>id</th>
+        <th>添加时间</th>
+        <th>关键字</th>
+        <th>搜索次数</th>
+        <th>状态</th>
+        <th>城市&nbsp;&nbsp;<?php echo $filtercity; ?></th>
+
+        <th>操作</th>
+    </tr>
+
+    <?php foreach ($data as $v): ?>
+        <tr>
+            <th><?php echo $v['id']; ?></th>
+            <th><?php echo date('Y-m-d H:i:s', $v['dateline']); ?></th>
+            <th><?php echo $v['val']; ?></th>
+            <th><?php echo $v['click_num']; ?></th>
+            <th><?php echo $v['status'] == 0 ? '<span class="label label-warning">已过期</span>' : '<span class="label label-success">有效</span>'; ?></th>
+            <th><?php echo $city[$v['city']]; ?></th>
+            <th><?php if($v['status'] == 0):?> <span style="color:gray">过期</span> <?php else:?><a class="btn btn-primary" href="/wftadlogin/setting/searchkey?id=<?php echo $v['id'];?>&action=out">设为过期</a><?php endif;?></th>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<form action="/wftadlogin/setting/searchkey" method="post" style="width:600px;" class="form-inline">
+    <p>
+        <label>新关键字:</label>
+        <input class="form-control" name="val">
+        <input type="hidden" class="form-control" name="type" value="2">
+        <button type="submit" class="btn btn-primary">提交</button>
+    </p>
+</form>
+
+
+<?php echo $page;?>
+
+<script>
+
+    $(function () {
+        $('#type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+    });
+</script>
+

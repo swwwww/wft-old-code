@@ -1,0 +1,214 @@
+<body>
+<form class="join-form" id="info-save">
+    <fieldset>
+        <span class="join-info">宝宝姓名</span>
+        <input id="name" name="username" placeholder="与出生证明的姓名一致" value="<?php echo $data ? $data->username : ''; ?>" type="text"
+               class="text name"/>
+    </fieldset>
+    <fieldset>
+        <span class="join-info">宝宝性别</span>
+        <ul class="gender">
+            <li class="boy-box">
+                <input id="boy" type="radio" name="gender"
+                       value="boy" <?php echo (!$data || $data->sex == 'boy') ? 'checked' : ''; ?> />
+                <label for="boy" class="boy">王子</label>
+            </li>
+            <li class="girl-box">
+                <input id="girl" type="radio"
+                       name="gender" <?php echo ($data && $data->sex == 'girl') ? 'checked' : ''; ?> value="girl">
+                <label for="girl" class="girl">公主</label>
+            </li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <span class="join-info">宝宝生日</span>
+        <input type="date" name="birthday" value="<?php echo $data ? date('Y-m-d', $data->birthday) : ''; ?>"
+               class="text birth" min="2015-01-01" max="2015-12-31"/>
+        <input type="hidden" name="uid" value="<?php echo $this->uid; ?>">
+    </fieldset>
+    <fieldset>
+        <span class="join-info">宝宝地址</span>
+        <select id="area" name="area" class="adds">
+            <option value="" <?php echo (!$data) ? 'selected' : ''; ?>>选择区域</option>
+            <option value="江岸区" <?php echo ($data && $data->address == '江岸区') ? 'selected' : ''; ?>>江岸区</option>
+            <option value="洪山区" <?php echo ($data && $data->address == '洪山区') ? 'selected' : ''; ?>>洪山区</option>
+            <option value="江汉区" <?php echo ($data && $data->address == '江汉区') ? 'selected' : ''; ?>>江汉区</option>
+            <option value="汉阳区" <?php echo ($data && $data->address == '汉阳区') ? 'selected' : ''; ?>>汉阳区</option>
+            <option value="武昌区" <?php echo ($data && $data->address == '武昌区') ? 'selected' : ''; ?>>武昌区</option>
+            <option value="硚口区" <?php echo ($data && $data->address == '硚口区') ? 'selected' : ''; ?>>硚口区</option>
+            <option value="青山区" <?php echo ($data && $data->address == '青山区') ? 'selected' : ''; ?>>青山区</option>
+            <option value="东西湖区" <?php echo ($data && $data->address == '东西湖区') ? 'selected' : ''; ?>>东西湖区</option>
+            <option value="近郊区" <?php echo ($data && $data->address == '近郊区') ? 'selected' : ''; ?>>近郊区</option>
+        </select>​
+    </fieldset>
+    <fieldset>
+        <span class="join-info">照片<i>（2-5张）</i></span>
+        <div class="upload_area clearfix">
+            <ul id="imglist" class="post_imglist"></ul>
+            <div class="upload_btn phone"></div>
+        </div>
+        <div class="tips">
+            <p>至少1张出生证明照片，要求出生时间清晰可见；</p>
+            <p>至少1张宝宝近照，要根据照片刷脸入场的哦；</p>
+        </div>
+    </fieldset>
+    <button class="btn tijiao">提交</button>
+</form>
+<div id="fade"></div>
+<div id="pop-up">
+    <div id="try"></div>
+</div>
+<div id="error-tips"></div>
+</body>
+<script type="text/javascript" src="/mabaobao/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="/mabaobao/js/exif.js"></script>
+<script type="text/javascript" src="/mabaobao/js/binaryajax.js"></script>
+<script type="text/javascript" src="/mabaobao/js/localResizeIMG2.js"></script>
+<script type="text/javascript" src="/mabaobao/js/mobileBUGFix1.mini.js"></script>
+<script type="text/javascript">
+    $(function () {
+        "use strict";
+        var submit = $(".tijiao"),
+            errorTips = $("#error-tips");
+
+        $('#pop-up').on('tap', '.close', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'none');
+            $('#fade').css('display', 'none');
+            $('#try').html('');
+            submit.removeAttr("disabled");
+            submit.removeClass("grey");
+        });
+
+        submit.on("tap", function (e) {
+            e.preventDefault();
+            $(this).attr('disabled', 'true');
+            $(this).addClass("grey");
+            var obj = $(this);
+            $.post('/mabao/index/confirm', $('#info-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    obj.attr('disabled', false);
+                    obj.removeClass("grey");
+                    $('#pop-up').css('display', 'block');
+                    $('#fade').css('display', 'block');
+                    $('#try').html('<p class="success">报名成功，请等待审核</p>' + '<a class="btn" href="/mabao/index/card?uid=' + data.uid + '">确定</a>')
+                } else {
+                    //提示错误信息
+                    errorTips.text(data.message);
+                    errorTips.show();
+                    setTimeout(function () {
+                        errorTips.hide();
+                        submit.removeAttr("disabled");
+                        submit.removeClass("grey");
+                    }, 2000);
+                }
+            }, 'json');
+            return false;
+        });
+        var viewImg = $("#imglist"),
+            imgcount = 0,
+            isIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i),
+            isAndroid = navigator.userAgent.match(/android/i),
+            phoneEle = $('.phone'),
+            uploadweixin = viewImg.data('uploadweixin');
+
+        if(isIOS) {
+            fileupload();
+        }else if(isAndroid) {
+            if (window.getdata) {
+                window.getdata.onPickSuccess = function (result, obj) {
+                    if(obj) {
+                        var status = true;
+                        if (obj.height > 1600) {
+                            status = false;
+                            alert("照片最大高度不超过1600像素");
+                        }
+
+                        if (status) {
+                            viewImg.append('<li><span class="pic_time"><span class="p_img"></span><em>50%</em></span></li>');
+                            viewImg.find("li:last-child").html('<span class="del"></span><img class="wh60" src="data:image/jpeg;base64,'+ result +'"/><input type="hidden" id="file'
+                                + imgcount
+                                + '" name="fileup[]" value="'
+                                + result + '">');
+
+                            $(".del").on("click",function(){
+                                $(this).parent('li').remove();
+                                $("#upload_image").show();
+                            });
+                            imgcount++;
+                        }
+                    }else {
+                        var imgStr = result.substring(0, result.indexOf(',{')),
+                            jsonStr = result.substring(result.indexOf(',{') + 1, (result.length+1));
+                        jsonStr = eval('(' + jsonStr + ')');
+                        var status = true;
+                        if (jsonStr.height > 1600) {
+                            status = false;
+                            alert("照片最大高度不超过1600像素");
+                        }
+                        if (status) {
+                            viewImg.append('<li><span class="pic_time"><span class="p_img"></span><em>50%</em></span></li>');
+                            viewImg.find("li:last-child").html('<span class="del"></span><img class="wh60" src="data:image/jpeg;base64,'+ imgStr +'"/><input type="hidden" id="file'
+                                + imgcount
+                                + '" name="fileup[]" value="'
+                                + imgStr + '">');
+
+                            $(".del").on("click",function(){
+                                $(this).parent('li').remove();
+                                $("#upload_image").show();
+                            });
+                            imgcount++;
+                        }
+                    }
+                };
+                phoneEle.on('click', function () {
+                    window.getdata.pickfile();
+                });
+            }
+        } else {
+            fileupload();
+        }
+
+        function fileupload(){
+            var str = '<input type="file" id="upload_image" value="图片上传" accept="image/jpeg,image/gif,image/png" capture="camera">';
+            phoneEle.append(str);
+            $('#upload_image').localResizeIMG({
+                width: 800,
+                quality: 0.8,
+                success: function (result) {
+                    var status = true;
+                    if (result.height > 1600) {
+                        status = false;
+                        alert("照片最大高度不超过1600像素");
+                    }
+                    if (viewImg.find("li").length > 4) {
+                        status = false;
+                        alert("最多上传5张照片");
+                    }
+                    if (status) {
+                        viewImg.append('<li><span class="pic_time"><span class="p_img"></span><em>50%</em></span></li>');
+                        viewImg.find("li:last-child").html('<span class="del"></span><img class="wh60" src="' + result.base64 + '"/><input type="hidden" id="file'
+                            + imgcount
+                            + '" name="fileup[]" value="'
+                            + result.clearBase64
+                            + '"><label style="display: block;line-height: 20px;vertical-align: middle"><input style="font-size:10px" type="radio" name="cover" value="' + imgcount + '" /></label>');
+
+                        $(".del").on("click",function(){
+                            var deleted = $(this).parent(),
+                                ul = deleted.parent();
+                            deleted.remove();
+                            ul.children().each(function (i, li) {
+                                $(li).find('input[name="cover"]').val(i);
+                            });
+                            $("#upload_image").show();
+                        });
+                        imgcount++;
+                    }
+                }
+            });
+        }
+
+
+
+    }());
+</script>

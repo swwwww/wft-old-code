@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GBK"/>
+    <style type="text/css">
+        body, html, #allmap {
+            width: 960px;
+            height: 500px;
+            overflow: hidden;
+            hidden;
+            margin: 0;
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=gPUtdgCwWw7cqBnBEUvhqCXN"></script>
+    <title>设置地点</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+    function initmap(x, y) {
+
+        // 百度地图API功能
+        map = new BMap.Map("allmap");            // 创建Map实例
+        point = new BMap.Point(x, y);    // 创建点坐标
+        map.centerAndZoom(point, 15);                     // 初始化地图,设置中心点坐标和地图级别。
+        map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+        map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件
+
+        marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);              // 将标注添加到地图中
+        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        marker.enableDragging();    //可拖拽
+
+
+        local = new BMap.LocalSearch(map, {
+            renderOptions: {map: map}
+        });
+
+    }
+    function getmap() {
+        p = marker.getPosition();       //获取marker的位置
+        return p.lng + "," + p.lat;
+    }
+    function baidusearch(data) {
+        local.search(data);
+    }
+</script>

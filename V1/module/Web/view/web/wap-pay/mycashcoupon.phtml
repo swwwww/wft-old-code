@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的优惠券</title>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/couponstyle.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .coupon-form {
+            width: 94%;
+            margin: 11% auto 0;
+            overflow: hidden;
+        }
+        .coupon-form input[type='text'] {
+            font-family: "Microsoft YaHei";
+            float: left;
+            font-size: 24px;
+            width: calc( 100% - 150px);
+            height: 60px;
+            line-height: 60px;
+            padding-left: 20px;
+            border: 1px solid #999;
+            box-sizing: border-box;
+            border-radius: 30px;
+        }
+
+        .coupon-form input[type='submit'] {
+            font-family: "Microsoft YaHei";
+            float: right;
+            width: 130px;
+            height: 60px;
+            line-height: 60px;
+            background-color: #fa6e51;
+            color: #fff;
+            letter-spacing: 6px;
+            font-size: 30px;
+            border: none;
+            border-radius: 30px;
+        }
+        .couponRadio{
+            display: block !important;
+            width: 44px!important;
+            height: 44px !important;
+            border-radius: 22px !important;
+            border: 2px solid #c3c3c3 !important;
+            position: absolute;
+            top: 32%;
+            right: 20px;
+            float: right;
+        }
+        .check-box{
+            /*background:#fff url("/images/wap/icons.png?ver=4") no-repeat -10px -5278px*/
+            background: #fff url("/images/wap/icons.png?ver=4") no-repeat -11px -5279px;
+            border: 2px solid red !important;
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+        <form class="coupon-form" autocomplete="off" id="sub">
+            <input type="text" placeholder="可兑换邀请码" id="code"/>
+            <input type="submit" value="兑换" />
+        </form>
+        {{each response_params as value i}}
+        {{if value.isvalid==1}}
+            <?php if($pay_price<=0):?>
+                <a href="/web/wappay/exchangesuc?cid={{value.cid}}&id={{value.id}}">
+            <?php else:?>
+<!--                <a href="#">-->
+            <?php endif;?>
+                <section class="cash coupon_info">
+                    <p class="cash-shape"></p>
+                    <span class="cash-price">
+                        ￥<mark class="cash-price-content">{{value.price}}</mark>.00
+                    </span>
+                    <span class="cash-info">
+                        <mark class="cash-info-type">{{value.title}}</mark>
+                        <mark class="cash-info-intro">·{{value.description}}</mark>
+                        {{if value.time_type==1}}
+                        <mark class="cash-info-intro">·截止时间:{{value.end_time}}</mark>
+                        {{else}}
+                        <mark class="cash-info-intro">·{{value.begin_time}}至{{value.end_time}}</mark>
+                        {{/if}}
+                    </span>
+                    {{if value.isnew==1}}
+                    <p class="cash-sign">
+                        <span>新用户</span>
+                    </p>
+                    {{/if}}
+                    <?php if($pay_price>0):?>
+<!--                        <input type="radio" name="radio" id="coupon{{i}}" value="{{value.cid}}" class="couponRadio"/>-->
+                        <span for="coupon{{i}}" class="label">
+                            <input type="radio" name="radio" id="coupon{{i}}" value="{{value.id}}" class="couponRadio"/>
+                        </span>
+                    <?php endif;?>
+                    {{if value.eventinfo[0]}}
+                    <article class="cash-introduce">
+                        <p>可用场次</p>
+                        {{each value.eventinfo}}
+                        <span>·仅限{{$value.name}} &nbsp;&nbsp;&nbsp;{{$value.start_time_wx}}~{{$value.end_time_wx}}</span>
+                        {{/each}}
+                    </article>
+                    {{/if}}
+                </section>
+<!--            </a>-->
+        {{/if}}
+        {{/each}}
+        <h3>
+            <span>已失效的券</span>
+        </h3>
+        <div class="wrap">
+            {{each response_params as value i}}
+            {{if value.isvalid==0}}
+            <section class="cash invalid">
+                <p class="cash-shape"></p>
+                <span class="cash-price">
+                    ￥<mark class="cash-price-content">{{value.price}}</mark>.00
+                </span>
+                <span class="cash-info">
+                    <mark class="cash-info-type">{{value.title}}</mark>
+                    <mark class="cash-info-intro">·{{value.description}}</mark>
+                    <mark class="cash-info-intro">·{{value.begin_time}}至{{value.end_time}}</mark>
+                </span>
+            <span class="cash-failure">
+                <mark>{{if value.is_pass==1}}已过期{{else if value.is_pay==1}}已使用{{/if}}</mark>
+            </span>
+            </section>
+            {{/if}}
+            {{/each}}
+        </div>
+</script>
+<script id="more" type="text/html">
+    {{each response_params as value i}}
+    <div class="item {{if value.isvalid==0}}disabled{{/if}}">
+        <div class="left price">&yen;{{value.price}}<span class="point">.00</span></div>
+        <div class="right info">
+            <h2 class="title">{{value.title}}</h2>
+            <div class="tips">{{value.description}}</div>
+            <div class="time">使用时间：{{value.begin_time}}～{{value.end_time}}</div>
+            <i class=""></i>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+<input type="hidden" name="city" id="city" value="<?php echo $city;?>">
+<input type="hidden" name="type" id="type" value="<?php echo $type;?>">
+<input type="hidden" name="tourl" id="tourl" value="<?php echo $tourl;?>">
+<input type="hidden" name="pay_price" id="pay_price" value="<?php echo $pay_price;?>">
+<input type="hidden" name="sid" id="sid" value="<?php echo $sid;?>">
+<input type="hidden" name="coupon_id" id="coupon_id" value="<?php echo $coupon_id;?>">
+</body>
+<!--<script type="text/javascript" src="/js/jquery.min.js"></script>-->
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script>
+    //        document.cookie='open_id=oBzdouDW7_CB-Sbby1dlk9bu-ebE;path=/';
+    //        document.cookie='phone=13871281565;path=/';
+    //        document.cookie='token=2a51400ae195e7999af09197e6b53e49;path=/';
+    //        document.cookie='uid=70623;path=/';
+    //获取url参数值
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+    var city = localStorage.getItem("select_city");
+    if(!city){
+        city = $("#city").val();
+    }
+    $(function(){
+        var type = $('#type').val(),
+            tourl = $("#tourl").val(),
+            pay_price = $('#pay_price').val(),
+            sid = $('#sid').val(),
+            coupon_id = $('#coupon_id').val();
+
+        type = sid>0 ? 2 : 1;
+        $.ajax({
+            type: "POST",
+            url: "/cashcoupon/index/nmy",
+            dataType:"json",
+            async: false,
+            data:{
+                'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                'pagenum':100,
+                'coupon_id':coupon_id,
+                'pay_price':pay_price,
+                'type':type
+            },
+
+            headers: {
+                "VER": 10,
+                "CITY":encodeURI(city)
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    alert(result.response_params.message);
+                }else {
+                    //todo 成功
+                    var len = result.response_params.length;
+                    var info;
+                    for(var i=0;i<len;i++){
+                        info = result.response_params[i];
+                        info.price = parseInt(info.price);
+                        var b = new Date(parseInt(info.begin_time)*1000);
+                        var e = new Date(parseInt(info.end_time)*1000);
+                        info.begin_time = b.getFullYear()+'-'+ (b.getMonth()+1 < 10 ? '0'+(b.getMonth()+1) : b.getMonth()+1)+'-'+ b.getDate();
+                        info.end_time = e.getFullYear()+'-'+(e.getMonth()+1 < 10 ? '0'+(e.getMonth()+1) : e.getMonth()+1)+ '-'+ e.getDate();
+                    }
+                    var html = template('test', result);
+                    document.getElementById('content').innerHTML = html;
+//                    if(result.response_params.length == 1){
+//                        $("#coupon0").attr("checked",true);
+//                    }
+
+                    $("#sub").submit(function(e){
+                        e.preventDefault();
+                        var code = $("#code").val();
+                        if(code){
+                            $.ajax({
+                                type: "POST",
+                                url: "/cashcoupon/index/exchange",
+                                dataType:"json",
+                                async: false,
+                                data:{
+                                    'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                                    'code':code
+                                },
+                                headers: {
+                                    "VER": 10,
+                                    "CITY":encodeURI(city)
+                                },
+                                success: function (result) {
+                                    if (result.response_params.status == 0) {
+                                        alert(result.response_params.message);
+//                                        window.location.reload();
+                                    }
+                                    else if(result.response_params.status==1){
+                                        //todo 成功
+                                        alert('兑换成功');
+                                        var cid = result.response_params.id;
+                                        var id = result.response_params.linkid;
+//                                        console.log( result.response_params);return;
+                                        window.location.href='/web/wappay/exchangesuc?cid='+cid+"&id="+id
+                                    }else{
+                                        window.location.reload()
+                                    }
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                    if (XMLHttpRequest.status == 401) {
+                                        //todo 跳转授权页面
+//                                        alert(XMLHttpRequest.responseJSON.message);
+                                        window.location.href = '<?php echo $authorUrl;?>';
+                                    }
+                                    else if (XMLHttpRequest.status == 403) {
+//                                        alert('接口验证失败，非法访问');
+                                        window.location.href = '<?php echo $authorUrl;?>';
+                                    }
+                                    else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                        alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                                    }
+                                    else {
+                                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                    }
+                                }
+                            });
+                        }else{
+                           alert("请输入验证码");
+                           return false;
+                        }
+                    });
+                }
+
+                if($('.label').length == 1){
+                    $('.label').find('input').addClass('check-box');
+                }
+                $('.label').on('click','input',function(e) {
+                    e.preventDefault();
+                    $(this).toggleClass('check-box');
+                    $(this).parent().parent().siblings().find('input').removeClass("check-box");
+                    if ($(this).hasClass('check-box')) {
+                        var id = $(this).val();
+                        if (pay_price > 0) {
+                            window.location.href = decodeURIComponent(tourl) + "&cashcoupon_id=" + id;
+                        }
+                    }else if(!($(this).hasClass('check-box'))){
+                        if (pay_price > 0) {
+                            window.location.href = decodeURIComponent(tourl) + "&flag=" + -1;
+                        }
+                    }
+                });
+
+
+
+//                $('.couponRadio').on('change',function(e){
+//                    e.preventDefault();
+//                    $(this).attr("checked",true);
+//                    $(this).parent().siblings().find('input').attr("checked",false);
+//                    var id = $('input:radio[name="radio"]:checked').val();
+//                    if(pay_price>0){
+//                        window.location.href = decodeURIComponent(tourl)+"&cashcoupon_id="+id
+//                    }
+//                });
+            },
+
+
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+//                    alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    window.location.href = '<?php echo $authorUrl;?>';
+
+//                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+        });
+    });
+</script>
+</html>

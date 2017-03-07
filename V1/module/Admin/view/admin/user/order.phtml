@@ -1,0 +1,142 @@
+<hgroup class="box">
+    <header>
+        <h3>个人信息</h3>
+        <i class="icon icon-add"></i>
+        <!--        <a href="/wftadlogin/authmenu/new">添加菜单资源</a>-->
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+            <li><a href="/wftadlogin/user/info?uid=<?php echo $userData->uid; ?>">基本信息</a></li>
+            <li><a href="/wftadlogin/user/order?uid=<?php echo $userData->uid; ?>">订单</a></li>
+            <li><a href="/wftadlogin/user/speak?uid=<?php echo $userData->uid; ?>">用户发言</a></li>
+            <li><a href="/wftadlogin/user/integral?uid=<?php echo $userData->uid; ?>">积分</a></li>
+            <li><a href="/wftadlogin/user/balance?uid=<?php echo $userData->uid; ?>">余额</a></li>
+            <li><a href="/wftadlogin/user/cashCoupon?uid=<?php echo $userData->uid; ?>">现金券</a></li>
+            <li><a href="/wftadlogin/user/qualify?uid=<?php echo $userData->uid; ?>">抢购资格</a></li>
+            <li><a href="/wftadlogin/user/partner?uid=<?php echo $userData->uid; ?>">玩伴</a></li>
+            <li><a href="/wftadlogin/user/favorite?uid=<?php echo $userData->uid; ?>">收藏</a></li>
+            <li><a href="/wftadlogin/user/travel?uid=<?php echo $userData->uid; ?>">出行人</a></li>
+            <li><a href="/wftadlogin/user/address?uid=<?php echo $userData->uid; ?>">地址</a></li>
+        </ul>
+    </div>
+</hgroup>
+
+<form class="box box-form" action="" method="get">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $coupon_name = null;
+
+        if (isset($_GET['coupon_name']) && $_GET['coupon_name']) {
+            $coupon_name = $_GET['coupon_name'];
+        }
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">商品/活动名称</th>
+            <th colspan="3">
+                <input type="hidden" name="uid" value="<?php echo $userData->uid; ?>">
+                <input type="text" class="cssInput" name="coupon_name" value="<?php echo $coupon_name;?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/user/order?uid=<?php echo $userData->uid; ?>" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        订单列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tr>
+                <th class="size1">
+                    订单号
+                </th>
+                <th class="size1">
+                    商品/活动名称
+                </th>
+                <th class="size1">
+                    套系名称/场次ID
+                </th>
+                <th class="size1">
+                    游玩地
+                </th>
+                <th class="size1">
+                    购买时间
+                </th>
+                <th class="size2">
+                    验证时间
+                </th>
+                <th class="size1">
+                    支付金额
+                </th>
+                <th class="size1">
+                    现金券金额
+                </th>
+
+                <th class="size1">
+                    订单状态
+                </th>
+                <th class="size1">
+                    支付渠道
+                </th>
+            </tr>
+            <?php foreach ($data as $row): ?>
+                <tr>
+                    <td class="size1">
+                        <?php
+                            if ($row['order_type'] == 2) {
+                                $order_url =  '/wftadlogin/order/info?order_sn='. $row['order_sn'];
+                                $name_url = '/wftadlogin/good/new?gid='. $row['coupon_id'];
+                            } elseif ($row['order_type'] == 3) {
+                                $order_url =  '/wftadlogin/excercise/orderinfo?order_sn='. $row['order_sn'];
+                                $name_url = '/wftadlogin/excercise/edit?id='. $row['bid'];
+                            } else {
+                                $order_url =  '#';
+                                $name_url = '#';
+                            }
+
+                        ?>
+                        <a href="<?php echo $order_url;?>"><?php echo $row['order_sn']; ?></a>
+                    </td>
+                    <td class="size2">
+                        <a href="<?php echo $name_url;?>"><?php echo $row['coupon_name']; ?></a>
+                    </td>
+                    <td class="size1">
+                        <?php if($row['order_type'] == 2):?>
+                            <?php echo $row['price_name']; ?>
+                        <?php elseif($row['order_type'] == 3):?>
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['coupon_id']; ?>"><?php echo $row['coupon_id']; ?></a>
+                        <?php endif;?>
+                    </td>
+                    <td class="size1"><?php echo $row['shop_name']; ?></td>
+                    <td class="size1"><?php echo $row['buy_time']; ?></td>
+                    <td class="size2"><?php echo $row['use_time']; ?></td>
+                    <td class="size1"><?php echo $row['account_money'] + $row['real_pay']; ?></td>
+                    <td class="size1"><?php echo $row['voucher']; ?></td>
+                    <td class="size1"><?php echo $row['order_status']; ?></td>
+                    <td class="size1"><?php echo $row['account_type']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+
+        <div class="box-title">
+            统计该条件下：
+            订单数 <?php echo $count['order_num'];?>
+            支付金额为 <?php echo $count['order_money']; ?>
+            退款金额 <?php echo $count['order_back'];?>
+            均单值 <?php echo $count['order_sqr']; ?>
+        </div>
+    </div>
+</div>

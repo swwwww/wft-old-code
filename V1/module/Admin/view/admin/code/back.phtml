@@ -1,0 +1,353 @@
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/code/back">原路返回退款</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/yards/backlist">活动退款</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/code/drawback">商品退款</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $good_name = null;
+        $order_id = null;
+        $good_id = null;
+        $buy_start = null;
+        $buy_end = null;
+        $back_start = null;
+        $back_end = null;
+        $temp_back_start = null;
+        $temp_back_end = NULL;
+        $temp_start = null;
+        $temp_end = NULL;
+        $pageNum = 10;
+        $trade_way = 0;
+        $temp = 2;
+
+
+        if (isset($_GET['page_num']) && $_GET['page_num']) {
+            $pageNum = $_GET['page_num'];
+        }
+
+        if (isset($_GET['good_name']) && $_GET['good_name']) {
+            $good_name = $_GET['good_name'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['good_id']) && $_GET['good_id']) {
+            $good_id = $_GET['good_id'];
+        }
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['temp_back_start']) && $_GET['temp_back_start']) {
+            $temp_back_start = $_GET['temp_back_start'];
+        }
+
+        if (isset($_GET['temp_back_end']) && $_GET['temp_back_end']) {
+            $temp_back_end = $_GET['temp_back_end'];
+        }
+
+        if (isset($_GET['back_start']) && $_GET['back_start']) {
+            $back_start = $_GET['back_start'];
+        }
+
+        if (isset($_GET['back_end']) && $_GET['back_end']) {
+            $back_end = $_GET['back_end'];
+        }
+
+        if (isset($_GET['temp_start']) && $_GET['temp_start']) {
+            $temp_start = $_GET['temp_start'];
+        }
+
+        if (isset($_GET['temp_end']) && $_GET['temp_end']) {
+            $temp_end = $_GET['temp_end'];
+        }
+
+        if (isset($_GET['trade_way']) && $_GET['trade_way']) {
+            $trade_way = $_GET['trade_way'];
+        }
+
+        if (isset($_GET['temp']) && $_GET['temp']) {
+            $temp = $_GET['temp'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">商品名称</th>
+            <th>
+                <input type="text" class="cssInput" name="good_name" value="<?php echo $good_name;?>">
+            </th>
+            <th width="160">订单号</th>
+            <th>
+                <input type="text" name="order_id" value="<?php echo $order_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">订单交易时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_start;?>">
+                <input name="buy_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $buy_end;?>">
+            </th>
+            <th width="160">提交退款时间</th>
+            <th>
+                <input name="back_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_start;?>">
+                <input name="back_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $back_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">提交原路返回退款时间</th>
+            <th>
+                <input name="temp_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $temp_start;?>">
+                <input name="temp_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $temp_end;?>">
+            </th>
+            <th width="160">确定原路返回账户时间</th>
+            <th>
+                <input name="temp_back_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $temp_back_start;?>">
+                <input name="temp_back_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $temp_back_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">状态</th>
+            <th colspan="3">
+                <select name="trade_way">
+                    <option value="0" <?php echo ($trade_way == 0) ? 'selected' : '';?>>交易渠道_全部</option>
+                    <option value="1" <?php echo ($trade_way == 1) ? 'selected' : '';?>>交易渠道_支付宝</option>
+                    <option value="2" <?php echo ($trade_way == 2) ? 'selected' : '';?>>交易渠道_银联</option>
+                    <option value="3" <?php echo ($trade_way == 3) ? 'selected' : '';?>>交易渠道_新微信网页</option>
+                    <option value="5" <?php echo ($trade_way == 5) ? 'selected' : '';?>>交易渠道_微信app</option>
+                    <option value="4" <?php echo ($trade_way == 4) ? 'selected' : '';?>>交易渠道_旧微信网页</option>
+                </select>
+
+                <select name="temp">
+                    <option value="1" <?php echo ($temp == 1) ? 'selected' : '';?>>全部</option>
+                    <option value="2" <?php echo ($temp == 2) ? 'selected' : '';?>>状态_已提交原路返回</option>
+                    <option value="3" <?php echo ($temp == 3) ? 'selected' : '';?>>状态_已退款</option>
+                </select>
+
+                <select name="page_num">
+                    <option value="10" <?php echo ($pageNum == 10) ? 'selected' : '';?>>展示个数_10</option>
+                    <option value="50" <?php echo ($pageNum == 50) ? 'selected' : '';?>>展示个数_50</option>
+                    <option value="100" <?php echo ($pageNum == 100) ? 'selected' : '';?>>展示个数_100</option>
+                    <option value="150" <?php echo ($pageNum == 150) ? 'selected' : '';?>>展示个数_150</option>
+                </select>　　
+                商品id<input type="text" name="good_id" value="<?php echo $good_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/code/back" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/code/outBackOrder" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        使用码列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="100">交易时间</th>
+                <th width="100">提交退款时间</th>
+                <th width="100">提交退款原账户时间</th>
+                <th width="100">确定退款到原账户时间</th>
+                <th width="100">验证码</th>
+                <th width="150">交易号</th>
+                <th width="100">订单号</th>
+                <th width="100">入账金额</th>
+                <th width="100">出账金额</th>
+                <th width="100">交易渠道</th>
+                <th width="60">用户id</th>
+                <th width="100">用户名</th>
+                <th width="150">商品名称</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left" class="ter-change" >
+                    <td width="50">
+                        <?php if($temp == 2):?>
+                        <input type="checkbox" order-money="<?php echo  $row['coupon_unit_price']; ?>" order-id="<?php echo $row['order_sn'];?>" name="check_ids" value="<?php echo $row['id']; ?>"></td>
+                        <?php endif;?>
+                    <td width="100">
+                        <?php echo date('Y-m-d H',$row['dateline']); ?>
+                    </td>
+                    <td width="100">
+                        <?php echo date('Y-m-d H',$row['back_time']); ?>
+                    </td>
+                    <td width="100">
+                        <?php echo date('Y-m-d H',$row['tmp_dateline']); ?>
+                    </td>
+                    <td width="100">
+                        <?php echo ($row['tmp_status'] == 3) ? date('Y-m-d H',$row['last_dateline']) : ''; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['id'].$row['password']; ?>
+                    </td>
+                    <td width="150">
+                        <?php echo $row['trade_no']; ?>
+                    </td>
+                    <td width="100"><a href="/wftadlogin/order/info?order_sn=<?php echo $row['order_sn'];?>"><?php echo $row['order_sn'] . ($row['buy_number'] > 1 ? '_'. $row['sort'] : ''); ?></a></td>
+                    <td width="100"><?php echo $row['coupon_unit_price']; ?></td>
+                    <td width="100">
+                        <?php
+                        if (($row['status'] == 2 || $row['status'] == 3)) {
+                            echo floatval($row['back_money']) ? $row['back_money'] : $row['coupon_unit_price'];
+                        }
+                        ?>
+                    </td>
+                    <td width="100"><?php echo $tradeWay[$row['account_type']]; ?></td>
+                    <td width="60"><?php echo $row['user_id']; ?></td>
+                    <td width="100"><?php echo $row['username']; ?></td>
+                    <td width="150"><?php echo $row['coupon_name']; ?></td>
+                    <td width="150">
+                        <?php if($temp == 2){?>
+                        <a style="background-color: green" href="/wftadlogin/code/doBack?type=1&id=<?php echo $row['id']; ?>" class="ui-button">线下退款</a>
+                        <?php }?>
+                        <?php if($temp == 3){?>
+                            已返回用户原账户
+                        <?php }?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-this">全选
+        <button onclick="if(confirm('线下退款?')==false)return false;"  data-src="<?php echo $doUrl?>&all=1" class="ui-button" id="mark-check">线下退款</button>
+        <div class="box-title">
+            已选择 订单个数为<span id="order-num"></span> 累计金额为<span id="order-money"></span>
+        </div>
+
+        <div class="box-title">
+            统计该条件下的订单个数为 <?php echo $count['order_number']; ?>
+            支付金额为 <?php echo $count['order_money']; ?>
+            使用码个数为 <?php echo $count['code_num']; ?>
+            退款金额为 <?php echo $count['back_money']; ?>
+        </div>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+
+</div>
+
+
+<script>
+    $(function () {
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+        //选择本页
+        $('#check-this').click(function() {
+            $("#check-all").attr('checked',false);
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+                getOrder()
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+                getOrder()
+            }
+        });
+
+        $('.ter-change').on('change', '[type="checkbox"]', function () {
+            getOrder();
+        });
+
+
+        //type  1为全部
+        function getOrder() {
+            var check_ids = document.getElementsByName('check_ids');
+            var id='';//如果这样定义var s;变量s中会默认被赋个null值
+            var orderMoney = 0;
+            var orderId = 0;
+            for (var i = 0; i < check_ids.length; i++) {
+                force_data = check_ids[i];
+                if (force_data.checked){
+                    force_data.getAttribute('order-id');
+                    orderMoney = orderMoney + parseFloat(force_data.getAttribute('order-money'))*100;
+                    orderId[i] = force_data.getAttribute('order-id');
+                    orderId ++;
+                }
+            }
+            $('#order-num').html(orderId);
+            $('#order-money').html(orderMoney/100);
+
+        }
+
+        //确认退款
+        $('#mark-check').click(function() {
+            if (confirm('确定将所有选中的订单确认线下退款？不可恢复')) {
+                //执行修改操作
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                    return false;
+                }
+
+                $.post('/wftadlogin/code/doBack?type=2', {ids:id}, function (data) {
+                    if (data.status == 1) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            } else {
+                alert('取消');
+            }
+        });
+
+    });
+</script>
+
+
+
+

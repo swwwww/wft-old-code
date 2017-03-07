@@ -1,0 +1,51 @@
+<hgroup class="box">
+    <header>
+        <h3>商家管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/seller?city=<?php echo $city;?>">商家列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box" action="/wftadlogin/seller/save" method="post" id="blog-save">
+    <header class="box-title"><?php echo $data ? '修改商家':'添加商家';?></header>
+    <table class="table">
+
+        <?php if ($data):?>
+            <tr>
+                <th width="160">商家id</th>
+                <th colspan="3">
+                    <?php echo $data->market_id;?>
+                    <input type="hidden" name="market_id" value="<?php echo $data->market_id;?>">
+                </th>
+            </tr>
+        <?php endif;?>
+        <input type="hidden" name="city" value="<?php echo $data ? $data->market_city : $city;?>">
+        <tr>
+            <th width="160">商家名称</th>
+            <th colspan="3">
+                <input class="cssInput" name="market_name" type="text" value="<?php echo $data ? $data->market_name : '';?>" placeholder="请输入商家名称">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商家类别</th>
+            <th colspan="3">
+                <select class="cssInput" name="market_type">
+                    <?php foreach($shopType as $val):?>
+                        <option <?php echo ($data && $val == $data->market_type) ? 'selected' : '';?>><?php echo $val;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3"><input type="submit" value="保存" class="btn btn-primary" data-loading-text="提交中..."/>
+            </th>
+        </tr>
+    </table>
+</form>

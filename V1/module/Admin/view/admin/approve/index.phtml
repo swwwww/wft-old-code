@@ -1,0 +1,259 @@
+<hgroup class="box">
+    <header>
+        <h3>财务</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/approve/index">订单审核</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/charge/list">充值审核</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $buy_start = null;
+        $buy_end = null;
+        $check_status = 1;
+        $trade_way = null;
+        $order_id = null;
+        $user_id = null;
+        $coupon_id = null;
+        $order_type = 0;
+
+        if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+            $buy_start = $_GET['buy_start'];
+        }
+
+        if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+            $buy_end = $_GET['buy_end'];
+        }
+
+        if (isset($_GET['check_status']) && $_GET['check_status']) {
+            $check_status = $_GET['check_status'];
+        }
+
+        if (isset($_GET['trade_way']) && $_GET['trade_way']) {
+            $trade_way = $_GET['trade_way'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['user_id']) && $_GET['user_id']) {
+            $user_id = $_GET['user_id'];
+        }
+
+        if (isset($_GET['coupon_id']) && $_GET['coupon_id']) {
+            $coupon_id = $_GET['coupon_id'];
+        }
+
+        if (isset($_GET['order_type']) && $_GET['order_type']) {
+            $order_type = $_GET['order_type'];
+        }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="120">购买开始时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput" style="width:200px"  value="<?php echo $buy_start;?>">
+            </th>
+            <th width="120">购买结束时间</th>
+            <th>
+                <input name="buy_end" type="date" class="cssInput" style="width:200px"  value="<?php echo $buy_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120">支付方式</th>
+            <th>
+                <select name="trade_way">
+                    <option value="0" <?php echo ($trade_way == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($trade_way == 1) ? 'selected' : '';?>>支付宝</option>
+                    <option value="2" <?php echo ($trade_way == 2) ? 'selected' : '';?>>银联</option>
+                    <option value="3" <?php echo ($trade_way == 3) ? 'selected' : '';?>>新微信网页</option>
+                    <option value="4" <?php echo ($trade_way == 4) ? 'selected' : '';?>>旧微信网页</option>
+                    <option value="5" <?php echo ($trade_way == 5) ? 'selected' : '';?>>微信</option>
+                    <option value="6" <?php echo ($trade_way == 6) ? 'selected' : '';?>>账户支付</option>
+                </select>
+            </th>
+            <th width="120">审核状态</th>
+            <th>
+                <select name="check_status">
+                    <option value="3" <?php echo ($check_status == 3) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($check_status == 1) ? 'selected' : '';?>>未审核</option>
+                    <option value="2" <?php echo ($check_status == 2) ? 'selected' : '';?>>已审核</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120">用户id/名称/手机号</th>
+            <th>
+                <input name="user_id" type="text" class="cssInput" style="width:200px"  value="<?php echo $user_id;?>">
+            </th>
+            <th width="120">商品 活动名称/id</th>
+            <th>
+                <input name="coupon_id" type="text" class="cssInput" style="width:200px"  value="<?php echo $coupon_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120">订单号</th>
+            <th>
+                <input name="order_id" type="text" class="cssInput" style="width:200px"  value="<?php echo $order_id;?>">
+            </th>
+            <th width="120">订单类型</th>
+            <th>
+                <select name="order_type">
+                    <option value="0" <?php echo (!$order_type) ? 'selected' : '';?>>全部</option>
+                    <option value="2" <?php echo ($order_type == 2) ? 'selected' : '';?>>商品</option>
+                    <option value="3" <?php echo ($order_type == 3) ? 'selected' : '';?>>活动</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="5">
+                <input type="hidden" name="type" value="3">
+                <a href="/wftadlogin/approve/index" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <input type="hidden" name="activity_type" value="1">
+                <a href="javascript:void(0)" data-src="/wftadlogin/approve/out" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        订单列表　　　
+        <span>入账总金额：<mark><?php echo $counter['total_money'];?></mark></span>　　
+        <span>已审核金额：<mark><?php echo $counter['approve_money'];?></mark></span>　　
+        <span><mark>待审核金额</mark>：<mark><?php echo $counter['total_money'] - $counter['approve_money'];?></mark></span>　　
+        <span>订单个数 : <mark><?php echo $count;?></mark></span>　　
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="80">交易时间</th>
+                <th width="180">交易号</th>
+                <th width="50">订单号</th>
+                <th width="90">用户名</th>
+                <th width="50">用户id</th>
+                <th width="80">商品/活动ID</th>
+                <th width="150">商品/活动名称</th>
+                <th width="100">入账金额</th>
+                <th width="80">支付渠道</th>
+                <th width="120">支付账号</th>
+                <th width="80">审批状态</th>
+                <th width="80">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><input type="checkbox" name="check_ids" value="<?php echo $row['order_sn']; ?>" class="check_ids"></td>
+                    <td width="170"><?php echo date('Y-m-d H:i',$row['dateline']); ?></td>
+                    <td width="180"><?php echo $row['trade_no']; ?></td>
+                    <td width="50"> <?php echo $row['order_sn']; ?></td>
+                    <td width="90"><?php echo $row['username'];?></td>
+                    <td width="50"><?php echo $row['user_id']; ?></td>
+                    <td width="80"><?php echo $row['order_type'] == 2 ? $row['coupon_id'] : $row['bid']; ?></td>
+                    <td width="150"><?php echo $row['coupon_name']; ?></td>
+                    <td width="150"><?php echo bcadd($row['real_pay'], $row['account_money'], 2); ?></td>
+                    <td width="80"><?php echo $trade[$row['account_type']]; ?></td>
+                    <td width="120"><?php echo $row['account']; ?></td>
+                    <td width="80">
+                        <?php
+                            if ($row['approve_status'] == 1) {
+                                echo '未审批';
+                            } elseif ($row['approve_status'] == 2) {
+                                echo '已审批';
+                            }
+                        ?>
+                    </td>
+                    <th width="80">
+                        <?php if($row['approve_status'] == 1):?>
+                            <a onclick="if(confirm('确定审批到账?')==false) return false;" href="/wftadlogin/approve/done?type=1&id=<?php echo $row['order_sn']; ?>"  class="ui-button">审批到账</a>
+                        <?php endif;?>
+                    </th>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-all">当前页面全选
+        <button class="ui-button" id="approve-by">所选项审批到账</button>
+        <button data-src="/wftadlogin/approve/done?type=3" class="ui-button" id="all-in">当前搜索条件下全部审批到账</button>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //全选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+        });
+
+        //当前页面审批到账
+        $('#approve-by').click(function() {
+            if (confirm('确定将所有选中的订单审批到账？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/approve/done?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&id=' + id;
+                }
+            }
+        });
+
+        //全选审批到账
+        $('#all-in').click(function() {
+            if (confirm('前搜索条件下全部审批到账?')) {
+                $('#out-data-form').attr('action',  $(this).attr('data-src'));
+                $('#out-data-form').submit();
+                $('#out-data-form').attr('action', '');
+            }
+            return false;
+        });
+
+    });
+</script>
+
+
+
+

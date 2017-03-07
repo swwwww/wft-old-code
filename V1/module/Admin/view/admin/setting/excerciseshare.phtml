@@ -1,0 +1,141 @@
+<hgroup class="box">
+    <header>
+        <h3>分享返利设置</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/cashshare">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/setting/excercisesharesave" method="post">
+    <header class="box-title">添加分享返利设置<span class="ui-button" id="add-price">添加</span></header>
+
+    <table class="table">
+        <tr>
+            <th width="100">购买金额（小-大　金额区间）</th>
+            <th width="100">分享者额外现金券（目前不支持多张券组合）</th>
+            <th width="100">好友购买获得</th>
+            <th width="100">操作
+            </th>
+        </tr>
+        <?php if(!$this->options): ?>
+        <tr id="range" class="range">
+            <th colspan="1"><input type="text" class="cssInput" name="price_range[]" value="">
+            <th colspan="1"><input type="text" class="cssInput" name="owner[]" value="">
+            <th colspan="1">
+                <select name="corm[]">
+                    <option value ="1">现金券</option>
+                    <option value ="2">现金</option>
+                </select>
+                <input type="text" style="width: 200px;" class="cssInput" name="geter[]" value="">
+            <th colspan="1">
+                <span  class="ui-button">删除</span>
+            </th>
+        </tr>
+        <?php endif; ?>
+        <?php foreach($this->options as $k => $v): ?>
+        <tr id="range<?php echo $k; ?>" class="range">
+            <th colspan="1"><input type="text" class="cssInput" name="price_range[]" value="<?php echo $v[0]; ?>">
+            <th colspan="1"><input type="text" class="cssInput" name="owner[]" value="<?php echo $v[1]; ?>">
+            <th colspan="1">
+                <select name="corm[]">
+                    <option <?php if($v[2]==1): ?>selected="selected" <?php endif; ?> value ="1">现金券</option>
+                    <option <?php if($v[2]==2): ?>selected="selected" <?php endif; ?> value ="2">现金</option>
+                </select>
+                <input type="text" style="width: 200px;" class="cssInput" name="geter[]" value="<?php echo $v[3]; ?>" />
+            </th>
+            <th colspan="1">
+                <span onclick="rangedelete(<?php echo $k; ?>)" class="ui-button">删除</span>
+            </th>
+        </tr>
+        <?php endforeach; ?>
+
+        <tr>
+            <th width="160">是否全场通用
+            <th colspan="3" width="600">
+                <input name="isall" type="radio" value="1" <?php if($data->isall):?> checked <?php endif; ?> /> 是 &nbsp;&nbsp;&nbsp;
+                <input name="isall" type="radio" value="0" <?php if(!$data->isall):?> checked <?php endif; ?> /> 否
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">
+                <input type="hidden" name="id" value="<?php echo $data->id; ?>" /></th>
+            <th colspan="3">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+
+    </table>
+
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='afterbuy']").attr('value', data.result.url);
+                $("#img").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='shareicon']").attr('value', data.result.url);
+                $("#img2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload3').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='afterget']").attr('value', data.result.url);
+                $("#img3").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    var rangedelete = function(n){
+        var range = $('#range'+n);
+        range.remove();
+    };
+
+    $('#add-price').on('click',function() {
+        var n = $('.range').length;
+        var range = $('.range').eq(n-1);
+        var html = '<tr id="range'+n+'" class="range">' +
+            '<th><input type="text" class="cssInput" name="price_range[]" value=""><th>' +
+            '<input type="text" class="cssInput" name="owner[]" value="">' +
+
+            '<th>' +
+            '<select name="corm[]">'+
+            '<option value ="1">现金券</option>'+
+            '<option value ="2">现金</option>'+
+            '</select>'+
+            '<input type="text" style="width: 200px;" class="cssInput" name="geter[]" value=""><th>' +
+            '<span onclick="rangedelete('+n+')" class="ui-button">删除</span></th></tr>';
+        range.after(html);
+    });
+
+</script>
+

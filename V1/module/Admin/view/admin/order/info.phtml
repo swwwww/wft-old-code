@@ -1,0 +1,431 @@
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:void(0)">订单详情</a>
+        <i class="icon icon-add"></i>
+        <a href="javascript:history.go(-1)">返回上一页</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+       订单信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">订单号</th>
+            <th colspan="3">
+                 <?php echo $orderData->order_sn;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">交易时间</th>
+            <th colspan="3">
+                <?php echo date('Y-m-d H:i:s', $orderData->dateline);?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">交易号</th>
+            <th colspan="3">
+                 <?php echo $orderData->trade_no;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">实际支付</th>
+            <th colspan="3">
+                <?php echo $orderData->real_pay + $orderData->account_money;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">现金券金额</th>
+            <th colspan="3">
+                <?php if($crashData):?>
+                <a href="/wftadlogin/cashcoupon/detail?cid=<?php echo $crashData->cid;?>"><?php echo $orderData->voucher;?></a>
+                <?php else:?>
+                    <?php echo $orderData->voucher;?>
+                <?php endif;?>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">返券金额</th>
+            <th colspan="3">
+                 <?php echo $backData['back_crash']; ?>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">返利金额</th>
+            <th colspan="3">
+                <?php echo $backData['rebate']; ?>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">购买获得积分</th>
+            <th colspan="3">
+                <?php echo $backData['integral']; ?>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        用户信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">用户名</th>
+            <th colspan="3">
+                <?php echo $orderData->username;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">用户id</th>
+            <th colspan="3">
+                <?php echo $orderData->user_id;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">购买关联 手机号</th>
+            <th colspan="3">
+                <?php echo $orderData->buy_phone;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">支付方式</th>
+            <th colspan="3">
+                <?php echo $orderData->account_type;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">支付账号</th>
+            <th colspan="3">
+                <?php echo $orderData->account;?>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        商品信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">商家名称</th>
+            <th colspan="3">
+                <?php echo $orderData->shop_name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商品名称</th>
+            <th colspan="3">
+                <?php echo $orderData->coupon_name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">套系</th>
+            <th colspan="3">
+                <?php echo $gameInfo->type_name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">商品状态</th>
+            <th colspan="3">
+                <?php
+                    $timer = time();
+                    if (!$goodData->status || $goodData->is_together == 2 || $goodData->start_time > $timer) {
+                        echo '未开始';
+                    } elseif ($goodData->down_time > $timer && $goodData->end_time > $timer && $goodData->start_time < $timer) {
+                        echo '在售';
+                    } elseif ($goodData->down_time < $timer) {
+                        echo '停止售卖';
+                    } elseif ($goodData->foot_time < $timer){
+                        echo '停止使用';
+                    } else {
+                        echo '其它';
+                    }
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">游玩地</th>
+            <th colspan="3">
+                <?php echo $goodInfoData->shop_name;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">出行时间</th>
+            <th colspan="3">
+                <?php
+                    if ($goodData->need_use_time == 2) {
+                        echo $gameInfo->start_time ? date('Y-m-d H:i',$gameInfo->start_time) : '0';
+                    } else {
+                        echo date('Y-m-d H:i',$goodInfoData->start_time). '  到  '. date('Y-m-d H:i', $goodInfoData->end_time);
+                    }
+                ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">该订单验证商家</th>
+            <th colspan="3">
+                <?php
+                    echo $useOrganizer;
+                ?>
+            </th>
+        </tr>
+
+    </table>
+</div>
+
+<?php if(count($zybData)):?>
+    <div class="box">
+        <div class="box-title">
+            智游宝订单信息
+        </div>
+        <div>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th width="100">智游宝辅助码</th>
+                    <th width="100">状态</th>
+                    <th width="100">操作</th>
+                </tr>
+                <?php foreach ($zybData as $row): ?>
+                    <tr style="text-align: left">
+                        <td width="100"><?php echo $row['zyb_code']; ?></td>
+                        <td width="100">
+                            <?php
+                                if ($row['status'] == 1 || $row['zyb_type'] == 2) {
+                                    echo '异常';
+                                } elseif ($row['status'] == 2) {
+                                    echo '已支付';
+                                } elseif ($row['status'] == 3) {
+                                    echo '退款中';
+                                } elseif ($row['status'] == 4) {
+                                    echo '已退款';
+                                } elseif ($row['status'] == 5) {
+                                    echo '已使用';
+                                }
+                            ?>
+                        </td>
+                        <td width="100">
+                            <?php if($row['zyb_type'] == 1):?>
+                            <a class="ui-button" href="/wftadlogin/zyb/info?order_sn=<?php echo $row['order_sn']; ?>">查看</a>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif;?>
+
+
+<?php if($insureData):?>
+<div class="box">
+    <div class="box-title">
+        保险相关信息
+    </div>
+    <table class="table">
+        <tr>
+            <th width="160">保险人数</th>
+            <th colspan="3">
+                <?php echo $gameInfo->insure_num_per_order * $orderData->buy_number;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">保险单价</th>
+            <th colspan="3">
+                <?php echo $gameInfo->insure_price;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">保险总价</th>
+            <th colspan="3">
+                <?php echo $gameInfo->insure_num_per_order * $orderData->buy_number * $gameInfo->insure_price ;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">保险天数</th>
+            <th colspan="3">
+                <?php echo $gameInfo->insure_days;?>
+            </th>
+        </tr>
+
+    </table>
+</div>
+<?php endif;?>
+
+<div class="box">
+    <div class="box-title">
+        验证码信息
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">编号</th>
+                <th width="100">验证码</th>
+                <th width="100">审核状态</th>
+                <th width="100">使用码状态</th>
+                <th width="100">操作</th>
+            </tr>
+            <?php foreach ($codeData as $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['sort']; ?></td>
+                    <td width="100"><?php echo $row['id'].$row['password']; ?></td>
+                    <td width="100"><?php echo ($row['check_status'] == 1) ? '未审核' : '已审核'; ?></td>
+                    <td width="100">
+                        <?php
+                            if ($orderData->pay_status < 2) {
+                                echo '未支付';
+                            } elseif ($row['status'] == 0) {
+                                echo '待使用';
+                            } elseif ($row['status'] == 1) {
+                                if ($row['force'] == 0) {
+                                    if ($row['test_status'] == 0) {
+                                       echo '已使用';
+                                    } elseif ($row['test_status'] == 3) {
+                                        echo '已提交结算';
+                                    } elseif ($row['test_status'] == 4) {
+                                        echo '已受理结算';
+                                    } elseif ($row['test_status'] == 5) {
+                                        echo '已结算';
+                                    }
+                                } elseif ($row['force'] == 2) {
+                                    echo '已受理退款';
+                                } elseif ($row['force'] == 3) {
+                                    echo '已退款';
+                                }
+                            } elseif ($row['status'] == 2) {
+                                echo '已退款';
+                            } elseif ($row['status'] == 3) {
+                                if ($row['force'] == 2) {
+                                    echo '已受理退款';
+                                } else {
+                                    echo '退款中';
+                                }
+                            }
+                        ?>
+                    </td>
+                    <td width="100">
+                        <?php if($row['status'] == 2 && isset($_GET['tui'])):?>
+                            <a class="ui-button" href="/wftadlogin/order/backMoney?order_sn=<?php echo $orderData->order_sn; ?>&id=<?php echo $row['id']; ?>">提交原路返回</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        操作记录
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="100">交易号</th>
+                <th width="150">时间</th>
+                <th width="150">操作</th>
+                <th width="50">交易金额</th>
+                <th width="150">操作人员</th>
+                <th width="150"></th>
+            </tr>
+            <?php foreach ($actionData as $row): ?>
+                <tr style="text-align: left">
+                    <td width="100"><?php echo $orderData->trade_no;?></td>
+                    <td width="150"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                    <td width="150"><?php echo $row['action_note']; ?></td>
+                    <td width="50"><?php
+                        if($row['play_status'] == 2) {// 付款成功
+                            echo $orderData->real_pay + $orderData->account_money;
+                        } elseif ($row['play_status'] == 4 || $row['play_status'] == 12) { // 退款成功
+                            echo '-'. $orderData->coupon_unit_price;
+                        } elseif ($row['play_status'] == 10) { // 结算
+                            echo '-'. $orderData->coupon_unit_price;
+                        }
+                        ?></td>
+                    <td width="150"><?php echo $row['action_user_name']; ?></td>
+                    <td width="150">
+                        <?php if ($row['back_flag'] == 1) {?>
+                            <a onclick="if(confirm('确定要驳回提交退款?')==false)return false;"  href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&object_type=1&type=1" class="ui-button">驳回提交退款</a>
+                        <?php };?>
+
+                        <?php if ($row['back_flag'] == 2) {?>
+                            <a onclick="if(confirm('确定要驳回受理退款?')==false)return false;" href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&object_type=2&type=1" class="ui-button">驳回受理退款</a>
+                        <?php };?>
+
+                        <?php if ($row['back_flag'] == 3) {?>
+                            <a onclick="if(confirm('确定要驳回受理退款?')==false)return false;" href="/wftadlogin/yards/abnormal?code_id=<?php echo $row['code_id'];?>&order_sn=<?php echo $row['order_id'];?>&object_type=2&type=1" class="ui-button">驳回受理退款</a>
+                        <?php };?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<?php if(count($backTemp)):?>
+<div class="box">
+    <div class="box-title">
+        退款到原支付账号
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="100">交易号</th>
+                <th width="250">提交退款原账户时间</th>
+                <th width="150">确认退款时间</th>
+                <th width="150">订单号</th>
+                <th width="150">使用码</th>
+                <th width="150">金额</th>
+                <th width="150">用户id</th>
+                <th width="150">用户名称</th>
+                <th width="150">状态</th>
+            </tr>
+            <?php foreach ($backTemp as $row): ?>
+                <tr style="text-align: left">
+                    <td width="100"><?php echo $orderData->trade_no;?></td>
+                    <td width="250"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                    <td width="150"><?php echo ($row['last_dateline'] && $row['status'] == 3) ? date('Y-m-d H:i:s', $row['last_dateline']) : ''; ?></td>
+                    <td width="150"><?php echo $orderData->order_sn; ?></td>
+                    <td width="150"><?php echo $row['id'].$row['password']; ?></td>
+                    <td width="150"><?php echo $row['back_money']; ?></td>
+                    <td width="150"><?php echo $row['user_id']; ?></td>
+                    <td width="150"><?php echo $row['username']; ?></td>
+                    <td width="150"><?php echo ($row['status'] == 2) ? '退款中' : (($row['status'] == 3) ? '已退款' : '其它'); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif;?>

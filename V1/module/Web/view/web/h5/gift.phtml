@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>好评有礼</title>
+    <link href="/css/h5/style.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="in-bg">
+    <div class="in-title">
+        <h3><?php echo $code;?></h3>
+    </div>
+    <h2><?php echo $data->rule;?></h2>
+</header>
+<section class="in-main">
+    <h2>点评示例:</h2>
+    <p>"<?php echo $data->eg;?><?php echo $code;?>"</p>
+    <p>点评成功之后，<?php echo $data->prize_day;?>个工作日内即可获得<?php echo $data->title;?>！</p>
+
+
+</section>
+<footer>
+    <a class="in-good" target="_blank" onclick="open_store()">去好评</a>
+</footer>
+</body>
+<script>
+    function open_store(){
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location.href = '<?php echo $ios_url;?>';
+            } else if (navigator.userAgent.match(/android/i)) {
+                document.location.href = '<?php echo $android_url;?>';
+            }else {
+                document.location.href = '<?php echo $android_url;?>';
+            }
+    }
+</script>
+</html>

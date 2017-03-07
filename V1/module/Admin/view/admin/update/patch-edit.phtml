@@ -1,0 +1,80 @@
+<hgroup class="box">
+    <header>
+        <h3>补丁管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.back(-1)">返回</a>
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+
+<div style="width: 400px;">
+    <form method="post" action="patchSave" enctype="multipart/form-data">
+        <input name="id" style="display: none" value="<?php echo $res->id ?: 0; ?>">
+        <table class="table">
+
+            <tr>
+                <td width="100px;">APP版本号</td>
+                <td><input name="version_name" class="form-control" value="<?php echo $res->version_name ?: ''; ?>"></td>
+            </tr>
+            <tr>
+                <td width="100px;">PatchCode</td>
+                <td><input name="patch_code" class="form-control" value="<?php echo $res->patch_code ?: ''; ?>" ></td>
+            </tr>
+
+            <tr>
+                <td width="100px;">HashCode</td>
+                <td><input name="hash_code" class="form-control" value="<?php echo $res->hash_code ?: ''; ?>"></td>
+            </tr>
+
+
+            <tr>
+                <td width="100px;">设备类型</td>
+                <td>
+
+                    <select class="form-control" name="client_type" id="client_type">
+                        <option value="ios">IOS</option>
+                        <option value="android">Android</option>
+                    </select>
+
+                    <script>
+                        $(function(){
+                            $("#client_type").val('<?php echo isset($res['client_type'])?$res['client_type']:0;?>');
+                        })
+                    </script>
+
+                </td>
+
+
+
+            </tr>
+
+            <tr>
+                <td width="100px;">补丁描述</td>
+                <td><textarea class="form-control" rows="6"
+                              name="version_info"><?php echo $res->version_info ?: ''; ?></textarea></td>
+            </tr>
+
+            <tr>
+                <td width="100px;">补丁包</td>
+                <td>
+                    <label for="exampleInputFile"><?php echo $file?'已上传':'选择文件';?></label>
+                    <input type="file" id="apkfile" name="file">
+
+                </td>
+            </tr>
+
+
+
+        </table>
+
+        <button type="submit" class="btn btn-default">提交</button>
+
+    </form>
+</div>
+
+
+
+</body>

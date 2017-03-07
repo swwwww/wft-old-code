@@ -1,0 +1,44 @@
+<form class="box box-form" id="form-sub" action="/wftadlogin/yardsCode/saveUpdateSpecial" method="post">
+    <header class="box-title">
+        修改特殊退款金额
+    </header>
+    <table class="table">
+        <tr>
+            <th width="160">订单id</th>
+            <th colspan="3">
+                <?php echo $order_id;?>
+                <input type="hidden" name="order_id" value="<?php echo $order_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用码id</th>
+            <th colspan="3">
+                <?php echo $code_id;?>
+                <input type="hidden" name="code_id" value="<?php echo $code_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">提交退款金额</th>
+            <th colspan="3">
+                <?php echo $codeData->back_money;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">新的退款金额</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="back_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+
+    </table>
+</form>

@@ -1,0 +1,198 @@
+<hgroup class="box">
+    <header>
+        <h3>账号管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/accountnew">添加</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $group_id = null;
+    $city_id = null;
+
+    if (isset($_GET['group_id']) && $_GET['group_id']) {
+        $group_id = $_GET['group_id'];
+    }
+
+    if (isset($_GET['city_id']) && $_GET['city_id']) {
+        $city_id = $_GET['city_id'];
+    }
+
+    if (isset($_GET['user']) && $_GET['user']) {
+        $user = $_GET['user'];
+    }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">用户</th>
+            <th>
+                <input type="text" class="cssInput" name="user" value="<?php echo $user;?>">
+            </th>
+            <th width="160">角色</th>
+            <th>
+                <select name="group_id" id="select">
+                    <option value="0" >全部</option>
+                    <?php foreach($group as $k => $g):?>
+                        <option <?php if($k == $group_id): ?>checked<?php endif; ?> value="<?php echo $k; ?>" ><?php echo $g; ?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+            <th width="160">城市</th>
+            <th>
+                <?php echo $filtercity; ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="5">
+                <a href="/wftadlogin/setting/editor" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<table class="table" style="">
+    <tr>
+        <th>id</th>
+        <th>头像</th>
+        <th>名称</th>
+        <th>联系方式</th>
+        <th>身份证</th>
+        <th>城市</th>
+        <th>角色</th>
+        <th>每月返利额度</th>
+        <th>绑定用户id</th>
+        <th>操作</th>
+
+    </tr>
+    <?php foreach ($data as $v): ?>
+        <tr>
+            <td><?php echo $v->id; ?></td>
+            <td><img src="<?php echo $v->image; ?>" width="30px" height="30px"></td>
+            <td><?php echo $v->admin_name; ?></td>
+            <td><?php echo $v->idnum; ?></td>
+            <td><?php echo $v->phone; ?></td>
+            <td><?php echo $cityData[$v->admin_city]; ?></td>
+            <td><?php echo $group[$v->group];?></td>
+            <td><?php echo $v->limit; ?></td>
+            <?php if($v->group == 1 || $v->group == 3):?>
+                <th>
+                    <input type="text" value="<?php echo $v->bind_user_id; ?>" class="form-control"
+                           style="width: 50px;display: inherit;"> <a class="btn btn-primary bind_user" att-v="<?php echo $v->id; ?>">绑定用户</a>
+                </th>
+                <?php else: ?>
+                <th>
+                    --
+                </th>
+            <?php endif;?>
+            <td>
+                <?php if($v->is_closed == 1): ?>
+<a class="btn btn-warning" href="/wftadlogin/setting/editorclose?isclose=0&id=<?php echo $v->id; ?>">启用</a>
+                <?php else: ?>
+<a class="btn btn-warning" href="/wftadlogin/setting/editorclose?isclose=1&id=<?php echo $v->id; ?>">禁用</a>
+                <?php endif; ?>
+                <a class="btn btn-warning" href="/wftadlogin/setting/accountnew?id=<?php echo $v->id; ?>">编辑</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<div>
+    <?php echo $this->pageData; ?>
+
+</div>
+
+<script type="text/javascript" src="/js/plupload.full.min.js"></script>
+<script>
+    (function () {
+
+        $(".bind_user").click(function () {
+            uid = $(this).attr('att-v');
+            bind_uid = $(this).parent().find('input').val()
+            $.post('/wftadlogin/setting/binduser', {uid: uid, bind_uid: bind_uid}, function (data) {
+                if (data.status == 1) {
+                    alert('绑定成功');
+                    window.location.reload()
+                } else {
+                    alert(data.message);
+                    window.location.reload()
+                }
+            }, 'json');
+
+        });
+
+        var upload = $('#l_upload'),
+            buttons = upload.find('.img-upload'),
+            maxCount = 1,
+            uploaded = upload.find('.img-box').length - 1,
+            uploader = new plupload.Uploader({
+                runtimes: "html5,flash,silverlight,html4",
+
+                browse_button: [].slice.call(buttons),
+
+                url: '/wftadlogin/index/upload',
+                flash_swf_url: '/js/Moxie.swf',
+                file_data_name: 'file',  //键名
+                multi_selection: true,
+                unique_names: true,
+                dragdrop: true,
+                filters: {
+                    max_file_size: '10mb',
+                    mime_types: [
+                        {title: "Image files", extensions: "jpg,gif,png"},
+                    ]
+                }
+            }),
+            imgContainer = '<div class="panel panel-default img-box"  style="float: left;text-align: center;line-height: 130px;position: relative;"><img class="img-thumb" width="130"; height="130" src="{url}" /><div class="close">&times;</div><input type="hidden" name="image" value="{url}" /></div>';
+
+        uploader.init();
+
+        uploader.bind('FilesAdded', function (up, files) {
+            var extra;
+            extra = uploaded + files.length - maxCount;
+
+            //如果选择图片过多
+            if (extra > 0) {
+                $.each(files.splice(maxCount - uploaded, extra), function (index, file) {
+                    up.removeFile(file);
+                });
+            }
+
+            uploaded += files.length;
+
+            setTimeout(function () {
+                up.start();
+            }, 10);
+        });
+
+        uploader.bind('FileUploaded', function (up, file, data) {
+            var json = $.parseJSON(data.response),
+                img = $(imgContainer.replace(/{url}/g, json.url));
+
+            upload.prepend(img);
+        });
+
+        uploader.bind('UploadComplete', function () {
+            if (uploaded === 10) {
+                buttons.hide();
+            }
+        });
+
+
+        upload.on('click', '.close', function (e) {
+            if (uploaded === 10) {
+                buttons.show();
+            }
+            uploaded--;
+            $(e.target).parent().remove();
+        });
+    }());
+</script>

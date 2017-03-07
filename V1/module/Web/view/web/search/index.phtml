@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>搜索</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/index.css" rel="stylesheet"/>
+</head>
+<body>
+    <section class="wrapper">
+        <form class="search-form" id="form" autocomplete="off" method="get">
+            <header>
+                <div class="head_cnt">
+                    <i class="icon"></i>
+                    <input type="text" name="keyword" class="search" placeholder="请输入相关票券活动名称" autocomplete="off" id="key"/>
+                    <input type="hidden" name="city" id="city" value="<?php echo $city;?>">
+                    <input type="reset" value="×" />
+                    <input type="submit" value="搜索" id="search"/>
+                </div>
+            </header>
+            <main class="align" id="content"></main>
+
+            <script id="test" type="text/html">
+            <div class="hot-search">
+                <div class="border"></div>
+                <span class="title">热门搜索</span>
+            </div>
+            <div class="hot-list">
+                {{each response_params}}
+                <a href="#" title="" data-key="{{$value}}" class="search_info">{{$value}}</a>
+                {{/each}}
+            </div>
+        </script>
+            <div class="history-search">
+                <div class="border"></div>
+                <span class="title">历史记录</span>
+            </div>
+            <div class="history-list">
+                <?php foreach($history as $v):?>
+                <a class="item" href="/web/search/info?keyword=<?php echo $v[0];?>&city=<?php echo $city;?>" title=""><i class="icon"></i><?php echo $v[0];?></a>
+                <?php endforeach;?>
+            </div>
+            <a class="history-clear link-btn del" href="javascript:;">清除历史记录</a>
+        </form>
+    </section>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    $(".del").click(function(){
+        $.post('/web/search/del',function(d){
+            if(d.response_params.status==1)
+            window.location.reload();
+        });
+    });
+
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+    var city = '<?php echo $city;?>';
+    $.ajax({
+        type:'POST',
+        url:"/search/index/hotpush",
+        dataType:'json',
+        async: true,
+        headers: {
+            "VER": 10,
+            'CITY':encodeURI(city)
+        },
+        success: function (result) {
+            if (result.response_params.status == 0) {
+                //alert(result.response_params.message);
+            } else {
+                //todo 成功
+                //window.location.href = "";
+                //console.log(result.response_params);
+                var html = template('test', result);
+                document.getElementById('content').innerHTML = html;
+                $(".search_info").click(function(){
+                   var key = $(this).attr("data-key");
+                   $(this).attr("href","/web/search/info?keyword="+key+"&city="+city)
+                });
+                $("#search").click(function(){
+                    $("#form").attr("action","/web/search/info").submit();
+                })
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+            if (XMLHttpRequest.status == 401) {
+                //todo 跳转授权页面
+                //alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+            }
+            else if (XMLHttpRequest.status == 403) {
+//                alert('接口验证失败，非法访问');
+                window.location.href = '<?php echo $authorUrl;?>';
+
+            }
+            else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                alert('请求参数错误:' + XMLHttpRequest.error_msg);
+            }
+            else {
+                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+            }
+
+        }
+    })
+</script>
+</html>

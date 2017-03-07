@@ -1,0 +1,230 @@
+<ul class="breadcrumb">
+    <li>
+        <a href="#">Home</a><span class="divider"></span>
+    </li>
+    <li>
+        <span class="divider"><a href="/wftadlogin/seller/marketlist">商家管理</a></span>
+    </li>
+    <li class="active">
+        <?php echo $data ? '商家修改' : '新建商家';?>
+    </li>
+</ul>
+
+<form action="/wftadlogin/seller/savemarket" method="post">
+    <table class="table" style="width: 850px;">
+        <?php if ($data):?>
+            <tr>
+                <th>商家编号</th>
+                <th colspan="4">
+                   <?php echo $data->market_id;?>
+                    <input type="hidden" name="market_id" value="<?php echo $data->market_id;?>">
+                </th>
+            </tr>
+        <?php endif;?>
+        <tr>
+            <th width="109">商家名称</th>
+            <th width="300"><input class="form-control" name="market_name" type="text" value="<?php echo $data ? $data->market_name : '';?>" placeholder="请输入商家名称"></th>
+            <th width="109">商家类别</th>
+            <th width="276">
+                <select class="form-control" name="market_type">
+                    <?php foreach($shopType as $val):?>
+                        <option <?php echo ($data && $val == $data->market_type) ? 'selected' : '';?>><?php echo $val;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+            <th>
+                <input type="submit" value="保存" class="btn btn-primary" data-loading-text="提交中..."/>
+            </th>
+        </tr>
+    </table>
+</form>
+<?php if($data):?>
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li>店铺列表</li>
+        <a href="/wftadlogin/seller/shop?marketId=<?php echo $data->market_id;?>" class="btn btn-primary btn-lg setShop" style="margin-left: 200px;">添加游玩地</a>
+    </ul>
+</div>
+<?php endif;?>
+
+<?php foreach($shopData as $val):?>
+<form action="/wftadlogin/seller/saveshop" method="post" class="save_sp">
+        <table class="table" style=" width: 800px; border:3px solid green">
+            <tr>
+                <th width="100">店铺名称</th>
+                <th width="300">
+                    <input class="form-control" name="shop_name" type="text" value="<?php echo $val->shop_name;?>">
+                </th>
+                <th width="100">店铺编号</th>
+                <th width="300">
+                    <?php echo $data->market_id.$val->shop_id;?>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="100">营业时间</th>
+                <th width="200">
+                    <input type="time" value="<?php echo date('H:i', $val->shop_open);?>" name="shop_open" class="time-picker form-control">
+                </th>
+                <th width="100">
+                    <input type="time" value="<?php echo date('H:i', $val->shop_close);?>" name="shop_close" class="time-picker form-control">
+                </th>
+                <th></th>
+            </tr>
+
+            <tr>
+                <th width="100">联系电话</th>
+                <th width="200">
+                    <input class="form-control" name="shop_phone" type="text" value="<?php echo $val->shop_phone ;?>">
+                </th>
+                <th colspan="2"></th>
+            </tr>
+
+            <tr>
+                <th width="100">地  址 ：</th>
+                <th width="200">
+                    <input class="form-control" name="shop_address" type="text" value="<?php echo $val->shop_address;?>">
+                </th>
+                <th colspan="2"></th>
+            </tr>
+
+            <tr>
+                <th width="100">坐 标 ：</th>
+                <th width="200">
+                    纬度坐标：<input type="text" class="form-control input-sm addr_y" name="addr_y" value="<?php echo $val->addr_y;?>">
+                </th>
+                <th width="200">
+                    经度坐标：<input type="text" class="form-control input-sm addr_x" name="addr_x" value="<?php echo $val->addr_x;?>">
+                </th>
+                <th>
+                    <button type="button" class="btn btn-primary btn-sm setmap">设置坐标点</button>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="100">商圈 ：</th>
+                <th width="200" class="xth">
+                    <div class="dropdown">
+                        <a role="button" data-toggle="dropdown" class="btn btn-primary dLabel" data-target="#" href="#"><?php echo $sData[$val->busniess_circle];?><span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            <?php foreach ($this->select_circle[1] as $k => $v): ?>
+                                <?php if (!empty($v)): ?>
+                                    <li class="dropdown-submenu circle"><a tabindex="-1" href="#" val="<?php echo $this->select_circle[0][$k]['rid']; ?>"><?php echo $this->select_circle[0][$k]['name']; ?></a>
+                                        <ul class="dropdown-menu circle">
+                                            <?php for ($i = 1; $i <= count($v); $i++) { ?>
+                                                <li><a class="lalala" href="#" val="<?php echo $v[$i]['rid']; ?>"><?php echo $v[$i]['name']; ?></a>
+                                                </li>
+                                            <?php } ?>
+                                        </ul>
+                                    </li>
+                                <?php else: ?>
+                                    <li class="circle"><a href="#" val="<?php echo $this->select_circle[0][$k]['rid']; ?>"><?php echo $this->select_circle[0][$k]['name']; ?></a>
+                                    </li>
+                                <?php endif ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="business" class="business" value="<?php echo $val->busniess_circle;?>">
+                </th>
+                <th>
+                    <input type="hidden" name="market_id" value="<?php echo $data->market_id;?>">
+                    <input type="hidden" name="shop_id" value="<?php echo $val->shop_id;?>">
+                </th>
+                <th>
+                    <input type="submit" value="保存" class="btn btn-info save_shop" data-loading-text="提交中..."/>
+                </th>
+            </tr>
+        </table>
+</form>
+<?php endforeach;?>
+
+<!--   地图   -->
+<div class="modal fade" id="setmap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>获取位置信息</h3>
+            </div>
+            <div class="modal-body">
+                <h4>拖动跳动的点,使用滚轮快速放大缩小 <input type="text" value="搜索" id="skey"> <a class="btn btn-primary btn-sm"
+                                                                                  id="mapsearch">搜索</a></h4>
+
+                <iframe name="myFrame" src="/wftadlogin/seller/setmap"
+                        style="width:100%; height:500px; border: 0px;border-radius: 5px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="ui-button" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="ui-button getmap" data-dismiss="modal" aria-hidden="true">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.save_shop').click(function () {
+            $.post('/wftadlogin/seller/saveshop', $(this).closest('.save_sp').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+
+        $('.dropdown-menu a').click(function () {
+            var sval = $(this).text();
+            var bval = $(this).attr('val');
+            //$(this).parents('.xth').find('.business');
+            $(this).parents('.xth').find('.business').val(bval)
+            $(this).parents('.xth').find('.dLabel').text(sval)
+            $('.dropdown').removeClass('open')
+            return false;
+        })
+
+        ////////////////    地图      ///////////////////
+
+        $('.setmap').click(function () {
+            //地图框架地址
+            posturl = $(this).attr("url");
+            init_xy = [];
+            xx = $(this).parent().parent().find('.addr_x');
+            yy = $(this).parent().parent().find('.addr_y');
+            init_xy[0] = xx.val();
+            init_xy[1] = yy.val();
+            if (init_xy[0] == 0 || init_xy[1] == 0) {
+                init_xy[0] = 114.306655;  //湖北武汉
+                init_xy[1] = 30.571659;
+            }
+
+
+            $("#setmap").modal()
+            try {
+                //初始化地图
+                myFrame.window.initmap(init_xy[0], init_xy[1]);
+            }
+            catch (err) {
+                setTimeout(function () {
+                    myFrame.window.initmap(init_xy[0], init_xy[1]);
+                }, 2000)
+            }
+        })
+        $(".getmap").click(function () {
+            var mapxy = myFrame.window.getmap().split(',');
+            xx.val(mapxy[0])
+            yy.val(mapxy[1])
+
+        })
+
+        $("#mapsearch").click(function () {
+            var skey;
+            skey = $("#skey").val();
+            myFrame.window.baidusearch(skey);
+        })
+        ////////////////  地图结束 /////////////////
+    });
+</script>

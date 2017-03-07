@@ -1,0 +1,297 @@
+
+#form1 tr{
+    position: relative;
+}
+
+#form1 tr:after{
+    content: '';
+    display: block;
+    height: 0;
+    width: 0;
+    clear: both;
+}
+
+.course-list-01 ul{
+    position: relative;
+    overflow: hidden;
+}
+.course-list-01 li{
+    float: left;
+    margin-right: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #666;
+}
+.list-dd{
+    font-size: 14px;
+    color: #999;
+    line-height: 20px;
+}
+.course-list-01 td{
+    width: 70%;
+}
+.course-list-01 a{
+    display: inline-block;
+    width: 155px;
+    height: 40px;
+    color: #fff;
+    background: #66CCCC;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 8px;
+    outline: none;
+}
+
+#form1 input,#form1 select,#form1 textarea{
+    color: #999;
+    border: 1px solid #CBE0D2;
+    background-color: #F4F9F7;
+}
+
+
+
+/*****课程安排*****/
+#course-picker{
+    width: 260px;
+    padding:0;
+    border: 1px solid #DFDFDF;
+}
+
+#course-picker li{
+    float: none;
+    clear: both;
+    margin: 0;
+    overflow: hidden;
+    background: #fff;
+    list-style: none;
+
+}
+
+#course-picker li:nth-child(odd){
+    background: #F4F9F7;
+}
+
+#course-picker li.cp-header{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #666;
+    background: #f2f2f2;
+}
+
+.cp-choose,
+.cp-day,
+.cp-times,
+.cp-demon{
+    float: left;
+    height: 35px;
+    line-height: 35px;
+    box-sizing: content-box;
+}
+
+.cp-choose{
+    width: 37px;
+    border-right: 1px solid #DFDFDF;
+}
+
+.cp-day{
+    width: 69px;
+    border-right: 1px solid #DFDFDF;
+    text-align: center;
+}
+
+.cp-choose .cp-checkbox,
+.cp-demon .cp-checkbox{
+    margin: 12px 0 0 12px;
+}
+
+.cp-times{
+    width: 111px;
+    text-align: center;
+    border-right: 1px solid #DFDFDF;
+}
+
+.cp-demon{
+    width: 37px;
+}
+
+.course-sub-time .cp-choose .cp-checkbox,
+.course-empty .cp-demon .cp-checkbox{
+    display: none;
+}
+
+.cp-text{
+    margin: 0 10px;
+    font-size: 12px;
+}
+
+#course-picker li.cp-footer{
+    height: 50px;
+    line-height: 50px;
+    background: #f2f2f2;
+}
+
+#cp-all{
+    float: left;
+    margin: 20px 11px 0;
+}
+
+.cp-footer label{
+    float: left;
+    margin:  0 10px;
+    font: normal 12px/50px tahoma, "宋体";
+    color: #999;
+}
+
+a.cp-button{
+    height: 30px;
+    width: auto;
+    line-height: 30px;
+    padding: 0 16px;
+    background: #47AD7E;
+    cursor: pointer;
+}
+
+a.cp-button:hover{
+    text-decoration: none;
+}
+
+
+.empty .cp-choose .cp-checkbox{
+    display: none;
+}
+
+
+#course-ctr{
+    position: relative;
+}
+
+#course-add{
+    display: none;
+    position: absolute;
+    left: 0;
+    width: 330px;
+    z-index: 2;
+    padding: 15px 20px;
+    background: #fff;
+    border: 4px solid #DFDFDF;
+    margin-top: 13px;
+}
+
+#course-add.shown{
+    display: block;
+}
+
+#course-add.multiple{
+    margin-top: 0;
+}
+
+.ca-pointer{
+    display: block;
+    height: 17px;
+    width: 24px;
+    position: absolute;
+    top: -17px;
+    left: 50%;
+    margin-left: -12px;
+    background: #ccc;
+}
+
+#course-add.multiple .ca-pointer{
+    display: none;
+}
+
+.ca-title{
+    font-size: 12px;
+    color: #999;
+}
+
+.ca-time{
+    overflow: hidden;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+.ca-time{
+    color: #333;
+}
+
+.ca-time span{
+    float: left;
+}
+
+.ca-time .ca-time-text{
+    margin: 0 15px;
+    font-size: 15px;
+}
+
+.course-main-time .cp-times{
+    cursor: pointer;
+}
+
+.ca-time .ca-close{
+    float: left;
+    height: 20px;
+    width: 20px;
+    margin: 5px 0 0 20px;
+    background: #ccc;
+}
+
+.ca-time .ca-field{
+    box-sizing: content-box;
+    float: left;
+    height: 28px;
+    width: 38px;
+    line-height: 28px;
+    text-align: center;
+}
+
+.ca-time .ca-sp{
+    margin: 0 5px;
+}
+
+.ca-fields{
+    margin-top: 10px;
+    display: none;
+}
+
+#course-add .ca-add{
+    height: 30px;
+    width: 55px;
+    margin-top: 10px;
+    line-height: 30px;
+    border-radius: 5px;
+}
+
+.ca-confirm:hover,
+.ca-add:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.add .ca-add,
+.full .ca-add{
+    display: none;
+}
+
+.add .ca-fields{
+    display: block;
+}
+
+.ca-time .ca-save{
+    height: 30px;
+    width: 55px;
+    line-height: 30px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+#course-add .ca-confirm{
+    display: block;
+    float: none;
+    height: 30px;
+    width: 69px;
+    margin: 40px auto 10px;
+    line-height: 30px;
+    background: #47AD7E;
+}

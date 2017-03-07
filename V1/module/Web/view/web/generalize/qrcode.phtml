@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <title>引导关注二维码</title>
+</head>
+<style type="text/css">
+    .qrCode{
+        position: fixed;
+        left: 46%;
+        top: 50%;
+        z-index: 10;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+    }
+    img{
+        width: 115%;
+        height: auto;
+    }
+    .font{
+        width: 100%;
+    }
+    span.tips {
+        display: block;
+        text-align: center;
+        margin-top: 100px;
+        font-size: 32px;
+        font-weight: 600;
+        font-family: "microsoft yahei";
+
+    }
+    @media only screen and (max-width: 320px) and (min-height: 416px){
+        span.tips {
+            margin-top: 56px;
+        }
+    }
+
+    @media only screen and (min-width: 414px) and (min-height: 672px){
+        span.tips {
+            margin-top: 110px;
+        }
+    }
+
+</style>
+<body>
+<div class="qrCode">
+    <img src="/images/ground/qrcode1.jpg"/>
+</div>
+<div class="font">
+    <span class="tips" >请长按二维码关注</span>
+</div>
+
+
+</body>
+</html>

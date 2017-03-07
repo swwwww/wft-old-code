@@ -1,0 +1,239 @@
+<script src="/js/layer/layer.js"></script>
+<style>
+    * {
+        font-size: 14px;
+    }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>订单</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/Insurance">保险列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>注意! 投保是以订单为单位</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form" _lpchecked="1">
+    <input name="good_id" type="hidden" value="<?php echo $good_id; ?>">
+    <header class="box-title">搜索条件</header>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th width="160">购买时间</th>
+            <th>
+                <input type="date" name="t1" value="">
+                <input type="date" name="t2" value="">
+            </th>
+            <th colspan="2">
+                验证时间<input type="date" name="t3" value="">
+                <input type="date" name="t4" value="">
+            </th>
+
+        </tr>
+
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input name="username" type="text" class="cssInput" style="width:190px" value="">
+            </th>
+            <th width="160">用户手机号</th>
+            <th>
+                <input name="phone" type="text" class="cssInput" style="width:190px" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">投保状态</th>
+            <th>
+
+                <select name="ins_status" id="select">
+                    <option value="0" selected="">全部</option>
+                    <option value="3">投保成功</option>
+                    <option value="1">未提交</option>
+                    <option value="4">投保失败</option>
+                </select>
+            </th>
+            <th width="160">信息检查</th>
+            <th>
+                <select name="check_status" id="select">
+                    <option value="0" selected="">全部</option>
+                    <option value="1">信息完整</option>
+                    <option value="-1">信息有误</option>
+                </select>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/Insurance/index?good_id=<?php echo $good_id; ?>" style="background-color: green"
+                   class="ui-button">清空所有选项</a>
+                <button class="ui-button">提交</button>
+
+                <input type="submit" name="out" value="导出保险列表" class="ui-button">
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        使用码列表
+    </div>
+    <div>
+        <table class="table">
+
+            <tr>
+                <th width="50">选择</th>
+                <th width="50">ID</th>
+                <th width="100">订单号</th>
+                <th width="150">下单时间</th>
+                <th width="80">套系名称</th>
+                <th width="80">用户名</th>
+                <th width="170">UID</th>
+                <th width="170">联系人</th>
+                <th width="150">手机号</th>
+                <th width="150">出行人</th>
+                <th width="100">投保状态</th>
+                <th width="100">保险号</th>
+                <th width="300">操作</th>
+            </tr>
+
+            <?php $l = array(
+                0 => '信息未填写',
+                1 => '未投保',
+                2 => '投保中',
+                3 => '已投保',
+                4 => '投保失败'
+            ); ?>
+            <?php foreach ($list as $v): ?>
+                <tr style="text-align: left">
+                    <td width="50"><input type="checkbox" name="check_ids" value="<?php echo $v->order_sn;?>"></td>
+                    <td width="50"><?php echo $v->insure_id; ?></td>
+                    <td width="100">
+                        <?php echo $v->order_sn; ?>
+                    </td>
+                    <td width="150">
+                        <?php echo date('Y-m-d', $v->dateline); ?>
+                    </td>
+                    <td width="80"><?php echo $v->type_name; ?></td>
+                    <td width="80"><?php echo $v->username; ?></td>
+                    <td width="170"><?php echo $v->user_id; ?></td>
+                    <td width="170"><?php echo $v->buy_name; ?></td>
+                    <td width="150"><?php echo $v->buy_phone; ?></td>
+                    <td width="150"><?php echo $v->name ? $v->name : "<span style='color: red'>未填写</span>"; ?></td>
+                    <td width="100"><?php echo $l[$v->insure_status]; ?></td>
+                    <td width="100"><?php echo $v->insure_sn; ?></td>
+
+                    <td width="300">
+                        <?php if ($v->insure_status != 3): ?>
+                            <a href="/wftadlogin/Insurance/edit?insure_id=<?php echo $v->insure_id; ?>"
+                               class="login btn">修改信息</a>
+                            <a href="/wftadlogin/Insurance/toubao?order_sn=<?php echo $v->order_sn; ?>"
+                               class="ui-button toubao"
+                               data-day="<?php echo $baoyou->getProductInfo($v->product_code)['DayRange']; ?>">投保</a>
+
+                        <?php endif;;?>
+                        <?php if ($v->insure_status == 3): ?>
+                            <a href="/wftadlogin/Insurance/tuibao?order_sn=<?php echo $v->order_sn; ?>"
+                               class="ui-button" onclick="return confirm('如果保单已生效将无法退款,确定退保吗?'); ">退保</a>
+                        <?php endif;?>
+
+
+
+
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <input type="checkbox" id="check-all">全选
+        <button class="ui-button toubao" id="mark-back" data-day="<?php echo $baoyou->getProductInfo($v->product_code)['DayRange']; ?>">批量投保</button>
+        <footer>
+            <footer>
+                <?php echo $this->pageData; ?>
+            </footer>
+        </footer>
+    </div>
+</div>
+
+<div style="display: none" id="usetime">
+    <div style="padding: 30px;">
+        <p style="color: #ff6d5e" id="ins_day"></p>
+        <p>开始时间
+            <input type="date" value="<?php echo date('Y-m-d'); ?>" class="start_time">
+        </p>
+
+        <p>结束时间
+            <input type="date" value="<?php echo date('Y-m-d', time()); ?>" class="end_time">
+        </p>
+
+        <button class="ui-button toubao_req" style="position: relative; left: 10px; left: 161px;top: 10px;">投保</button>
+    </div>
+</div>
+<script>
+    $(function () {
+        url = false;
+        $('.toubao').click(function () {
+
+            var button_name=$(this).text();
+
+           // console.log(button_name);
+
+
+            url = $(this).attr('href');
+
+
+            var day = $(this).attr('data-day');
+            $('#ins_day').html("对应的天数应为" + day + "天");
+            layer.open({
+                title: '请选择投保时间',
+                type: 1,
+                skin: 'layui-layer-demo', //样式类名
+                closeBtn: 1, //不显示关闭按钮
+                shift: 2,
+                shadeClose: false, //开启遮罩关闭
+                content: $('#usetime').html()
+            });
+            $('.layui-layer-content .toubao_req').click(function () {
+
+                var s=$(this).parent().find('.start_time').val();
+                var e=$(this).parent().find('.end_time').val();
+                if(button_name=='批量投保'){
+                    //批量生成
+                    var chk_value='';
+                    $("[name=check_ids]:checked").each(function(){
+                        chk_value+=$(this).val()+","
+                    });
+                   window.location.href="/wftadlogin/Insurance/toubao?order_sn="+chk_value+"&start_time="+s+"&end_time="+e;
+                }else {
+                    //单个保单生成
+                    window.location.href=url+"&start_time="+s+"&end_time="+e;
+                }
+
+            });
+
+            return false;
+        });
+
+        //全选和全不选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+
+
+
+
+
+
+    })
+</script>

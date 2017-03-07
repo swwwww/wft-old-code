@@ -1,0 +1,133 @@
+<div class="info">
+    <div class="info-title">
+        <img src="<?php echo $userdata->img;?>"  height="37" width="37"/>
+        <p><?php echo $userdata->name;?></p>
+        <span class="info-numbers">剩余抽奖机会:<mark><?php echo $userdata->chance_number;?></mark></span>
+    </div>
+
+    <div class="prize">
+        <div class="prize-title">点击福袋  抽取奖品</div>
+        <div class="prize-content">
+            <a>
+                <h3>十</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+            <a>
+                <h3>佳</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+            <a>
+                <h3>遛</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+            <a>
+                <h3>娃</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+            <a>
+                <h3>基</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+            <a>
+                <h3>地</h3>
+                <div class="fudai">
+                    <p>恭喜您<br/>玩具反斗城XXX元礼包</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+<a class="prize-link" href="/activity/pingxuan/myprize">我的奖品</a>
+<a class="go-vote" href="/activity/pingxuan">继续投票</a>
+
+<!--暂无抽奖机会弹窗-->
+<div class="prize-popup"  style="display: none;">
+    <div class="matte">
+        <img class="matte-prize" src="/activity/px/images/prize.png">
+        <a class="vote-btn" href="/activity/pingxuan">去投票</a>
+    </div>
+    <div class="cross2">
+        <div class="cross-content"></div>
+    </div>
+</div>
+
+
+<!--初始化手机号码弹窗-->
+<?php if(!$phone):?>
+    <div class="tel-popup">
+        <div class="tel-content">
+            <p>请输入您的手机号:</p>
+            <input type="text" id="tel" value="" name="phone"/>
+            <div class="tel-button">
+                <span>确定</span>
+            </div>
+
+        </div>
+        <div class="matte"></div>
+    </div>
+<?php endif;?>
+
+
+<script ></script>
+<script>
+    (function(){
+
+
+//初始化弹窗
+        $(".tel-button").on('click',function(){
+            var oTel = $('#tel');
+            if(!(oTel.val() && /^1\d{10}$/.test(oTel.val()))) {
+                alert("请输入正确的手机号");
+                return;
+            }
+
+
+            $(".tel-popup").hide();
+            $.post('/activity/pingxuan/updatephone',{'phone':oTel.val()},function(data){
+                console.log(data);
+                window.location.reload();
+            });
+        });
+
+
+
+
+        //抽奖
+        $('.prize').on('click','a',function(e){
+            var target = $(e.target).closest('a');
+            $(this).children('.fudai').show();
+            $(this).css('background', 'none');
+            setTimeout(function(){
+                $.post("/activity/pingxuan/takePrize",function(data){
+                    if(data.status == 1){
+                        target.find('p').show().empty().append(data.message);
+                    }else if(data.status==2){//没有抽奖机会
+                        $('.prize-popup').show();
+                    }else {
+                        target.find('p').show().empty().append(data.message);
+                    }
+                });
+
+            },1000);
+        });
+
+
+        //无投票机会弹窗  关闭弹窗
+        $(".cross2").on("tap",function(){
+            $(".prize-popup").hide();
+        })
+
+
+    })();
+
+</script>

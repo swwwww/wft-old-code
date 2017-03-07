@@ -1,0 +1,107 @@
+<hgroup class="box">
+    <header>
+        <h3>个人信息</h3>
+        <i class="icon icon-add"></i>
+        <!--        <a href="/wftadlogin/authmenu/new">添加菜单资源</a>-->
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+            <li><a href="/wftadlogin/user/info?uid=<?php echo $userData->uid; ?>">基本信息</a></li>
+            <li><a href="/wftadlogin/user/order?uid=<?php echo $userData->uid; ?>">订单</a></li>
+            <li><a href="/wftadlogin/user/speak?uid=<?php echo $userData->uid; ?>">用户发言</a></li>
+            <li><a href="/wftadlogin/user/integral?uid=<?php echo $userData->uid; ?>">积分</a></li>
+            <li><a href="/wftadlogin/user/balance?uid=<?php echo $userData->uid; ?>">余额</a></li>
+            <li><a href="/wftadlogin/user/cashCoupon?uid=<?php echo $userData->uid; ?>">现金券</a></li>
+            <li><a href="/wftadlogin/user/qualify?uid=<?php echo $userData->uid; ?>">抢购资格</a></li>
+            <li><a href="/wftadlogin/user/partner?uid=<?php echo $userData->uid; ?>">玩伴</a></li>
+            <li><a href="/wftadlogin/user/favorite?uid=<?php echo $userData->uid; ?>">收藏</a></li>
+            <li><a href="/wftadlogin/user/travel?uid=<?php echo $userData->uid; ?>">出行人</a></li>
+            <li><a href="/wftadlogin/user/address?uid=<?php echo $userData->uid; ?>">地址</a></li>
+        </ul>
+    </div>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">
+        余额列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tr>
+                <th class="size1">
+                    交易时间
+                </th>
+                <th class="size1">
+                    交易金额
+                </th>
+                <th class="size1">
+                    账户余额
+                </th>
+                <th class="size1">
+                    类型
+                </th>
+                <th class="size1">
+                    订单号
+                </th>
+                <th class="size1">
+                    交易流水号
+                </th>
+                <th class="size1">
+                    账户类型
+                </th>
+                <th class="size1">
+                    事由
+                </th>
+            </tr>
+            <?php
+                $action_type_id = array(
+                    '1' => '普通退款',
+                    '2' => '支付宝充值',
+                    '3' => '银联充值',
+                    '4' => '圈子发言奖励',
+                    '5' => '购买商品奖励',
+                    '6' => '点评商品奖励',
+                    '7' => '点评游玩地奖励',
+                    '8' => 'app好评奖励',
+                    '9' => '采纳攻略',
+                    '25'=> '微信网页充值'
+                );
+            ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo date("Y-m-d H:i:s",$row['dateline']); ?></td>
+
+
+                        <?php if(in_array($row['action_type_id'],[8,9,19,20,21,99])){
+                            $action_type_id[$row['action_type_id']]='后台小编奖励';
+                        } ?>
+
+                        <td class="size1"><span style="color:red"><?php echo ($row['action_type'] == 1 ? '+' : '-'); ?></span><?php echo $row['flow_money']; ?></td>
+                        <td class="size1"><?php echo $row['surplus_money']; ?></td>
+
+                        <td class="size1"><?php echo ($row['action_type']==1)?$action_type_id[$row['action_type_id']]:'消费'; ?></td>
+                        <td class="size1"><?php echo $row['object_id']; ?></td>
+                        <td class="size1"><?php echo $row['trade_no']?:'-'; ?></td>
+                        <td class="size1">
+<!--
+现在都不可以提取 action_type_id判断
+1普通退款 2支付宝充值 3银联充值  4圈子发言奖励 5购买商品奖励　6点评商品奖励　7点评游玩地奖励　8　app好评奖励 9采纳攻略
+-->
+                            <?php echo $row['withdraw'] ? '可提现' : '不可提取'; ?>
+                        </td>
+                        <td class="size1"><?php echo $row['description']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+    })
+</script>

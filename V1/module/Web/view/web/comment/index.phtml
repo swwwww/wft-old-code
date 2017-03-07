@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>点评</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/travel.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .review{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content" style="margin-bottom: 100px;"></main>
+<script id="test" type="text/html">
+    <header class="header top">
+        <a class="header-back" href="javascript:history.go(-1);"></a>
+        <a class="header-title">点评</a>
+        <a class="header-user" href="" title=""></a>
+    </header>
+    <section class="wrapper">
+        {{if !post[0]}}
+        <div class="nodata"><img src="/images/wap/images/nodata.gif" /></div>
+        {{else}}
+        <div class="inner">
+            <ul class="pk-user lists">
+                {{each post}}
+                <li>
+                    <img class="photo" src="{{$value.author_img}}"/>
+                    <div class="info">
+                        <div class="stars">
+                            <span>{{$value.author}}</span>
+                            <div class="product-bar">
+                                <div class="product-bar-cur" style="width: {{$value.score*20}}%"></div>
+                            </div>
+                            <!--小编采纳可选-->
+                            {{if $value.accept==1}}
+                            <em>小编采纳</em>
+                            {{/if}}
+                        </div>
+                        <time>{{$value.dateline}}</time>
+                        <div class="con">
+                            <p>
+                                {{each $value.message}}
+                                {{if $value.t==1}}
+                                {{$value.val}}
+                                {{/if}}
+                                {{/each}}
+                            </p>
+                            <div class="con-pic">
+                                {{each $value.message}}
+                                {{if $value.t==2}}
+                                <img src="{{$value.val}}"/>
+                                {{/if}}
+                                {{/each}}
+                            </div>
+                            <div class="handle">
+                                <div class="ctr">
+                                    <!--有点赞和点评时添加active-->
+                                    <div class="{{if $value.is_like==1}} active{{/if}} like" data="{{$value.id}}">
+                                        <a href="javascript:;" class="likes">{{$value.like_number}}</a>
+                                    </div>
+                                    <div class="collect" data="{{$value.id}}">
+                                        <a href="javascript:;" class="reply">{{$value.reply_number}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {{/each}}
+                {{/if}}
+            </ul>
+        </div>
+    </section>
+</script>
+<script id="more" type="text/html">
+    {{each post}}
+    <li>
+        <img class="photo" src="{{$value.author_img}}"/>
+        <div class="info">
+            <div class="stars">
+                <span>{{$value.author}}</span>
+                <div class="product-bar">
+                    <div class="product-bar-cur" style="width: {{$value.score*20}}%"></div>
+                </div>
+                <!--小编采纳可选-->
+                {{if $value.accept==1}}
+                <em>小编采纳</em>
+                {{/if}}
+            </div>
+            <time>{{$value.dateline}}</time>
+            <div class="con">
+                <p>
+                    {{each $value.message}}
+                    {{if $value.t==1}}
+                    {{$value.val}}
+                    {{/if}}
+                    {{/each}}
+                </p>
+                <div class="con-pic">
+                    {{each $value.message}}
+                    {{if $value.t==2}}
+                    <img src="{{$value.val}}"/>
+                    {{/if}}
+                    {{/each}}
+                </div>
+                <div class="handle">
+                    <div class="ctr">
+                        <!--有点赞和点评时添加active-->
+                        <div class="{{if $value.is_like==1}} active{{/if}} like" data="{{$value.id}}">
+                            <a href="javascript:;" class="likes">{{$value.like_number}}</a>
+                        </div>
+                        <div class="collect" data="{{$value.id}}">
+                            <a href="javascript:;" class="reply">{{$value.reply_number}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    {{/each}}
+</script>
+<a class="review" style="margin-top: 100px;">
+    <input class="comment" type="text" name="comment" placeholder="写下你的评论" autocomplte="off" id="comment" readonly>
+    <button class="submit">点评</button>
+</a>
+<div id="tipsDia"></div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+$(function(){
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+    var object_id = GetQueryString('id');
+    var type=GetQueryString('type');
+    $.ajax({
+        type: "POST",
+        url: "/post/index/postlist",
+        dataType:"json",
+        async: true,
+        data:{"uid":<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>,'object_id':object_id,'type':type},
+        headers: {
+            "VER": 10
+        },
+        success: function (result) {
+            if (result.response_params.status == 0) {
+                alert(result.response_params.message);
+
+            } else{
+                var len = result.response_params.post.length;
+                for(var i=0;i<len;i++){
+                    var info = result.response_params.post[i];
+                    var d=new Date(parseInt(info.dateline)*1000);
+                    info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ (d.getMinutes()+1 < 10 ? '0'+(d.getMinutes()+1) : d.getMinutes()+1)+':'+ (d.getSeconds()+1 < 10 ? '0'+(d.getSeconds()+1) : d.getSeconds()+1);
+
+                }
+                var html = template('test', result.response_params);
+                document.getElementById('content').innerHTML = html;
+
+                $("#comment").click(function(){
+                    window.location.href="/web/organizer/review?id="+object_id+"&type="+type
+                });
+
+
+                var tipsDia = $("#tipsDia");
+                $('.collect').click(function(){
+                    var obj = $(this);
+                    var pid = obj.attr('data');
+                    window.location.href="/web/comment/recomment?id="+object_id+"&type="+type+"&pid="+pid
+                });
+                //点赞和取消点赞
+                $('.like').click(function(){
+                    var obj = $(this);
+                    var mid = obj.attr('data');
+                    var data ={'mid':mid,'uid':<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>};
+                    if(obj.hasClass('active')){
+                        $.ajax({
+                            type: "POST",
+                            url: "/social/sendpost/deletelike",
+                            //        dataType:"json",
+                            async: true,
+                            data:data,
+                            headers: {
+                                "VER": 10
+                            },
+                            success: function (result) {
+                                if (result.response_params.status == 0) {
+//                                    alert(result.response_params.message);
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+
+                                } else if(result.response_params.message =='已经取消过了'){
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+                                }else{
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+                                    obj.removeClass('active');
+                                    var num = obj.find('a').text();
+                                    obj.find('a').text(parseInt(num)-1);
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                if (XMLHttpRequest.status == 401) {
+                                    //alert('授权失败');
+                                    // 跳转授权页面
+                                    //alert(XMLHttpRequest.responseJSON.message);
+                                    window.location.href = '<?php echo $authorUrl;?>';
+
+                                }
+                                else if (XMLHttpRequest.status == 403) {
+                                    alert('接口验证失败，非法访问');
+                                }
+                                else if (XMLHttpRequest.status == 400) {
+                                    alert('请求参数错误');
+                                }
+                                else {
+                                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                }
+                            }
+
+                        });
+                    }else{
+                        $.ajax({
+                            type: "POST",
+                            url: "/social/sendpost/like",
+                            //        dataType:"json",
+                            async: true,
+                            data:data,
+                            headers: {
+                                "VER": 10
+                            },
+                            success: function (result) {
+                                if (result.response_params.status == 0) {
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+
+                                } else if(result.response_params.message=='已经点赞过了') {
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+                                }else{
+                                    tipsDia.text(result.response_params.message);
+                                    tipsDia.show();
+                                    setTimeout(function(){
+                                        tipsDia.hide();
+                                        tipsDia.text("");
+                                    },2000);
+                                    obj.addClass('active');
+                                    var num = obj.find('a').text();
+                                    obj.find('a').text(parseInt(num)+1);
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                if (XMLHttpRequest.status == 401) {
+                                    //alert('授权失败');
+                                    // 跳转授权页面
+                                    //alert(XMLHttpRequest.responseJSON.message);
+                                    window.location.href = '<?php echo $authorUrl;?>';
+
+                                }
+                                else if (XMLHttpRequest.status == 403) {
+                                    alert('接口验证失败，非法访问');
+                                }
+                                else if (XMLHttpRequest.status == 400) {
+                                    alert('请求参数错误');
+                                }
+                                else {
+                                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                }
+                            }
+
+                        });
+                    }
+                });
+
+                //分页显示
+                var counter = 1;
+                // dropload
+                var dropload = $('.inner').dropload({
+                    scrollArea : window,
+                    domDown : {
+                        domClass   : 'dropload-down',
+                        domRefresh : '<div class="dropload-refresh" style="height:50px;text-align: center;margin-bottom: 25px;">↑上拉加载更多</div>',
+                        domLoad    : '<div class="dropload-load" style="height:50px;line-height: 50px;text-align: center;margin-bottom: 30px;"><span class="loading"></span>加载中...</div>',
+                        domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;margin-bottom: 15px;">暂无数据</div>'
+                    },
+
+                    loadDownFn : function(me){
+                        counter++;
+                        $.ajax({
+                            type: "POST",
+                            url: "/post/index/postlist",
+                            dataType: 'json',
+                            async: true,
+                            data:{"uid":<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>,'object_id':object_id,'type':type,'page':counter},
+                            headers: {
+                                "VER": 10
+                            },
+                            success: function(result){
+                                var len = result.response_params.post.length;
+                                for(var i=0;i<len;i++){
+                                    var info = result.response_params.post[i];
+                                    var d=new Date(parseInt(info.dateline)*1000);
+                                    info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ (d.getMinutes()+1 < 10 ? '0'+(d.getMinutes()+1) : d.getMinutes()+1)+':'+ (d.getSeconds()+1 < 10 ? '0'+(d.getSeconds()+1) : d.getSeconds()+1);
+                                }
+                                // 为了测试，延迟1秒加载
+                                setTimeout(function(){
+                                    $('.lists').append(template('more', result.response_params));
+                                    // 每次数据加载完，必须重置
+                                    me.resetload();
+                                },500);
+
+                                if(len==0){
+                                    // 锁定
+                                    me.lock();
+                                    // 无数据
+                                    me.noData();
+                                    return;
+                                }
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown){
+//                                alert('Ajax error!');
+                                // 即使加载出错，也得重置
+                                me.resetload();
+                            }
+                        });
+                    }
+                });
+
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+            if (XMLHttpRequest.status == 401) {
+                //alert('授权失败');
+                // 跳转授权页面
+                //alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+
+            }
+            else if (XMLHttpRequest.status == 403) {
+                alert('接口验证失败，非法访问');
+            }
+            else if (XMLHttpRequest.status == 400) {
+                alert('请求参数错误');
+            }
+            else {
+                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+            }
+        }
+
+    });
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li class="active"><a href="/wftadlogin/word">评论管理</a></li>
+        <li><?php echo $data['subject'];?></li>
+    </ul>
+</div>
+
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb">
+        <a href="/wftadlogin/word/reply?id=<?php echo $data['pid'];?>" class="ui-button">回复</a>
+    </ul>
+
+    <div>
+        <?php
+            echo htmlspecialchars_decode($data['message']).'<br />';
+           if(count(json_decode($data['photo_list'], true))) {
+               foreach (json_decode($data['photo_list'], true) as $img) {
+                   echo '<img width="60px" height="60px" src="'.$img.'">';
+               }
+           }
+
+        ?>
+    </div>
+</div>
+
+<div>===========================================================================</div>
+
+<?php foreach($post as $val):?>
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb">
+            <li><?php echo date('Y-m-d', $val['dateline']). '　　';  echo $val['author'];?></li>
+        <!--    <a href="/wftadlogin/word/display?type=up&pid=<?php /*echo $val['pid']; */?>&display=<?php /*echo $val['displayorder']; */?>" class="ui-button"><?php /*echo ($val['displayorder'] == 2) ? '取消置顶' : '置顶'; */?></a>
+            <a href="/wftadlogin/word/display?type=del&pid=<?php /*echo $val['pid']; */?>"  onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+        --></ul>
+        <div>
+            <?php echo $val['message'];?>
+        </div>
+    </div>
+<?php endforeach;?>
+
+<footer>
+    <?php echo $this->pageData; ?>
+</footer>

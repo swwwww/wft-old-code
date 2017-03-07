@@ -1,0 +1,124 @@
+
+<nav id="oNav" class="rank-nav">
+    <a <?php if(!$_GET['type']){$_GET['type']='儿童乐园';} echo $_GET['type'] == '儿童乐园' ? 'class="add"' : '' ?> href="/activity/pingxuan/bustop?type=儿童乐园">
+        <p>儿童乐园</p>
+    </a>
+    <a <?php echo $_GET['type'] == '儿童主题' ? 'class="add"' : '' ?> href="/activity/pingxuan/bustop?type=儿童主题">
+        <p>主题乐园</p>
+    </a>
+    <a <?php echo $_GET['type'] == '儿童游泳' ? 'class="add"' : '' ?> href="/activity/pingxuan/bustop?type=儿童游泳">
+        <p>儿童游泳</p>
+    </a>
+    <a <?php echo $_GET['type'] == '周边景点' ? 'class="add"' : '' ?> id="last" href="/activity/pingxuan/bustop?type=周边景点">
+        <p>周边景点</p>
+    </a>
+</nav>
+
+
+
+<section id="strategy" class="rank-list" style=" ">
+
+    <?php foreach ($data as $k=>$v):?>
+        <div class="rank-list-info">
+            <span class="info-rank">
+                <mark><?php echo $k+1;?></mark>
+            </span>
+            <img src="<?php echo $v->img;?>" />
+            <span class="info-score style01"><?php echo $v->votes;?></span>
+            <span class="info-shop"><?php echo $v->name;?></span>
+        </div>
+    <?php endforeach;?>
+</section>
+
+
+
+<div class="rank-page">
+    <?php //echo $page;?>
+   <!-- <div class="rank-page-content">
+        <span class="arrow-left"></span>
+        <a class="page01">1</a>
+        <a class="page02">2</a>
+        <a class="page03">3</a>
+        <a class="page04">4</a>
+        <a class="page05">5</a>
+        <input type="text" id="pageNum" value=""/>
+        <a class="page-more">988</a>
+        <span class="arrow-right"></span>
+    </div>-->
+
+</div>
+<div class="intro">
+    <div class="intro-title">活动规则</div>
+    <div class="intro-content">
+        <p>1.投票开始时间：2016年5月24日 10:00，投票截止时间：2016年5月31日23:59。</p>
+        <p>2.在微信、玩翻天app都可以参与投票。投票、分享成功即可获得抽奖机会！</p>
+        <p>3.每人每天在微信/app可以投10票，投票次数当天清零，不可累计。可为同一个支持的商家投多次票。</p>
+        <p>4.投票成功、分享后即可获得抽奖机会。每日抽奖机会不使用则当日清零。</p>
+        <p>*活动咨询，可加微信: wanfantian1  为好友，或扫以下二维码进入投票群，会不定期举行福利活动哟。</p>
+        <p><img src="/activity/px/images/aa.jpg"></p>
+        <p>
+            在法律范围内活动解释权归玩翻天所有。
+        </p>
+    </div>
+</div>
+<div class="prizes">
+    <div class="prizes-title">媒体支持</div>
+    <ul>
+        <li>
+            <img src="/activity/px/images/deyi.png"/>
+            <p>得意生活</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/chenbao.png"/>
+            <p>武汉晨报</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/wanbao.png"/>
+            <p>武汉晚报</p>
+        </li>
+    </ul>
+</div>
+<div class="prizes prizes-bottom">
+    <div class="prizes-title">奖品支持</div>
+    <ul>
+        <li>
+            <a href="/activity/pingxuan/link"><img src="/activity/px/images/guobeishuang.png"/></a>
+            <p>果倍爽少儿果汁饮料</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/jidi.png"/>
+            <p>极地海洋世界</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/xingqi.png"/>
+            <p>星期8小镇</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/wanda.png"/>
+            <p>万达儿童乐园</p>
+        </li>
+
+        <li>
+            <img src="/activity/px/images/add1.png"/>
+            <p>啊哈儿童成长乐园</p>
+        </li>
+
+        <li>
+            <img src="/activity/px/images/add2.png"/>
+            <p>莫莉幻想</p>
+        </li>
+
+        <li>
+            <img src="/activity/px/images/add3.png"/>
+            <p>小蝌蚪儿童室内水上乐园</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/add4.png"/>
+            <p>乐悠游亲子游泳俱乐部</p>
+        </li>
+        <li>
+            <img src="/activity/px/images/add5.png"/>
+            <p>33°婴幼儿游泳拓展训练馆</p>
+        </li>
+    </ul>
+</div>

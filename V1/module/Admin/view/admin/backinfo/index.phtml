@@ -1,0 +1,58 @@
+<hgroup class="box">
+    <header>
+        <h3>意见反馈</h3>
+        <i class="icon icon-list"></i>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+</hgroup>
+<style>
+    .warning1{color:Red;text-decoration:none;font-weight:bold;margin-right:20px;}
+</style>
+<table class="table table-hover">
+    <tr>
+        <th>id</th>
+        <th>城市&nbsp;&nbsp;<?php echo $filtercity; ?></th>
+        <th>用户</th>
+        <th>反馈内容</th>
+        <th>时间</th>
+        <th>联系方式</th>
+        <th>处理状态</th>
+        <th>操作</th>
+    </tr>
+    <?php foreach ($this->data as $v): ?>
+
+        <tr <?php echo ($v->is_ok) ? '' : 'class="warning1"';?>>
+            <td><?php echo $v->id; ?></td>
+            <td><?php echo array_key_exists($v->city,$city)?$city[$v->city]:''; ?></td>
+            <td><?php echo $v->uid; ?></td>
+            <td><?php echo $v->message; ?></td>
+            <td><?php echo date('Y-m-d H:i:s', $v->dateline); ?></td>
+            <td><?php echo $v->contact; ?></td>
+            <td><?php echo ($v->is_ok) ? '<b style="color:green">ok</b>' : '未处理'; ?></td>
+            <td>
+                <?php if (!$v->is_ok):?>
+                    <a class="btn btn-primary onyes" href="/wftadlogin/backinfo/do?id=<?php echo $v->id; ?>">确认处理</a>
+                <?php endif;?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<div>
+   <?php echo $this->pagedata;?>
+</div>
+<script>
+    $(function () {
+        $('.onyes').click(function () {
+                url = $(this).attr('href');
+                $.get(url, function(result){
+                    if(result.status == 1){
+                        window.location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                });
+            return false;
+        })
+    })
+</script>
+

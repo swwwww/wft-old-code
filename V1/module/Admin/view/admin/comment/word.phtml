@@ -1,0 +1,171 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/circle">圈子管理</a></li>
+        <li><a href="/wftadlogin/circle/word">发言管理</a></li>
+        <?php if($circle):?>
+        <li><?php echo '圈子是'.$circle['title'];?> </li>
+        <a href="/wftadlogin/comment/newword?id=<?php echo $comment['_id'];?>" class="ui-button">添加新的发言</a>
+        <?php endif;?>
+    </ul>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        发言列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索发言" name="k" value="">
+                <input type="hidden" name="id" value="<?php echo $circle ? $circle['_id'] : '';?>">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">id</th>
+                <th width="100">发表用户</th>
+                <th width="100">发布时间</th>
+                <th width="120">圈子</th>
+                <th width="200">标题/内容摘要</th>
+                <th width="60">
+                    <?php
+                        if (isset($_GET['status']) && $_GET['status']) {
+                            $m = $_GET['status'];
+                        } else {
+                            $m = 0;
+                        }
+                     ?>
+                    <select class="type_change">
+                        <option <?php echo ($m == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?status=0&<?php unset($_GET['status'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">所有状态</option>
+                        <option <?php echo ($m == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?status=1&<?php unset($_GET['status'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">正常发表</option>
+                        <option <?php echo ($m == -1) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?status=-1&<?php unset($_GET['status'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">隐藏</option>
+                        <option <?php echo ($m == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?status=2&<?php unset($_GET['status'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">置顶</option>
+                        <option <?php echo ($m == 3) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?status=3&<?php unset($_GET['status'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">动态置顶</option>
+                    </select>
+                </th>
+                <th width="60">
+                    <?php
+                    if (isset($_GET['flag']) && $_GET['flag']) {
+                        $n = $_GET['flag'];
+                    } else {
+                        $n = 0;
+                    }
+                    $_GET['status'] = $m;
+                    ?>
+                    <select class="type_change">
+                        <option <?php echo ($n == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?flag=0&<?php unset($_GET['flag'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">所有状态</option>
+                        <option <?php echo ($n == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?flag=1&<?php unset($_GET['flag'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">不是焦点图</option>
+                        <option <?php echo ($n == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/word?flag=2&<?php unset($_GET['flag'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">焦点图</option>
+                    </select>
+                </th>
+                <th width="50">点赞人数</th>
+                <th width="50">回复数</th>
+                <th width="300">操作</th>
+            </tr>
+            <?php if ($data->count()): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+                        <td  width="15"><?php echo $row['_id']; ?></td>
+                        <td  width="100"><?php echo $row['username']; ?></td>
+                        <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                        <td  width="120"><a href="/wftadlogin/comment/new?id=<?php echo $row['cid'];?>"><?php echo $row['c_name']; ?></a></td>
+                        <td  width="200">
+                            <a href="/wftadlogin/comment/wordinfo?id=<?php echo $row['_id'];?>">
+                                <?php
+                                    if($row['title']) {
+                                        echo $row['title'];}
+                                    else {
+                                        $st = '';
+                                        foreach($row['msg'] as $v) {
+                                            if ($v['t'] == 1 && $v['val']) {
+                                                echo $st = substr($v['val'], 0, 60);
+                                                break;
+                                            }
+                                        }
+                                        if (!$st) {
+                                            echo '内容无';
+                                        }
+                                    };
+                                ?>
+                            </a>
+                        </td>
+                        <td  width="60">
+                            <?php
+                                if ($row['status'] == 3) {
+                                    echo '置顶动态';
+                                } elseif ($row['status'] == 2) {
+                                    echo '置顶';
+                                } elseif ($row['status'] == 1) {
+                                    echo '正常发表';
+                                } else {
+                                    echo '隐藏';
+                                }
+                            ?>
+                        </td>
+                        <td  width="60" class="share_fock">todo</td>
+                        <td  width="50" class="share_prise">0</td>
+                        <td  width="50" class="share_reply">0</td>
+                        <td  width="300">
+                            <a href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 2) ? 'reset' : 'up'; ?>" class="ui-button"><?php echo ($row['status'] == 2) ? '取消置顶' : '置顶'; ?></a>
+                            <a href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 3) ? 'reset' : 'action'; ?>" class="ui-button"><?php echo ($row['status'] == 3) ? '取消置顶动态' : '置顶动态'; ?></a>
+                            <?php if($row['status'] >= 1):?><a href="/wftadlogin/comment/map?id=<?php echo $row['_id']; ?>" class="ui-button">推送</a><?php endif;?>
+                            <a href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 0) ? 'reset' : 'hidden'; ?>" class="ui-button"><?php echo ($row['status'] == 0) ? '取消隐藏' : '隐藏'; ?></a>
+                            <a href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=del" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无发言</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //获取点赞
+        $.each($('.share_prise'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=prise&cid=' + cid);
+        })
+
+        //获取回复
+        $.each($('.share_reply'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=reply&cid=' + cid);
+        })
+
+        //获取焦点图
+        $.each($('.share_fock'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=fock&cid=' + cid);
+        })
+
+    })
+</script>
+
+

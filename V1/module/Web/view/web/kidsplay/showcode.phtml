@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">-->
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>我的验证码</title>
+    <link rel="stylesheet" href="/css/wap/code.css" />
+    <!--750等比缩放-->
+    <script>
+        (function(){
+            var w=window.screen.width,
+                s=w/750,
+                u=navigator.userAgent,
+                m='<meta name="viewport" content="width=750,';
+            if(/android (\d+\.\d+)/i.test(u)){
+                if(parseFloat(RegExp.$1>2.3)){
+                    m+="minimum-scale = "+s+", maximum-scale = "+s+","
+                }
+            }else{
+                m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';
+            document.write(m)}());
+    </script>
+</head>
+<body>
+<section class="store">
+    <a  href="<?php if($order_type==2){echo '/web/kidsplay/orderdetail?orderId='.$order_sn;}else{echo '/web/wappay/orderdetail?orderId='.$order_sn;};?>" class="store-info">
+        <p class="store-title"><?php echo $title;?></p>
+        <?php if($order_type==1):?>
+            <p class="store-msg">使用时间：<time class="store-msg-time"><?php echo $usetime;?></time></p>
+            <p class="store-msg">使用地点：<?php echo $useaddr;?></p>
+        <?php else:?>
+            <p class="store-msg">活动时间：<time class="store-msg-time"><?php echo date("m-d H",$start_time).':00';?> - <?php echo date('H',$end_time).':00';?></time></p>
+            <p class="store-msg">活动地点：<?php echo $meet;?></p>
+        <?php endif;?>
+    </a>
+</section>
+
+<section class="authCode">
+    <?php foreach($data as $v):?>
+    <?php if($v['is_other']==0):?>
+    <div class="authCode-per">
+        <div class="authCode-left">
+            <p class="authCode-left-title">验证码：
+                <span class="authCode-left-code"><?php echo $v['code'];?></span>
+            </p>
+                <span class="authCode-left-kind">
+                    <?php echo $v['name'];?>
+                </span>
+        </div>
+        <div class="authCode-right authCode-back">
+            <?php
+                if($v['status']==0){
+                    echo '待使用';
+                }elseif($v['status']==1){
+                    echo '已使用';
+                }elseif($v['status']==2){
+                    echo '已退款';
+                }else{
+                    echo '退款中';
+                }
+            ?>
+        </div>
+    </div>
+    <?php endif;?>
+    <?php endforeach;?>
+</section>
+
+<section class="extra">
+    <?php foreach($data as $v):?>
+        <?php if($v['is_other']==1):?>
+            <div class="authCode-per">
+                <div class="authCode-left">
+                    <p class="authCode-left-title">附加码：
+                        <span class="authCode-left-code"><?php echo $v['code'];?></span>
+                    </p>
+                <span class="authCode-left-kind">
+                    <?php echo $v['name'];?>
+                </span>
+                </div>
+                <div class="authCode-right authCode-back">
+                    <?php
+                    if($v['status']==0){
+                        echo '待使用';
+                    }elseif($v['status']==1){
+                        echo '已使用';
+                    }elseif($v['status']==2){
+                        echo '已退款';
+                    }else{
+                        echo '退款中';
+                    }
+                    ?>
+                </div>
+            </div>
+        <?php endif;?>
+    <?php endforeach;?>
+</section>
+</body>
+</html>

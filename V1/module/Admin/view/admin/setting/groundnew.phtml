@@ -1,0 +1,155 @@
+<hgroup class="box">
+    <header>
+        <h3>新增地推</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/ground">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/setting/groundsave" method="post">
+    <header class="box-title">添加</header>
+
+    <table class="table">
+        <tr>
+            <th width="160">地推名称</th>
+            <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo $data->title; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开始时间</th>
+            <th colspan="3">
+            <span>
+            <input type="date" value="<?php echo ($data && $data->stime > 0) ? date('Y-m-d', $data->stime) : date('Y-m-d', time());?>" name="begin_time">
+            <input type="time" value="<?php echo ($data && $data->stime > 0) ? date('H:i', $data->stime) : date('H:i', time());?>" name="begin_timel">
+            </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">结束时间</th>
+            <th colspan="3">
+            <span>
+            <input type="date" value="<?php echo ($data && $data->etime > 0) ? date('Y-m-d', $data->etime) : date('Y-m-d', time());?>" name="end_time">
+            <input type="time" value="<?php echo ($data && $data->etime > 0) ? date('H:i', $data->etime) : date('H:i', time());?>" name="end_timel">
+            </span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">现金券奖励</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="cashcoupon" <?php if($options['cashcoupon'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="cashcoupon_no" value="<?php echo $options['cashcoupon_no']; ?>">现金券编号
+            </th>
+        </tr>
+        <tr>
+            <th width="160">首单返利</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="backcash" <?php if($options['backcash'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="backcash_value" value="<?php echo $options['backcash_value']; ?>">金额比例
+                <input type="text" class="cssInput" name="backcash_max" value="<?php echo $options['backcash_max']; ?>">限额
+            </th>
+        </tr>
+        <tr>
+            <th width="160">资格券奖励</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="quailty" <?php if($options['quailty'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="quailty_num" value="<?php echo $options['quailty_num']; ?>">张数
+            </th>
+        </tr>
+<!--        <tr>-->
+<!--            <th width="160">积分奖励</th>-->
+<!--            <th colspan="3">-->
+<!--                <input type="checkbox" class="" name="integral" --><?php //if($options['integral'] == 1): ?><!--checked--><?php //endif; ?>
+<!--                       value="1">-->
+<!--                <input type="text" class="cssInput" name="integral_value" value="--><?php //echo $options['integral_value']; ?><!--">-->
+<!--            </th>-->
+<!--        </tr>-->
+        <tr>
+            <th width="160">老用户是否有奖</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="old" <?php if($data->old == 1): ?>checked<?php endif; ?>
+                       value="1">
+
+            </th>
+        </tr>
+        <tr>
+            <th width="160">现金券奖励</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="cashcoupon_old" <?php if($options['cashcoupon_old'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="cashcoupon_no_old" value="<?php echo $options['cashcoupon_no_old']; ?>">现金券编号
+            </th>
+        </tr>
+        <tr>
+            <th width="160">首单返利</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="backcash_old" <?php if($options['backcash_old'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="backcash_value_old" value="<?php echo $options['backcash_value_old']; ?>">金额比例
+                <input type="text" class="cssInput" name="backcash_max_old" value="<?php echo $options['backcash_max_old']; ?>">限额
+            </th>
+        </tr>
+        <tr>
+            <th width="160">资格券奖励</th>
+            <th colspan="3">
+                <input type="checkbox" class="" name="quailty_old" <?php if($options['quailty_old'] == 1): ?>checked<?php endif; ?>
+                       value="1">
+                <input type="text" class="cssInput" name="quailty_num_old" value="<?php echo $options['quailty_num_old']; ?>">张数
+            </th>
+        </tr>
+        <tr>
+            <th width="160">类别</th>
+            <th colspan="3">
+                <input type="radio" <?php if($data): ?>disabled="disabled" <?php endif; ?> class="" name="usefor" <?php if($data->usefor == 1): ?>checked <?php endif; ?>
+                       value="1">地推活动 &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" <?php if($data): ?>disabled="disabled" <?php endif; ?> class="" name="usefor" <?php if($data->usefor == 2): ?>checked <?php endif; ?>
+                       value="2">签到
+            </th>
+        </tr>
+<!--        <tr>-->
+<!--            <th width="160">积分奖励</th>-->
+<!--            <th colspan="3">-->
+<!--                <input type="checkbox" class="" name="integral_old" --><?php //if($options['integral_old'] == 1): ?><!--checked--><?php //endif; ?>
+<!--                       value="1">-->
+<!--                <input type="text" class="cssInput" name="integral_value_old" value="--><?php //echo $options['integral_value_old']; ?><!--">-->
+<!--            </th>-->
+<!--        </tr>-->
+        <tr>
+            <th width="160">
+                <input type="hidden" name="id" value="<?php echo $data->id; ?>" /></th>
+            <th colspan="3">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+
+    </table>
+
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+</script>
+

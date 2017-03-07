@@ -1,0 +1,299 @@
+<form action="/wftadlogin/activity/saveactivity" method="post" id="act_post">
+    <table class="table" style="width: 850px;">
+        <?php if ($data):?>
+            <tr>
+                <th></th>
+                <th>
+                    <input type="hidden" name="aid" value="<?php echo $data->id;?>">
+                </th>
+            </tr>
+        <?php endif;?>
+        <tr>
+            <th width="109">
+                专题名称
+            </th>
+            <th width="300">
+                <input class="form-control" name="ac_name" type="text" value="<?php echo $data ? $data->ac_name : '';?>" placeholder="请输入专题名称">
+            </th>
+        </tr>
+
+        <!--<tr>
+            <th width="109">
+                专题标签
+            </th>
+            <th width="300">
+                <span id="tag_inner">
+                <?php /*foreach ($tags as $val): */?>
+                        <input <?php /*echo (in_array($val->id, array_flip($checkTags))) ? 'checked' : ''; */?>
+                            name="tags[<?php /*echo $val->id; */?>]" value=<?php /*echo $val->tagname; */?>  type="checkbox"/><?php /*echo $val->tagname; */?>
+                <?php /*endforeach; */?>
+                </span>
+            </th>
+        </tr>-->
+
+        <tr>
+            <th width="109">
+                专题类别
+            </th>
+            <th width="300">
+                <select name="ac_type">
+                    <?php foreach($ac_type as $m=>$n):?>
+                        <option <?php echo ($data && $data->ac_type == $m) ? 'selected' : ''; ?> value="<?php echo $m;?>"><?php echo $n;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">
+                展示类型
+            </th>
+            <th width="300">
+                <select name="view_type">
+                    <?php foreach($view_type as $k=>$val):?>
+                        <option <?php echo ($data && $data->view_type == $k) ? 'selected' : ''; ?> value="<?php echo $k;?>"><?php echo $val;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">
+                专题介绍（小编说）
+            </th>
+            <th width="500">
+                <textarea rows="6" cols="50" name="introduce"><?php echo $data ? $data->introduce : '';?></textarea>
+            </th>
+        </tr>
+
+<!--        <tr>
+            <th width="109">
+                是否允许评论
+            </th>
+            <th width="500">
+                <input name="allow_post" type="radio" value="1" <?php /*echo (!count($data) || $data->allow_post == 1) ? 'checked' : ''; */?> /> 允许评论 &nbsp;&nbsp;&nbsp;
+                <input name="allow_post" type="radio" value="0" <?php /*echo (count($data) && $data->allow_post == 0) ? 'checked' : ''; */?>/> 不允许评论
+            </th>
+        </tr>-->
+
+        <tr>
+            <th width="109">
+                专题时间
+            </th>
+            <th width="500">
+                <input name="ac_long" type="radio" value="1" <?php echo (!$data || $data->s_time == 0) ? 'checked' : ''; ?> /> 长期有效 &nbsp;&nbsp;&nbsp;
+                <input name="ac_long" type="radio" value="2" <?php echo ($data && $data->s_time > 0) ? 'checked' : ''; ?>/> 时限性专题
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">
+            </th>
+            <th width="500">
+            开始时间
+            <input type="date" value="<?php echo ($data && $data->s_time > 0) ? date('Y-m-d', $data->s_time) : date('Y-m-d', time());?>" name="s_time">
+            <input type="time" value="<?php echo ($data && $data->s_time > 0) ? date('H:i', $data->s_time) : '08:30';?>" name="s_timel">
+            <br /> <br />
+            结束时间
+            <input type="date" value="<?php echo ($data && $data->e_time > 0) ? date('Y-m-d', $data->e_time) : date('Y-m-d', time()+518400);?>" name="e_time">
+            <input type="time" value="<?php echo ($data && $data->e_time > 0) ? date('H:i', $data->e_time) : '23:59';?>" name="e_timel">
+            </th>
+        </tr>
+
+        <tr>
+            <th>封面图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="ac_cover" value="<?php echo count($data) ? $data->ac_cover : '';?>" />
+                    <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset><br/>
+                <div>
+                    <img width="240px" height="120px" class="fileupload1" src="<?php echo count($data) ? $data->ac_cover : '';?>">
+                </div>
+            </th>
+        </tr>
+
+
+
+        <tr>
+            <th></th>
+            <th>
+                <input type="hidden" name="ac_city" value="<?php echo ($data) ? $data->ac_city : $_COOKIE['city']; ?>">
+                <input type="submit" value="保存" id="save_act" class="btn btn-primary" data-loading-text="提交中..."/>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<?php if($data):?>
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a class="btn btn-info" href="/wftadlogin/activity/linkg?aid=<?php echo $data->id; ?>">添加商品</a></li>
+        <li><a class="btn btn-info" href="/wftadlogin/activity/linkp?aid=<?php echo $data->id; ?>">添加游玩地</a></li>
+        <li><a class="btn btn-info" href="/wftadlogin/activity/linke?aid=<?php echo $data->id; ?>">添加活动</a></li>
+    </ul>
+</div>
+
+<div class="panel panel panel-primary" style="width:500px;float:left">
+    <tr>
+        <th width="109">
+            商品列表
+        </th>
+        <?php if(count($gameData)):?>
+            <th>
+                <table class="table" align="center">
+                    <tr>
+                        <td width="80">商品id</td>
+                        <td width="350">商品名称</td>
+                        <td width="90">商品状态</td>
+                        <td width="350">操作</td>
+                    </tr>
+                    <?php foreach($gameData as $val):?>
+                        <tr class="li_mer">
+                            <td width="80"><?php echo $val['id'];?></td>
+                            <td width="350"><a href="/wftadlogin/good/new?gid=<?php echo $val['id'];?>"><?php echo $val['title'];?></a></td>
+                            <td width="90">
+                                <?php
+                                $timer = time();
+                                if (!$val['status']) {
+                                    echo '未发布';
+                                }  elseif ($val['is_together'] == 2) {
+                                    echo '非合作商品';
+                                } elseif ($val['buy_num'] == $val['ticket_num']) {
+                                    echo '已经卖完';
+                                } elseif ($val['down_time'] < $timer) {
+                                    echo '停止售卖';
+                                } elseif ($val['start_time'] > $timer) {
+                                    echo '未上架';
+                                } elseif ($val['end_time'] < $timer) {
+                                    echo '已下架';
+                                } elseif ($val['up_time'] > $timer) {
+                                    echo '预售中';
+                                }  else {
+                                    echo '售卖中';
+                                }
+                                ?>
+                            </td>
+
+                            <td width="250">
+                                <a href="/wftadlogin/activity/dogame?aid=<?php echo $data->id;?>&gid=<?php echo $val['id'];?>&type=del" class="btn btn-danger">删除关联</a>
+                                <span data-src="/wftadlogin/activity/dosort?type=1&id=<?php echo $val['id']; ?>&ac_sort=<?php echo $val['ac_sort'];?>" class="btn btn-primary check_up"><?php echo ($val['ac_sort']) ? '置顶' : '取消置顶';?></span>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                </table>
+            </th>
+        <?php endif;?>
+    </tr>
+</div>
+
+
+<div class="panel panel panel-primary" style="width:500px;float:left">
+    <tr>
+        <th width="109">游玩地</th>
+        <?php if(count($placeData)):?>
+            <th>
+                <table class="table" align="center">
+                    <tr>
+                        <td width="80">游玩地id</td>
+                        <td width="350">游玩地名称</td>
+                        <td width="350">操作</td>
+                    </tr>
+                    <?php foreach($placeData as $val):?>
+                        <tr class="li_mer">
+                            <td width="80"><?php echo $val['shop_id'];?></td>
+                            <td width="350"><a href="/wftadlogin/place/new?sid=<?php echo $val['shop_id'];?>"><?php echo $val['shop_name'];?></a></td>
+                            <td width="250">
+                                <a href="/wftadlogin/activity/doplace?aid=<?php echo $data->id;?>&pid=<?php echo $val['shop_id'];?>&type=del" class="btn btn-danger">删除关联</a>
+                                <span data-src="/wftadlogin/activity/dosort?type=1&id=<?php echo $val['id']; ?>&ac_sort=<?php echo $val['ac_sort'];?>" class="btn btn-primary check_up"><?php echo ($val['ac_sort']) ? '置顶' : '取消置顶';?></span>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                </table>
+            </th>
+        <?php endif;?>
+    </tr>
+</div>
+
+<!--新增活动-->
+<div class="panel panel panel-primary" style="width:500px;float:left">
+        <tr>
+            <th width="109">活动</th>
+            <?php if(count($excerciseData)):?>
+                <th>
+                    <table class="table" align="center">
+                        <tr>
+                            <td width="80">活动id</td>
+                            <td width="350">活动名称</td>
+                            <td width="350">操作</td>
+                        </tr>
+                        <?php foreach($excerciseData as $val):?>
+                            <tr class="li_mer">
+                                <td width="80"><?php echo $val['id'];?></td>
+                                <td width="350"><a href="/wftadlogin/excercise/edit?id=<?php echo $val['id'];?>"><?php echo $val['name'];?></a></td>
+                                <td width="250">
+                                    <a href="/wftadlogin/activity/doexcercise?aid=<?php echo $data->id;?>&eid=<?php echo $val['id'];?>&type=del" class="btn btn-danger">删除关联</a>
+                                    <span data-src="/wftadlogin/activity/dosort?type=1&id=<?php echo $val['id']; ?>&ac_sort=<?php echo $val['ac_sort'];?>" class="btn btn-primary check_up"><?php echo ($val['ac_sort']) ? '置顶' : '取消置顶';?></span>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                    </table>
+                </th>
+            <?php endif;?>
+        </tr>
+</div>
+<?php endif;?>
+
+<script>
+    $(function () {
+        $('#save_act').click(function () {
+            $.post('/wftadlogin/activity/saveactivity', $('#act_post').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+
+        $('.check_up').click(function() {
+            $.get($(this).attr('data-src'));
+            if ( $(this).html() == '置顶') {
+                $(this).html('取消置顶');
+            } else {
+                $(this).html('置顶');
+            }
+            return false;
+        })
+
+        $('.check_del').click(function() {
+            $.get($(this).attr('data-src'));
+            $(this).closest('.li_mer').remove();
+            return false;
+        })
+    });
+</script>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='ac_cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>

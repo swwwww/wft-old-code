@@ -1,0 +1,119 @@
+<hgroup class="box">
+    <header>
+        <h3>申请圈子</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/circle">返回圈子列表</a>
+    </header>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/circle/doapply" method="post">
+    <header class="box-title"><?php echo $data?'修改圈子':'添加圈子';?></header>
+    <table class="table">
+    <tr>
+        <th width="160">圈子名称</th>
+        <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo $data ? $data['title'] : ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">圈子类型</th>
+        <th colspan="3" width="600">
+            <select name="type">
+                <option value="1" <?php echo ($data && $data['type'] == 1) ? 'selected' : ''; ?>>私密</option>
+                <option value="2" <?php echo ($data && $data['type'] == 2) ? 'selected' : ''; ?>>公开</option>
+            </select>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">圈子说明</th>
+        <th colspan="3" width="600">
+            <textarea class="cssTextArea" name="introduce"><?php echo $data ? $data['introduce'] : '';?></textarea>
+        </th>
+    </tr>
+
+    <tr>
+        <th>封面图</th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" name="img" value="<?php echo $data ? $data['img'] : '';?>" />
+                <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="240px" height="120px" class="fileupload1" src="<?php echo $data ? $data['img'] : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th>缩略图 </th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" class="hidden" name="thumb" value="<?php echo $data ? $data['thumb'] : '';?>" />
+                <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="120px" height="120px" class="fileupload2" src="<?php echo $data ? $data['thumb'] : '';?>">
+            </div>
+        </th>
+    </tr>
+        <tr>
+            <th>申请原因 </th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="reason"><?php echo $data ? $data['reason'] : '';?></textarea>
+            </th>
+        </tr>
+    <tr>
+        <th></th>
+        <th colspan="3">
+            <input type="hidden" name="id"  value="<?php echo $data ? $data['_id'] : '';?>">
+            <input type="hidden" name="uid"  value="<?php echo $uid;?>">
+            <input type="hidden" name="city[]"  value="<?php echo $_COOKIE['city'];?>">
+            <button type="submit" class="btn btn-primary" id="ti-new">提交</button>
+        </th>
+    </tr>
+
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='img']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='thumb']").attr('value', data.result.url);
+                $(".fileupload2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>
+
+

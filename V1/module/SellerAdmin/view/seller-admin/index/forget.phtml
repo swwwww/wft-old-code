@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+</head>
+<body>
+<header id="header">
+    <div class="center">
+        <div id="header-tips">
+            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>
+            <h2 id="header-title">商家版</h2>
+        </div>
+        <div id="header-member">
+            <figure>
+                <a href="" title="user" class="portrait">
+                    <img alt="" src="/seller/images/demo01.png">
+                </a>
+                <figcaption>
+                    <a class="username" href="" title="世界儿童乐园">世界儿童乐园</a>
+                </figcaption>
+            </figure>
+            <nav id="header-nav">
+                <a class="set" href="#"></a>
+                <a class="exit" href="#"></a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div id="container" class="center">
+    <form class="forget-form" action="" method="post" h-com="select checkbox form" id="form1">
+        <fieldset>
+            <h2>忘记密码</h2>
+        </fieldset>
+<!--        <fieldset>-->
+<!--            <div class="ui-select gf-select">-->
+<!--                <input type="hidden" name="typeid" value="0">-->
+<!--                <div class="ui-select-title" tabindex="1">商家</div>-->
+<!--                <ul class="ui-select-options ui-scroll ui-scroll-y ui-scroll-hidden" style="position: relative;">-->
+<!--                    <li data-value="1">商家</li>-->
+<!--                    <li data-value="2">游玩地</li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </fieldset>-->
+        <fieldset>
+            <label class="gf-title" for="lf-name">商家名/ID</label><input class="text" id="lf-name" name="user" type="text" placeholder="请输入商家名/ID">
+        </fieldset>
+        <fieldset>
+            <input class="text gf-text" name="phone" type="text" placeholder="请输入手机号" id="phone">
+            <input type="button" value="发送验证码" class="phone_code_call button" id="send">
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">验证码</label><input class="text"  name="code" id="code" type="password" placeholder="请输入验证码">
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">输入密码</label><input class="text"  name="new_pwd" id="pwd" type="password" placeholder="请输入密码">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <label class="gf-title">重新输入密码</label><input class="text" id="re_pwd"  name="password" type="password" placeholder="请重新输入密码">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="button gf-button" type="button" value="确定" id="subBtn"/>
+        </fieldset>
+    </form>
+</div>
+<footer id="footer"></footer>
+</body>
+<template id="alert">
+    <div class="modal-alert">
+        <h1 class="modal-alert-title">{{message}}</h1>
+        <input class="button modal-alert-button modal-close" type="button" value="确定" />
+    </div>
+</template>
+<script src="/seller/js/jquery.js"></script>
+<script>
+    $(function(){
+        $('#send').click(function () {
+            var user = $('#lf-name').val();
+            var phone = $("#phone").val();
+            if(!user || !phone){
+                alert('请输入用户名或手机号');
+            }
+            $.post("/selleradmin/index/sendCode",{'phone':phone,'user':user},function(d){
+                if(d.response_params.status==0){
+                    alert(d.response_params.message);
+                }else{
+                    alert(d.response_params.message);
+                }
+            },'json');
+            var count = 120;
+            var countdown = setInterval(CountDown, 1000);
+            function CountDown() {
+                $("#send").attr("disabled", true);
+                $("#send").val(count + "秒后重新获取");
+                if (count == 0) {
+                    $("#code-btn").val("获取短信验证码").removeAttr("disabled");
+                    clearInterval(countdown);
+                }
+                count--;
+            }
+        });
+
+        $("#subBtn").click(function(){
+            var user = $('#lf-name').val();
+            var phone = $("#phone").val();
+            var code = $("#code").val();
+            var pwd = $("#pwd").val();
+            var re_pwd = $("#re_pwd").val();
+            if(!user){
+                alert('请输入用户名');
+                return false;
+            }
+            if(!phone){
+                alert('请输入手机号');
+                return false;
+            }
+            if(!code){
+                alert('请输入验证码');
+                return false;
+            }
+            if(!pwd){
+                alert('请输入密码');
+                return false;
+            }
+            if(!re_pwd){
+                alert('请输入重复密码');
+                return false;
+            }
+            if(pwd != re_pwd){
+                alert('两次密码不相同');
+                return false;
+            }
+            $.post('/selleradmin/index/forget', $('#form1').serialize(), function (data) {
+                if(data.status==1){
+                    alert(data.message);
+                    window.location.href='/selleradmin/index/login';
+                }else{
+                    alert(data.message);
+                    window.location.reload();
+                }
+
+            });
+        });
+    });
+</script>
+</html>
+

@@ -1,0 +1,49 @@
+<form class="box box-form" action="/wftadlogin/business/saveAudit" method="get">
+    <header class="box-title">结算 　　　　
+        <a href="javascript:history.go(-1)">返回</a>
+    </header>
+    <table class="table">
+
+        <tr>
+            <th width="160">商家实际收入</th>
+            <th colspan="3">
+                <?php echo $money['total_money'];?>
+                <input type="hidden" name="real_have_money" value="<?php echo $money['total_money'];?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">账户可提现余额</th>
+            <th colspan="3">
+                <?php echo $accountData->use_money;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">请输入实际结算金额</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="account_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">请填写原因</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="reason" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="id" value="<?php echo $accountData->organizer_id; ?>">
+                <?php foreach(json_decode($query, true) as $k=>$v):?>
+                    <input type="hidden" name="<?php echo $k;?>" value="<?php echo $v; ?>">
+                <?php endforeach;?>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+

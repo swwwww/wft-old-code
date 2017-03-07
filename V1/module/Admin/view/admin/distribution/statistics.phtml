@@ -1,0 +1,76 @@
+<hgroup class="box">
+    <header>
+        <h3>分销</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/seller">销售员管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/withdraw">提现管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/orderList">订单列表</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/statistics">业绩统计</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<header class="box-title">累计销售额：<?php echo $totalData['total_sale']; ?></header>
+<header class="box-title">累计推广收益：<?php echo $totalData['total_spread']; ?></header>
+<header class="box-title">已提取收益：<?php echo $totalData['total_got']; ?></header>
+<script src="/js/echarts.min.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<!-- 为 ECharts 准备一个具备大小（宽高）的Dom -->
+<div id="spread" style="width: 900px;height:400px;"></div>
+<script type="text/javascript">
+
+    $(function () {
+        var myChart = echarts.init(document.getElementById('spread'));
+        var spread = <?php echo $spread;?>
+
+
+        option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : spread['time'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'推广收益',
+                    type:'bar',
+                    barWidth: '60%',
+                    data:spread['data']
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+
+    });
+
+</script>
+

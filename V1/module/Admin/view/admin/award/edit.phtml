@@ -1,0 +1,111 @@
+<hgroup class="box">
+    <header>
+        <h3>奖品修改</h3>
+
+        <i class="icon icon-list" style="margin-top: 20px;"></i>
+        <a href="/wftadlogin/award/award" style="margin-top: 8px;">回到奖品管理首页</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">奖品修改</div>
+
+    <form method="post"
+          action="/wftadlogin/award/awardedit<?php echo $this->data ? '?award_id=' . $this->data['award_id'] : ''; ?>">
+        <table class="table">
+            <tr>
+                <th width="160">奖品名称</th>
+                <th colspan="3">
+                    <textarea class="csstextarea"
+                              name="title"><?php echo $data ? $data->title : ''; ?></textarea>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">奖项名称</th>
+                <th colspan="3">
+                    <input type="text" class="cssInput" style="width:300px" name="rank"
+                           value="<?php echo $data ? $data->rank : ''; ?>">
+                </th>
+            </tr>
+            <tr>
+                <th width="160">数量</th>
+                <th colspan="3">
+                    <input type="text" class="cssInput" style="width:300px" name="num"
+                           value="<?php echo $data ? $data->num : ''; ?>">
+                </th>
+            </tr>
+            <tr>
+                <th width="160">领取截止时间</th>
+                <th colspan="3">
+                    <input type="text" class="cssInput" style="width:300px" name="time"
+                           value="<?php echo $data ? $data->time : ''; ?>">
+                </th>
+            </tr>
+            <tr>
+                <th width="160">使用须知</th>
+                <th colspan="3">
+                   <textarea class="csstextarea"
+                             name="note"><?php echo $data ? $data->note : ''; ?></textarea>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">
+                    <button id="ti-place" class="ui-button">提交</button>
+                </th>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<style>
+    .img-keyword {
+        line-height: 15px;
+        color: red;
+    }
+
+    #fileupload2 {
+        width: 144px;
+        height: 41px;
+        cursor: pointer;
+        font-size: 30px;
+        outline: medium none;
+        position: absolute;
+        filter: alpha(opacity=0);
+        -moz-opacity: 0;
+        opacity: 0;
+        left: 0px;
+        top: 0px;
+    }
+
+    .img-button {
+        float: left;
+        height: 41px;
+        background: #f5696c;
+        width: 144px;
+        position: relative;
+    }
+
+    .img-tip {
+        text-align: center;
+        line-height: 41px;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .csstextarea {
+        width: 300px;
+        height: 100px;
+    }
+</style>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+
+

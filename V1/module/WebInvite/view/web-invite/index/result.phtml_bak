@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>邀请有奖</title>
+    <link href="/invite/style.css" rel="stylesheet"/>
+</head>
+<body>
+<style>
+    .check-win-list.check-win-rule p {margin: 0 30px 5px 30px;}
+    .check-win-list.check-win-rule {padding-top: 10px;}
+</style>
+    <header class="in-header">
+        <div class="in-first">
+            <a class="in-logo" href="">
+                <img src="/invite/img/logo_share.gif"/>
+            </a>
+            <a class="home" href=""></a>
+        </div>
+        <div class="in-bg"></div>
+    </header>
+    <section class="in-main">
+        <div class="in-info">
+            <div class="in-img">
+                <img src="/invite/img/in_img.gif" />
+            </div>
+            <div class="in-text">
+                恭喜你获得10积分！可以兑换游玩门票噢！快去兑换吧！
+<!--                --><?php //if(!empty($this->r_reciever_type) and !empty($this->r_reciever_award)):?>
+<!--                玩翻天小伙伴武汉遛娃爸妈族欢迎你！下面是你领到的--><?php //echo $this->r_reciever_type;?><!--哟！-->
+<!--                --><?php //endif;?>
+            </div>
+        </div>
+        <div style="background: url('/invite/img/in_coupon_<?php echo $in_coupon ;?>.png') ; background-repeat: no-repeat; background-position: center center; background-size: cover;" class="in-coupon">
+<!--            --><?php //if(!empty($this->r_reciever_type) and !empty($this->r_reciever_award)):?>
+<!--            <span class="xjq">--><?php //echo $this->r_reciever_type;?><!--</span><span class="yen"><em>--><?php //echo $this->r_reciever_award;?><!--</em>--><?php //if($this->r_reciever_type == '现金券') : echo '元';endif;?><!--</span>-->
+<!--            --><?php //endif;?>
+        </div>
+        <p class="in-tips"><?php echo $this->r_reciever_award; if($this->r_reciever_type == '现金券') : echo '元';endif; echo $this->r_reciever_type;?>已放入 <?php if(!empty($this->phone)):echo $this->phone;endif;?></p>
+        <a class="button" href="/web/wappay/register?tourl=/web/wappay/my" title="">立即查看&nbsp;&nbsp;&nbsp;是否到账</a>
+        <a class="check-rule in-rule" title="">?活动详情</a>
+    </section>
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--rule-->
+            <div class="check-win-list check-win-rule">
+                <?php
+                if(!empty($this->rule)) :
+                    $rules = preg_split('/\r\n/',$this->rule);
+                    foreach($rules as $rule){
+                        // todo something eg: echo $name;
+                        echo '<p>'.$rule.'</p>';
+                    }
+                    //echo $this->rule;
+                endif;?>
+                <a class="check-win-close">确定</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/invite/main.min.js"></script>
+</html>

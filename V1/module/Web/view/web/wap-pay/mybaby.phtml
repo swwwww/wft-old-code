@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的baby</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/my.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <section class="wrapper">
+        <div class="edit-baby">
+            {{each baby}}
+            <a class="item" href="/web/wappay/babyinfo?id={{$value.id}}&act=fix">
+                <img src="{{$value.img}}" />
+                <div class="info">
+                    <div class="name">{{$value.name}}</div>
+                    <div class="date">出生日期：{{$value.birth}}</div>
+                </div>
+                <div class="aside">
+                    <i class="icon {{if $value.sex==2}}nv{{else}}nan{{/if}}"></i>
+                    <span>{{$value.old}}岁</span>
+                </div>
+            </a>
+            {{/each}}
+            <a class="item add" href="/web/wappay/babyinfo?act=add">
+                添加宝宝资料
+            </a>
+        </div>
+    </section>
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    $(function(){
+        $.ajax({
+            type:'POST',
+            url:"/user/info",
+            dataType:'json',
+            async: true,
+            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    //window.location.href = "";
+                    //console.log(result.response_params);
+                    for(var i=0;i<result.response_params.baby.length;i++){
+                        var info = result.response_params.baby[i];
+                        var now = new Date().getTime();
+                        var da = new Date(parseInt(info.birth)*1000);
+                        var year = da.getFullYear();
+                        var month = da.getMonth()+1;
+                        var date = da.getDate();
+                        info.birth=[year,month,date].join('-');
+                        info.old = Math.floor((now-da)/1000/365/60/60/24);
+                    }
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+
+            }
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,64 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/comment">评论管理</a></li>
+        <li><?php echo $msg['title'];?></li>
+    </ul>
+</div>
+
+
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb">
+            <li><?php echo date('Y-m-d', $msg['dateline']). '　　';  echo $msg['username']. '　评论';?></li>
+            <a href="/wftadlogin/comment/newreply?id=<?php echo $msg['_id'];?>&cid=<?php echo $circle['_id'];?>" class="ui-button">回复</a>
+            <a href="/wftadlogin/comment/updateword?id=<?php echo $msg['_id']; ?>&uid=<?php echo $msg['uid'];?>&type=<?php echo ($msg['status'] == 2) ? 'reset' : 'up'; ?>" class="ui-button"><?php echo ($msg['status'] == 2) ? '取消置顶' : '置顶'; ?></a>
+            <a href="/wftadlogin/comment/updateword?id=<?php echo $msg['_id']; ?>&uid=<?php echo $msg['uid'];?>&type=<?php echo ($msg['status'] == 0) ? 'reset' : 'hidden'; ?>" class="ui-button"><?php echo ($msg['status'] == 0) ? '取消隐藏' : '隐藏'; ?></a>
+        </ul>
+
+        <div>
+            <?php
+            foreach($msg['msg'] as $k) {
+                if ($k['t'] == 1) {
+                    echo $k['val'].'<br />';
+                }
+
+                if ($k['t'] == 2) {
+                    echo '<img width="100px" height="100px" src="' . $k['val'] . '"><br />';
+                }
+            }
+            ;?>
+        </div>
+    </div>
+
+<div>===========================================================================</div>
+
+    <?php foreach($post as $val):?>
+    <div class="panel panel panel-primary">
+        <ul class="breadcrumb">
+            <li><?php echo date('Y-m-d', $val['dateline']). '　　';  echo $val['username']. '　回复';?> 状态是<?php echo ($val['status'] == 2) ? '置顶' : (($val['status'] == 1) ? '正常' : '隐藏'); ?>
+
+            </li>
+            <a href="/wftadlogin/comment/updateReply?id=<?php echo $val['_id']; ?>&type=<?php echo ($val['status'] != 2) ? 'up' : 'reset';?>" class="ui-button"><?php echo ($val['status'] != 2) ? '置顶' : '取消置顶';?></a>
+            <a href="/wftadlogin/comment/updateReply?id=<?php echo $val['_id']; ?>&type=<?php echo ($val['status'] != 0) ? 'hidden' : 'reset';?>" class="ui-button"><?php echo ($val['status'] != 0) ? '隐藏' : '取消隐藏';?></a>
+            <a href="/wftadlogin/comment/updateReply?id=<?php echo $val['_id']; ?>&type=edit" class="ui-button">修改</a>
+
+        </ul>
+
+        <div>
+            <?php
+            foreach($val['msg'] as $k) {
+                if ($k['t'] == 1) {
+                    echo $k['val'];
+                }
+
+                if ($k['t'] == 2) {
+                    echo '<br/>'.'图片';
+                }
+            }
+            ;?>
+        </div>
+    </div>
+    <?php endforeach;?>
+
+<footer>
+    <?php echo $this->pagedata; ?>
+</footer>

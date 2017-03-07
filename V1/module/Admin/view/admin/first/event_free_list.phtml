@@ -1,0 +1,149 @@
+<hgroup class="box">
+    <header>
+        <h3>会员专区亲子游场次列表</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/first/excercisefreelist">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：① <span style="color:green">有问题 请及时联系</span> ② 请及时 记得删除无效的</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/first/eventfreelist" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    if (isset($_GET['bid']) && $_GET['bid']) {
+        $bid = $_GET['bid'];
+    }
+
+    if (isset($_GET['name']) && $_GET['name']) {
+        $name = $_GET['name'];
+    }
+
+    if (isset($_GET['eid']) && $_GET['eid']) {
+        $bid = $_GET['eid'];
+    }
+
+    if (isset($_GET['start_time']) && $_GET['start_time']) {
+        $start_time = $_GET['start_time'];
+    }
+
+    if (isset($_GET['end_time']) && $_GET['end_time']) {
+        $end_time = $_GET['end_time'];
+    }
+
+    if (isset($_GET['city']) && $_GET['city']) {
+        $city = $_GET['city'];
+    }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="bid" value="<?php echo $bid;?>">
+            </th>
+            <th width="160">活动名称</th>
+            <th>
+                <input type="text" class="cssInput" name="name" value="<?php echo $name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">场次ID</th>
+            <th>
+                <input type="text" class="cssInput" name="eid" value="<?php echo $eid;?>">
+            </th>
+            <th width="160">场次时间</th>
+            <th>
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $start_time;?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/first/eventfreelist" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<div class="box">
+    <div class="box-title">
+        会员专区亲子游场次列表
+    </div>
+    <div class="box-table">
+        <table class="">
+            <tbody>
+            <tr>
+                <th class="size1">场次id</th>
+                <th class="size1">活动id</th>
+                <th class="size2">活动名称</th>
+                <th class="size2">场次时间</th>
+                <th class="size2">游玩地</th>
+                <th class="size2">优惠方式</th>
+                <th class="size1">会员已报名</th>
+                <th class="size1">状态</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if (count($data_event_list)): ?>
+                <?php foreach ($data_event_list as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1">
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['id']; ?>">
+                                <?php echo $row['id']; ?>
+                            </a>
+                        </td>
+                        <td class="size1">
+                            <a href="/wftadlogin/excercise/edit?id=<?php echo $row['bid']; ?>">
+                                <?php echo $row['bid']; ?>
+                            </a>
+                        </td>
+                        <td class="size2"><?php echo $row['name'].' 第'.$row['no'].'期'; ?></td>
+                        <td class="size2"><?php echo date('Y-m-d H:i',$row['start_time']).'<br/>-'.date('Y-m-d H:i',$row['end_time']); ?></td>
+                        <td class="size2"><?php echo rtrim($data_shop[$row['bid']],',<br>'); ?></td>
+                        <td class="size2">
+                            <?php echo $row['free_coupon_need_count']; ?>次亲子游资格
+                        </td>
+                        <td class="size1">
+                            <?php echo $row['free_coupon_join_count']; ?>
+                        </td>
+                        <td class="size1">
+                            <?php if ($row['sell_status'] ==3): ?>
+                                已结束
+                            <?php elseif($row['sell_status'] == 0): ?>
+                                暂停中
+                            <?php elseif($row['sell_status'] == -1): ?>
+                                已删除
+                            <?php elseif($row['open_time'] >time()): ?>
+                                未开始
+                            <?php elseif($row['over_time'] >time() && $row['join_number']<$row['perfect_number']): ?>
+                                报名中
+                            <?php elseif($row['join_number']>=$row['perfect_number']): ?>
+                                已满员
+                            <?php else: ?>
+                                已结束
+                            <?php endif; ?>
+                        </td>
+                        <td class="size3">
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['id']; ?>"
+                               class="ui-button">详情</a>
+                            <a onclick= "if(confirm( '确定要取消该场次的亲子游优惠吗？ ')==false)return false;" href="/wftadlogin/first/cancelfreeprice?id=<?php echo $row['id']; ?>&status=1" class="ui-button">取消优惠</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无数据 快去活动页面设置吧</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $data_paginator; ?>
+        </footer>
+    </div>
+</div>

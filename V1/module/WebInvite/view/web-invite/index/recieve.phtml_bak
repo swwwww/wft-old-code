@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>邀请有奖</title>
+    <link href="/invite/style.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="in-header">
+    <div class="in-first">
+        <a class="in-logo" href="">
+            <img src="/invite/img/logo_share.gif"/>
+        </a>
+        <a class="home" href=""></a>
+    </div>
+    <div class="ge-bg">
+        <div class="ge-info">
+            <div class="in-img">
+                <img src="<?php if(!empty($this->inviteImg)){echo $this->inviteImg;}else{echo "/img/def_user.jpg";}?>" />
+            </div>
+            <div class="in-text ge-text">
+                <?php if(!empty($this->inviteUsername)):?>
+                    <p>我是<?php echo $this->inviteUsername;?>，</p>
+                <?php endif;?>
+                <?php if(!empty($this->r_reciever_type) and !empty($this->r_reciever_award)):?>
+                    <p>送给你<?php echo $this->r_reciever_award; if($r_reciever_type == '现金券') : echo '元';endif; echo $this->r_reciever_type;?>，可以兑换免费门票噢！</p>
+                <?php endif;?>
+                    <p>快来领取吧！</p>
+            </div>
+        </div>
+    </div>
+
+</header>
+<section>
+    <div style="background: url('/invite/img/in_coupon_<?php echo $in_coupon ;?>.png') ; background-repeat: no-repeat; background-position: center center; background-size: cover;" class="in-coupon">
+<!--        --><?php //if(!empty($this->r_reciever_type) and !empty($this->r_reciever_award)):?>
+<!--        <span class="xjq">--><?php //echo $this->r_reciever_type;?><!--</span><span class="yen"><em>--><?php //echo $this->r_reciever_award;?><!--</em>--><?php //if($r_reciever_type == '现金券') : echo '元';endif;?><!--</span>-->
+<!--        --><?php //endif;?>
+    </div>
+</section>
+<section class="ge-form">
+    <form action="javascript:void(0)">
+<!--    <form action="/index/bind" method="post" >-->
+        <input type="text" name="phone" id="phone" value="" placeholder="输入手机号，领取奖励">
+        <input type="hidden" name="token" id="token" value="<?php echo $this->token;?>">
+        <a class="submitBtn" id="submitBtn" type="submit">领取<?php if(!empty($this->r_reciever_type)) : echo $this->r_reciever_type; endif;?></a>
+    </form>
+</section>
+<div class="check-win" id="check-win">
+    <div class="check-win-box" id="check-win-box">
+        <!--tips-->
+        <div class="check-win-list check-win-tips">
+            <div id="loginTip" class="wx_text">
+                <i></i>
+            </div>
+            <a class="check-win-close">确定</a>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/invite/main.min.js"></script>
+</html>

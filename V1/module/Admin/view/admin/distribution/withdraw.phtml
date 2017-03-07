@@ -1,0 +1,137 @@
+<hgroup class="box">
+    <header>
+        <h3>分销</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/seller">销售员管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/withdraw">提现管理</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/orderList">订单列表</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/distribution/statistics">业绩统计</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $username = null;
+        $uid = null;
+        $time_start = null;
+        $time_end = null;
+        $check_status = 0;
+
+        if (isset($_GET['username']) && $_GET['username']) {
+            $username = $_GET['username'];
+        }
+
+        if (isset($_GET['uid']) && $_GET['uid']) {
+            $uid = $_GET['uid'];
+        }
+
+        if (isset($_GET['time_start']) && $_GET['time_start']) {
+            $time_start = $_GET['time_start'];
+        }
+
+        if (isset($_GET['time_end']) && $_GET['time_end']) {
+            $time_end = $_GET['time_end'];
+        }
+
+        if (isset($_GET['check_status']) && $_GET['check_status']) {
+            $check_status = $_GET['check_status'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="username" value="<?php echo $username;?>">
+            </th>
+            <th width="160">用户uid</th>
+            <th>
+                <input type="text" class="cssInput" name="uid" value="<?php echo $uid;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">创建时间</th>
+            <th>
+                <input name="time_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_start;?>">
+                <input name="time_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_end;?>">
+            </th>
+            <th width="160">审批状态</th>
+            <th>
+                <select name="check_status">
+                    <option value="0" <?php echo ($check_status == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($check_status == 1) ? 'selected' : '';?>>待审批</option>
+                    <option value="2" <?php echo ($check_status == 2) ? 'selected' : '';?>>审批通过</option>
+                    <option value="4" <?php echo ($check_status == 4) ? 'selected' : '';?>>审批不通过</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/distribution/withdraw" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">销售员提现记录列表</div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">用户uid</th>
+                <th scope="col">提现时间</th>
+                <th scope="col">提现金额</th>
+                <th scope="col">收益账户余额</th>
+                <th scope="col">提现状态</th>
+                <th scope="col">操作</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['uid']; ?></td>
+                    <td><?php echo date('Y-m-d H:i:s', $v['create_time']); ?></td>
+                    <td><?php echo $v['price']; ?></td>
+                    <td><?php echo $v['account_money']; ?></td>
+                    <td>
+                        <?php
+                            if ($v['status'] == 1) {
+                                echo '待审批';
+                            } elseif ($v['status'] == 2) {
+                                echo '审批通过';
+                            } elseif ($v['status'] == 4) {
+                                echo '审批不通过';
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if($v['status'] == 1):?>
+                            <a class="ui-button" href="/wftadlogin/distribution/charge?id=<?php echo $v['id']; ?>&charge_type=1">审批通过</a>
+                            <a class="ui-button" href="/wftadlogin/distribution/charge?id=<?php echo $v['id']; ?>&charge_type=2">审批不通过</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+

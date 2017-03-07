@@ -1,0 +1,118 @@
+<div class="shop">
+    <div class="shop-title">
+        <p>
+            <span class="name"><?php echo $data->name; ?></span>
+            <span class="score"><mark><?php echo $data->votes; ?></mark> 票</span>
+        </p>
+    </div>
+    <div class="shop-title">
+        <p>
+            <span class="name num">No：<?php echo $data->id; ?></span>
+            <span class="score ranks">实时排名：<mark><?php echo $seq; ?></mark> </span>
+        </p>
+    </div>
+    <p class="shop-address">商家地址:<br/><span><?php echo $data->address; ?></span></p>
+    <p class="shop-address">入选理由：<br/><span><?php echo $data->reason; ?></span></p>
+    <div class="shop-impress">
+        <p>家长印象</p>
+
+
+        <div class="shop-impress-info">
+
+            <?php foreach ($yingxiang as $k => $v): ?>
+
+                <a class="impress-list-diff01 diff-style01">
+
+                    <span><?php echo $k ?></span>
+                    <span class="img-box"></span>
+                    <mark><?php echo $v; ?></mark>
+                </a>
+
+
+            <?php endforeach; ?>
+
+
+        </div>
+    </div>
+
+
+    <img src="<?php echo $data->img2; ?>"/>
+
+    <img src="<?php echo $data->img3; ?>"/>
+</div>
+<a class="prize-link" href="#" data-id="<?php echo $data->id; ?>">我要投票</a>
+<a class="go-vote vote-diff" href="/activity/pingxuan">查看其他遛娃地</a>
+<div class="impress">
+    <div class="impress-title">所有印象</div>
+    <p class="impress-intro">请为商家添加您的宝贵印象：</p>
+
+
+    <div class="impress-list">
+
+        <?php foreach ($yingxiang as $k => $v): ?>
+            <a class="impress-list-diff01 diff-style02">
+
+                <span><?php echo $k ?></span>
+                <span class="img-box"></span>
+                <mark><?php echo $v; ?></mark>
+            </a>
+        <?php endforeach; ?>
+
+    </div>
+</div>
+
+<!--投票成功弹窗-->
+<div class="vote-popup" style="display: none">
+    <div class="matte">
+        <img class="matte-vote" src="/activity/px/images/vote.png">
+    </div>
+    <div class="cross">
+        <div class="cross-content"></div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        //投票成功弹窗
+        $(".cross").on("tap", function () {
+            $(".vote-popup").hide();
+        })
+
+        $('.prize-link').click(function () {
+            var bid = $(this).attr('data-id');
+            $.post('/activity/pingxuan/toupiao', {"bid": bid}, function (data) {
+                if (data.status == 1) {
+                    $('.vote-popup').show()
+
+                } else {
+                    alert(data.message)
+                }
+            })
+        })
+
+        //印象投票
+        $('.style-diff01').click(function () {
+            var y_name = $(this).find('span').html()
+            $.post('/activity/pingxuan/yingxiangvote', {
+                'y_name': y_name,
+                'bid':<?php  echo $data->id;?>}, function (data) {
+                alert(data.message);
+                window.location.reload();
+            })
+        })
+
+
+        //印象投票
+        $('.impress-list-diff01').click(function () {
+            var y_name = $(this).find('span').html()
+            $.post('/activity/pingxuan/yingxiangvote', {
+                'y_name': y_name,
+                'bid':<?php  echo $data->id;?>}, function (data) {
+                alert(data.message);
+                window.location.reload();
+            })
+        })
+
+    })
+</script>

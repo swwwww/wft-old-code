@@ -1,0 +1,128 @@
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/business/accountList">商家账户</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+        $organizer_name = null;
+        if (isset($_GET['organizer_name']) && $_GET['organizer_name']) {
+            $organizer_name = $_GET['organizer_name'];
+        }
+
+        $organizer_id = null;
+        if (isset($_GET['organizer_id']) && $_GET['organizer_id']) {
+            $organizer_id = $_GET['organizer_id'];
+        }
+
+        $organizer_city = 0;
+        if (isset($_GET['organizer_city']) && $_GET['organizer_city']) {
+            $organizer_city = $_GET['organizer_city'];
+        }
+    ?>
+    <table class="table">
+        <tr>
+            <th width="240">
+                城市:
+                <select name="organizer_city">
+                    <?php foreach($city as $k => $v):?>
+                    <option value="<?php echo $k?>" <?php echo ($organizer_city == $k) ? 'selected' : '';?>><?php echo $v; ?></option>
+                    <?php endforeach;?>
+                    <option value="0" <?php echo (!$organizer_city) ? 'selected' : '';?>>所有</option>
+                </select>
+            </th>
+            <th>
+                商家名称 或者 商家id:
+                <input type="text" style="width:140px" class="cssInput" name="organizer_name" value="<?php echo $organizer_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="240"></th>
+            <th>
+                <a href="/wftadlogin/business/accountList" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/business/outOrganizerData" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">商家ID</th>
+                <th width="80">商家名称</th>
+                <th width="80">商家城市</th>
+                <th width="80">开户人</th>
+                <th width="150">开户行</th>
+                <th width="150">开户支行</th>
+                <th width="150">银行卡号</th>
+                <th width="50">临时账户</th>
+                <th width="50">可提现余额</th>
+                <th width="50">申请转账金额</th>
+                <th width="50">账户总余额</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <?php echo $row['organizer_id'];?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['name'];?>
+                    </td>
+                    <td width="50"><?php echo $this->city[$row['city']]; ?></td>
+                    <td width="50">
+                        <?php echo $row['bank_user'];?>
+                    </td>
+                    <td width="100"><?php echo $row['bank_name']; ?></td>
+                    <td width="100"><?php echo $row['bank_address']; ?></td>
+                    <td width="100"><?php echo $row['bank_card']; ?></td>
+                    <td width="50"><?php echo $row['not_use_money']; ?></td>
+                    <td width="50"><?php echo $row['use_money']; ?></td>
+                    <td width="50"><?php echo $row['audit_money']; ?></td>
+                    <td width="50"><?php echo $row['total_money']; ?></td>
+                    <td width="150">
+                        <a href="/wftadlogin/organizerrecord/record?organizer_id=<?php echo $row['organizer_id']; ?>" class="ui-button">查看</a>
+                        <a href="/wftadlogin/business/codeList?organizer_id=<?php echo $row['organizer_id']; ?>" class="ui-button">申请结算</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //全选和全不选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //导出
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+    });
+</script>

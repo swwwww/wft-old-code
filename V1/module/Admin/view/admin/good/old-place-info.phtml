@@ -1,0 +1,162 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/good/priceInfo?gid=<?php echo $gameInfo->gid;?>">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="post" id="good-info-save">
+    <table class="table">
+        <tr>
+            <th width="160">游玩地</th>
+            <th colspan="3" id="ad-place-view">
+                <input type="hidden"  name="shop_id" value="<?php echo $gameInfo->shop_id;?>">
+                <input type="text" class="orTz cssInput" style="width: 180px" name="shop_name" value="<?php echo $gameInfo->shop_name;?>">
+                <div>
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">开始使用时间</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo date('Y-m-d', $gameInfo->start_time?:time());?>" name="start_timel">
+                <input type="time" value="<?php echo date('H:i', $gameInfo->start_time?:time());?>" name="start_timer">　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">结束使用时间</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo date('Y-m-d', $gameInfo->end_time?:time()+3600*24*60);?>" name="end_timel">
+                <input type="time" value="<?php echo date('H:i', $gameInfo->end_time?:time()+3600*24*60);?>" name="end_timer">　
+            </th>
+        </tr>
+
+        <tr>
+            <th width="120px">价格套系：</th>
+            <th colspan="3">
+            <span>
+                <select name="pid">
+                    <?php foreach ($priceData as $price): ?>
+                        <?php if ($_GET['id'] and $gameInfo->pid == $price['id']) { ?>
+                            <option value="<?php echo $price['id']; ?>"><?php echo $price['name']; ?></option>
+                        <?php } elseif (!$_GET['id']) { ?>
+                            <option value="<?php echo $price['id']; ?>"><?php echo $price['name']; ?></option>
+                        <?php } ?>
+                    <?php endforeach; ?>
+                </select>
+            </span>
+            </th>
+        </tr>
+        <?php if ($_GET['id'] and $goodData->need_use_time == 2): ?>
+            <tr>
+                <th width="120px">原价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->money; ?>" style="width: 180px" name="money"
+                                       type="text " class="cssInput"/></th>
+            </tr>
+            <tr>
+                <th width="120px">售价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->price; ?>" style="width: 180px" name="price"
+                                       type="text " class="cssInput"/></th>
+            </tr>
+            <tr>
+                <th width="120px">结算价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->account_money; ?>" style="width: 180px"
+                                       name="account_money" type="text" class="cssInput"/></th>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <th width="160">接纳人数</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width: 180px" name="total_num" value="<?php echo $gameInfo->total_num;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">使用商家</th>
+            <th colspan="3">
+                <?php if($_GET['id']): ?>
+                    <?php echo $useOrganizerData->organizer_name; ?>
+                    <input type="hidden" name="organizer_id" value="<?php echo $useOrganizerData->organizer_id;?>">
+                <?php else:?>
+                    <select name="organizer_id">
+                        <option <?php echo ($marketData->id == $useOrganizerData->organizer_id) ? 'selected' : ''; ?> value="<?php echo $marketData->id; ?>"><?php echo $marketData->name?></option>
+                        <?php foreach($branchData as $branch):?>
+                            <option <?php echo ($branch->id == $useOrganizerData->organizer_id) ? 'selected' : ''; ?> value="<?php echo $branch->id?>"><?php echo $branch->name?></option>
+                        <?php endforeach;?>
+                    </select>
+                <?php endif;?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="id" value="<?php echo $gameInfo->id; ?>">
+                <input type="hidden" name="gid" value="<?php echo $_GET['gid']; ?>">
+                <button id="ti-good-info" type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+
+<script>
+    $(function () {
+
+        //搜索店铺的
+        $('#ad-place-view').on('input propertychange', '.orTz', function () {
+            var k = $(this).val();
+            var that =  $(this).next();
+            that.empty();
+            $.get('/wftadlogin/good/getShop?k='+ k,
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div class="xiala" data-name="' + entry['name'] + '" data-sid="' + entry['sid'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+                    })
+                }, 'json'
+            );
+        });
+
+        $('#ad-place-view').on('click','.xiala',function() {
+            var shop_name = $(this).attr('data-name');
+            var shop_id = $(this).attr('data-sid');
+
+            var tk = $(this).parent('div').parent('th');
+            var html = '<input type="hidden" name="shop_id"  value="'+ shop_id +'"><input type="hidden" name="shop_name"  value="'+ shop_name +'">'+ shop_name;
+
+            tk.empty();
+            tk.append(html);
+        });
+
+        //保存提交
+        $('#ti-good-info').click(function () {
+            $.post('/wftadlogin/good/saveGood<?php if($_GET['id']): ?>Info<?php endif; ?>', $('#good-info-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href='<?php echo $_COOKIE['url']; ?>';
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+    })
+</script>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+    <script src="/seller/js/modernizr.js"></script>
+</head>
+<body>
+<header id="header">
+    <div class="center">
+        <div id="header-tips">
+            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>
+            <h2 id="header-title">商家版</h2>
+        </div>
+        <div id="header-member">
+            <figure>
+                <a href="" title="" class="portrait">
+                    <img alt="" src="/seller/images/demo01.png">
+                </a>
+                <figcaption>
+                    <a class="username" title="世界儿童乐园" href="">世界儿童乐园</a>
+                </figcaption>
+            </figure>
+            <nav id="header-nav">
+                <a class="set" href=""></a>
+                <a class="exit" href=""></a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<div id="container" class="center">
+    <nav id="navigator">
+        <ul>
+            <li>
+                <a class="user-self" href="/" title="">
+                    <i></i>首页
+                </a>
+            </li>
+            <li>
+                <a class="user-order" href="/order.html" >
+                    <i></i>订单
+                </a>
+            </li>
+            <li>
+                <a class="user-shops" href="/shops.html" >
+                    <i></i>分店管理
+                </a>
+            </li>
+            <li>
+                <a class="user-info active" href="/article.html" >
+                    <i></i>基本信息
+                </a>
+            </li>
+            <li>
+                <a class="user-account" href="/selleradmin/index/account" >
+                    <i></i>绑定银行账号
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main id="content">
+        <header id="top-nav">
+            <nav id="top-nav-crumb">
+                <a href="/">首页</a>
+                <span>&gt;</span>
+                <span>编辑基本信息</span>
+            </nav>
+        </header>
+        <section class="wrapper">
+            <form class="general-form" action="" method="post" h-com="preview-img form">
+                <fieldset>
+                    <label class="gf-title">商家名称：</label>
+                    <input class="text" type="text" name="name" value="" placeholder="请输入商家名称" tabindex="1">
+                </fieldset>
+                <fieldset>
+                    <label class="gf-title">商家简介：</label>
+                    <textarea class="gf-textarea"  placeholder="请输入商家简介" tabindex="1"></textarea>
+                </fieldset>
+                <fieldset>
+                    <label class="gf-title">地址：</label>
+                    <input class="text" type="text" name="address" value="" placeholder="请输入商家地址" tabindex="1">
+                </fieldset>
+                <fieldset>
+                    <label class="gf-title">用户咨询电话：</label>
+                    <input class="text" type="text" name="tel" value="" placeholder="请输入电话" tabindex="1">
+                </fieldset>
+                <fieldset>
+                    <label class="gf-title">图文详情：</label>
+                    <textarea class="gf-textarea"  placeholder="请输入图文详情" tabindex="1"></textarea>
+                </fieldset>
+
+                <fieldset>
+                    <div class="gf-photo">
+                        <label class="gf-title">商户图片：</label>
+                        <div class="gf-file" h-com="upload-image"
+                             data-upload='{"url": "/seller/upload","file_data_name": "file","type":"images","multi_selection":false,"size":{"width":203,"height":203}}'>
+                            <div class="upload-sty upload-button">
+                                <input class="upload-field" type="hidden" name="cover" value="" />
+                                <div class="upload-preview">
+                                    <div class="upload-preview-container">
+                                        <img class="upload-preview-img"/>
+                                    </div>
+                                    <div class="upload-preview-progress">
+                                        <div class="upg-info"></div>
+                                        <div class="upg-bar"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="upload-title upload-button">
+                                <a class="button">上传</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gf-pic">
+                        <label class="gf-title">商户头像：</label>
+                        <div class="gf-file" h-com="upload-image"
+                             data-upload='{"url": "/seller/upload","file_data_name": "file","type":"images","multi_selection":false,"size":{"width":203,"height":203}}'>
+                            <div class="upload-sty upload-button">
+                                <input class="upload-field" type="hidden" name="cover" value="" />
+                                <div class="upload-preview">
+                                    <div class="upload-preview-container">
+                                        <img class="upload-preview-img"/>
+                                    </div>
+                                    <div class="upload-preview-progress">
+                                        <div class="upg-info"></div>
+                                        <div class="upg-bar"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="upload-title upload-button">
+                                <a class="button">上传</a>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="gf-contact">
+                    <!--<input class="button gf-add" type="button" value="+添加联系人">-->
+                    <div class="gf-call">
+                        <h1>商家联系人</h1>
+                    </div>
+                    <dl>
+                        <dt>张小姐<span>市场部经理</span><a href="" title=""></a></dt>
+                        <dd>联系电话：15102782363</dd>
+                        <dd>QQ：85866499</dd>
+                        <dd>Email：<a href="mailto:zchun@vip.deyi.com">Email:zchun@vip.deyi.com</a></dd>
+                    </dl>
+                    <dl>
+                        <dt>张小姐<span>市场部经理</span><a href="" title=""></a></dt>
+                        <dd>联系电话：15102782363</dd>
+                        <dd>QQ：85866499</dd>
+                        <dd>Email：<a href="mailto:zchun@vip.deyi.com">Email:zchun@vip.deyi.com</a></dd>
+                    </dl>
+                    <dl class="last-one">
+                        <dt>张小姐<span>市场部经理</span><a href="" title=""></a></dt>
+                        <dd>联系电话：15102782363</dd>
+                        <dd>QQ：85866499</dd>
+                        <dd>Email：<a href="mailto:zchun@vip.deyi.com">Email:zchun@vip.deyi.com</a></dd>
+                    </dl>
+                </fieldset>
+                <fieldset class="gf-submit">
+                    <input class="submit button" type="button" value="保存修改">
+                </fieldset>
+            </form>
+        </section>
+
+    </main>
+</div>
+<footer id="footer"></footer>
+</body>
+<template id="alert">
+    <div class="modal-alert">
+        <h1 class="modal-alert-title">{{message}}</h1>
+        <input class="button modal-alert-button modal-close" type="button" value="确定" />
+    </div>
+</template>
+<script src="/seller/js/jquery.js"></script>
+<script src="/seller/js/lodash.js"></script>
+<script src="/seller/js/horcrux.js"></script>
+<script src="/seller/js/components.js" charset="utf-8"></script>
+</html>
+

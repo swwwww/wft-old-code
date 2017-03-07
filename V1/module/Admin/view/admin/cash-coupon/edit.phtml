@@ -1,0 +1,382 @@
+<style>
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>现金券管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/cashcoupon">返回现金券列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span> </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/cashcoupon/save" method="post" id="menu-save">
+    <header class="box-title"><?php echo count($data)?'修改现金券':'添加现金券';?></header>
+    <table class="table">
+    <tr>
+        <th width="160">现金券名称</th>
+        <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo $data ? $data->title : ''; ?>">
+        </th>
+    </tr>
+    <tr>
+        <th width="160">描述</th>
+        <th colspan="3"><input type="text" style="width: 800px;" class="cssInput" name="description" value="<?php echo $data ? $data->description : ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">传播码</th>
+        <th colspan="3"><input type="text" class="cssInput" name="diffuse_code" value="<?php echo $data ? urldecode($data->diffuse_code) : ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">金额</th>
+        <th colspan="3"><input type="text" class="cssInput cash" id="price" name="price" value="<?php echo $data ? $data->price : ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">发放总量</th>
+        <th colspan="3"><input type="text" class="cssInput cash" id="total" name="total" value="<?php echo $data ? $data->total : ''; ?>">
+        </th>
+    </tr>
+    <tr>
+        <th width="160">发放总金额</th>
+        <th colspan="3"><span id="total_cash" > <?php echo (float)$data->price*(int)$data->total; ?> </span>
+        </th>
+    </tr>
+    <tr>
+        <th width="160">资金来源
+        <th colspan="3" width="600">
+            <input name="source" type="radio" value="0" <?php if(!$data->source):?> checked <?php endif; ?> /> 总站 &nbsp;&nbsp;&nbsp;
+            <input name="source" type="radio" value="1" <?php if($data->source):?> checked <?php endif; ?> /> 分站
+        </th>
+    </tr>
+    <tr>
+        <th width="160">是否新用户专享
+        <th colspan="3" width="600">
+            <input name="new" type="radio" value="0" <?php if(!$data->new):?> checked <?php endif; ?> /> 否 &nbsp;&nbsp;&nbsp;
+            <input name="new" type="radio" value="1" <?php if($data->new):?> checked <?php endif; ?> /> 是
+        </th>
+    </tr>
+    <tr class="box-title">
+        <th colspan="4">
+            时间设置
+        </th>
+    </tr>
+    <tr>
+        <th width="160">允许发放时间</th>
+        <th colspan="3">
+            <span>
+            <input type="date" value="<?php echo ($data && $data->begin_time > 0) ? date('Y-m-d', $data->begin_time) : date('Y-m-d', time());?>" name="begin_time">
+            <input type="time" value="<?php echo ($data && $data->begin_time > 0) ? date('H:i', $data->begin_time) : date('H:i', time());?>" name="begin_timel">
+            </span>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">结束发放时间</th>
+        <th colspan="3">
+            <span>
+            <input type="date" value="<?php echo ($data && $data->end_time > 0) ? date('Y-m-d', $data->end_time) : date('Y-m-d', time());?>" name="end_time">
+            <input type="time" value="<?php echo ($data && $data->end_time > 0) ? date('H:i', $data->end_time) : date('H:i', time());?>" name="end_timel">
+            </span>
+        </th>
+    </tr>
+    <tr>
+        <th width="160">使用时间
+        <th colspan="3" width="600">
+            <span>
+            <input name="time_type" type="radio" value="0" <?php if(!$data->time_type):?> checked <?php endif; ?> /> 固定周期 &nbsp;&nbsp;&nbsp;
+            <input name="time_type" type="radio" value="1" <?php if($data->time_type):?> checked <?php endif; ?> /> 领用后到期
+            </span>
+        </th>
+    </tr>
+
+        <tr class="between_time">
+            <th width="160">开始使用时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($data && $data->use_stime > 0) ? date('Y-m-d', $data->use_stime) : date('Y-m-d', time());?>" name="use_stime">
+                <input type="time" value="<?php echo ($data && $data->use_stime > 0) ? date('H:i', $data->use_stime) : date('H:i', time());?>" name="use_stimel">
+                </span>
+            </th>
+        </tr>
+
+        <tr class="between_time">
+            <th width="160">结束使用时间</th>
+            <th colspan="3">
+                <span>
+                <input type="date" value="<?php echo ($data && $data->use_etime > 0) ? date('Y-m-d', $data->use_etime) : date('Y-m-d', time());?>" name="use_etime">
+                <input type="time" value="<?php echo ($data && $data->use_etime > 0) ? date('H:i', $data->use_etime) : date('H:i', time());?>" name="use_etimel">
+                </span>
+            </th>
+        </tr>
+
+        <tr class="to_time">
+            <th width="160">领券后</th>
+            <th colspan="3"><input type="text" class="cssInput" name="after_hour" value="<?php echo $data ? $data->after_hour : ''; ?>">
+                <select name="unit">
+                    <option  value="d">天</option>
+                    <option <?php if($data->id): ?>selected<?php endif; ?> value="h">小时</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr class="box-title">
+            <th colspan="4">领券范围</th>
+        </tr>
+        <?php if($_COOKIE['city'] == '1'): ?>
+        <tr>
+            <th width="160">总站管理</th>
+            <th colspan="3" width="600">
+                <input name="is_main" type="radio" value="1" <?php if($data->is_main):?> checked <?php endif; ?> /> 所有城市 &nbsp;&nbsp;&nbsp;
+                <input name="is_main" type="radio" value="0" <?php if(!$data->is_main):?> checked <?php endif; ?> /> 部分城市
+            </th>
+        </tr>
+
+        <tr id="each_city">
+            <th width="160"></th>
+            <th colspan="3">
+                <?php foreach($cities as $k => $c): ?>
+                    <?php if($k==1){continue;}; ?>
+                    <input type="checkbox" name="city[]" <?php if(in_array($k,$city)): ?>checked<?php endif; ?> value="<?php echo $k; ?>" /><?php echo $c; ?>&nbsp;&nbsp;&nbsp;
+                <?php endforeach; ?>
+            </th>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <th width="160">使用范围
+            <th colspan="3" width="600">
+                <input name="range" type="radio" value="0" <?php if((int)$data->range===0):?> checked <?php endif; ?> /> 全场商品通用 &nbsp;&nbsp;&nbsp;
+                <input name="range" type="radio" value="1" <?php if((int)$data->range===1):?> checked <?php endif; ?> /> 部分商品使用
+                <input name="range" type="radio" value="2" <?php if((int)$data->range===2):?> checked <?php endif; ?> /> 特殊类别使用
+                <input name="range" type="radio" value="3" <?php if((int)$data->range===3):?> checked <?php endif; ?> /> 所有活动使用
+                <input name="range" type="radio" value="4" <?php if((int)$data->range===4):?> checked <?php endif; ?> /> 部分活动使用
+            </th>
+        </tr>
+
+        <tr id="some_goods">
+            <th width="160"></th>
+            <th colspan="3">
+                <input id="ad-good-view" type="text" class="cssInput" value="" /> <input class="btn btn-primary" type="button" value="添加" />
+                <div id="goods">
+
+                </div>
+                <div id="adds">
+                    <?php if((int)$data->range===1): ?>
+                        <?php foreach($good as $g): ?>
+                            <input type="checkbox" checked name="goods[]" value='<?php echo $g['id'] ?>' /><?php echo $g['title'] ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </th>
+        </tr>
+
+        <tr id="some_event">
+            <th width="160"></th>
+            <th colspan="3">
+                <input id="ad-event-view" type="text" class="cssInput" value="" /> <input class="btn btn-primary" type="button" value="添加" />
+                <div id="events">
+
+                </div>
+                <div id="adds2">
+                    <?php if((int)$data->range===4): ?>
+                        <?php foreach($good as $g): ?>
+                            <input type="checkbox" checked name="events[]" value='<?php echo $g['id'] ?>' /><?php echo $g['name'].'第'.$g['no'].'期' ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </th>
+        </tr>
+
+        <tr id="some_types">
+            <th width="160"></th>
+            <th colspan="3">
+                <?php if($types): ?>
+                    <?php if((int)$data->range!==2): $g_arr = [];  endif; ?>
+                <?php foreach($types as $t){ ?>
+                    <input type="checkbox" name="types[]" <?php if(in_array($t['id'],$g_arr)): ?>checked<?php endif; ?> value="<?php echo $t['id']; ?>"  /><?php echo $t['tag_name']; ?>&nbsp;&nbsp;&nbsp;
+                <?php } ?>
+                <?php endif; ?>
+            </th>
+        </tr>
+    </table>
+    <input type="hidden" name="id"  value="<?php echo $data ? $data->id : '';?>">
+    <span type="submit" class="btn btn-primary" id="ti-new">提交</span>
+</form>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script>
+    $(function () {
+        <?php if((int)$data->time_type === 0): ?>
+        $('.to_time').hide();
+        <?php endif; ?>
+        <?php if((int)$data->time_type === 1): ?>
+        $('.between_time').hide();
+        <?php endif; ?>
+
+
+        <?php if($data->is_main): ?>
+        $('#each_city').hide();
+        <?php endif; ?>
+
+        <?php if($data->range == 0 or $data->range == 3): ?>
+        $('#some_goods').hide();
+        $('#some_event').hide();
+        $('#some_types').hide();
+        <?php endif; ?>
+        <?php if($data->range == 1): ?>
+        $('#some_goods').show();
+        $('#some_event').hide();
+        $('#some_types').hide();
+        <?php endif; ?>
+        <?php if($data->range == 2): ?>
+        $('#some_goods').hide();
+        $('#some_event').hide();
+        <?php endif; ?>
+        <?php if($data->range == 4): ?>
+        $('#some_types').hide();
+        $('#some_goods').hide();
+        <?php endif; ?>
+        $('#ti-new').click(function () {
+            $.post('/wftadlogin/cashcoupon/save', $('#menu-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        $('.cash').change(function(){
+            total = $('#total').val();
+            price = $('#price').val();
+            money = total * price;
+            if(money > 0){
+                $('#total_cash').text(money);
+            }else{
+                $('#total_cash').text(0);
+            }
+        });
+
+        $("input[name='time_type']").change(function(){
+            console.log($("input[name='time_type']:checked").val());
+            if('1' == $("input[name='time_type']:checked").val()){
+                $('.between_time').hide();
+                $('.to_time').show();
+            }else{
+                $('.between_time').show();
+                $('.to_time').hide();
+            }
+        });
+
+        $("input[name='range']").change(function(){
+            if('0' == $("input[name='range']:checked").val()){
+                $('#some_goods').hide();
+                $('#some_types').hide();
+                $('#some_event').hide();
+            }else if('1' == $("input[name='range']:checked").val()){
+                $('#some_goods').show();
+                $('#some_types').hide();
+                $('#some_event').hide();
+            }else if('2' == $("input[name='range']:checked").val()){
+                $('#some_goods').hide();
+                $('#some_event').hide();
+                $('#some_types').show();
+            }else if('3' == $("input[name='range']:checked").val()){
+                $('#some_goods').hide();
+                $('#some_event').hide();
+                $('#some_types').hide();
+            }else if('4' == $("input[name='range']:checked").val()){
+                $('#some_goods').hide();
+                $('#some_event').show();
+                $('#some_types').hide();
+            }
+        });
+
+        $("input[name='is_main']").change(function(){
+            if('0' == $("input[name='is_main']:checked").val()){
+                $('#each_city').show();
+            }else{
+                $('#each_city').hide();
+            }
+        });
+
+        $("#ad-good-view").bind("propertychange input",function(){
+            var k = $(this).val();
+            var that =  $("#goods");
+            that.empty();
+            $.get('/wftadlogin/game/getGame?k='+ k,
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div onclick="add_good($(this))" class="xiala" data-name="' + entry['name']
+                            + '" data-sid="' + entry['sid'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+
+                    })
+                }, 'json'
+            );
+        });
+
+        $("#ad-event-view").bind("propertychange input",function(){
+            var k = $(this).val();
+            var that =  $("#events");
+            that.empty();
+            $.get('/wftadlogin/excercise/getEvent?k='+ k,
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div onclick="add_event($(this))" class="xiala" data-name="' + entry['name']
+                            + '" data-sid="' + entry['sid'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+
+                    })
+                }, 'json'
+            );
+        });
+
+        var checkeds = new Array();
+        add_good = function(obj){
+            var that =  $("#adds");
+            var b = $.inArray(obj.attr('data-sid'),checkeds);
+            console.log(obj.attr('data-sid'));
+            if(b == -1){
+                var html = '<input type="checkbox" checked name="goods[]" value='+ obj.attr('data-sid') +' /> '+obj.attr('data-name');
+                checkeds.push(obj.attr('data-sid'));
+                that.append(html);
+            }
+            $("#goods").empty();
+        }
+
+        var checkeds2 = new Array();
+        add_event = function(obj){
+            var that =  $("#adds2");
+            var b = $.inArray(obj.attr('data-sid'),checkeds2);
+            console.log(obj.attr('data-sid'));
+            if(b == -1){
+                var html = '<input type="checkbox" checked name="events[]" value='+ obj.attr('data-sid') +' /> '+obj.attr('data-name');
+                checkeds2.push(obj.attr('data-sid'));
+                that.append(html);
+            }
+            $("#events").empty();
+        }
+
+    });
+
+
+</script>
+
+
+

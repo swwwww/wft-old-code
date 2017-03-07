@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>玩翻天后台管理</title>
+<script type="text/javascript">(function () {
+        if (!/*@cc_on!@*/0)return;
+        var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+        while (i--) {
+            document.createElement(e[i])
+        }
+    })();</script>
+<link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+<?php echo $this->headMeta()
+    ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+    ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+?>
+
+<!-- Le styles -->
+<?php echo $this->headLink(array(
+    'rel' => 'shortcut icon',
+    'type' => 'image/vnd.microsoft.icon',
+    'href' => $this->basePath() . '/img/favicon.ico'
+))
+    ->prependStylesheet($this->basePath() . '/css/style.css')
+    ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+    ->prependStylesheet($this->basePath() . '/css/loginDialog.css')
+    ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+
+</head>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+
+        <h1 id="top-logo">
+            <a target="_blank" href="http://wan.wanfantian.com">
+                <img width="123" height="32"
+                     src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+        </h1>
+
+        <nav id="top-user">
+            <a href="javascript:;"></a>
+            <a href="/activity/manage/logout">安全退出</a>
+        </nav>
+    </header>
+
+    <nav id="side-nav">
+<!--        <dl>-->
+<!--            <dt class="box-title">活动后台</dt>-->
+<!--            <dd class="box">-->
+<!--                <ul>-->
+<!--                    <li><a target="_blank" href="/activity/huijuadmin/list">查看参与用户</a></li>-->
+<!--                    <li><a target="_blank" href="/activity/huijuadmin/prizelist">设置奖品</a></li>-->
+<!--                </ul>-->
+<!--            </dd>-->
+<!--        </dl>-->
+
+        <dl>
+            <dt class="box-title">商家评选活动</dt>
+            <dd class="box">
+                <ul>
+                    <li><a href="/activity/pingxuanadmin/business">评选商家列表</a></li>
+                    <li><a href="/activity/pingxuanadmin/prizeList">设置奖品</a></li>
+                    <li><a href="/activity/pingxuanadmin/userlist">参与用户列表</a></li>
+                </ul>
+
+            </dd>
+        </dl>
+    </nav>
+
+    <div id="content" style="margin-top: 10px;">
+        <?php echo $this->content; ?>
+    </div>
+    <!--主界面结束-->
+</div>
+
+</html>
+
+
+
+

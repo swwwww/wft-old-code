@@ -1,0 +1,184 @@
+<?php
+    $act   = isset($_GET['act']) ? $_GET['act'] : '';
+    $btime = isset($_GET['begin_time']) ? $_GET['begin_time'] : '';
+    $etime = isset($_GET['end_time']) ? $_GET['end_time'] : '';
+    $nname = isset($_GET['nick_name']) ? $_GET['nick_name'] : '';
+    $is_on = isset($_GET['is_on']) ? $_GET['is_on'] : '';
+    $c_num = isset($_GET['concern_num']) ? $_GET['concern_num'] : '';
+    $scene = isset($_GET['scene']) ? $_GET['scene'] : '';
+    $wname = isset($_GET['weixin_name']) ? $_GET['weixin_name'] : '';
+    $key_url  = '?act=' . $act . '&begin_time=' . $btime. '&end_time=' . $etime;
+    $key_url .= '&nick_name=' . $nname . '&is_on=' . $is_on . '&concern_num=' . $c_num;
+    $key_url .= '&scene=' . $scene . '&weixin_name=' . $wname;
+?>
+
+<hgroup class="box">
+    <header>
+        <h3>微信用户关注管理</h3>
+
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/weixin">回到微信管理首页</a>
+
+        <i class="icon icon-download"></i>
+        <a href="/wftadlogin/weixin/concernExport<?php echo $key_url; ?>">数据导出</a>
+    </header>
+
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">
+        关键字列表
+
+        <?php if (isset($_GET['act']) && $_GET['act'] == 'all') : ?>
+
+            <a class="a-switch" href="/wftadlogin/weixin/concern">返回渠道列表</a>
+            <div style="float:right;margin-right:30px">
+                <form action="#" method="get">
+                    <input type="hidden" name="act" value="all">
+                    关注时间：始<input type="date" class="cssInput" style="margin-top: 5px;width:150px" name="begin_time"
+                           value="<?php echo (isset($_GET['begin_time']) && $_GET['begin_time']) ? $_GET['begin_time'] : ''; ?>">
+                    末<input type="date" class="cssInput" style="margin-top: 5px;width:150px" name="end_time"
+                           value="<?php echo (isset($_GET['end_time']) && $_GET['end_time']) ? $_GET['end_time'] : ''; ?>">
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:180px"
+                           placeholder="输入用户昵称" name="nick_name"
+                           value="<?php echo (isset($_GET['nick_name']) && $_GET['nick_name']) ? $_GET['nick_name'] : ''; ?>">
+
+                    <select class="cssInput" style="margin-top: 5px;width:100px" name="is_on">
+                        <option value="">是否关注</option>
+                        <option value="1"<?php echo (isset($_GET['is_on']) && $_GET['is_on'] == '1') ? ' selected="selected"' : ''; ?>>关注</option>
+                        <option value="0"<?php echo (isset($_GET['is_on']) && $_GET['is_on'] == '0') ? ' selected="selected"' : ''; ?>>未关注</option>
+                    </select>
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:100px"
+                           placeholder="输入关注次数" name="concern_num"
+                           value="<?php echo (isset($_GET['concern_num']) && $_GET['concern_num']) ? $_GET['concern_num'] : ''; ?>">
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:100px"
+                           placeholder="输入渠道" name="scene"
+                           value="<?php echo isset($_GET['scene']) ? $_GET['scene'] : ''; ?>">
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:160px"
+                           placeholder="输入微信公众号" name="weixin_name"
+                           value="<?php echo isset($_GET['weixin_name']) ? $_GET['weixin_name'] : ''; ?>">
+
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </form>
+            </div>
+
+        <?php else : ?>
+
+            <a class="a-switch" href="/wftadlogin/weixin/concern?act=all">查看所有关注记录</a>
+            <div style="float:right;margin-right:30px">
+                <form action="#" method="get">
+                    <select class="cssInput" style="margin-top: 5px;width:200px" name="is_on">
+                        <option value="">选择当前是否关注</option>
+                        <option value="1"<?php echo (isset($_GET['is_on']) && $_GET['is_on'] == 1) ? ' selected="selected"' : ''; ?>>只看关注</option>
+                        <option value="0"<?php echo (isset($_GET['is_on']) && $_GET['is_on'] == 0) ? ' selected="selected"' : ''; ?>>只看未关注</option>
+                    </select>
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:160px"
+                           placeholder="输入微信公众号" name="weixin_name"
+                           value="<?php echo isset($_GET['weixin_name']) ? $_GET['weixin_name'] : ''; ?>">
+
+                    <input type="text" class="cssInput" style="margin-top: 5px;width:100px"
+                           placeholder="输入渠道" name="scene"
+                           value="<?php echo isset($_GET['scene']) ? $_GET['scene'] : ''; ?>">
+
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </form>
+            </div>
+
+        <?php endif; ?>
+    </div>
+
+    <div class="box-table">
+        <?php if (isset($_GET['act']) && $_GET['act'] == 'all') : ?>
+            <table>
+                <tr>
+                    <th class="size1">数据ID</th>
+                    <th class="size2">用户加密微信号</th>
+                    <th class="size2">用户昵称</th>
+                    <th class="size1">当前是否关注</th>
+                    <th class="size1">关注次数</th>
+                    <th class="size1">最后关注时间</th>
+                    <th class="size1">渠道</th>
+                    <th class="size1">微信公众号</th>
+                </tr>
+
+                <?php foreach ($data as $key => $row) : ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id; ?></td>
+                        <td class="size2"><?php echo $row->open_id; ?></td>
+                        <td class="size2"><?php echo $row->nick_name; ?></td>
+                        <td class="size1"><?php echo $row->is_on ? '是' : '否'; ?></td>
+                        <td class="size1"><?php echo $row->concern_num; ?></td>
+                        <td class="size1"><?php echo date('Y-m-d H:i', $row->concern_time); ?></td>
+                        <td class="size1"><?php echo $row->scene; ?></td>
+                        <td class="size1"><?php echo $row->weixin_name; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php else : ?>
+            <table>
+                <tr>
+                    <th class="size1">ID</th>
+                    <th class="size3">微信公众号</th>
+                    <th class="size2">渠道</th>
+                    <th class="size1">关注人数</th>
+                    <th class="size3">操作</th>
+                </tr>
+
+                <?php foreach ($data as $key => $row) : ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $key + 1; ?></td>
+                        <td class="size3"><?php echo $row->weixin_name; ?></td>
+                        <td class="size2"><?php echo $row->scene; ?></td>
+                        <td class="size1"><?php echo $row->num; ?></td>
+                        <td class="size3">
+                            <?php
+                            $search_url = '&scene=' . $row->scene . '&weixin_name=' . $row->weixin_name . '&is_on=' . $is_on;
+                            ?>
+                            <a href="/wftadlogin/weixin/concern?act=all<?php echo $search_url; ?>" class="ui-button">查看关注</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+<style>
+    th {
+        max-width: 200px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    td {
+        max-width: 200px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .box-table td{
+        text-align: left;
+    }
+
+    .a-switch {
+        margin-left: 35px;
+    }
+</style>

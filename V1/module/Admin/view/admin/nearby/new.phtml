@@ -1,0 +1,120 @@
+<hgroup class="box">
+    <header>
+        <h3>附近</h3>
+        <i class="icon"></i>
+        <?php if($data):?>
+        <a href="/wftadlogin/nearby/<?php echo ($data['type'] == 1) ? 'restaurant' : 'park'; ?>">返回<?php echo ($data['type'] == 1) ? '餐厅' : '停车场'; ?></a>
+        <?php else:?>
+            <a href="javascript:history.go(-1)">返回</a>
+        <?php endif;?>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/nearby/save" method="post">
+    <header class="box-title"><?php echo ($type == 1) ? '餐厅' : '停车场';?></header>
+    <table class="table">
+        <tr>
+            <th width="160">名称</th>
+            <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo $data ? $data['title'] : ''; ?>">
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">地  址</th>
+            <th colspan="3"><input type="text" class="cssInput" name="address" value="<?php echo $data ? $data['address'] : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">坐  标</th>
+            <th colspan="3">
+                纬度坐标：<input type="text" class="cssInput" style="width:100px" name="addr_y" id="addr_y" value="<?php echo $data ? $data['addr']['coordinates'][1] : '30.571659';?>">
+                经度坐标：<input type="text" class="cssInput" style="width:100px" name="addr_x" id="addr_x" value="<?php echo $data ? $data['addr']['coordinates'][0] : '114.306655';?>">
+                <button type="button" class="btn btn-primary btn-sm setmap">设置坐标点</button>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="id" value="<?php echo $data ? $data['_id'] : 0;?>">
+                <input type="hidden" name="type" value="<?php echo $type;?>">
+                <button id="ti-place" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+<!--   地图   -->
+<div class="modal fade" id="setmap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>获取位置信息</h3>
+            </div>
+            <div class="modal-body">
+                <h4>拖动跳动的点,使用滚轮快速放大缩小 <input type="text" value="搜索" id="skey"> <a class="btn btn-primary btn-sm"
+                                                                                  id="mapsearch">搜索</a></h4>
+
+                <iframe name="myFrame" src="/wftadlogin/seller/setmap"
+                        style="width:100%; height:500px; border: 0px;border-radius: 5px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="ui-button" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="ui-button getmap" data-dismiss="modal" aria-hidden="true">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    ////////////////    地图      ///////////////////
+
+    $('.setmap').click(function () {
+        //地图框架地址
+        posturl = $(this).attr("url");
+        init_xy = [];
+        init_xy[0] = $('#addr_x').val();
+        init_xy[1] = $('#addr_y').val();
+        if (init_xy[0] == 0 || init_xy[1] == 0) {
+            init_xy[0] = 114.306655;  //湖北武汉
+            init_xy[1] = 30.571659;
+        }
+
+
+        $("#setmap").modal()
+        try {
+            //初始化地图
+            myFrame.window.initmap(init_xy[0], init_xy[1]);
+        }
+        catch (err) {
+            setTimeout(function () {
+                myFrame.window.initmap(init_xy[0], init_xy[1]);
+            }, 2000)
+        }
+    })
+    $(".getmap").click(function () {
+        var mapxy = myFrame.window.getmap().split(',');
+        $('#addr_x').val(mapxy[0])
+        $('#addr_y').val(mapxy[1])
+
+    })
+
+    $("#mapsearch").click(function () {
+        var skey;
+        skey = $("#skey").val();
+        myFrame.window.baidusearch(skey);
+    })
+    ////////////////  地图结束 /////////////////
+</script>
+
+
+

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <title>玩翻天</title>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/index.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <style type="text/css">
+        .item-activity{
+            position: relative;
+        }
+        .activity-log{
+            position: absolute;
+            right: 25px;
+            top: 0;
+            width: 114px;
+            height: 164px;
+        }
+    </style>
+</head>
+<body>
+<main class="align fixed-bottom-100" id="content"></main>
+<script id="test" type="text/html">
+    <header class="header top">
+        <a class="header-area" href="/web/wappay/city" id="baidu_geo">武汉<i class="icon"></i></a>
+        <a class="header-pic"><img src="/images/wap/logo-wft.png"/></a>
+        <a class="header-search" href="javascript:;" title="" id="search"></a>
+    </header>
+    <section class="wrapper">
+        <div class="imgbox swipe" id="slider" style="visibility:visible;">
+            <ul class="swipe-wrap">
+                {{each maps as value index}}
+                {{if value.type<7}}
+                <li class="pic {{if index==0}} active{{/if}}"><a href="{{if value.type==1}}/web/tag/info?id={{value.id}}{{else if value.type==2}}/web/organizer/shops?id={{value.id}}{{else if value.type==4}}/web/place/index?id={{value.id}}{{else if value.type==5}}/web/organizer/shops?id={{value.id}}{{else}}{{value.url}}{{/if}}"><img src="{{value.cover}}"/></a></li>
+                {{/if}}
+                {{/each}}
+            </ul>
+            <ol class="dots" id="dots">
+                {{each maps as value index}}
+                <li class="{{if index==0}} active{{/if}}"></li>
+                {{/each}}
+            </ol>
+        </div>
+        <div class="index-category Fix">
+            <div class="index-wrap Fix">
+                {{each module_pic}}
+                {{if $value.is_new==1}}
+                <span class="new">NEW</span>
+                {{/if}}
+                <a href="{{if $value.type==1}}/web/tag/info?id={{$value.id}}{{else if $value.type==2}}/web/organizer/shops?id={{$value.id}}{{else if $value.type==4}}/web/place/index?id={{$value.id}}{{else if $value.type==5}}/web/organizer/shops?id={{$value.id}}{{else if $value.type==10}}/web/wappay/integral{{else if $value.type==11}}/web/wappay/account{{else if $value.type==9}}/webinvite{{else if $value.type==12}}/web/wappay/seckill{{else if $value.type==13}}/web/wappay/mycashcoupon{{else if $value.type==14}}/web/tag/category?id={{$value.id}}{{else}}{{$value.url}}{{/if}}" class="item">
+                    <img class="icon" src="{{$value.cover}}"/>
+                    <div class="name">{{$value.title}}</div>
+                </a>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+    <section class="wrapper">
+        <h2 class="index-coupon">
+            <span class="coupon-title">推荐票券</span>
+            <a class="coupon-more" href="/web/coupon/allcoupon">所有票券<i class="arrowent"></i></a>
+        </h2>
+        <div class="shopping-guess-container">
+            <div class="sc-wheel">
+                <ul class="shopping-guess-list">
+                    {{each sale_list}}
+                    <li class="shopping-guess-item">
+                        <a href="/web/organizer/shops?id={{$value.id}}" title="{{$value.title}}>">
+                            <div class="guess-item-pic">
+                                <img src="{{$value.cover}}"/>
+                                <span class="price">&yen; {{$value.price}} 起</span>
+                            </div>
+                            <div class="guess-item-title">
+                                {{$value.title}}
+                            </div>
+                        </a>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </section>
+    {{include 'list'}}
+</script>
+<script id="list" type="text/html">
+    <section class="wrapper">
+        <h2 class="index-coupon">
+            <span class="coupon-title">热门精选</span>
+        </h2>
+        <div class="inner">
+            <ul class="index-list lists">
+                {{each choice_list}}
+                {{if $value.type == 16}}
+                <li class="index-item Fix">
+                    <a href="/web/kidsplay/info?id={{$value.id}}" title="">
+
+                        <figure class="item-activity">
+                            <img class="activity-log" src="/images/wap/liuwa-school.png">
+                            <img class="img" src="{{$value.cover}}"/>
+                            <figcaption class="name">{{$value.title}}</figcaption>
+                        </figure>
+                    </a>
+                    <aside class="aside">
+                        <span class="dateLine">{{$value.session_str}}</span>
+                        <mark class="gatherPlace">{{$value.note}}</mark>
+                    </aside>
+                    {{if $value.buy_num>0}}
+                    <span class="numTip">已有{{$value.buy_num}}人报名</span>
+                    {{else}}
+                    <span class="numTip">正在报名中</span>
+                    {{/if}}
+                    <span class="priceTip">￥<mark>{{$value.low_money}}</mark>起</span>
+                    <div class="tag-list">
+                        {{each $value.tags}}
+                        <span class="tag-item">{{$value}}</span>
+                        {{/each}}
+                    </div>
+                </li>
+                {{else}}
+                <li class="index-item Fix">
+                    <a href="{{if $value.type==1}}/web/tag/info?id={{$value.id}}{{else if $value.type==4}}/web/place/index?id={{$value.id}}{{else if $value.type==5}}/web/organizer/shops?id={{$value.id}}{{else if $value.type==2}}{{$value.url}}{{/if}}" title="">
+
+                        <figure>
+                            <img class="img" src="{{$value.cover}}"/>
+                            <figcaption class="name">{{$value.title}}</figcaption>
+                        </figure>
+                    </a>
+                    <aside class="aside">
+                        {{each $value.prise}}
+                        <span class="sale">{{$value}}</span>
+                        {{/each}}
+                    </aside>
+                    {{if $value.buy_num > 0}}
+                    <span class="numTip">已售{{$value.buy_num}}份</span>
+                    {{else}}
+                    <span class="numTip">有票</span>
+                    {{/if}}
+                    <span class="priceTip">&yen;<mark>{{$value.low_money}}</mark>起</span>
+                </li>
+                {{/if}}
+                {{/each}}
+            </ul>
+        </div>
+    </section>
+</script>
+<script id="more" type="text/html">
+    {{each choice_list}}
+    {{if $value.type == 16}}
+    <li class="index-item Fix">
+        <a href="/web/kidsplay/info?id={{$value.id}}" title="">
+
+            <figure>
+                <img class="img" src="{{$value.cover}}"/>
+                <figcaption class="name">{{$value.title}}</figcaption>
+            </figure>
+        </a>
+        <aside class="aside">
+            <span class="dateLine">{{$value.session_str}}</span>
+            <mark class="gatherPlace">{{$value.note}}</mark>
+        </aside>
+        {{if $value.buy_num>0}}
+        <span class="numTip">已有{{$value.buy_num}}人报名</span>
+        {{else}}
+        <span class="numTip">正在报名中</span>
+        {{/if}}
+        <span class="priceTip">￥<mark>{{$value.low_money}}</mark>起</span>
+        <div class="tag-list">
+            {{each $value.tags}}
+            <span class="tag-item">{{$value}}</span>
+            {{/each}}
+        </div>
+    </li>
+    {{else}}
+    <li class="index-item Fix">
+        <a href="{{if $value.type==1}}/web/tag/info?id={{$value.id}}{{else if $value.type==4}}/web/place/index?id={{$value.id}}{{else if $value.type==5}}/web/organizer/shops?id={{$value.id}}{{else if $value.type==2}}{{$value.url}}{{/if}}" title="">
+
+            <figure>
+                <img class="img" src="{{$value.cover}}"/>
+                <figcaption class="name">{{$value.title}}</figcaption>
+            </figure>
+        </a>
+        <aside class="aside">
+            {{each $value.prise}}
+            <span class="sale">{{$value}}</span>
+            {{/each}}
+        </aside>
+        {{if $value.buy_num > 0}}
+        <span class="numTip">已售{{$value.buy_num}}份</span>
+        {{else}}
+        <span class="numTip">有票</span>
+        {{/if}}
+        <span class="priceTip">￥<mark>{{$value.low_money}}</mark>起</span>
+    </li>
+    {{/if}}
+    {{/each}}
+</script>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/swipe.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js?ver=<?php echo time();?>"></script>
+<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script type="text/javascript">
+    (function(){
+        $(".features-choice").addClass("current");
+
+        var City = GetQueryString('city'),
+            curcity = localStorage.getItem("MOBILE_CURRENTCITY"),
+            defcity = localStorage.getItem('MOBILE_DEFAULTCITY');
+
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return decodeURI(r[2]); return null;
+        }
+
+        if(!City){
+            function getLocation(){
+                var delcity = '武汉';
+                localStorage.setItem('MOBILE_DEFAULTCITY',delcity);
+                if (navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(showPosition,showError);
+                }else{
+                    alert("浏览器不支持地理定位。");
+                }
+            }
+            function showPosition(position){
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+                localStorage.setItem('lat',lat);
+                localStorage.setItem('lng',lon);
+                var point = new BMap.Point(lon, lat);  // 创建坐标点
+                // 根据坐标得到地址描述
+                var myGeo = new BMap.Geocoder();
+                myGeo.getLocation(point, function (result) {
+//                    alert(JSON.stringify(result.addressComponents));
+                    var city = result.addressComponents.city;//定位城市
+                    city = city.substring(0,city.length-1);
+                    var addr =  result.addressComponents.province+result.addressComponents.city+result.addressComponents.district+result.addressComponents.street+result.addressComponents.streetNumber;
+                    localStorage.setItem('MOBILE_CURRENTCITY',city);
+                    localStorage.setItem("ADDRESS",addr);
+                });
+            }
+
+            function showError(error){
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        $("#baidu_geo").text("武汉");
+//                    alert("定位失败,用户拒绝请求地理定位");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("定位失败,位置信息是不可用");
+                        break;
+                    case error.TIMEOUT:
+                        alert("定位失败,请求获取用户位置超时");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert("定位失败,定位系统失效");
+                        break;
+                }
+            }
+            getLocation();
+        }
+
+        if(City){
+            city = City;
+        }else{
+            city = curcity!=null ? curcity : defcity;
+        }
+
+        localStorage.setItem("select_city",city);
+        document.cookie="sel_city="+encodeURI(city)+';path=/';
+        $.ajax({
+            type: "POST",
+            url: "/coupon",
+            dataType:"json",
+            async: true,
+            headers: {
+                "VER": 10,
+                "CITY":encodeURI(city)
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+//                    alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+                    $("#baidu_geo").text(city);
+
+                    window.mySwipe = new Swipe(document.getElementById('slider'), {
+                        startSlide: 0,
+                        speed: 400,
+                        autoplay: 3000,
+                        continuous: true,
+                        disableScroll: false,
+                        stopPropagation: false,
+                        callback: function(pos) {
+                            var bullets = document.getElementById('dots').getElementsByTagName('li');
+                            var i = bullets.length;
+                            while(i--){
+                                bullets[i].className = ' ';
+                            }
+                            bullets[pos].className = 'active';
+                        }
+                    });
+
+//                    var wheel = $(".sc-wheel"),
+//                        prev = $(".guess-prev"),
+//                        next = $('.guess-next'),
+//                        img = wheel.find('ul'),
+//                        w = img.find('li').outerWidth(true),
+//                        h = img.find('li').height(true),
+//                        len = img.find('li').length,
+//                        startX, startY, moveEndX, moveEndY, X, Y;
+//
+//                    img.css("width", w * len );
+//                    img.css("height",h);
+//
+//                    next.on("click",function(){
+//                        img.stop().animate({'margin-left':-w},500,function()
+//                        {
+//                            img.find('li').eq(0).appendTo(img);
+//                            img.css({'margin-left':0});
+//                        });
+//                    });
+//                    prev.on("click",function(){
+//
+//                        img.stop().animate({'margin-left':w},500,function()
+//                        {
+//                            img.css({'margin-left':0});
+//                            img.find('li:last').prependTo(img);
+//                        });
+//                    });
+//
+//                    wheel.on("touchstart", function(e) {
+//                        startX = e.originalEvent.changedTouches[0].pageX;
+//                        startY = e.originalEvent.changedTouches[0].pageY;
+//                    });
+//                    wheel.on("touchmove", function(e) {
+//                        e.preventDefault();
+//                        moveEndX = e.originalEvent.changedTouches[0].pageX;
+//                        moveEndY = e.originalEvent.changedTouches[0].pageY;
+//                        X = moveEndX - startX;
+//                        Y = moveEndY - startY;
+//
+//                        if ( Math.abs(X) > Math.abs(Y) && X > 0 ) {
+//                            img.stop().animate({'margin-left': w},100,function()
+//                            {
+//                                img.find('li:last').prependTo(img);
+//                                img.css({'margin-left':0});
+//                            });
+//
+//                        }
+//                        else if ( Math.abs(X) > Math.abs(Y) && X < 0 ) {
+//                            img.stop().animate({'margin-left': -w},100,function()
+//                            {
+//                                img.find('li').eq(0).appendTo(img);
+//                                img.css({'margin-left':0});
+//
+//                            });
+//                        }
+//                    });
+
+                    $("#search").attr("href","/web/search/index?city="+city);
+
+                    var counter = 1;
+
+                    // dropload
+                    var dropload = $('.inner').dropload({
+                        scrollArea : window,
+                        domDown : {
+                            domClass   : 'dropload-down',
+                            domRefresh : '<div class="dropload-refresh" style="height:50px;text-align: center;margin-bottom: 25px;">↑上拉加载更多</div>',
+                            domLoad    : '<div class="dropload-load" style="height:50px;line-height: 50px;text-align: center;margin-bottom: 30px;"><span class="loading"></span>加载中...</div>',
+                            domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;margin-bottom: 15px;">暂无数据</div>'
+                        },
+                        loadDownFn : function(me){
+                            counter++;
+                            $.ajax({
+                                type: "POST",
+                                url: "/coupon",
+                                dataType: 'json',
+                                data:{'page':counter},
+                                async: false,
+                                headers: {
+                                    "VER": 10,
+                                    "CITY":encodeURI(city)
+                                },
+                                success: function(data){
+                                    var len= data.response_params.choice_list.length;
+                                    // 为了测试，延迟1秒加载
+                                    setTimeout(function(){
+                                        $('.lists').append(template('more', data.response_params));
+                                        // 每次数据加载完，必须重置
+                                        me.resetload();
+                                    },500);
+
+                                    if(len==0){
+                                        // 锁定
+                                        me.lock();
+                                        // 无数据
+                                        me.noData();
+                                        return;
+                                    }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown){
+//                                    alert('Ajax error!');
+                                    // 即使加载出错，也得重置
+                                    me.resetload();
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+//                    window.location.href = '<?php //echo $authorUrl;?>//';
+                }
+                else if (XMLHttpRequest.status == 403) {
+//                    window.location.href = '<?php //echo $authorUrl;?>//';
+//                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+
+            }
+        });
+    }());
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

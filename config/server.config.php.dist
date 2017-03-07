@@ -1,0 +1,76 @@
+<?php
+
+return array(
+    'db' => array(
+        'driver' => 'Pdo',
+        'dsn' => "mysql:dbname=wft; host=127.0.0.1",
+        'username' => 'root',
+        'password' => '12345677',
+        'driver_options' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        ),
+    ),
+
+
+    'service_manager' => array(
+        'factories' => array(
+            'Zend\Db\Adapter\Adapter'
+            => 'Zend\Db\Adapter\AdapterServiceFactory',
+        ),
+    ),
+
+    'url' => '',
+    'apiKey' => '',  //接口认证
+    'token_key' => '', //网页认证
+
+    //得意登录
+    'deyiSecret' => '',
+
+    //支付宝
+    'alipay' => array(
+        'partner' => '',    //合作身份者id，以2088开头的16位纯数字
+        'seller_id' => '',  //收款账号
+        'notify_url' => ''  //回调地址
+    ),
+
+    //银联
+
+    'unionpay' => array(
+        'sign_cert_pwd' => '',
+        'merid' => '',
+        'front_notify_url' => '', //前台通知地址
+        'back_notify_url' => ''   //后台通知地址
+    ),
+
+    //玩翻天微信
+    'wanfantian_weixin' => array(
+        'appid' => '',
+        'secret' => '',
+        'token' => '',
+        'PartnerKey' => '', //支付key
+        'PartnerID' => '',
+        'notify_url' => ''
+    ),
+
+    //开班了微信
+    'kaibanle_weixin' => array(
+        'appid' => '',
+        'secret' => '',
+        'token' => '',
+    ),
+    //个推账号
+    'getui_account' => array(
+        'APPKEY' => '',
+        'APPID' => '',
+        'MASTERSECRET' => '',
+        'HOST' => '',
+    ),
+    //保游配置
+
+    'baoyou'=>array(
+        'url'=>'https://test-api.51baoy.com/InsApi/',
+        'userid'=>'www.wanfantian.com',
+        'password'=>'wanfantian_DBA0F743',
+        'productGuid'=>'ec55967c0c1d453786f36e57e2406e5f'  //产品id
+    )
+);

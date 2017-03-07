@@ -1,0 +1,55 @@
+<hgroup class="box">
+    <header>
+        <h3>显示管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/index">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/setting/bannersettingsave" method="post">
+    <header class="box-title">客户端显示/隐藏功能列表</header>
+    <table class="table">
+        <?php
+            foreach ($data_banner as $key => $val) {
+        ?>
+        <tr>
+            <th width="160"><?php echo $val['banner_name'];?></th>
+            <th colspan="3">
+                <input type="radio" class="banner_setting" data-id="<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_id']?>" data-typy="<?php echo $val['banner_id']?>" name="banner_setting_<?php echo $val['banner_id'];?>" value="0" <?php echo $data_banner_setting[$val['banner_id']]['banner_setting_value'] ? '' : 'checked';?>> 隐藏&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" class="banner_setting" data-id="<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_id']?>" data-typy="<?php echo $val['banner_id']?>" name="banner_setting_<?php echo $val['banner_id'];?>" value="1" <?php echo $data_banner_setting[$val['banner_id']]['banner_setting_value'] ? 'checked' : '';?>> 显示&nbsp;&nbsp;&nbsp;&nbsp;
+            </th>
+        </tr>
+        <input type="hidden" value="<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_value'] ? $data_banner_setting[$val['banner_id']]['banner_setting_value'] : 0;?>" name="banner_setting[]" id="banner_setting_<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_id']?>"/>
+        <input type="hidden" value="<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_id']?>" name="banner_setting_id[]" id="banner_setting_<?php echo $data_banner_setting[$val['banner_id']]['banner_setting_id']?>"/>
+        <?php
+            }
+        ?>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input name="city" value="<?php echo $city; ?>" type="hidden" />
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+
+<script>
+    $(document).on('click', '.banner_setting', function () {
+        var data_banner_setting_id = $(this).attr('data-id');
+        var data_value             = $(this).val();
+
+        $('#banner_setting_' + data_banner_setting_id).val(data_value);
+    });
+</script>
+
+
+

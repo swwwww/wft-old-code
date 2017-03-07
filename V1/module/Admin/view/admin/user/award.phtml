@@ -1,0 +1,124 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/comment">用户管理</a></li>
+        <li><a href="/wftadlogin/comment/word?id=<?php echo $circle['_id'];?>">奖励</a></li>　　　　
+
+    </ul>
+</div>
+
+<form class="box box-form" action="/wftadlogin/user/doaward" method="post">
+    <table class="table">
+
+        <tr>
+            <th width="160">奖励方式</th>
+            <th colspan="3" width="600">
+                <input name="type" type="radio" value="1" checked /> 现金券 &nbsp;&nbsp;&nbsp;
+                <input name="type" type="radio" value="2" /> 返现金
+            </th>
+        </tr>
+
+        <tr id="je">
+            <th width="160">金额</th>
+            <th colspan="3"><input type="text" class="cssInput" name="cash" value="<?php echo $data ? $data->diffuse_code : ''; ?>">
+                目前可以使用的金额:<?php echo $remain; ?>
+            </th>
+        </tr>
+        <tr id="je1">
+            <th width="160">可否提现</th>
+            <th colspan="3">
+                <input name="withdrawal" type="radio" value="1" checked /> 可提现 &nbsp;&nbsp;&nbsp;
+                <input name="withdrawal" type="radio" value="0" /> 不可提现
+            </th>
+        </tr>
+        <tr id="pj">
+            <th width="160">票券</th>
+            <th>
+                <select name="coupon" id="select">
+                    <?php foreach($cc as $c): ?>
+                        <option value="<?php echo $c['id'].'#'.$c['price'];?>" >[<?php echo $c['id'].']-'.$c['title'];?></option>
+                    <?php endforeach; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr id="jlje"><!-- 现金 -->
+            <th width="160">奖励理由</th>
+            <th>
+                <select onchange="action_type1_change(this);" name="action_type1" id="rs1">
+                    <option value="0" >选择</option>
+                    <option value="9" >采纳攻略</option>
+                    <option value="8" >好评玩翻天APP</option>
+                    <option value="19" >延期补偿</option>
+                    <option value="20" >资深玩家奖励</option>
+                    <option value="21" >好想你券</option>
+                    <option value="99" >自定义</option>
+<!--                    <option value="4" >发言</option>-->
+                </select>
+                <input name="action_custom1" class="cssInput" style="display:none" type="text" value="" />
+            </th>
+        </tr>
+        <tr id="jlpj"><!-- 券 -->
+            <th width="160">奖励理由</th>
+            <th>
+                <select onchange="action_type_change(this);" name="action_type" id="rs2">
+                    <option value="0" >选择</option>
+                    <option value="6" >采纳攻略</option>
+                    <option value="7" >好评玩翻天APP</option>
+                    <option value="18" >延期补偿</option>
+                    <option value="19" >资深玩家奖励</option>
+                    <option value="20" >好想你券</option>
+                    <option value="99" >自定义</option>
+<!--                <option value="8" >发言</option>-->
+                </select>
+                <input style="display:none" class="cssInput" name="action_custom" type="text" value="" />
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="uid"  value="<?php echo $uid;?>"> <!--//主贴id-->
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<script>
+    $('#jlje').hide();
+    $('#je').hide();
+    $('#je1').hide();
+    $('#jlpj').show();
+    $('#pj').show();
+    $("input[name='type']").change(function(){
+        if('1' == $("input[name='type']:checked").val()){
+            $('#je').hide();
+            $('#je1').hide();
+            $('#jlje').hide();
+            $('#jlpj').show();
+            $('#pj').show();
+        }else if('2' == $("input[name='type']:checked").val()){
+            $('#je').show();
+            $('#je1').show();
+            $('#jlje').show();
+            $('#pj').hide();
+            $('#jlpj').hide();
+        }
+    });
+
+    var action_type_change = function(obj){
+        var valu = $(obj).val();
+        if(valu == 99){
+            $("input[name='action_custom']").show();
+        }else{
+            $("input[name='action_custom']").hide();
+        }
+    };
+
+    var action_type1_change = function(obj){
+        var valu = $(obj).val();
+        if(valu == 99){
+            $("input[name='action_custom1']").show();
+        }else{
+            $("input[name='action_custom1']").hide();
+        }
+    };
+</script>

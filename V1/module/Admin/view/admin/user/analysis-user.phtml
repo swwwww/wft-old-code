@@ -1,0 +1,165 @@
+<hgroup class="box">
+    <header>
+        <h3>用户运营分析管理</h3>
+        <i class="icon icon-list"></i>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+    $phone = null;
+    $user_name = null;
+    $range_start = null;
+    $range_end = null;
+    $average_start = null;
+    $average_end = null;
+    $order = 0;
+    $activity_start = null;
+    $activity_end = null;
+
+    if (isset($_GET['phone']) && $_GET['phone']) {
+        $phone = $_GET['phone'];
+    }
+
+    if (isset($_GET['user_name']) && $_GET['user_name']) {
+        $user_name = $_GET['user_name'];
+    }
+
+    if (isset($_GET['range_start']) && $_GET['range_start']) {
+        $range_start = $_GET['range_start'];
+    }
+
+    if (isset($_GET['range_end']) && $_GET['range_end']) {
+        $range_end = $_GET['range_end'];
+    }
+
+    if (isset($_GET['average_start']) && $_GET['average_start']) {
+        $average_start = $_GET['average_start'];
+    }
+
+    if (isset($_GET['average_end']) && $_GET['average_end']) {
+        $average_end = $_GET['average_end'];
+    }
+
+    if (isset($_GET['order']) && $_GET['order']) {
+        $order = $_GET['order'];
+    }
+
+    if (isset($_GET['activity_start']) && $_GET['activity_start']) {
+        $activity_start = $_GET['activity_start'];
+    }
+
+    if (isset($_GET['activity_end']) && $_GET['activity_end']) {
+        $activity_end = $_GET['activity_end'];
+    }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">用户手机号/用户id</th>
+            <th>
+                <input type="text" class="cssInput" name="phone" value="<?php echo $phone;?>">
+            </th>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="user_name" value="<?php echo $user_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">订单总金额范围</th>
+            <th>
+                <input name="range_start" type="text" class="cssInput" style="width:90px"  value="<?php echo $range_start;?>">
+                <input name="range_end" type="text" class="cssInput" style="width:90px"  value="<?php echo $range_end;?>">
+            </th>
+            <th width="160">均单值范围</th>
+            <th>
+                <input name="average_start" type="text" class="cssInput" style="width:90px"  value="<?php echo $average_start;?>">
+                <input name="average_end" type="text" class="cssInput" style="width:90px"  value="<?php echo $average_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">排序</th>
+            <th>
+                 <select name="order">
+                     <option value="0" <?php echo ($order == 0) ? 'selected' : '';?>>订单总金额</option>
+                     <option value="3" <?php echo ($order == 3) ? 'selected' : '';?>>均单值</option>
+                     <option value="1" <?php echo ($order == 1) ? 'selected' : '';?>>商品购买数量</option>
+                     <option value="2" <?php echo ($order == 2) ? 'selected' : '';?>>活动购买数量</option>
+                 </select>
+            </th>
+            <th width="160">活动数量范围</th>
+            <th>
+                <input name="activity_start" type="text" class="cssInput" style="width:90px"  value="<?php echo $activity_start;?>">
+                <input name="activity_end" type="text" class="cssInput" style="width:90px"  value="<?php echo $activity_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/user/analysisUser" style="background-color: green" class="ui-button">清空所有选项</a>
+                <input id="out-an" type="hidden" name="put" value="1">
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/user/analysisUser?put=1" id="out-data" style="background-color: green" class="ui-button">导出用户信息</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">列表</div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">用户ID</th>
+                <th scope="col">用户手机号</th>
+                <th scope="col">用户名</th>
+                <th scope="col">最后下单时间</th>
+                <th scope="col">订单总金额</th>
+                <th scope="col">订单均单金额</th>
+                <th scope="col">购买商品数量</th>
+                <th scope="col">购买活动数量</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['uid']; ?></td>
+                    <td><?php echo $v['phone']; ?></td>
+                    <td><?php echo $v['username']; ?></td>
+                    <td><?php echo $v['dateline']; ?></td>
+                    <td><?php echo $v['user_attached_total_money']; ?></td>
+                    <td><?php echo $v['user_attached_average_value']; ?></td>
+                    <td><?php echo $v['goods_order_num']; ?></td>
+                    <td><?php echo $v['activity_order_num']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <div>
+            <?php echo $this->pageData; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-an').attr("value", 2);
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+            $('#out-an').attr("value", 1);
+
+        });
+    });
+</script>

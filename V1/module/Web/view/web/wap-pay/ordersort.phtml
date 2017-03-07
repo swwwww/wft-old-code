@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>订单</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/order.css" rel="stylesheet"/>
+    <style>
+        .item{
+            width:100%;
+        }
+        .category li{
+            width:25%;
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <section class="wrapper">
+        <ul class="category bdt-1px">
+            <li><a class="item " href="orderwait" title="">待付款</a></li>
+            <li><a class="item " href="newallorders" title="">待使用</a></li>
+            <li><a class="item active" href="ordersort" title="">待评价</a></li>
+            <li><a class="item " href="ordersuccess" title="">已完成</a></li>
+        </ul>
+    </section>
+    <article class="wrapper">
+        <div id="allOrders">
+            {{if response_params[0]}}
+            {{each response_params}}
+                <div class="item">
+                    <div class="mt bdb-1px">
+                        <span class="status">订单状态：</span>
+                    <span class="info">
+                    {{if $value.pay_status==0}}
+                    未付款
+                    {{else if $value.pay_status==1}}
+                    付款中
+                    {{else if $value.pay_status==2}}
+                    已付款
+                    {{else if $value.pay_status==3}}
+                    付款中
+                    {{else if $value.pay_status==4}}
+                    退款成功
+                    {{else if $value.pay_status==5}}
+                    已使用
+                    {{else if $value.pay_status==6}}
+                    已过期
+                    {{else if $value.pay_status==7}}
+                    团购中...
+                    {{/if}}
+                    </span>
+                    </div>
+                    <div class="mc bdb-1px">
+                        <a class="imc-con" href="/web/wappay/orderdetail?orderId={{$value.order_sn}}" title="">
+                            <div class="mc-l">
+                                <img src="{{$value.img}}"/>
+                            </div>
+                            <div class="mc-r">
+                                {{$value.title}}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="mb bdb-1px">
+                        <span class="mb-l">付款：&yen; {{$value.price}}*{{$value.number}}.00</span>
+                        <span class="mb-m">数量：{{$value.number}}</span>
+                        <a class="mb-r" href="/web/organizer/review?id={{$value.coupon_id}}&type=2" title="">去评价</a>
+                    </div>
+                </div>
+            {{/each}}
+            {{else}}
+            <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+            {{/if}}
+        </div>
+    </article>
+</script>
+</body>
+<script type="text/javascript" src="/js/wap/main.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript">
+    $.ajax({
+        type: "POST",
+        url: "/coupon/mylist/talk",
+        dataType:"json",
+        async: true,
+        data: {
+            'uid': <?php echo $_COOKIE['uid'];?>
+        },
+        headers: {
+            "VER": 10
+        },
+        success: function (result) {
+            if (result.response_params.status == 0) {
+                //alert(result.response_params.message);
+            } else {
+                //todo 成功
+                var html = template('test', result);
+                document.getElementById('content').innerHTML = html;
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+            if (XMLHttpRequest.status == 401) {
+                //todo 跳转授权页面
+                alert(XMLHttpRequest.responseJSON.message);
+                //                window.location.href = '<?php //echo $authorUrl;?>//';
+            }
+            else if (XMLHttpRequest.status == 403) {
+                alert('接口验证失败，非法访问');
+            }
+            else if (XMLHttpRequest.status == 400) {
+                //                            window.location.href = '<?php //echo $authorUrl;?>//';
+                alert('请求参数错误:' + XMLHttpRequest.error_msg);
+            }
+            else {
+                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+            }
+        }
+    });
+
+</script>
+</html>

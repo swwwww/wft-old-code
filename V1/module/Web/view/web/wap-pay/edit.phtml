@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="app-mobile-web-app-capable" content="yes">
+    <title>修改个人资料</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/my.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <section class="wrapper">
+        <form class="edit-intro">
+            <div class="item item-pic">
+                <span class="tips tips-pic">头像</span>
+                <i class="arrowent"></i>
+                <div class="upload-pic" id="upload-pic">
+                    <img src="{{img}}"/>
+                </div>
+                <input id="upload-image" type="file" accept="image/*;capture=camera" class="input-file">
+            </div>
+            <a class="item" href="/web/wappay/editname?user={{username}}">
+                <span class="tips left">昵称</span>
+                <span class="name left">{{username}}</span>
+                <i class="arrowent"></i>
+            </a>
+            <div class="title">个人信息</div>
+            <a class="item" >
+                <span class="tips left">性别</span>
+                <select class="gender left">
+                    {{if sex==1}}
+                    <option id="man" name="1">男</option>
+                    <option id="man" name="2">女</option>
+                    {{else}}
+                    <option id="woman" name="2">女</option>
+                    <option id="woman" name="1">男</option>
+                    {{/if}}
+                </select>
+                <i class="arrowent"></i>
+            </a>
+            <a class="item">
+                <span class="tips left">出生日期</span>
+                <span class="time left"><input class="font" type="date" value="2016-01-01"/></span>
+                <i class="arrowent"></i>
+            </a>
+            <div class="title">宝宝信息</div>
+            <a class="item baby" href="/web/wappay/mybaby">
+                <span class="tips tips-baby left">我的Baby</span>
+                <div class="info right">
+                    {{each baby}}
+                    <img src="{{$value.img}}" alt="">
+                    {{/each}}
+                </div>
+                <i class="arrowent"></i>
+            </a>
+            <input class="submit" type="submit" value="完成" autocomplete="off" id="sub"/>
+        </form>
+    </section>
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/third-part/binaryajax.js"></script>
+<script type="text/javascript" src="/js/third-part/exif.js"></script>
+<script type="text/javascript" src="/js/third-part/localResizeIMG.js"></script>
+<script type="text/javascript" src="/js/third-part/mobileBUGFix.js"></script>
+<script>
+    (function(){
+        $.ajax({
+            type:'POST',
+            url:"/user/info",
+            dataType:'json',
+            async: true,
+            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    //window.location.href = "";
+                    //console.log(result.response_params);
+
+                        var info = result.response_params;
+                        var d=new Date(parseInt(info.birth)*1000);
+                        info.birth=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate();
+
+
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+
+                    var viewImg = $("#upload-pic");
+                    $('#upload-image').localResizeIMG ({
+                        width: 800,
+                        quality: 0.8,
+                        success: function (result) {
+                            var status = true;
+                            if (result.height > 1600) {
+                                status = false;
+                                alert("照片最大高度不超过1600像素");
+                            }
+                            if (status) {
+                                //console.log(result.base64);;
+                                viewImg.html('<img src="' + result.base64 + '"/><input type="hidden" id="file' + '" name="fileup[]" value="'+ result.clearBase64 + '">');
+                            }
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+
+            }
+        })
+    }())
+
+
+</script>
+</html>

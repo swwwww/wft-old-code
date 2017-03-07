@@ -1,0 +1,404 @@
+<?php
+$action = '商圈管理';
+$this->headTitle($action);
+?>
+<!--面包屑-->
+<ol class="breadcrumb">
+    <li><a href="/wftadlogin/">Home</a></li>
+    <li><a href="/wftadlogin/setting">系统设置</a></li>
+    <li class="active">商圈管理</li>
+</ol>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">>>国家</h3>
+    </div>
+    <div class="panel-body">
+
+        <select size="20" id="select1" style="width: 100%;border: 0px;height: 300px;">
+            <?php foreach ($this->country_arr as $v): ?>
+                <option <?php if($v['rid']==$country): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?> </option>
+            <?php endforeach; ?>
+        </select>
+
+        <a class="btn btn-primary" id="add1">添加</a>
+        <a class="btn btn-danger delete" id="delete1">删除选中</a>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">>>省份</h3>
+    </div>
+    <div class="panel-body">
+
+        <select size="20" id="select2" style="width: 100%;border: 0px;height: 300px;">
+            <?php foreach ($this->province_arr as $v): ?>
+                <option <?php if($v['rid']==$province): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?> </option>
+            <?php endforeach; ?>
+        </select>
+
+        <a class="btn btn-primary" id="add2">添加</a>
+        <a class="btn btn-danger delete" id="delete2">删除选中</a>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">>>城市</h3>
+    </div>
+    <div class="panel-body">
+
+        <select size="20" id="select3" style="width: 100%;border: 0px;height: 300px;">
+            <?php foreach ($this->city_arr as $v): ?>
+                <option <?php if($v['acr']==$acr): ?>selected="selected" <?php endif; ?> value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?> </option>
+            <?php endforeach; ?>
+        </select>
+
+        <a class="btn btn-primary" id="add3">添加</a>
+        <a class="btn btn-danger delete" id="delete3">删除选中</a>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">>>区域</h3>
+    </div>
+    <div class="panel-body">
+
+        <select size="20" id="select4" style="width: 100%;border: 0px;height: 300px;">
+            <?php foreach ($this->street_arr as $v): ?>
+                <option value="<?php echo $v['rid']; ?>"><?php echo $v['name']; ?> </option>
+            <?php endforeach; ?>
+        </select>
+
+        <a class="btn btn-primary" id="add4">添加</a>
+        <a class="btn btn-danger delete" id="delete4">删除选中</a>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">>>商圈</h3>
+    </div>
+    <div class="panel-body">
+        <select size="20" id="select5" style="width: 100%;border: 0px;height: 300px;">
+
+        </select>
+        <a class="btn btn-primary" id="add5">添加</a>
+        <a class="btn btn-danger delete" id="delete5">删除选中</a>
+
+    </div>
+</div>
+<p style="clear: left;"></p>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <div class="modal-title" id="myModalLabel">
+                    添加列表
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>
+                    名称： <input type="text" class="form-control" name="addname" id="addname">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                    添加
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal -->
+</div>
+
+
+<style>
+    .panel {
+        width: 250px;
+        margin: 10px;
+        float: left;
+    }
+
+    #myModalLabel {
+        text-align: left;
+        margin-top: 0px;
+    }
+</style>
+
+<script>
+    $(function () {
+        acr = '<?php echo $this->acr;?>';
+        rid = 0;
+
+        $(document).on('click', '#select1 option', function () {
+            rid = $(this).val();
+            $.get('/wftadlogin/setting/getcircle', {'level':1,'acr': acr, 'rid': rid}, function (data) {
+                var option_list = '';
+                $.each(data, function (k, v) {
+                    option_list += '<option value="' + v.rid + '">' + v.name + '</option>';
+
+                });
+                $('#select2').html('');
+                if (option_list) {
+                    $('#select2').append(option_list);
+                } else {
+                    $('#select2').append('<option id="null" ">暂无数据</option>');
+                }
+            }, 'json');
+        });
+
+        $(document).on('click', '#select2 option', function () {
+            rid = $(this).val();
+            $.get('/wftadlogin/setting/getcircle', {'level':2,'acr': acr, 'rid': rid}, function (data) {
+                var option_list = '';
+                $.each(data, function (k, v) {
+                    option_list += '<option value="' + v.rid + '">' + v.name + '</option>';
+
+                });
+                $('#select3').html('');
+                if (option_list) {
+                    $('#select3').append(option_list);
+                } else {
+                    $('#select3').append('<option id="null" ">暂无数据</option>');
+                }
+            }, 'json');
+        });
+
+        $(document).on('click', '#select3 option', function () {
+            rid = $(this).val();
+            $.get('/wftadlogin/setting/getcircle', {'level':3,'acr': acr, 'rid': rid}, function (data) {
+                var option_list = '';
+                $.each(data, function (k, v) {
+                    option_list += '<option value="' + v.rid + '">' + v.name + '</option>';
+
+                })
+                $('#select4').html('');
+                if (option_list) {
+                    $('#select4').append(option_list);
+                } else {
+                    $('#select4').append('<option id="null" ">暂无数据</option>');
+                }
+            }, 'json');
+        });
+
+        $(document).on('click', '#select4 option', function () {
+            rid = $(this).val();
+            $.get('/wftadlogin/setting/getcircle', {'level':4,'acr': acr, 'rid': rid}, function (data) {
+                var option_list = '';
+                $.each(data, function (k, v) {
+                    option_list += '<option value="' + v.rid + '">' + v.name + '</option>';
+
+                })
+                $('#select5').html('');
+                if (option_list) {
+                    $('#select5').append(option_list);
+                } else {
+                    $('#select5').append('<option id="null" ">暂无数据</option>');
+                }
+            }, 'json');
+        });
+
+
+
+
+
+
+
+
+
+        $('#add1').click(function () {
+            $('#myModal').modal()
+            $('.modal-footer button').one('click', function () {
+                addname = $('#addname').val();
+                $.get('/wftadlogin/setting/addselect1', {'acr': acr, 'addname': addname}, function (data) {
+                    if (data.status) {
+                        $('#select1').append('<option value="' + data.rid + '">' + data.name + '</option>');
+                        $('#myModal').modal('hide')
+                        $('#addname').val('');
+                    }
+                }, 'json')
+            })
+
+        })
+
+
+        $('#add2').click(function () {
+            $('#myModal').modal()
+            $('.modal-footer button').one('click', function () {
+                addname = $('#addname').val();
+
+                rid = $('#select1').select().val();
+                if (rid < 10000000) {
+                    alert('请先选择大分类');
+                    return false;
+                }
+                $.get('/wftadlogin/setting/addselect2', {'acr': acr, 'addname': addname, 'rid': rid}, function (data) {
+                    if (data.status) {
+                        $("#null").remove();
+                        $('#select2').append('<option value="' + data.rid + '">' + data.name + '</option>');
+                        $('#myModal').modal('hide')
+                        $('#addname').val('');
+                    }
+                }, 'json')
+            })
+        });
+
+        $('#add3').click(function () {
+            $('#myModal').modal()
+            $('.modal-footer button').one('click', function () {
+                addname = $('#addname').val();
+                rid = $('#select2').select().val();
+                if (rid < 10000000) {
+                    alert('请先选择大分类');
+                    return false;
+                }
+                $.get('/wftadlogin/setting/addselect3', {'acr': acr, 'addname': addname, 'rid': rid}, function (data) {
+                    if (data.status) {
+                        $("#null").remove();
+                        $('#select3').append('<option value="' + data.rid + '">' + data.name + '</option>');
+                        $('#myModal').modal('hide')
+                        $('#addname').val('');
+                    }
+                }, 'json')
+            })
+        });
+
+        $('#add4').click(function () {
+            $('#myModal').modal()
+            $('.modal-footer button').one('click', function () {
+                addname = $('#addname').val();
+                rid = $('#select3').select().val();
+
+                if (rid < 10000000) {
+                    alert('请先选择大分类');
+                    return false;
+                }
+                $.get('/wftadlogin/setting/addselect4', {'acr': acr, 'addname': addname, 'rid': rid}, function (data) {
+                    if (data.status) {
+                        $("#null").remove();
+                        $('#select4').append('<option value="' + data.rid + '">' + data.name + '</option>');
+                        $('#myModal').modal('hide')
+                        $('#addname').val('');
+                    }
+                }, 'json')
+            })
+        });
+
+        $('#add5').click(function () {
+            $('#myModal').modal()
+            $('.modal-footer button').one('click', function () {
+                addname = $('#addname').val();
+                rid = $('#select4').select().val();
+                if (rid < 10000000) {
+                    alert('请先选择大分类');
+                    return false;
+                }
+                $.get('/wftadlogin/setting/addselect5', {'acr': acr, 'addname': addname, 'rid': rid}, function (data) {
+                    if (data.status) {
+                        $("#null").remove();
+                        $('#select5').append('<option value="' + data.rid + '">' + data.name + '</option>');
+                        $('#myModal').modal('hide')
+                        $('#addname').val('');
+                    }
+                }, 'json')
+            })
+        });
+
+
+        $('#delete1').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r != true) {
+                return false;
+            }
+            rid = $('#select1').val();
+            $.get('/wftadlogin/setting/delete', {'rid': rid}, function (data) {
+                if (data.status) {
+                    $("#select1 option[value='" + rid + "']").remove();
+                    $("#select2").html('');
+                    $("#select3").html('');
+                    $("#select4").html('');
+                    $("#select5").html('');
+                }else{
+                    alert(data.message);
+                }
+            }, 'json')
+        });
+
+        $('#delete2').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r != true) {
+                return false;
+            }
+            rid = $('#select2').val();
+            $.get('/wftadlogin/setting/delete', {'rid': rid}, function (data) {
+                if (data.status) {
+                    $("#select2 option[value='" + rid + "']").remove();
+                    $("#select3").html('');
+                    $("#select4").html('');
+                    $("#select5").html('');
+                }else{
+                    alert(data.message);
+                }
+            }, 'json')
+        });
+
+        $('#delete3').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r != true) {
+                return false;
+            }
+            rid = $('#select3').val();
+            $.get('/wftadlogin/setting/delete', {'rid': rid}, function (data) {
+                if (data.status) {
+                    $("#select3 option[value='" + rid + "']").remove();
+                    $("#select4").html('');
+                    $("#select5").html('');
+                }else{
+                    alert(data.message);
+                }
+            }, 'json')
+        });
+
+        $('#delete4').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r != true) {
+                return false;
+            }
+            rid = $('#select4').val();
+            $.get('/wftadlogin/setting/delete', {'rid': rid}, function (data) {
+                if (data.status) {
+                    $("#select4 option[value='" + rid + "']").remove();
+                    $("#select5").html('');
+                }else{
+                    alert(data.message);
+                }
+            }, 'json')
+        });
+
+        $('#delete5').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r != true) {
+                return false;
+            }
+            rid = $('#select5').val();
+            $.get('/wftadlogin/setting/delete', {'rid': rid}, function (data) {
+                if (data.status) {
+                    $("#select5 option[value='" + rid + "']").remove();
+                }else{
+                    alert(data.message);
+                }
+            }, 'json')
+        });
+
+    })
+</script>

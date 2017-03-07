@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>打开链接</title>
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>-->
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <link href="/css/share.css" rel="stylesheet"/>
+
+    <script>(function () {
+            var w = window.screen.width, s = w / 750, u = navigator.userAgent, m = '<meta name="viewport" content="width=750,';
+            if (/android (\d+\.\d+)/i.test(u)) {
+                if (parseFloat(RegExp.$1 > 2.3)) {
+                    m += "minimum-scale = " + s + ", maximum-scale = " + s + ","
+                }
+            } else {
+                m += "user-scalable=no,"
+            }
+            m += 'target-densitydpi=device-dpi">';
+            document.write(m);
+        }());</script>
+</head>
+<body>
+<header class="banner">
+    <div class="banner-info">
+        <p>输入手机号领取红包</p>
+        <input style="text-align: center" id="tel" type="text" value="" name="tel"/>
+        <span id="get">马上领取</span>
+    </div>
+</header>
+<h5>
+    <span>看朋友们的手气如何</span>
+</h5>
+
+<div class="item inner">
+    <div class="item-list more">
+        <?php foreach ($data as $k => $v): ?>
+            <div class="item-list-content">
+                <img
+                    src="<?php echo $imgs[$v['uid']] ?: 'http://userpic.deyi.com/ucenter/data/avatar/000/57/28/99_avatar_middle.jpg'; ?>">
+                <span>
+                    <mark class="name"><?php echo $users[$v['uid']]; ?></mark>
+                    <mark class="time"><?php echo date('Y-m-d', $v['create_time']); ?></mark><br/>
+                    <mark class="info"><?php echo $messages[$v['uid'] % 4]; ?></mark>
+                </span>
+                <span class="price"><?php echo $v['price']; ?>元</span>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/js/drop.min.js"></script>
+
+<script type="text/javascript">
+    var btn = $("#get");
+    var lists = $(".item-list");
+    var count = 3;
+    var myCountDown;
+    (function () {
+        var oTel = $("#tel");
+        btn.on("click", function () {
+            if (!(oTel.val() && /^1\d{10}$/.test(oTel.val()))) {
+                alert("请输入正确的手机号");
+                return;
+            }
+            $.post('/web/generalize/grab', {tel: oTel.val(), sid:<?php echo $sid; ?>}, function (data) {
+                if (data.response_params.status == 1) {
+
+                    myCountDown = setInterval(countDown, 1000);
+                    btn.unbind("click");
+                    window.location.href="/web/generalize/accepted?sid=<?php echo $sid; ?>";
+                } else {
+                    alert(data.response_params.msg);
+                }
+            });
+        });
+
+        var counter = 1,
+            inner = $(".inner");
+        var lists = $(".more");
+        // dropload
+        var dropload = inner.dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh" style="height:40px;line-height:40px;text-align: center;">上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load" style="height:40px;line-height: 40px;text-align: center;"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/web/generalize/winner?sid=<?php echo $sid; ?>",
+                    dataType: 'json',
+                    async: true,
+                    data:{'sid':<?php echo $sid ?  : 0;?>,'page': counter,'wap':1},
+
+                    success: function(data){
+                        var result = '';
+                        datas = data.response_params.data;
+                        var len =datas.length;
+                        for(var i = 0; i < len; i++){
+                            var tdade = new Date(datas[i].create_time*1000);
+                            var month = tdade.getMonth()>9?tdade.getMonth():('0'+tdade.getMonth());
+                            var day = tdade.getDate()>9?tdade.getDate():('0'+tdade.getDate());
+                            result += '<div class="item-list-content">'+
+                            '<img src="'+datas[i].imgs+'">'+
+                            '<span>'+
+                            '<mark class="name">'+datas[i].username+'</mark>'+
+                            '<mark class="time">'+tdade.getFullYear()+'-'+month+'-'+day+'</mark><br/>'+
+                            '<mark class="info">'+datas[i].messages+'</mark>'+
+                            '</span>'+
+                            '<span class="price">'+datas[i].price+'元</span>'+
+                            '</div>';
+                        }
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            lists.append(result);
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },1000);
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        me.resetload();
+                    }
+                });
+            }
+        });
+
+
+    })();
+
+    function countDown() {
+        btn.attr("disabled", true);
+        btn.addClass("add");
+        btn.text("请稍等" + count + "秒!");
+        count--;
+        if (count == 0) {
+            btn.text("已领取");
+            btn.removeClass("add");
+            clearInterval(myCountDown);
+        }
+    }
+</script>
+<?php echo $this->partial('web/generalize/sharejs.phtml'); ?>
+</html>

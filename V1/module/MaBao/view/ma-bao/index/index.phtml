@@ -1,0 +1,300 @@
+<body>
+<header>
+    <p>2015年出生 贝乐园送你免费玩三次</p>
+    <?php if ($this->wft == 'yes'): ?>
+        <a href="/mabao/index/step?uid=<?php echo $uid; ?>">活动详情>></a>
+    <?php else: ?>
+        <a href="/mabao/index/step?otu=1">活动详情>></a>
+    <?php endif; ?>
+    <div class="rule-title">活动说明</div>
+</header>
+<section class="wrapper">
+    <ul class="rule">
+        <li class="rule-text">
+            <span>1</span>
+            <p>报名时间：2016年3月29日-2016年4月16日<br>凡是2015年出生的羊宝宝，上传你家宝宝的出生证明和近照，即可获得贝乐园免费畅玩3次卡一张。</p>
+        </li>
+        <li class="rule-text">
+            <span>2</span>
+            <p>领券时间：2016.4.5-5.7。周末全天不兑券，工作日兑券。</p>
+        </li>
+        <li class="rule-text">
+            <span>3</span>
+            <p>券的使用时间：2016.6.30前 (每次游玩限1小时)。</p>
+        </li>
+        <li class="rule-text">
+            <span>4</span>
+            <p>贝乐园武汉8店均可凭卡游玩。</p>
+        </li>
+        <li class="rule-text">
+            <span>5</span>
+            <p class="share-light">点击右侧分享后才能报名哟~</p>
+        </li>
+    </ul>
+    <span class="number">已有<label style="color: red"> <?php echo $number; ?> </label>位羊宝宝报名,<label style="color: red"> <?php echo $click_number; ?> </label>人围观</span>
+
+    <?php if ($this->wft == 'yes') { ?><!----在玩翻天打开---->
+    <?php if ($uid && $phone) { ?>
+        <?php if ($this->share) { ?><!----已经分享---->
+
+            <?php if ($flag) { ?>   <!----已经报名---->
+                <?php if ($check_status == 0 || $check_status == 1 || $check_status == 2) { ?><!----等待审核或者已通过或者已经领取---->
+                    <a class="btn grey">已报名</a>
+                <?php } else { ?><!----被驳回---->
+                    <a class="btn down-activity" href="javascript:void(0)">我是羊宝宝，我要参加</a>
+                <?php } ?>
+            <?php } else { ?><!----没有报名---->
+                <a class="btn down-activity" href="javascript:void(0)">我是羊宝宝，我要参加</a>
+            <?php } ?>
+
+
+            <?php if ($flag) { ?>   <!----已经报名---->
+                <?php if ($check_status == 0) { ?><!----等待审核---->
+                    <a class="btn check_go" href="javascript:void(0);" ">我的畅玩卡</a>
+                <?php } elseif ($check_status == 1 || $check_status == 2) { ?><!----已通过或者已经领取---->
+                    <a class="btn" href="/mabao/index/card?uid=<?php echo $uid; ?>">我的畅玩卡</a>
+                <?php } else { ?><!----被驳回---->
+                    <a class="btn refuse" href="javascript:void(0);">我的畅玩卡</a>
+                <?php } ?>
+            <?php } else { ?><!----没有报名---->
+                <a class="btn to-go" data-id="<?php echo $uid; ?>">我的畅玩卡</a>
+            <?php } ?>
+
+
+            <a class="btn" href="/mabao/index/place">畅玩地址</a>
+
+
+        <?php } else { ?><!----没有分享---->
+            <a class="btn down-activity" data-uid="<?php echo $uid; ?>">我是羊宝宝，我要参加</a>
+            <a class="btn sharer" data-uid="<?php echo $uid; ?>" data-flag="<?php echo $flag; ?>">我的畅玩卡</a>
+            <a class="btn" href="/mabao/index/place?otu=1">畅玩地址</a>
+        <?php } ?>
+
+
+    <?php } else { ?><!----没有手机号或者没有登录---->
+        <?php if ($uid) { ?><!----没有手机号---->
+            <a class="btn down-activity" href="javascript:void(0);">我是羊宝宝，我要参加</a>
+            <a class="btn check_phone" href="javascript:void(0);">我的畅玩卡</a>
+        <?php } else { ?><!----没有登录---->
+            <a class="btn down-activity">我是羊宝宝，我要参加</a>
+            <a class="btn login">我的畅玩卡</a>
+        <?php } ?>
+        <a class="btn" href="/mabao/index/place">畅玩地址</a>
+    <?php } ?>
+
+    <!--不是app打开下载页-->
+    <?php } else { ?>
+        <a class="btn down-activity" href="javascript:void(0)">我是羊宝宝，我要参加</a>
+        <a class="btn" href="/mabao/index/step?otu=1">我的畅玩卡</a>
+        <a class="btn" href="/mabao/index/place?otu=1">畅玩地址</a>
+    <?php } ?>
+
+
+</section>
+<section class="wrapper">
+    <h3 class="other"><span>不是羊宝宝？看这里</span></h3>
+    <div class="other-list">
+        <a class="item good" href="javascript:void(0)">
+            <figure>
+                <img src="/mabaobao/images/title-other.jpg"/>
+                <figcaption>
+                    <h4>贝乐园10次特惠卡</h4>
+                    <span class="price">&yen;298</span>
+                </figcaption>
+            </figure>
+            <div class="hot">
+                限时特价
+            </div>
+        </a>
+    </div>
+</section>
+<?php if ($this->wft == 'yes') { ?>
+    <a id="share" href="javascript:share()"></a>
+<?php } else { ?>
+    <a id="share" href="javascript:wexinShare()"></a>
+<?php } ?>
+<div id="fade"></div>
+<div id="pop-up">
+    <a class="close" id="close"></a>
+    <div id="try"></div>
+</div>
+<div id='zz' style="display: none"><img src='/images/11.png'></div>
+</body>
+<script type="text/javascript" src="/mabaobao/js/jquery-2.1.3.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
+<script type="text/javascript">
+    "use strict";
+    function share() {
+        var url = 'http://wan.wanfantian.com/mabao/index?id=987';
+        var app = 0;
+        var title = '<?php echo $text["title"]?>';
+        var img = 'http://wan.wanfantian.com/mabaobao/images/yangbao.png';
+        var content = '<?php echo $text["content"]?>';
+
+        if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+            window.location.href = 'webshare$$app=' + app + '&title=' + title + '&url=' + url + '&img=' + img + '&content=' + content;
+        } else if (navigator.userAgent.match(/android/i)) {
+            window.getdata.webShare(app, url, title, content, img);
+        } else {
+            //alert('不是手机浏览器')
+        }
+    }
+
+    function wexinShare() {
+        $('#zz').css('display', 'block');
+    }
+
+    (function () {
+        'use strict';
+        $('.share').on('tap', function () {
+            var uId = $(this).attr('data-uid');
+            $.get('/mabao/index/share?uid=' + uId, function (result) {
+                if (result.status == 1) {
+                    window.location.href = '/mabao/index/join?uid=' + uId;
+                } else {
+                    $('#pop-up').css('display', 'block');
+                    $('#fade').css('display', 'block');
+                    $('#try').html('<p>分享后才能参加哦！</p>' + '<a class="btn close">确定</a>');
+                }
+            });
+            return false;
+        });
+
+        $('.sharer').on('tap', function (e) {
+            e.preventDefault();
+            var uId = $(this).attr('data-uid');
+            var flag = $(this).attr('data-flag');
+            $.get('/mabao/index/share?uid=' + uId, function (result) {
+                if (result.status == 1) {
+                    if (flag) {
+                        window.location.href = '/mabao/index/card?uid=' + uId;
+                    } else {
+                        $('#pop-up').css('display', 'block');
+                        $('#fade').css('display', 'block');
+                        $('#try').html('<p>没有报名就没有办法获得' + '畅玩卡哦</p><a class="btn" href="/mabao/index/join?uid=' + uId + '">我要报名</a>');
+                    }
+                } else {
+                    $('#pop-up').css('display', 'block');
+                    $('#fade').css('display', 'block');
+                    $('#try').html('<p>分享后才能获得畅玩卡！</p>' + '<a class="btn close">确定</a>');
+                }
+            });
+            return false;
+        });
+
+        $('.to-go').on('tap', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'block');
+            $('#fade').css('display', 'block');
+            $('#try').html('<p>没有报名就没有办法获得畅玩卡哦</p>' + '<a class="btn" href="/mabao/index/join?uid=' + $(this).attr('data-id') + '">我要报名</a>');
+        });
+
+        $('#zz').on('tap', function (e) {
+            e.preventDefault();
+            $('#zz').css('display', 'none');
+        });
+
+        $('#pop-up').on('tap', '.close', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'none');
+            $('#fade').css('display', 'none');
+            $('#try').html('');
+        });
+
+
+        $('.check_phone').on('tap', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'block');
+            $('#fade').css('display', 'block');
+            $('#try').html('<p>请在“我”>"修改个人资料"中绑定手机，否则，无法收到验证码参加活动验证码哦</p>');
+        });
+
+        $('.check_go').on('tap', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'block');
+            $('#fade').css('display', 'block');
+            $('#try').html('<p>报名成功！请等待审核通过</p>' + '<a class="btn close">确定</a>');
+        });
+
+        $('.refuse').on('tap', function (e) {
+            e.preventDefault();
+            $('#pop-up').css('display', 'block');
+            $('#fade').css('display', 'block');
+            $('#try').html('<p>审核未通过！请重新报名</p>' + '<a class="btn close">确定</a>');
+        });
+
+        $('.down-activity').on('tap', function () {
+
+            alert('活动已经结束了');
+            return false;
+            /*if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location.href = 'user_login$$'
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.user_login()
+            } else {
+                alert('不是手机浏览器')
+            }*/
+        });
+
+        $('.good').on('tap', function () {
+            if (navigator.userAgent.match(/micromessenger/i)) {
+                document.location.href = 'http://wan.wanfantian.com/web/organizer/shops?id=1205';
+            } else {
+                if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                    document.location.href = 'game_info$$id=1205';
+                } else if (navigator.userAgent.match(/android/i)) {
+                    window.getdata.game_info(1205);
+                } else {
+                    alert('不是手机浏览器')
+                }
+            }
+        });
+
+        $('#pop-up').on('tap', '.tologin', function (e) {
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location.href = 'user_login$$'
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.user_login()
+            } else {
+                alert('不是手机浏览器')
+            }
+        });
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '<?php echo $jsApi['appid'];?>', // 必填，公众号的唯一标识
+            timestamp: <?php echo $jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+            nonceStr: '<?php echo $jsApi['noncestr'];?>', // 必填，生成签名的随机串
+            signature: '<?php echo $jsApi['signature'];?>',// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+        });
+
+        wx.ready(function () {
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            wx.onMenuShareTimeline({
+                title: '<?php echo $friend;?>', // 分享标题
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: 'http://wan.wanfantian.com/mabaobao/images/yangbao.png', // 分享图标
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: '<?php echo $text["title"]?>', // 分享标题
+                desc: '<?php echo $text["content"]?>', // 分享描述
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: 'http://wan.wanfantian.com/mabaobao/images/yangbao.png', // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+        });
+    })();
+</script>

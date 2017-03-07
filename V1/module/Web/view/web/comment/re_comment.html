@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>点评回复</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/travel.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<style type="text/css">
+    .content {
+        background-color: #ffffff;
+        padding: 15px;
+        border-bottom: 1px solid #2e2e2e;
+    }
+    .content .user-img {
+        display: inline-block;
+        float: left;
+        height: 76px;
+        width: 76px;
+        border-radius: 38px;
+    }
+    .content .name-time {
+        display: inline-block;
+        float: left;
+        font-size: 26px;
+        margin-left: 10px;
+    }
+    .content .name-time .user-name {
+        display: block;
+        margin-bottom: 10px;
+    }
+    .content .name-time .comment-time {
+        display: block;
+    }
+    .content .product-bar {
+        display: inline-block;
+        margin-left: 45px;
+        margin-top: 5px;
+        float: left;
+        width: 162px;
+        height: 24px;
+        background: url("/images/wap/stars-bg.gif") no-repeat 0 0;
+    }
+    .content .product-bar-cur {
+        height: 24px;
+        background: url("/images/wap/stars.gif") no-repeat 0 0;
+    }
+    .content .comment-info {
+        font-size: 30px;
+        padding: 20px 0;
+    }
+    .content .foot {
+        float: right;
+        padding-top: 15px;
+        font-size: 26px;
+    }
+    .content .foot .like-num {
+        display: inline-block;
+        padding-left: 50px;
+        width: 100px;
+        height: 31px;
+        background: url(/static/img/site/mobile/icons_c.png) no-repeat -12px -2186px;
+    }
+    .content .foot .comment-num {
+        display: inline-block;
+        padding-left: 50px;
+        width: 100px;
+        height: 31px;
+        background: url(/static/img/site/mobile/icons_c.png) no-repeat -12px -2224px;
+    }
+    .reply {
+        margin-top: 20px;
+    }
+    .reply .head-icon {
+        display: block;
+        width: 100px;
+        height: 31px;
+        margin: 0 45px 20px 60px;
+        background: url(/static/img/site/mobile/icons_c.png) no-repeat -12px -2186px;
+    }
+    .reply .list {
+        background-color: #ffffff;
+    }
+    .reply .list-item {
+        border-bottom: 1px solid #CCCCCC;
+    }
+    .reply .reply-img {
+        float: left;
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        border-radius: 30px;
+        margin: 25px 20px 0 25px;
+    }
+    .reply .item-head {
+        margin: 25px 30px 0 0;
+        font-size: 24px;
+    }
+    .reply .reply-name,
+    .reply .reply-time {
+        display: inline-block;
+    }
+    .reply .reply-name {
+        float: left;
+    }
+    .reply .reply-time {
+        float: right;
+    }
+    .reply .relpy-msg {
+        padding: 0 30px 20px 95px;
+        display: inline-block;
+        font-size: 26px;
+    }
+    .comment-in {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        line-height: 95px;
+        height: 95px;
+        border-top: 1px solid #2e2e2e;
+        background-color: #ffffff;
+    }
+    .comment-in .input {
+        display: inline-block;
+        width: 70%;
+        border: 1px solid #CCCCCC;
+        line-height: 60px;
+        border-radius: 5px;
+        margin-left: 4%;
+        font-size: 30px;
+        margin-top: 20px;
+    }
+    .comment-in .submit {
+        display: inline-block;
+        margin-left: 20px;
+        line-height: 60px;
+        background-color: #fa6e51;
+        color: #ffffff;
+        font-size: 30px;
+        width: 20%;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .clearfix:after {
+        content: ' ';
+        height: 0;
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
+
+</style>
+<body>
+<section class="content clearfix">
+    <div class="head-info clearfix">
+        <img class="user-img" src="/static/img/site/sample/truth.jpg">
+        <div class="name-time">
+            <span class="user-name">小竹宝宝</span>
+            <span class="comment-time">2016-8-10</span>
+        </div>
+        <div class="product-bar">
+            <div class="product-bar-cur" style="width: 80%"></div>
+        </div>
+    </div>
+    <p class="comment-info">灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩</p>
+    <div class="foot">
+        <span class="like-num">1</span>
+        <span class="comment-num">2</span>
+    </div>
+</section>
+
+<section class="reply">
+    <i class="head-icon"></i>
+    <ul class="list">
+        <li class="list-item clearfix">
+            <img class="reply-img" src="/static/img/site/sample/truth.jpg">
+            <div class="item-head clearfix">
+                <span class="reply-name">小丸子</span>
+                <span class="reply-time">2016-09-12</span>
+            </div>
+            <p class="relpy-msg">
+                灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好
+            </p>
+        </li>
+
+        <li class="list-item clearfix">
+            <img class="reply-img" src="/static/img/site/sample/truth.jpg">
+            <div class="item-head clearfix">
+                <span class="reply-name">小丸子</span>
+                <span class="reply-time">2016-09-12</span>
+            </div>
+            <p class="relpy-msg">
+                灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好玩灰常好玩，灰常好
+            </p>
+        </li>
+    </ul>
+</section>
+
+<div class="comment-in">
+    <input class="input" type="text" placeholder="说点什么吧" autofocus>
+    <a class="submit">发送</a>
+</div>
+</body>
+</html>

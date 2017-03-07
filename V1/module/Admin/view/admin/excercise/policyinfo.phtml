@@ -1,0 +1,439 @@
+<link rel="stylesheet" href="/js/wap/plugin/laydate/skins/molv/laydate.css">
+<style>
+    .btn-info {
+        background-image: linear-gradient(to bottom, #5bc0de 0px, #2aabd2 100%);
+        background-repeat: repeat-x;
+        border-color: #28a4c9;
+    }
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .cssInput{
+        width:300px;
+    }
+    #tongji{
+        padding:5px 5px;
+        margin: 5px 5px;
+    }
+    #tongji span{
+        color:red;
+        font-size:16px;
+        padding: 10px;
+    }
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 618px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+
+    .til{
+        margin-left:10px;
+    }
+
+    .til span{
+        padding: 20px;
+    }
+
+    #tipsDia{display: none; width: 40%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>出行人信息</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.go(-1)">活动订单详情</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<header class="box-title">人员名单 <mark>(点击出行人和身份证号可直接修改)</mark></header>
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+<!--                <th width="50">选择</th>-->
+                <th width="120">订单号</th>
+                <th width="120">下单时间</th>
+                <th width="80">用户ID</th>
+                <th width="80">用户名</th>
+                <th width="120">出行人</th>
+                <th width="150">出行人身份证号</th>
+                <th width="120">手机号</th>
+                <th width="100">状态</th>
+                <th width="100">保险号</th>
+<!--                <th width="100">操作</th>-->
+            </tr>
+
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                   <!-- <td width="50">
+                        <input type="checkbox" name="check_ids" value="<?php /*echo $row['insure_id']; */?>"  class="check_ids">
+                    </td>-->
+                    <td width="170"><?php echo $row['order_sn']; ?></td>
+                    <td width="170"><?php echo date('Y-m-d H:i',$row['dateline']); ?></td>
+                    <td width="50">
+                        <?php echo $row['user_id'];?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['username'];?>
+                    </td>
+                    <td width="100">
+                        <span onclick="QuickModifyVal(this);" class="t_<?php echo $row['associates_id'];?>" data-id="<?php echo $row['insure_id'];?>" data-field="name" data-val="<?php echo $row['name'];?>" style="width: 92px;height: 37px">
+                           <?php echo $row['name']?:'未填写';?>
+                        </span>
+                    </td>
+                    <td width="150">
+                        <span onclick="QuickModifyVal(this);" class="id_<?php echo $row['associates_id'];?>" data-id="<?php echo $row['insure_id'];?>" data-field="id_num" data-val="<?php echo $row['id_num'];?>" style="width: 92px;height: 37px">
+                            <?php echo $row['id_num']?:'未填写'; ?>
+                        </span>
+                    </td>
+                    <td width="100"><?php echo ($row['buy_phone']);?></td>
+                    <td width="100">
+                        <?php
+                                                    if($row['insure_status']==0){
+                                                        echo '未填写信息';
+                                                    }elseif($row['insure_status']==1){
+                                                        echo '未投保';
+                                                    }elseif($row['insure_status']==2){
+                                                        echo '投保中';
+                                                    }elseif($row['insure_status']==3){
+                                                        echo '已投保';
+                                                    }else{
+                                                        echo '投保失败';
+                                                    }
+                                                ?>
+                    </td>
+                    <td width="100"><?php echo $row['insure_sn']; ?></td>
+                    <td width="300">
+
+<!--                        <a href="/wftadlogin/excercise/deltraveller?id=--><?php //echo $row['insure_id'];?><!--"  class="ui-button ">删除</a>-->
+                        <!-- <a href="javascript:void(0)" onclick="SafeData(this);" class="login btn" data-id="--><?php //echo $row['associates_id'];?><!--">修改信息</a>-->
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            <tr style="display:none" id="foraddperson" ></tr>
+            </tbody>
+        </table>
+<!--        <input type="checkbox" id="check-all">全选-->
+<!--        <button  class="ui-button deltraveller2" onclick="add_person();" id="person-add" data="2">添加出行人</button>-->
+<!--        <button onclick="if(confirm('批量删除?')==false) return false;" class="ui-button deltraveller" id="approve-by" data="2">批量删除</button>-->
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<div id="LoginBox">
+    <div class="row1">
+        请选择保险生效时间<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>
+    </div>
+    <div class="row">
+        开始日：<li class="laydate-icon" id="start" style="width:200px; margin-right:10px;"></li>
+        结束日：<li class="laydate-icon" id="end" style="width:200px;"></li>
+    </div>
+    <div class="row" style="margin-top:130px;">
+        <a href="#" id="loginbtn">确定</a>
+    </div>
+</div>
+
+<div id="tipsDia"></div>
+<input type="hidden" name="ids" id="ids">
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<!--<script type="text/javascript" src="/js/wap/plugin/loading.js"></script>-->
+<script type="text/javascript" src="/js/wap/plugin/laydate/laydate.js"></script>
+<script>
+    var loginTip = $("#tipsDia");
+
+    $(function () {
+        //全选和全不选
+        $('#check-all').click(function () {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+
+        $('.deltraveller').click(function(){
+            if (confirm('确定将选中的人员投保？不可恢复')){
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                var check_ids = document.getElementsByName('check_ids');
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += $(check_ids[i]).val();
+                        } else {
+                            id += $(check_ids[i]).val() + '@';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    loginTip.text("没有选中任何订单");
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                    },2000);
+                    return false;
+                } else {
+                    window.location.href="/wftadlogin/excercise/deltraveller?type=&id="+id;
+                }
+            }
+        })
+    }());
+
+    //添加出行人
+    function add_person(){
+
+        var sHtml = '<tr class="ajax_person" style="text-align: left">' +
+            '<td width="50"> <input type="checkbox" name="check_ids" value=""  class="check_ids"></td>' +
+            '<td width="170"><?php echo $_GET['order_sn']; ?></td>' +
+            '<td width="170"><?php echo date('Y-m-d H:i', $order_data->dateline); ?></td>' +
+            '<td width="50"><?php echo $order_data->user_id;?></td>' +
+            '<td width="100"><?php echo $order_data->username;?></td>' +
+            '<td width="100"><input name="p_name" value="" /> </td>' +
+            '<td width="150"><input name="p_id" value="" /></td>' +
+            '<td width="100"><?php echo $order_data->phone;?></td>' +
+            '<td width="100">未投保</td>' +
+            '<td width="100"> </td>' +
+            '<td width="300"><button  class="ui-button " onclick="save_person($(this));" id="person-save" data="2">保存</button></td>' +
+            '</tr>';
+
+        var c_n = $(".ajax_person").length;
+        if(c_n == 0){
+            $('#foraddperson').before(sHtml);
+        }
+
+    }
+
+    //保存出行人
+    function save_person(obj){
+        var pp = obj.parent().parent();
+        var p_name = pp.find("[name='p_name']").val();
+        var p_id = pp.find("[name='p_id']").val();
+        var p_uid = <?php echo $order_data->user_id;?>;
+        var p_sn = <?php echo (int)$order_data->order_sn;?>+'';
+
+        $.ajax({
+            type: "POST",
+            url: "/wftadlogin/excercise/saveperson",
+            dataType:"json",
+            data:{"id_num":p_id, "name":p_name, "uid":p_uid,"order_sn":p_sn},
+            beforeSend:function(){
+                loginTip.text("正在处理...");
+                loginTip.show();
+            },
+            success: function(data){
+                if(data.status==1){
+                    var id = data.message;
+                    pp.find("[name='check_ids']").val(id);
+                    alert('添加成功！');
+                    location.reload();
+                    loginTip.hide();
+                }else{
+                    alert(data.message);
+                    loginTip.hide();
+                }
+            }
+        });
+    }
+
+    //快速修改字段值
+    function QuickModifyVal(obj){
+        var sVal = $(obj).text();
+        var oldVal = $(obj).attr('data-val');
+        var sField = $(obj).attr('data-field');
+        var sDataID = $(obj).attr('data-id');
+
+        var sHtml = '<input type="text" name="qm_'+ sField +'" id="qm_'+ sField +'" class="form-control" value="'+ sVal +'">';
+        $(obj).html(sHtml);
+        $('#qm_'+ sField).val('');
+        $('#qm_'+ sField).focus().blur(function(){
+            if($(this).val() != ''){
+                ExecModifyVal(obj, sVal, $(this).val(), sField, sDataID);
+            }else{
+                $(obj).html(oldVal);
+            }
+        }).keypress(function(e){
+            var curKey = e.which;
+
+            if (curKey == 13) {
+                if($(this).val() != ''){
+                    ExecModifyVal(obj, sVal, $(this).val(), sField, sDataID);
+                }else{
+                    $(obj).html(oldVal);
+                }
+            }
+        });
+    }
+
+    //执行修改操作
+    function ExecModifyVal(obj, sval, snewval, sfield, dataid){
+        if(snewval.trim() == sval.trim() || snewval.trim()==''){
+            $(obj).html(sval);
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "/wftadlogin/excercise/quickmodifyval",
+                dataType:"json",
+                data:{"key":sfield, "val":snewval, "id":dataid},
+                beforeSend:function(){
+                    loginTip.text("正在处理...");
+                    loginTip.show();
+                },
+                success: function(data){
+                    if(data.status==1){
+                        $(obj).html(data.data);
+                        loginTip.text(data.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },1000);
+                    }else{
+                        loginTip.text(data.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },1200);
+                    }
+                }
+            });
+        }
+    }
+</script>

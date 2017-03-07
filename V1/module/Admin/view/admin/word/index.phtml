@@ -1,0 +1,145 @@
+
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li class="active"><a href="/wftadlogin/word">评论管理</a></li>
+    </ul>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        评论列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索" name="k" value="">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">id</th>
+                <th width="100">用户名</th>
+                <th width="100">发布时间</th>
+                <th width="100">标题</th>
+                <th width="200">内容摘要</th>
+                <th width="60">
+                    <?php
+                    if (isset($_GET['order']) && $_GET['order']) {
+                        $m = $_GET['order'];
+                    } else {
+                        $m = 0;
+                    }
+                    ?>
+                    <select class="status_change">
+                        <option <?php echo ($m == 0) ? 'selected' : ''; ?> data-src="/wftadlogin/word?order=0&<?php unset($_GET['order'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">所有状态</option>
+                        <option <?php echo ($m == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/word?order=1&<?php unset($_GET['order'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">正常发表</option>
+                        <option <?php echo ($m == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/word?order=2&<?php unset($_GET['order'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">置顶</option>
+                    </select>
+                </th>
+                <th width="60">
+                    <?php
+                    if (isset($_GET['type']) && $_GET['type']) {
+                        $n = $_GET['type'];
+                    } else {
+                        $n = '';
+                    }
+
+                    $_GET['order'] = $m;
+                    ?>
+                    <select class="type_change">
+                        <option <?php echo ($n == null) ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">所有类别</option>
+                        <option <?php echo ($n == 'game') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=game&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">商品</option>
+                        <option <?php echo ($n == 'shop') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=shop&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">游玩地</option>
+                        <option <?php echo ($n == 'organizer') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=organizer&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">商家</option>
+                        <option <?php echo ($n == 'activity') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=activity&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">专题</option>
+                        <option <?php echo ($n == 'news') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=news&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">资讯</option>
+                        <option <?php echo ($n == 'coupon') ? 'selected' : ''; ?> data-src="/wftadlogin/word?type=coupon&<?php unset($_GET['type'], $_GET['p']);
+                        echo http_build_query($_GET); ?>">旧商品</option>
+                    </select>
+                </th>
+                <th width="300">操作</th>
+            </tr>
+            <?php if ($data->count()): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+                        <td  width="15"><?php echo $row->pid; ?></td>
+                        <td  width="100"><?php echo $row->author; ?></td>
+                        <td  width="100"><?php echo date('Y-m-d H:i:s', $row->dateline); ?></td>
+                        <?php
+                        if ($row->type == 'game') {
+                            $url = '/wftadlogin/game/new?gid='. $row->object_id;
+                        } elseif ($row->type == 'game') {
+                            $url = '/wftadlogin/game/new?gid='. $row->object_id;
+                        }elseif ($row->type == 'organizer') {
+                            $url = '/wftadlogin/organizer/new?oid='. $row->object_id;
+                        } elseif ($row->type == 'shop') {
+                            $url = '/wftadlogin/place/new?sid='. $row->object_id;
+                        } elseif ($row->type == 'news') {
+                            $url = '/wftadlogin/news/new?nid='. $row->object_id;
+                        } elseif ($row->type == 'coupon') {
+                            //$url = '/wftadlogin/coupons/new?cid='. $row->object_id;
+                            $url = 'javascript:void(0)';
+                        } elseif ($row->type == 'activity') {
+                            $url = '/wftadlogin/activity/new?aid='. $row->object_id;
+                        } else {
+                            $url = 'javascript:void(0)';
+                        }
+
+                        ?>
+                        <td  width="100"><a target="_blank" href="<?php echo $url;?>"><?php echo $row->subject; ?></a></td>
+                        <td  width="120"><?php echo $row->message; ?></a></td>
+                        <td  width="200">
+                            <?php echo ($row->displayorder == 2) ? '置顶' : (($row->displayorder == 1) ? '正常发表' : '隐藏'); ?>
+                        </td>
+                        <td  width="60"><?php echo $postCat[$row->type]; ?></td>
+                        <td  width="300">
+                            <a href="/wftadlogin/word/display?type=up&pid=<?php echo $row->pid; ?>&display=<?php echo $row->displayorder; ?>" class="ui-button"><?php echo ($row->displayorder == 2) ? '取消置顶' : '置顶'; ?></a>
+                            <a href="/wftadlogin/word/new?pid=<?php echo $row->pid;?>" class="ui-button">回复</a>
+                            <a href="/wftadlogin/word/display?type=del&pid=<?php echo $row->pid; ?>"  onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无发言</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        //状态筛选
+        $('.status_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+    })
+</script>

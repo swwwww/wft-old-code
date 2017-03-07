@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信订单详情</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<div id="order-activity" class="space10">
+    <section class="activity-info">
+        <div class="title">
+            <span class="sold-price">￥<?php echo $couponData->coupon_price;?></span>
+
+            <div class="discount">
+                <mark><?php echo $discount;?>折</mark>
+                <span class="mark-price">￥<?php echo $couponData->coupon_originprice;?></span>
+            </div>
+            <span class="shop-name"><?php echo $couponData->coupon_name;?></span>
+        </div>
+        <ul class="info-more">
+            <li class="buy">
+                <p>已报名</p>
+
+                <p class="numb"><?php echo $couponData->coupon_buy;?></p>
+            </li>
+            <li class="remain">
+                <p>剩余</p>
+
+                <p class="numb"><?php echo $couponData->coupon_total - $couponData->coupon_buy;?></p>
+            </li>
+            <li class="limit">
+                <p>每机限制</p>
+
+                <p class="numb"><?php echo $couponData->coupon_limitnum > 0 ? $couponData->coupon_limitnum : '不限购';?></p>
+            </li>
+        </ul>
+    </section>
+
+    <?php foreach ($codes as $k => $v): ?>
+        <section class="order-valid">
+            <div>
+                <span class="name">有效期：</span>
+                <span class="detail"><?php echo date('Y-m-d', $couponData->coupon_starttime)?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<?php echo date('Y-m-d', $couponData->coupon_close)?></span>
+            </div>
+            <div>
+                <span class="name">验证码：</span>
+                <span class="detail"><?php echo $v['id'] . $v['password'];?></span>
+                <a class="btn <?php echo $v['status'] == 0 ? 'return' : 'used' ?>"
+                   href="#"><?php echo $codeStatus[$v['status']];?></a>
+            </div>
+        </section>
+    <?php endforeach;?>
+
+
+    <h4>小玩说</h4>
+    <section class="order-detail">
+        <?php echo $couponData->editor_word;?>
+    </section>
+    <section class="order-oneline">
+        <span class="name">适合年龄</span>
+        <span class="detail"><?php echo $couponData->age_min;?>
+            岁<?php echo $couponData->age_max >= 99 ? '及以上' : '到' . $couponData->age_max . '岁';?></span>
+    </section>
+    <h4>活动流程</h4>
+    <section class="order-detail">
+        <?php echo $couponData->attend_method;?>
+    </section>
+    <h4>图文说明</h4>
+    <section class="order-detail">
+        <?php echo htmlspecialchars_decode($couponData->coupon_description);?>
+    </section>
+    <h4>活动组织者</h4>
+
+    <?php foreach ($shopData as $k => $v): ?>
+        <section class="order-shop">
+            <a class="shop-name" href="#"><?php echo $v['shopname'];?></a>
+            <a class="shop-adds"><?php echo $v['address'];?></a>
+            <a class="shop-tel" href="tel:<?php echo $v['phone'];?>">联系电话<span><?php echo $v['phone'];?></span></a>
+        </section>
+    <?php endforeach;?>
+
+
+
+
+    <!--相关票券-->
+<!--    <h4>相关游玩地</h4>-->
+<!---->
+<!--    --><?php //foreach($coupon_list as $k=>$v):?>
+<!--        <section class="order-place">-->
+<!--            <a class="arrow"></a>-->
+<!--            <p>--><?php //echo $v['coupon_name'];?><!--</p>-->
+<!--            <span>汉阳   升官渡</span>-->
+<!--        </section>-->
+<!--    --><?php //endforeach;?>
+
+
+</div>
+</body>
+</html>

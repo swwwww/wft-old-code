@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>"玩翻天"后台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Le styles -->
+    <link href="/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/css/bootstrap-theme.min.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/css/style.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="/img/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet" />
+    <!-- Scripts -->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/js/html5shiv.js"></script><![endif]-->
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/js/respond.min.js"></script><![endif]-->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<style>
+    .modal-body input {
+        width: 200px;
+        display: inline-block;
+    }
+</style>
+
+<!-- 模态框（Modal） -->
+<form method="post" action="#" id="first-page">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="height: 50px;">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        请关联焦点图 或者列表
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <h4><input name="real" type="radio" value="1" checked/> 关联列表</h4>
+                    <h4><input name="real" type="radio" value="2"/> 关联焦点图 </h4>
+                    <hr />
+                    小编说:<textarea   style="width:300px;height:100px" name="tip" value=""></textarea>(列表时必填)
+                    <input name="type" type="hidden" value="<?php echo $type;?>"/>
+                    <input name="id" type="hidden" value="<?php echo $id;?>"/>
+                    <input name="city" type="hidden" value="<?php echo $city;?>"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="ui-button ui-reset" data-dismiss="modal" aria-hidden="true">取消</button>
+                    <button class="ui-button ui-yes" data-dismiss="modal" aria-hidden="true">确定</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+</form>
+
+<script>
+    $(function () {
+        $('#myModal').modal()
+
+        //取消
+        $('.ui-reset').click(function () {
+            window.location.href=document.referrer;
+        });
+
+        //确定
+        $('.ui-yes').click(function () {
+            $.post('/wftadlogin/firstpage/add', $('#first-page').serialize(), function (data) {
+                if (data.status == 1) {
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

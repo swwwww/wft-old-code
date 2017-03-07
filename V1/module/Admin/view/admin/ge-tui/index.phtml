@@ -1,0 +1,122 @@
+<hgroup class="box">
+    <header>
+        <h3>推送管理</h3>
+        <?php if($show == 1):?>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/getui/new">发送一条推送</a>
+        <?php endif;?>
+        <?php if($show == 2):?>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/getui">返回推送列表</a>
+        <?php endif;?>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<?php if($show == 1):?>
+<div class="box">
+    <div class="box-title">
+        推送记录
+        <div style="float:right;margin-right:30px">
+                <a class="btn btn-default" href="/wftadlogin/getui?show=2">修改定时推送</a>
+        </div>
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size3">推送标题</th>
+                <th class="size3">推送内容</th>
+                <th class="size3">关联内容</th>
+                <th class="size2">推送日期</th>
+                <th class="size2">创建日期</th>
+                <th class="size1">目标用户</th>
+                <th class="size2">类别</th>
+                <th class="size1">对应id</th>
+                <th class="size2">结果</th>
+                <th class="size2">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id; ?></td>
+                        <td class="size3"><?php echo htmlspecialchars_decode($row->title, ENT_QUOTES);?></td>
+                        <td class="size3"><?php echo htmlspecialchars_decode($row->info, ENT_QUOTES);?></td>
+                        <td class="size3"><?php echo htmlspecialchars_decode($row->link_title, ENT_QUOTES);?></td>
+                        <td class="size2"><?php echo date('Y-m-d H:i:s', $row->push_time);?></td>
+                        <td class="size2"><?php echo date('Y-m-d H:i:s', $row->uptime);?></td>
+                        <td class="size1"><?php echo $activePeople[$row->area];?></td>
+                        <td class="size2"><?php echo $cat[$row->link_type];?></td>
+                        <td class="size1"><?php echo $row->link_id;?></td>
+                        <td class="size2"><?php echo $result[$row->result]?></td>
+                        <td class="size2">
+                            <?php if(0 < (time() - $row->push_time) && (time() - $row->push_time) < 12*3600):?>
+                            <a href="/wftadlogin/getui/stop?id=<?php echo $row->id; ?>">停止任务</a>
+                            <?php endif;?>
+                            <a href="/wftadlogin/getui/update?type=del&id=<?php echo $row->id; ?>">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无推送, 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<?php elseif($show == 2):?>
+<div class="box">
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size3">推送标题</th>
+                <th class="size3">推送内容</th>
+                <th class="size2">推送日期</th>
+                <th class="size1">目标用户</th>
+                <th class="size2">点击打开</th>
+                <th class="size2">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id; ?></td>
+                        <td class="size3"><?php echo $row->title ? $row->title : '相关';?></td>
+                        <td class="size3"><?php echo $row->info ? $row->info : '相关';?></td>
+                        <td class="size2"><?php echo '周'.(date('N', $row->push_time));?>　　<?php echo date('H:i', $row->push_time);?></td>
+                        <td class="size1"><?php echo $activePeople[$row->area];?></td>
+                        <td class="size2">
+                            <?php if($row->push_type == 1):?>
+                                专题-一元手慢无
+                            <?php endif;?>
+                            <?php if($row->push_type == 2):?>
+                                专题-周末去哪儿
+                            <?php endif;?>
+                        </td>
+                        <td class="size2">
+                            <a href="/wftadlogin/getui/update?id=<?php echo $row->id;?>" class="ui-button">修改</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无推送, 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<?php endif;?>

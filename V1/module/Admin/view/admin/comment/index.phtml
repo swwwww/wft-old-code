@@ -1,0 +1,291 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/consult">评论管理</a></li>
+    </ul>
+</div>
+<form class="box box-form" action="/wftadlogin/comment" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $begin_time = null;
+    $end_time = null;
+    $user = null;
+    $user_id = null;
+    $shop_id = null;
+    $goods_id = null;
+    $gettype = null;
+    $use_status = null;
+    $city = null;
+    $is_vir = 0;
+
+    if (isset($_GET['begin_time']) && $_GET['begin_time']) {
+        $begin_time = $_GET['begin_time'];
+    }
+
+    if (isset($_GET['end_time']) && $_GET['end_time']) {
+        $end_time = $_GET['end_time'];
+    }
+
+    if (isset($_GET['user']) && $_GET['user']) {
+        $user = $_GET['user'];
+    }
+
+    if (isset($_GET['user_id']) && $_GET['user_id']) {
+        $user_id = $_GET['user_id'];
+    }
+
+    if (isset($_GET['goods_id']) && $_GET['goods_id']) {
+        $goods_id = $_GET['goods_id'];
+    }
+
+    if (isset($_GET['shop_id']) && $_GET['shop_id']) {
+        $shop_id = $_GET['shop_id'];
+    }
+
+    if (isset($_GET['hd_id']) && $_GET['hd_id']) {
+        $hd_id = $_GET['hd_id'];
+    }
+
+    if (isset($_GET['gettype']) && $_GET['gettype']) {
+        $gettype = $_GET['gettype'];
+    }
+
+    if (isset($_GET['use_status']) && $_GET['use_status']) {
+        $use_status = $_GET['use_status'];
+    }
+
+    if (isset($_GET['city']) && $_GET['city']) {
+        $city = $_GET['city'];
+    }
+
+    if (isset($_GET['is_vir']) && $_GET['is_vir']) {
+        $is_vir = $_GET['is_vir'];
+    }
+
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">评论时间</th>
+            <th>
+                <input name="begin_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $begin_time;?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+
+            <th width="160">活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="hd_id" value="<?php echo $hd_id;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">游玩地ID</th>
+            <th>
+                <input type="text" class="cssInput" name="shop_id" value="<?php echo $shop_id;?>">
+            </th>
+            <th width="160">商品ID</th>
+            <th>
+                <input type="text" class="cssInput" name="goods_id" value="<?php echo $goods_id;?>">
+            </th>
+        </tr>
+        <tr>
+            <th width="160">用户ID</th>
+            <th>
+                <input type="text" class="cssInput" name="user_id" value="<?php echo $user_id;?>">
+            </th>
+            <th width="160">用户名称</th>
+            <th>
+                <input type="text" class="cssInput" name="user" value="<?php echo $user;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">点评是否有奖</th>
+            <th>
+                <select name="gettype" id="select">
+                    <option value="0" >全部</option>
+                        <option <?php if($gettype == 1): ?>selected<?php endif; ?> value="1">有</option>
+                        <option <?php if($gettype == 2): ?>selected<?php endif; ?> value="2">无</option>
+                </select>
+            </th>
+            <th width="160">是否小编采纳</th>
+            <th>
+                <select name="use_status">
+                    <option value="0" <?php echo ($use_status == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="2" <?php echo ($use_status == 2) ? 'selected' : '';?>>未采纳</option>
+                    <option value="1" <?php echo ($use_status == 1) ? 'selected' : '';?>>已采纳</option>
+                </select>
+                是否虚拟评论
+                <select name="is_vir">
+                    <option value="0" <?php echo (!$is_vir) ? 'selected' : '';?>>否</option>
+                    <option value="1" <?php echo ($is_vir) ? 'selected' : '';?>>是</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/comment" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<div class="box">
+    <div class="box-title">
+        评论列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索发言" name="k" value="">
+                <input type="hidden" name="id" value="<?php echo $circle ? $circle['_id'] : '';?>">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+<!--                <th width="15">id</th>-->
+                <th width="100">发表用户</th>
+                <th width="100">用户手机</th>
+                <th width="50">城市&nbsp;&nbsp;<?php echo $filtercity; ?></th>
+                <th width="100">发布时间</th>
+                <th width="50">类别</th>
+                <th width="120">评论对象</th>
+                <th width="200">内容</th>
+                <th width="80">是否虚拟评论</th>
+                <th width="50">图片</th>
+                <th width="50">回复数</th>
+                <th width="50">点赞</th>
+                <th width="50">积分</th>
+                <th width="50">采纳</th>
+                <th width="50">是否奖励</th>
+                <th width="50">现金券</th>
+                <th width="50">返现</th>
+                <th width="300">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $row): ?>
+
+                    <tr style="text-align: left">
+<!--                        <td  width="15"><?php echo $row['_id']; ?></td>-->
+                        <td  width="100"><a target="_blank" href="/wftadlogin/user/info?uid=<?php echo $row['uid'];?>"> <?php echo $row['username']; ?></a></td>
+                        <td  width="100"><?php echo $row['phone']; ?></td>
+                        <td  width="50"><?php echo array_key_exists('city',$row)?$citys[$row['city'][0]]:''; ?></td>
+                        <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                        <?php
+                            if($row['msg_type']==2){
+                                $path = 'good/new';
+                                $parameter = 'gid';
+                                $title = '商品';
+                            }elseif($row['msg_type']==3){
+                                $path = 'place/new';
+                                $parameter = 'sid';
+                                $title = '游玩地';
+                            }elseif($row['msg_type']==7){
+                                $path = 'excercise/edite';
+                                $parameter = 'id';
+                                $title = '活动';
+                            }
+                        ?>
+                        <td  width="50"><a href="/wftadlogin/<?php echo $path; ?>?<?php echo $parameter;?>=<?php echo $row['object_data']['object_id']; ?>"><?php echo $title; ?></a></td>
+                        <td  width="120">
+                            <a href="/wftadlogin/<?php echo $path;?>?<?php echo $parameter;?>=<?php echo $row['object_data']['object_id']; ?>">
+                                <?php echo $row['object_data']['object_title']; ?>
+                            </a>
+                        </td>
+                        <td  width="200">
+                            <a href="/wftadlogin/comment/wordinfo?id=<?php echo $row['_id'];?>">
+                                <?php
+                                $st = '';
+                                foreach($row['msg'] as $v) {
+                                    if ((int)$v['t'] === 1 && $v['val']) {
+                                        echo $st = substr($v['val'], 0, 60);
+                                        break;
+                                    }
+                                }
+                                if (!$st) {
+                                    echo '内容无';
+                                };
+                                ?>
+                            </a>
+                        </td>
+                        <td  width="80"><?php echo $is_vir ? '是' : '否';?></td>
+                        <td  width="50">
+                            <?php
+                            $n = 0;
+                            foreach($row['msg'] as $v) {
+                                if ((int)$v['t'] === 2 && $v['val']) {
+                                    $n++;
+                                }
+                            }
+                            echo $n;
+                            ?>
+                        </td>
+                        <td  width="50" class="share_reply"><?php echo $row['replay_number']; ?></td>
+                        <td  width="50" ><?php echo $row['like_number']; ?></td>
+                        <td  width="50" ><?php echo array_key_exists($row['_id'].'',$score)?(float)$score[$row['_id'].'']:0; ?></td>
+                        <td  width="50" ><?php echo (array_key_exists('accept',$row) && $row['accept'])?'采纳':'未采纳'; ?></td>
+                        <td  width="50" ><?php echo ($row['object_data']['post_award']==2)?'是':'否'; ?></td>
+                        <td  width="50" >
+                            <?php echo array_key_exists($row['_id'].'',$cc)?(float)$cc[$row['_id'].'']:0; ?>
+                        </td>
+                        <td  width="50" >
+                            <?php echo array_key_exists($row['_id'].'',$ac)?(float)$ac[$row['_id'].'']:0; ?>
+                        </td>
+                        <td  width="300">
+                            <a href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 2) ? 'reset' : 'up'; ?>" class="ui-button"><?php echo ($row['status'] == 2) ? '取消置顶' : '置顶'; ?></a>
+                            <a onclick= "if(confirm('确定<?php echo ($row['status'] == 0) ? '取消隐藏' : '隐藏'; ?>！')==false)return   false; " href="/wftadlogin/comment/updateword?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=<?php echo ($row['status'] == 0) ? 'reset' : 'hidden'; ?>" class="ui-button"><?php echo ($row['status'] == 0) ? '取消隐藏' : '隐藏'; ?></a>
+                            <a href="/wftadlogin/comment/newreply?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>"  class="ui-button">回复</a>
+                            <?php if($row['object_data']['post_award']==2): ?>
+                            <a href="/wftadlogin/comment/award?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>"  class="ui-button">给予奖励</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无发言</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //获取点赞
+        $.each($('.share_prise'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=prise&cid=' + cid);
+        })
+
+        //获取回复
+        $.each($('.share_reply'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=reply&cid=' + cid);
+        })
+
+        //获取焦点图
+        $.each($('.share_fock'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/comment/getWordShare?type=fock&cid=' + cid);
+        })
+
+    })
+</script>
+
+

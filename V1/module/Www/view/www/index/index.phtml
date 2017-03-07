@@ -1,0 +1,148 @@
+<section class="container-fluid header" id="index-head">
+    <div class="row  index-head img-responsive">
+        <div class="col-md-2"></div>
+        <div class="col-md-6">
+            <div class="textBox img-responsive">
+                <h3>家长们的遛娃宝典   孩子们的游玩管家</h3>
+                <div>
+                   <p> <b>更专注：</b>专注解决0~12岁儿童成长的亲子游玩类APP</p>
+                    <p> <b>很贴心：：</b>游玩地实地采拍图文攻略、贴心避坑指南，第一手家长遛娃地评价，告诉家长们带娃去哪儿玩，怎么玩，放心玩</p>
+                    <p> <b>最划算：</b>最IN最给力的遛娃团购！游乐场、亲子游、景点门票、农庄游统统大优惠</p>
+                    <p> <b>很公益：</b>消防演习、职业体验、爱心活动，孩子们最爱的公益活动这里全都有</p>
+                    <p> <b> 轻社交：</b>分享育儿经、二手转让、约玩伴，结识新朋友</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 center-img1">
+            <div class="downloadBox">
+                <img src="/static/images/app_r1_c15.png" class="Qcode img-responsive">
+                <a href="http://wan.wanfantian.com/app/index.php" target="_blank" class="ios">立即下载IOS版</a>
+                <a href="http://wan.wanfantian.com/app/index.php" target="_blank" class="android">立即下载安卓版</a>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</section>
+<!--header end-->
+<!--content start-->
+<section class="container-fluid" id="content">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3 center-img resp-pc" >
+            <img src="/static/images/index_r1_c3.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-6 center">
+            <p>
+                <span class="bold">遛娃学院</span>开学啦<br> 遛一个不如遛一群
+                <br/> 金牌遛娃师带你玩翻世界。
+            </p>
+        </div>
+        <div class="col-md-4 col-md-offset-1 center-img resp-phone">
+            <img src="/static/images/index_r1_c3.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row grayBg">
+        <div class="col-md-2"></div>
+        <div class="col-md-3 center">
+            <p>
+                好不好玩这里<span class="bold">查</span><br> 新鲜游玩资讯一手更新，
+                <br/> 众多爸妈达人真实分享。
+            </p>
+        </div>
+        <div class="col-md-6 center-img">
+            <img src="/static/images/index_r3_c9.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-3 center-img resp-pc">
+            <img src="/static/images/index_r5_c1.png" class="cont-img img-responsive">
+        </div>
+
+        <div class="col-md-6 center">
+            <p>
+                一元游玩这里<span class="bold">抢</span><br> 每周天上掉馅饼，一元遛娃超划算，
+                <br/> 周三AM10:00不见不散。
+            </p>
+        </div>
+
+        <div class="col-md-4 col-md-offset-1 center-img resp-phone">
+            <img src="/static/images/index_r5_c1.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+
+
+
+    <div class="row grayBg">
+        <div class="col-md-2"></div>
+        <div class="col-md-3 center">
+            <p>
+                团购神价赶紧<span class="bold">买</span><br> 你想要去的游玩地，
+                <br/> 这里都有超值优惠。
+            </p>
+        </div>
+        <div class="col-md-6 center-img">
+            <img src="/static/images/index_r7_c10.png" class="cont-img img-responsive">
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</section><!--content end-->
+
+<!--hotlist sart-->
+<section class="container hot" id="hotlist">
+    <h2 class="hot-head">
+        <span class="hot-title">热门推荐</span>
+        <a href="/www/index/artical">查看更多> </a>
+    </h2>
+    <div class="row hot-content">
+        <?php foreach($news as $k=>$new):?>
+            <div class="col-md-6 hot-info">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <img src="<?php echo $new['thumb_url'];?>" class="img-responsive hot-img">
+                    </div>
+                    <div class="col-xs-7">
+                        <h4 <?php if(in_array($k, array(0, 2))):?>class="hot-list-odd"<?php endif;?>>
+                            <a href="<?php echo $new['url'];?>"><?php echo $new['title'];?></a>
+                        </h4>
+                        <div class="hot-foot">
+                            <span class="footer-title"><?php echo $new['type_name'];?></span>
+                            <time class="hot-time"><?php echo date('Y-m-d', $new['dateline']);?></time>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach?>
+    </div>
+</section>
+<!--hotlist end-->
+
+<!--banner start-->
+<section class="container-fluid">
+    <div class="raw">
+        <div class="col-sm-12 col-xs-12 col-md-12 banner"></div>
+    </div>
+</section>
+<!--banner end-->
+<!--user say-->
+<section class="container-fluid grayBg">
+    <div class="raw user-say">
+        <div class="col-md-3"></div>
+        <div class="col-md-4" id="shoot">
+            <h2 class="title">精准用户，一键直达！</h2>
+            <p>"真心好用，孩子可喜欢了。"<span class="say-user">——艺星妈妈</span> </p>
+            <p>"玩翻天，太迎合我们这群麻麻的口味了，再也不用担心周末去哪遛娃了。"<span class="say-user">——梦境不完美</span> </p>
+            <p>"App里的很多活动都很有意义，假期刚好可以带孩子去体验，而且票价都便宜好多，非常实惠。"<span class="say-user">——～啊区</span> </p>
+            <p>"感谢玩翻天的优惠！不仅有优惠，还给我们提供了大量的遛娃信息点。感谢！感谢！最近推荐了很多朋友使用玩翻天，她们也是乐坏了！"<span class="say-user">——苏妹妹</span> </p>
+        </div>
+        <div class="col-md-3 center-img">
+            <img src="/static/images/index_r13_c11.png" class="img-responsive shoot-img">
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</section>

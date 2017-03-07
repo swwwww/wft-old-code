@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>现金券详情</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/couponstyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<section class="cash">
+    <p class="cash-shape"></p>
+            <span class="cash-price">
+                ￥<mark class="cash-price-content"><?php echo (int)$data['price'];?></mark>.00
+            </span>
+            <span class="cash-info">
+                <mark class="cash-info-type"><?php echo $data['title'];?></mark>
+                <mark class="cash-info-intro">·<?php echo $data['description'];?></mark>
+                <?php if($data['time_type']==0):?>
+                    <mark class="cash-info-intro">·<?php echo date('Y-m-d',$data['begin_time']);?>至<?php echo date('Y-m-d',$data['end_time']);?></mark>
+                <?php else:?>
+                    <mark class="cash-info-intro">·截止时间:<?php echo date('Y-m-d',$data['end_time']);?>至</mark>
+                <?php endif;?>
+            </span>
+</section>
+<?php if($data['type']==2):?>
+<?php if(!$data['eventinfo']):?>
+    <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+<?php else:?>
+<h3>
+    <span>接券活动</span>
+</h3>
+<div class="item inner">
+    <p class="item-title">以下活动可使用直减<mark><?php echo $data['price'];?></mark>元现金券</p>
+    <div class="item-list excerciseList">
+        <?php foreach($data['eventinfo'] as $v):?>
+        <a class="item-list-shop" href="/web/kidsplay/info?id=<?php echo $v['eid'];?>">
+            <img src="<?php echo $v['cover'];?>" />
+                <span class="item-list-shop-info">
+                    <span class="item-list-shop-info-name"><?php echo $v['shop_name'];?></span>
+                    <span class="item-list-shop-info-price">
+                        <mark>￥<?php echo $v['price']?></mark>
+                        <span class="date"><?php echo date("m-d",$v['start_time']);?>— <?php echo date("m-d",$v['end_time']);?></span>
+                        <span class="shows"><?php echo $v['num'];?>场可选</span>
+                    </span>
+                    <span class="item-list-shop-info-time">
+                        <span class="number">已有<?php echo $v['buynum'];?>人报名</span>
+                        <span class="address">
+                            <mark><?php echo $v['circle'];?></mark>
+                        </span>
+                    </span>
+                </span>
+        </a>
+        <?php endforeach;?>
+    </div>
+</div>
+<?php endif;?>
+<?php elseif($data['type']==1):?>
+<?php if(!$data['list']):?>
+    <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+<?php else:?>
+<h3>
+    <span>接券商品</span>
+</h3>
+<div class="item inner">
+    <p class="item-title">以下商品可使用直减<mark><?php echo $data['price'];?></mark>元现金券</p>
+    <div class="item-list goodList">
+        <?php foreach($data['list'] as $v):?>
+        <a class="item-list-shop" href="/web/organizer/shops?id=<?php echo $v['id'];?>">
+            <img src="<?php echo $v['cover'];?>" />
+                <span class="item-list-shop-info">
+                    <span class="item-list-shop-info-name"><?php echo $v['title'];?></span>
+                    <span class="item-list-shop-info-price">
+                        <mark>￥<?php echo (int)$v['price'];?></mark>
+                        <i>￥<?php echo $v['realprice'];?> </i>
+                    </span>
+                    <span class="item-list-shop-info-time">
+                        <span>结束购买 <mark><?php echo date("Y-m-d",$v['end_time']);?></mark></span>
+                        <?php foreach($v['tag'] as $val):?>
+                            <i><?php echo $val;?></i>
+                        <?php endforeach;?>
+                    </span>
+                </span>
+        </a>
+        <?php endforeach;?>
+    </div>
+</div>
+<?php endif;?>
+<?php endif;?>
+<script id="goodmore" type="text/html">
+    {{if list[0]}}
+    {{each list}}
+    <a class="item-list-shop" href="/web/organizer/shops?id={{$value.id}}">
+        <img src="{{$value.cover}}" />
+        <span class="item-list-shop-info">
+            <span class="item-list-shop-info-name">{{$value.title}}</span>
+            <span class="item-list-shop-info-price">
+                <mark>￥{{$value.price}}</mark>
+                <i>￥{{$value.realprice}}</i>
+            </span>
+            <span class="item-list-shop-info-time">
+                <span>结束购买 <mark>{{$value.end_time}}</mark></span>
+                {{each $value.tag}}
+                    <i>{{$value}}</i>
+                {{/each}}
+            </span>
+        </span>
+    </a>
+    {{/each}}
+    {{/if}}
+</script>
+<script id="excercisemore" type="text/html">
+    {{if eventinfo[0]}}
+    {{each eventinfo}}
+    <a class="item-list-shop" href="/web/kidsplay/info?id={{$value.eid}}">
+        <img src="{{$value.cover}}" />
+        <span class="item-list-shop-info">
+            <span class="item-list-shop-info-name">{{$value.shop_name}}</span>
+            <span class="item-list-shop-info-price">
+                <mark>￥{{$value.price}}</mark>
+                <span class="date">{{$value.start_time}}— {{$value.end_time}}</span>
+                <span class="shows">{{$value.num}}场可选</span>
+            </span>
+            <span class="item-list-shop-info-time">
+                <span class="number">已有{{$value.buynum}}人报名</span>
+                <span class="address">
+                    <mark>{{$value.circle}}</mark>
+                </span>
+            </span>
+        </span>
+    </a>
+    {{/each}}
+    {{/if}}
+</script>
+<input type="hidden" name="cid" id="cid" value="<?php echo $cid;?>">
+<input type="hidden" name="id" id="id" value="<?php echo $id;?>">
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script>
+    (function(){
+        var cid = $("#cid").val();
+        var id = $("#id").val();
+        //加载更多
+        var counter = 1;
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData" style="font-size: 20px;height:50px;line-height:50px;text-align: center;margin-bottom: 100px;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/cashcoupon/index/nindex",
+                    dataType: 'json',
+                    async: false,
+                    data:{'cid':cid,'page': counter,'id':id},
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function(data){
+                        var len =0;
+                        var info;
+                        if(data.response_params.type==1){
+                            len= data.response_params.list.length;
+                            for(var i=0;i<len;i++){
+                                info = data.response_params.list[i];
+                                info.price = parseInt(info.price);
+                                var b = new Date(parseInt(info.start_time)*1000);
+                                var e = new Date(parseInt(info.end_time)*1000);
+                                info.start_time = b.getFullYear()+'-'+ (b.getMonth()+1 < 10 ? '0'+(b.getMonth()+1) : b.getMonth()+1)+'-'+ b.getDate();
+                                info.end_time = e.getFullYear()+'-'+(e.getMonth()+1 < 10 ? '0'+(e.getMonth()+1) : e.getMonth()+1)+ '-'+ e.getDate();
+                            }
+                            $('.goodList').append(template('goodmore', data.response_params));
+                        }else{
+                            len = data.response_params.eventinfo.length;
+                            for(var i=0;i<len;i++){
+                                info = data.response_params.eventinfo[i];
+                                info.price = parseInt(info.price);
+                                var b = new Date(parseInt(info.start_time)*1000);
+                                var e = new Date(parseInt(info.end_time)*1000);
+                                info.start_time = b.getFullYear()+'-'+ (b.getMonth()+1 < 10 ? '0'+(b.getMonth()+1) : b.getMonth()+1)+'-'+ b.getDate();
+                                info.end_time = e.getFullYear()+'-'+(e.getMonth()+1 < 10 ? '0'+(e.getMonth()+1) : e.getMonth()+1)+ '-'+ e.getDate();
+                            }
+                            $('.excerciseList').append(template('excercisemore', data.response_params));
+                        }
+                        // 每次数据加载完，必须重置
+                        me.resetload();
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                            return;
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        // 即使加载出错，也得重置
+                        me.resetload();return;
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+//                    alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+//                                    alert('Ajax error!');
+                    }
+                });
+            }
+        });
+    }());
+</script>
+</body>
+</html>

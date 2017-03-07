@@ -1,0 +1,65 @@
+<hgroup class="box">
+    <header>
+        <h3>商家管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/organizer">返回商家列表</a>
+        <i class="icon icon-list"></i>
+        <a href="javascript:void(0)"> <?php echo $organizer->name;?>合同列表</a>
+    </header>
+</hgroup>
+
+
+<aside class="tips">
+    商家id :         <?php echo $organizer->id;?>
+</aside>
+
+<aside class="tips">
+    商家名称 :         <?php echo $organizer->name;?>
+</aside>
+
+<br />
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">合同列表</div>
+    <div class="panel-body">
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">合同编号</th>
+                <th scope="col">创建时间</th>
+                <th scope="col">经办人</th>
+                <th scope="col">商家</th>
+                <th scope="col">合同类型</th>
+                <th scope="col">预付金</th>
+                <th scope="col">合同状态</th>
+                <th scope="col">商品数</th>
+                <th scope="col">商品订单数</th>
+                <th scope="col">商家预计收入</th>
+                <th scope="col">商家实际收入</th>
+                <th scope="col">平台收入</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><?php echo $v['contract_no']; ?></td>
+                    <td><?php echo date('Y-m-d H:i:s', $v['create_time']); ?></td>
+                    <td><?php echo $v['admin_name']; ?></td>
+                    <td><?php echo $v['organizer_name'];?></td>
+                    <td><?php echo $this->contract_type[$v['contracts_type']]; ?></td>
+                    <td><?php echo $v['pre_money']; ?></td>
+                    <td><?php echo $this->contract_status[$v['contracts_status']]; ?></td>
+                    <td><?php echo  $v['goods_num']; ?></td>
+                    <td><?php echo  $v['order_num']; ?></td>
+                    <td><?php echo  $v['shop_pre_income']; ?></td>
+                    <td><?php echo  $v['shop_real_income']; ?></td>
+                    <td><?php echo  $v['deyi_income']; ?></td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <div>
+            <?php echo $this->pageData; ?>
+        </div>
+    </div>
+</div>
+
+

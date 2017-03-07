@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>玩翻天商家后台</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body>
+    <header class="co-header">
+        <a class="left" href="/seller/index/log">流水记录</a>
+        <a class="checked middle" href="/seller/index/code">验证</a>
+        <a class=" right" href="/seller/index/bind">绑定手机</a>
+    </header>
+    <section class="co-code">
+        <h2>请扫描二维码</h2>
+        <div class="check-code"><img src="<?php echo $this->qrcode;?>"/></div>
+    </section>
+    <section class="co-yzm">
+        <form action="javascript:void(0)">
+            <fieldset class="code">
+                <label>验证码：</label><input class="text" type="text" name="code" id="code" value="" placeholder="请输入验证码">
+            </fieldset>
+            <fieldset>
+                <input class="button" id="check-code" type="button" value="验证" data-code='
+                {
+                "iscode": "1",
+                "islogin": ""
+                }'/>
+            </fieldset>
+        </form>
+    </section>
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--tips-->
+            <div class="check-win-list check-win-tips">
+                <div id="codeTip">
+                    <i></i>
+                </div>
+                <a class="check-win-close">确定</a>
+            </div>
+            <!--验证send-->
+            <div class="check-win-list check-win-send">
+                <form action="javascript:void(0)">
+                    <fieldset class="title">
+                        <img src="/img/logo.gif" />
+                        <div class="price">
+                            <h3 id="good_name">商品名称商品名称商</h3>
+                            <p><span>售价：&yen;</span><span id="good_price"></span></p>
+                        </div>
+                    </fieldset>
+                    <fieldset class="info">
+                        <p id="series">参与方式：2大1小单次游玩券</p>
+                        <p>验证码：<mark id="code-mark">2536 25845 5258</mark></p>
+                        <p><span>订单号：</span><span id="order_sn"></span></p>
+<!--                        <p><span>下单时间：</span><span  id="order_time"></span></p>-->
+                        <p><span>购买用户：</span><span  id="buy_name"></span></p>
+                        <p><span>使用地点：</span><span id="use_addr"></span></p>
+                    </fieldset>
+                    <fieldset class="set" id="uncheck">
+                        <a class="check-win-close send-close">取消</a>
+                        <a class="sending" id="sending">确定</a>
+                    </fieldset>
+                    <div id="checked">
+                        <fieldset class="set2">
+                            <mark id="checked"><span id="check_info">此商品已验证2015-12-220- 12:55</span></mark>
+                        </fieldset>
+                        <fieldset class="set2">
+                            <a class="check-win-close">取消</a>
+                        </fieldset>
+                    </div>
+                    <input type="hidden" name="shop_id" value="<?php echo $this->shop_id?>" id="shop_id">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+</html>

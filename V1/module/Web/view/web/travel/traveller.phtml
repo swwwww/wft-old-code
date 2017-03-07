@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <title>出行人</title>
+    <link href="/css/order-center.css" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<div class="traveller">
+<!--    --><?php //var_dump($data)?>
+    <?php foreach($data as $v):?>
+        <form class="traveller-form">
+            <label class="traveller-form-label">
+                <div class="traveller-form-info">
+                    <span class="traveller-form-name"><?php echo $v['name'];?></span>
+                    <span class="traveller-form-id"><?php echo $v['id_num'];?></span>
+                    <?php if($type!=3):?>
+                    <span class="traveller-form-edit"><a href="/web/travel/updatetraveller?id=<?php echo $v['associates_id'];?>">编辑</a>
+                    <?php if($type==4):?>
+                    <span class="traveller-form-delete">
+                    <a href="javascript:;" class="del" data="<?php echo $v['associates_id'];?>">删除</a>
+                    </span>
+                    <?php endif;?>
+                    </span>
+                    <?php endif;?>
+                </div>
+            </label>
+            <?php if($type < 3):?>
+            <input type="checkbox" name="radio" class="traveller-form-radio r_<?php echo $v['associates_id'];?>" value="0" data="<?php echo $v['name'];?>" data-id="<?php echo $v['associates_id'];?>">
+            <?php endif;?>
+        </form>
+    <?php endforeach;?>
+    <?php if($type != 3):?>
+    <div class="traveller-addcontact">
+        <span class="traveller-addcontact-info"><a href="/web/travel/updatetraveller">+添加出行人</a></span>
+    </div>
+    <?php endif;?>
+</div>
+<?php if($type <3):?>
+    <button class="traveller-button">确定</button>
+<?php endif;?>
+<input type="hidden" name="people_num" id="people_num" value="<?php echo $people_num;?>">
+<input type="hidden" name="type" id="type" value="<?php echo $type;?>">
+<input type="hidden" name="url" id="back_url" value="<?php echo $_SERVER['HTTP_REFERER'];?>">
+<input type="hidden" name="order_sn" id="order_sn" value="<?php echo $order_sn;?>">
+<input type="hidden" name="good_num" id="good_num" value="<?php echo $good_num;?>">
+<input type="hidden" name="time" id="time" value="<?php echo $time;?>">
+<input type="hidden" name="tip" id="tip" value="<?php echo $tip;?>">
+<input type="hidden" name="ids" id="ids" value="<?php echo $ids;?>">
+<div class="matte-detail"></div>
+<div class="popup2-detail">
+    <p>确认出行人信息提交后不可修改</p>
+        <span>
+            <a class="go-del" href="javascript:;">取消</a>
+            <a class="go-submit" href="javascript:;">提交</a>
+        </span>
+</div>
+<div class="popup-detail">
+    <p id="tip"></p>
+    <a class="go-travel" href="#">填写出行人信息</a>
+</div>
+<div id="tipsDia"></div>
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script>
+    (function(){
+        var isTouch = ("ontouchend" in document ? "touchend" : "tap"),
+            people_num =$("#people_num").val(),
+            type = $("#type").val(),
+            tip = $("#tip").val(),
+            ids = $("#ids").val(),
+            good_num = $("#good_num").val(),
+            order_sn = $("#order_sn").val(),
+            traveller_ids,
+            url,
+            loginTip = $("#tipsDia");
+
+            if(type==2){
+                traveller_ids =ids;
+            }else{
+                traveller_ids = localStorage.getItem("select_traveller_ids");
+            }
+
+
+        if(traveller_ids){
+            var idsObj = traveller_ids.split(",");
+
+            for(var i in idsObj){
+                $(".r_"+idsObj[i]).attr("checked", true);
+                $(".r_"+idsObj[i]).val("1");
+                $(".r_"+idsObj[i]).addClass("active");
+            }
+        }
+
+        $('.traveller-form-radio').on("change", function (e) {
+            e.preventDefault();
+            var chk_num =$('input:checkbox[name="radio"]:checked').length;
+            if(chk_num>people_num){
+                loginTip.text("抱歉，保险最多人数为"+people_num);
+                loginTip.show();
+                setTimeout(function(){
+                    loginTip.hide();
+                },3000);
+                $(this).prop("checked",false);
+                return false;
+            }else{
+                if ($(this).val() == 0) {
+                    $(this).attr("checked", true);
+                    $(this).val("1");
+                } else {
+                    $(this).val("0");
+                    $(this).attr("checked", false);
+                }
+            }
+        });
+
+        $(".traveller-button").on(isTouch, function (e) {
+            e.preventDefault();
+            var chk = $('input:checkbox[name="radio"]:checked'),
+                chk_length = chk.length,
+                names = '',
+                ids = [];
+            for (var i = 0; i < chk_length; i++) {
+
+                if (i == chk_length - 1) {
+                    names += $(chk[i]).attr('data');
+                } else {
+                    names+= $(chk[i]).attr('data') + ',';
+                }
+
+                ids.push($(chk[i]).attr("data-id"));
+            }
+
+            localStorage.setItem('select_traveller_ids',ids);
+            localStorage.setItem('select_traveller_num',ids.length);
+            localStorage.setItem('select_traveller_names',names);
+
+            if(type==1){
+//                if(chk_length==people_num){
+//                    $(".popup2-detail").show();
+                    var url = document.referrer;
+                    window.location.href= url+"&tips=1&good_num="+good_num;
+//                    $(".go-submit").attr('href',url+"&tips=1&good_num="+good_num);
+//                }else{
+//                    var back = document.referrer;
+//                    window.location.href=back+"&tips=1&good_num="+good_num;
+//                }
+
+            }else if(order_sn){
+                if(tip==1){
+                    url = "/pay/excercise/addAssociates";
+                }else{
+                    url = "/pay/index/addAssociates";
+                }
+                $.ajax({
+                    type:'POST',
+                    url:url,
+                    dataType:'json',
+                    async: false,
+                    data:{"uid":<?php echo $_COOKIE['uid'];?>,'order_sn':order_sn,'associates_ids':"["+ids+"]"},
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            //alert(result.response_params.message);
+                            loginTip.text(result.response_params.message);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+                        } else if(result.error_code==0){
+                            loginTip.text(result.error_msg);
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+
+                        }else if(result.response_params.status==1){
+                            loginTip.text("补录出行人成功");
+                            loginTip.show();
+                            setTimeout(function(){
+                                loginTip.hide();
+                            },2000);
+
+//                            if(chk_length==people_num){
+//                                $(".popup2-detail").show();
+//                                var url = document.referrer;
+//                                $(".go-submit").attr('href',url);
+//                            }else{
+//                                var back = document.referrer;
+//                                window.location.href=back;
+//                            }
+                            window.location.href=document.referrer
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+                    }
+                })
+            }
+        });
+
+        $(".go-del").on(isTouch,function(e){
+            e.preventDefault();
+            $(".popup2-detail").hide();
+        });
+
+        var del = $(".del");
+        del.on(isTouch, function (e) {
+            e.preventDefault();
+            var id =$(this).attr('data');
+            $.ajax({
+                type:'POST',
+                url:"/user/associates/delete",
+                dataType:'json',
+                async: true,
+                data:{'associates_id':id},
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        //alert(result.response_params.message);
+                        loginTip.text(result.response_params.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                    } else if(result.error_code==0){
+                        loginTip.text(result.error_msg);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+
+                    }else if(result.response_params.status==1){
+                        loginTip.text(result.response_params.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        window.location.href = '<?php echo $authorUrl;?>';
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        window.location.href = '<?php echo $authorUrl;?>';
+                        alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+            })
+        })
+    }())
+</script>
+</body>
+</html>

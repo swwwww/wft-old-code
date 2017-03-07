@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,user-scalable=no,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m);}());</script>
+    <link href="/css/h5/ground.css" rel="stylesheet"/>
+    <title>感谢扫码</title>
+</head>
+<body>
+<header class="re-title">请<mark>工作人员</mark>现场确认领奖</header>
+<section class="wrapper">
+    <div class="re-pic">
+        <img src="/images/ground/gift.png"/>
+    </div>
+    <aside class="edit">
+        <a href="/web/generalize/dogift?t=<?php echo time(); ?>&dtid=<?php echo $_COOKIE['dtid']; ?>" class="btn" ontouchend="this.innerHTML='已领取';this.className='cur'">确定</a>
+    </aside>
+</section>
+</body>
+</html>

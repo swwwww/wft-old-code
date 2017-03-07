@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <title>个人中心</title>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/my.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <!--    <link href="/css/order-center.css" rel="stylesheet"/>-->
+</head>
+<body>
+<main class="align fixed-bottom-80" id="content">
+    <section class="wrapper">
+        <header class="my-header">
+<!--            <a class="invite" href="javascript:var ask=confirm('仅App邀请，才能获得礼品');if(ask){window.location.href='http://a.app.qq.com/o/simple.jsp?pkgname=com.deyi.wanfantian&g_f=991653'}" title=""><i class="icon"></i>邀请有礼</a>-->
+            <?php if($data['uid']>0):?>
+            <div class="my-photo">
+                <img class="pic" src="<?php echo $data['img'];?>">
+            </div>
+                <div class="info-wrap">
+                    <div class="my-id">
+                        <h3><?php echo $data['username'];?></h3>
+                        <span class="i-right"></span>
+                    </div>
+                    <div class="my-info">
+                        <!--奶妈为female-->
+                        <span class="identity"><?php echo $data['sex']==2 ? '宝妈' : '宝爸';?><i class="icon male"></i></span>
+                        <span class="uid">UID:<?php echo $data['uid'];?></span>
+                    </div>
+                    <?php else:?>
+                    <a href="/web/wappay/register?tourl=/web/wappay/my">
+                        <div class="my-photo">
+                            <img class="pic" src="/images/web/logo.png">
+                            <a class="edit" href=""></a>
+                        </div>
+                        <h3>您还没登录，点击登录</h3>
+                        <i class="arrowent"></i>
+                    </a>
+                </div>
+            <?php endif;?>
+        </header>
+    </section>
+    <nav class="wrapper">
+        <li style="list-style: none">
+            <a class="or-item" href="/web/wappay/allorder" title="">
+                <span class="">我的订单</span>
+                <span class="append">查看全部订单</span>
+                <i class="arrowent"></i>
+            </a>
+        </li>
+        <div class="order-list">
+            <a  href="/web/wappay/allorder?order_status=1" class="item">
+                <i class="wait-pay"><span class="<?php if($data['need_pay']>0){echo 'num';}?>"><?php echo $data['need_pay']>0 ? $data['need_pay'] : '';?></span></i>
+                <span class="order">待付款</span>
+            </a>
+            <a  href="/web/wappay/allorder?order_status=2" class="item">
+                <i class="wait-coupon"><span class="<?php if($data['unuse_coupon']>0){echo 'num';}?>"><?php echo $data['unuse_coupon']>0 ? $data['unuse_coupon'] : '';?></span></i>
+                <span class="order">待使用</span>
+            </a>
+            <a  href="/web/wappay/allorder?order_status=3" class="item">
+                <i class="wait-order"><span class="<?php if($data['need_comment']>0){echo 'num';}?>"><?php echo $data['need_comment']>0 ? $data['need_comment'] :'';?></span></i>
+                <span class="order">待评价</span>
+            </a>
+            <a  href="/web/wappay/allorder?order_status=4" class="item">
+                <i class="com-order"><span class="<?php if($data['order_refund']>0){echo 'num';}?>"><?php echo $data['order_refund']>0 ? $data['order_refund'] :'';?></span></i>
+                <span class="order">退款/返利</span>
+            </a>
+        </div>
+    </nav>
+    <section class="wrapper" style="height: auto;">
+        <ul class="or-intro" style="margin-bottom: 40px">
+            <li>
+                <a class="or-item" href="/web/wappay/account" title="">
+                    <i class="icon account"></i>
+                    <span class="genre">账户余额</span>
+                    <span class="append mark">&yen;<?php echo $data['money'];?></span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li>
+                <a class="or-item" href="/web/wappay/integral" title="">
+                    <i class="icon  score"></i>
+                    <span class="genre">我的积分</span>
+                    <span class="append"><?php echo $data['score'];?></span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li>
+                <a class="or-item" href="/web/wappay/mycashcoupon" title="" >
+                    <i class="icon exchange"></i>
+                    <span class="genre">现金券兑换</span>
+                    <span class="append"><?php echo $data['cashcoupon'];?>张</span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <?php if($data['is_seller']==1):?>
+            <li class="i-seller">
+                <a class="or-item" href="/web/user/sellerInfo" title="" >
+                    <i class="icon seller"></i>
+                    <span class="genre">销售员中心</span>
+                    <span class="append">￥<?php echo $data['seller_money'];?></span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <?php endif;?>
+            <li>
+                <a class="or-item" href="/web/wappay/myteam" title="" >
+                    <i class="icon play"></i>
+                    <span class="genre">同玩团</span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li >
+                <a class="or-item" href="/web/travel/addrlist" title="" >
+                    <i class="icon object07"></i>
+                    <span class="genre">联系人/收货地址</span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li>
+                <a class="or-item" href="/web/travel/traveller?type=4" title="" >
+                    <i class="icon object11"></i>
+                    <span class="genre">出行人</span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li class="i-bnr">
+                <a class="or-item" href="/web/wappay/mybaby" title="" >
+                    <i class="icon baby"></i>
+                    <span class="genre">我家Baby</span>
+                    <span class="append">
+                        <?php if($data['baby_flag']==1):?>
+                        <?php foreach($data['baby'] as $v):?>
+                        <img src="<?php echo $v['img'];?>"/>
+                        <?php endforeach;?>
+                        <?php endif;?>
+                    </span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+            <li>
+                <a class="or-item" href="/web/wappay/mycollect" title="" >
+                    <i class="icon collect"></i>
+                    <span class="genre">我的收藏</span>
+                    <span ></span>
+                    <i class="arrowent"></i>
+                </a>
+            </li>
+        </ul>
+    </section>
+</main>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script>
+//    document.cookie='open_id=oBzdouDW7_CB-Sbby1dlk9bu-ebE;path=/';
+//    document.cookie='phone=13871281565;path=/';
+//    document.cookie='token=2a51400ae195e7999af09197e6b53e49;path=/';
+//    document.cookie='uid=70623;path=/';
+    $(function(){
+        $("#my_menu").addClass("current");
+    })
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

@@ -1,0 +1,816 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html,body{
+    max-width: 640px;
+    margin: 0 auto;
+    -webkit-text-size-adjust: 100%;
+}
+
+@media screen and (max-width:359.9px){
+    html{font-size:12px;}
+}
+@media screen and (min-width:360px) and (max-width:374.9px){ html{font-size:13px;}
+}
+@media screen and (min-width:375px) and (max-width:413.9px){ html{font-size:14px;}
+}
+@media screen and (min-width:414px) and (max-width:479.9px){ html{font-size:14px;}
+}
+
+body {
+    color: #333;
+    background: #f8f5ee;
+    font-family: Microsoft YaHei, arial, \5b8b\4f53;
+    -webkit-font-smoothing: antialiased;
+    width: 100%;
+    height:100%;
+    -webkit-text-size-adjust: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+}
+a {
+    text-decoration: none;
+}
+ul, li {
+    list-style: none;
+}
+section, fieldset {
+    border: none;
+    display: block;
+}
+input, label, select {
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.wrapper {
+    width: 100%;
+    min-width: 320px;
+    margin: 0 auto;
+}
+.btn {
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    display: block;
+    width: 80%;
+    height: 40px;
+    margin: 0 auto 3%;
+    background: #FFC100;
+    border-bottom: 2px solid #ff9100;
+    color: #8A4400;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 6px 6px 6px 6px;
+    background-clip: padding-box;
+}
+.number {
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    display: block;
+    width: 80%;
+    height: 30px;
+    margin: 0 auto;
+    text-align: center;
+    background-clip: padding-box;
+}
+
+.grey {
+    color: #fff;
+    background: #999;
+    border-color: #999;
+}
+
+/* 首页 */
+header {
+    margin-bottom: 20px;
+    background: url("../images/index-bg.jpg") no-repeat 0 0;
+    background-size: cover;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+header:before{
+    content: '';
+    display: block;
+    padding-top: 65%;
+}
+header p {
+    width: 100%;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+    color: #733F07;
+    font-size: 16px;
+
+}
+header a {
+    position: absolute;
+    top: 48%;
+    right: 11%;
+    display: block;
+    color: #fff;
+    text-align: left;
+    -webkit-tap-highlight-color: transparent;
+}
+.rule-title {
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+}
+.rule{
+    margin-bottom: 5%;
+}
+.rule-text {
+    padding: 0 8%;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+.rule-text span {
+    float: left;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    background: #fea501;
+    text-align: center;
+    color: #fff;
+    -webkit-border-radius: 50% 50% 50% 50%;
+    border-radius: 50% 50% 50% 50%;
+    background-clip: padding-box;
+}
+.rule-text p {
+    color: #4c463a;
+    padding-left: 30px;
+}
+
+.rule-text .share-light{
+    color: #723a04;
+}
+
+/* 列表页 */
+.shoplist {
+    padding: 10px;
+}
+.shoplist section {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+.shoplist span {
+    float: left;
+    width: 60px;
+    height: 60px;
+}
+.shoplist span img {
+    width: 100%;
+}
+.shopdetail {
+    padding-left: 70px;
+}
+.shopdetail h3 {
+    color: #111;
+    font-size: 15px;
+    line-height: 25px;
+    padding-bottom: 3px;
+}
+.shopdetail p,.shopdetail a {
+    color: #4c4b46;
+    line-height: 16px;
+}
+
+/* 我的畅玩卡 */
+.mycard {
+    padding: 0 10px;
+}
+.mycard .title {
+    font-weight: normal;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+.mycard .myinfo,.mycard .myphoto {
+    background-color: #fff;
+}
+.mycard .myinfo {
+    padding: 15px;
+    background: #ffc000 url("../images/myinfo-bg.jpg") repeat-x 0 bottom;
+    background-size: 10px 3px;
+    position: relative;
+}
+.myinfo p {
+    height: 34px;
+    line-height: 34px;
+    border-bottom: 1px dotted #d18401;
+    font-size: 14px;
+}
+
+.myinfo .name,.myinfo .date,.myinfo .method{
+    line-height: 2em;
+}
+
+.myinfo .pic{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 90px;
+    height: 90px;
+}
+
+.myinfo .pic img{
+    width: 100%;
+}
+
+.myinfo .name .icon{
+    display: inline-block;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+.myinfo .name .icon.nan{
+    background: url("../images/nan.png") no-repeat 0 0;
+    background-size: 20px 20px;
+}
+.myinfo .name .icon.nv{
+    background: url("../images/nv.png") no-repeat 0 0;
+    background-size: 20px 20px;
+}
+
+.myinfo .code-form{
+    overflow: hidden;
+}
+
+.myinfo .code-form::before{
+    content: "";
+    display: block;
+    padding-top: 35px;
+}
+
+.myinfo input[type="text"]{
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 50%;
+    resize: none;
+    -webkit-appearance: none;
+    outline: none;
+    border: 0;
+    padding: 0 10px;
+    font-family: "microsoft yaHei";
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px/9;
+    z-index: 4;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.myinfo .submit{
+    -webkit-appearance: none;
+    outline: none;
+    border: 0;
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    letter-spacing: 2px;
+    color: #fff;
+    background-color: #ffd146;
+    z-index: 5;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.myinfo .submit.disabled{
+    background-color: #999;
+}
+
+.myinfo-detail {
+    display: inline-block;
+    width: 80px;
+    font-weight: bold;
+}
+
+.myphoto{
+    text-align: center;
+}
+.myphoto img {
+    width: 65%;
+    margin: 15px auto 0;
+}
+
+/* 步骤 */
+#step header {
+    margin-bottom: 0;
+    text-align: center;
+    background: #f8f5ee url("../images/step-bg.jpg") no-repeat center 0;
+    background-size: contain;
+    position: relative;
+}
+
+#step header::before{
+    content: '';
+    display: block;
+    padding-top: 43.7%;
+}
+
+#step header p {
+    width: 100%;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%,0);
+    color: #733F07;
+    font-size: 16px;
+}
+.step-bg1,.step-bg2,.step-bg3,.step-bg4,.step-bg5,.step-bg6{
+    position: relative;
+}
+.step-bg1 {
+    background: url("../images/step-bg1.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg1::before{
+    content: '';
+    display: block;
+    padding-top: 37%;
+}
+.step-bg2 {
+    background: url("../images/step-bg2.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg2::before{
+    content: '';
+    display: block;
+    padding-top: 43%;
+}
+.step-bg3 {
+    background: url("../images/step-bg3.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg3::before{
+    content: '';
+    display: block;
+    padding-top: 42%;
+}
+.step-bg4 {
+    background: url("../images/step-bg4.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg4::before{
+    content: '';
+    display: block;
+    padding-top: 43%;
+}
+.step-bg5 {
+    background: #f8f5ee  url("../images/step-bg5.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg5::before{
+    content: '';
+    display: block;
+    padding-top: 33.4%;
+}
+.step-bg6 {
+    background: #F2ECDF url("../images/step-bg6.jpg") no-repeat center 0;
+    background-size: contain;
+}
+.step-bg6::before{
+    content: '';
+    display: block;
+    padding-top: 32%;
+}
+#step section p {
+    color: #4C463A;
+    line-height: 2em;
+}
+.step-bg1 .step-1{
+    position: absolute;
+    bottom: 40%;
+    left: 25%;
+}
+
+.step-bg1 .download {
+    display: block;
+    width: 85px;
+    background: #FFD862;
+    border: 1px solid #ff9;
+    border-radius: 15px 15px 15px 15px;
+    background-clip: padding-box;
+    color: #1a1a1a;
+    font-size: 12px;
+    text-align: center;
+    line-height: 2em;
+}
+.step-bg2 .step-2 {
+    position: absolute;
+    bottom: 10%;
+    right: 20%;
+
+}
+.step-bg3 .step-3 {
+    width: 60%;
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    text-align: center;
+    line-height: 1.5em;
+}
+.step-bg3 .btn {
+    width: 100%;
+}
+.step-bg4 .step-4{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+.step-bg5 .step-5 {
+    position: absolute;
+    top: 40%;
+    left: 32%;
+}
+.step-bg6 .step-6 {
+    position: absolute;
+    top: 35%;
+    left: 13%;
+}
+
+/* 报名表单 */
+.join-form {
+    padding: 0 10px;
+}
+.join-form fieldset {
+    padding: 15px 0;
+    border-bottom: 1px solid #F0EADB;
+    overflow: hidden;
+}
+.join-info {
+    float: left;
+    width: 88px;
+    padding-left: 10px;
+    font-size: 15px;
+    line-height: 30px;
+}
+.join-info i {
+    font-style: normal;
+    font-size: 12px;
+    color: #D3BAAB;
+}
+.join-form .text, .join-form .adds {
+    height: 28px;
+    padding: 0 5px;
+    border: 1px solid #e2e2e2;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: padding-box;
+    background: #fff;
+    color: #999;
+    font-size: 13px;
+}
+.join-form .name {
+    width: 170px;
+}
+.join-form .gender {
+    width: 159px;
+    height: 30px;
+    margin-left: 85px;
+    background: #fff;
+    border-radius: 10px 10px 10px 10px;
+    background-clip: padding-box;
+    overflow: hidden;
+}
+.join-form li {
+    float: left;
+    width: 80px;
+}
+.join-form .girl-box {
+    margin-left: -1px;
+}
+.join-form input[type="radio"] {
+    display: none;
+}
+.join-form .gender label {
+    display: block;
+    height: 28px;
+    line-height: 28px;
+    border: 1px solid #E2E2E2;
+    background: url("../images/join-icon.png") no-repeat;
+    background-size: 25px 175px;
+    font-size: 13px;
+    color: #777;
+}
+.join-form .boy-box label {
+    padding-left: 40px;
+    border-radius: 10px 0 0 10px;
+    background-position: 17px -20px;
+}
+.join-form .girl-box label {
+    padding-left: 35px;
+    border-radius: 0 10px 10px 0;
+    background-position: 12px -71px;
+}
+.join-form input[type="radio"]:checked+label {
+    border-color: #E3D2C8;
+    background-color: #F2EDE1;
+}
+.join-form .boy-box input[type="radio"]:checked+label {
+    background-position: 17px 5px;
+}
+.join-form .girl-box input[type="radio"]:checked+label {
+    background-position: 12px -46px;
+}
+.join-form .birth {
+    width: 120px;
+}
+.join-form .adds {
+    width: 130px;
+    height: 30px;
+    padding: 0 5px;
+}
+.upload_area {
+    margin-left: 98px;
+}
+.upload_area .post_imglist li {
+    position: relative;
+    float: left;
+    padding: 0 10px 10px 0;
+    line-height: 38px;
+}
+.upload_area .post_imglist li .del {
+    position: absolute;
+    right: 5px;
+    top: -10px;
+    background: url("../images/icon_del.png") no-repeat 15px 0;
+    background-size: 23px auto;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}
+.upload_area .post_imglist li .p_img img {
+    padding: 2px;
+    border: 1px solid #DDD;
+    height: 54px;
+    width: 54px;
+}
+.upload_area .post_imglist li .pic_time {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    position: relative;
+}
+.upload_area .post_imglist li .pic_time em {
+    display: inline-block;
+    width: 100%;
+    height: 25%;
+    line-height: 15px;
+    font-size: 12px;
+    color: #fff;
+    background-color: #F1484A;
+    position: absolute;
+    top: 22px;
+    left: 0;
+}
+.upload_area .upload_btn {
+    background: url("../images/upload_btn.png") center no-repeat;
+    background-size: 60px auto;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin: 0 10px;
+}
+.upload_area .upload_btn input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    overflow: hidden;
+    height: 60px;
+    width: 60px;
+}
+#imglist li img.wh60 {
+    margin: 0 auto;
+    display: block;
+    width: 60px;
+    height: 60px;
+}
+.join-form .tips{
+    padding-top: 20px;
+    clear: both;
+    color: #777;
+    line-height: 1.5em;
+    padding-left: 10px;
+}
+.join-form .btn {
+    margin-top: 25px;
+}
+
+/*
+*不是羊宝宝
+*/
+.other{
+    margin-top: 6%;
+    color: #743f08;
+    font-size: 14px;
+    text-align: center;
+}
+
+.other::after{
+    content: "";
+    display: block;
+    border-top: 2px dashed #ffc81d;
+    position: relative;
+    top: -10px;
+    z-index: 1;
+}
+
+.other span{
+    display: inline-block;
+    width: 45%;
+    margin: 0 auto;
+    background-color: #f8f5ee;
+    position: relative;
+    z-index: 2;
+}
+
+.other-list{
+    margin: 10px 0 20px;
+}
+
+.other-list .item{
+    color: #333;
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.other-list .item img{
+    width: 100%;
+    height: auto;
+}
+
+.other-list .item figcaption{
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.other-list .item h4{
+    font-size: 15px;
+    font-weight: normal;
+    line-height: 2em;
+    float: left;
+    width: 75%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.other-list .item .price{
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.5em;
+    float: right;
+    width: 20%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    color: #ff5722;
+    text-align: right;
+}
+
+.other-list .item .hot{
+    position: absolute;
+    top: -10px;
+    left: -45px;
+    padding: 40px 0 5px;
+    font-size: 16px;
+    color: #fff;
+    width: 130px;
+    text-align: center;
+    background: #fa6e51 url("../images/hot.gif") no-repeat center 16px;
+    background-size: 22px 22px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+
+/* 弹窗样式 */
+#pop-up {
+    display: none;
+    position: fixed;
+    padding: 0 15px;
+    width: 240px;
+    height: 150px;
+    top: 50%;
+    left: 50%;
+    background-color: #f8f5ee;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: border-box;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 9;
+}
+
+#close {
+    display: block;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    padding: 10px;
+    width: 18px;
+    height: 18px;
+    background: url("../images/join-icon.png") no-repeat center -140px;
+    background-size: 25px 175px;
+}
+#pop-up p {
+    padding: 45px 0 25px;
+    font-size: 16px;
+    color: #191919;
+}
+
+#pop-up .success{
+    padding-left: 40px;
+    vertical-align: middle;
+    background: url("../images/success.png") no-repeat 58px 38px;
+    background-size: 37px 37px;
+
+}
+#pop-up p span {
+    color: #723F06;
+}
+
+#pop-up .btn{
+    width: 100%;
+}
+
+
+
+/* 遮罩层 */
+#fade {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 8;
+}
+
+/*分享*/
+#share{
+    position: fixed;
+    top: 24%;
+    right: 4%;
+    width: 60px;
+    height: 80px;
+    background: url("../images/share.png") no-repeat 0 0;
+    background-size: 60px 80px;
+    -webkit-transform-style: preserve-3d;
+    -webkit-animation: spin 5s both infinite;
+    z-index: 6;
+}
+
+@-webkit-keyframes spin{
+    0%,25%,100%{-webkit-transform:rotate3d(0, 0, 1, 0deg);transform:rotate3d(0, 0, 1, 0deg)}
+    5%{-webkit-transform:rotate3d(0, 0, 1, 25deg);transform:rotate3d(0, 0, 1, 25deg)}
+    10%{-webkit-transform:rotate3d(0, 0, 1, -10deg);transform:rotate3d(0, 0, 1, -10deg)}
+    15%{-webkit-transform:rotate3d(0, 0, 1, 25deg);transform:rotate3d(0, 0, 1, 25deg)}
+    20%{-webkit-transform:rotate3d(0, 0, 1, -25deg);transform:rotate3d(0, 0, 1, -25deg)}
+}
+@keyframes spin{
+    0%,25%,100%{-webkit-transform:rotate3d(0, 0, 1, 0deg);transform:rotate3d(0, 0, 1, 0deg)}
+    5%{-webkit-transform:rotate3d(0, 0, 1, 25deg);transform:rotate3d(0, 0, 1, 25deg)}
+    10%{-webkit-transform:rotate3d(0, 0, 1, -10deg);transform:rotate3d(0, 0, 1, -10deg)}
+    15%{-webkit-transform:rotate3d(0, 0, 1, 25deg);transform:rotate3d(0, 0, 1, 25deg)}
+    20%{-webkit-transform:rotate3d(0, 0, 1, -25deg);transform:rotate3d(0, 0, 1, -25deg)}
+}
+
+#error-tips{
+    color: #fff;
+    display: none;
+    padding: 10px 15px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: border-box;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    background: rgba(0,0,0,.6);
+    z-index: 9;
+}

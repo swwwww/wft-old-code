@@ -1,0 +1,149 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/game">返回商品列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/good/save" id="game-save" method="post">
+    <header class="box-title">
+        <a href="/wftadlogin/good/new?type=basis&gid=<?php echo $goodData->id?>">商品基本信息</a>　　　
+        <a href="/wftadlogin/good/new?type=info&gid=<?php echo $goodData->id?>">商品描述</a>        　　
+        <?php if($goodData->is_together == 1):?><?php if($goodData->need_use_time): ?><a href="/wftadlogin/good/priceInfo?gid=<?php echo $goodData->id?>">商品——价格套系</a><?php endif?><?php endif?>　　　　
+        <a href="/wftadlogin/good/new?type=welfare&gid=<?php echo $goodData->id?>">商品--奖励与返利</a>　　　　
+        <?php if(in_array($goodData->id, array(2010, 1987, 2091))):?>
+            <a href="/wftadlogin/good/new?type=code&gid=<?php echo $goodData->id?>">商品--美团码发送情况</a>
+        <?php endif?>
+    </header>
+    <table class="table">
+
+        <tr>
+            <th width="160">小玩说</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="editor_talk"><?php echo  $goodData->editor_talk;?></textarea>　<span style="color:red">1000汉字内</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">注意事项</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="matters"><?php echo $goodData->matters;?></textarea>　<span style="color:red">1000汉字内 可不写</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">图文详情</th>
+            <th colspan="3" width="600">
+                <script type="text/plain" id="myEditor" style="width:600px;height:240px;"><?php echo htmlspecialchars_decode($goodData->information);?></script>
+            </th>
+        </tr>
+
+        <tr>
+            <th>封面图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="cover" value="<?php echo $goodData->cover;?>" />
+                    <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="240px" height="120px" class="fileupload1" src="<?php echo $goodData->cover;?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>缩略图 <span style="line-height: 15px;color: red">（选填）</span></th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" class="hidden" name="thumb" value="<?php echo $goodData->thumb;?>" />
+                    <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+                </fieldset>
+                <div>
+                    <img width="120px" height="120px" class="fileupload2" src="<?php echo $goodData->thumb;?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th></th>
+            <th colspan="3">
+                <input type="hidden" name="gid"  value="<?php echo $goodData->id;?>">
+                <span type="submit" class="btn btn-primary" id="ti-game">提交</span>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $(function () {
+        //保存提交
+        $('#ti-game').click(function () {
+            $.post('/wftadlogin/good/save?type=info', $('#game-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href="/wftadlogin/good/new?type=info&gid="+ data.gid;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        //实例化编辑器
+        var um = UE.getEditor('myEditor');
+
+
+        //上传图片
+        $('#fileupload1').fileupload({
+            url: '/wftadlogin/index/upload',
+            dataType: 'json',
+            done: function (e, data) {
+                if (data.result.status == 1) {
+                    $("input[name='cover']").attr('value', data.result.url);
+                    $(".fileupload1").attr('src' , data.result.url);
+                } else {
+                    alert(data.result.response_params.message);
+                }
+            }
+        });
+
+        $('#fileupload2').fileupload({
+            url: '/wftadlogin/index/upload',
+            dataType: 'json',
+            /*limitMultiFileUploadSize: 1,
+             limitMultiFileUploadSizeOverhead: 30,
+             maxFileSize : 34,
+             //autoUpload: false,
+             acceptFileTypes:  /(\.|\/)(gpg|jpeg|png)$/i,
+             maxNumberOfFiles : 1,*/
+
+            done: function (e, data) {
+                if (data.result.status == 1) {
+                    $("input[name='thumb']").attr('value', data.result.url);
+                    $(".fileupload2").attr('src' , data.result.url);
+                } else {
+                    alert(data.result.response_params.message);
+                }
+            }
+        });
+    })
+</script>
+
+

@@ -1,0 +1,64 @@
+<hgroup class="box">
+    <header>
+        <h3>城市管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/city/new">开通一个城市</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<div class="box">
+    <div class="box-title">
+       城市列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">id</th>
+                <th class="size3">站点名称</th>
+                <th class="size2">站点负责人</th>
+                <th class="size2">状态</th>
+                <th class="size2">每月积分限制</th>
+                <th class="size2">每月返利限制</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if ($data): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1"><?php echo $row->id; ?></td>
+                        <td class="size3"><?php echo $row->city_name;?></td>
+                        <td class="size2"><?php echo $row->username;?></td>
+                        <td class="size2"><?php if($row->is_close == 0){echo '开启';}elseif($row->is_close == 1){echo '关闭';}elseif($row->is_close == 2){echo '添加内容中';};?></td>
+                        <td class="size2"><?php echo $row->integral;?></td>
+                        <td class="size2"><?php echo $row->return;?></td>
+                        <td class="size3">
+                            <a href="/wftadlogin/city/new?id=<?php echo $row->id;; ?>" class="ui-button">修改</a>
+                            <?php if((int)$row->is_close!==1): ?>
+                                <a href="/wftadlogin/city/close?c=1&id=<?php echo $row->id; ?>" class="ui-button">关闭</a>
+                            <?php elseif((int)$row->is_close!==0):?>
+                                <a href="/wftadlogin/city/close?c=2&id=<?php echo $row->id; ?>" class="ui-button">开启</a>
+                            <?php endif; ?>
+                            <?php if((int)$row->is_hot===1): ?>
+                                <a href="/wftadlogin/city/hot?h=0&id=<?php echo $row->id; ?>" class="ui-button">取消热门城市</a>
+                            <?php elseif((int)$row->is_hot===0):?>
+                                <a href="/wftadlogin/city/hot?h=1&id=<?php echo $row->id; ?>" class="ui-button">设为热门城市</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无推送, 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>

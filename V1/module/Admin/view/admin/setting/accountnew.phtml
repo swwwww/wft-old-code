@@ -1,0 +1,222 @@
+<hgroup class="box">
+    <header>
+        <h3>账号管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/editor">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<form action="/wftadlogin/setting/save" method="post">
+
+    <table class="table" style="width: 400px;">
+        <tr>
+            <th width="109">
+                城市
+            </th>
+            <th width="300">
+                <?php if($admin->id): ?>
+                    <?php echo $cityData[$admin->admin_city] ; ?>
+                    <?php else: ?>
+                <select name="city">
+                    <?php foreach($cityData as $k => $c):?>
+                        <option <?php if($k == $admin->admin_city): ?>checked<?php endif; ?> value="<?php echo $k;?>" ><?php echo $c;?></option>
+                    <?php endforeach;?>
+                </select>
+                <?php endif; ?>
+
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">角色</th>
+            <th width="300">
+                <select id="js" name="group">
+                    <?php foreach($group as $k => $g): ?>
+                        <option <?php if($k == $admin->group): ?>selected <?php endif; ?> value="<?php echo $k;?>" ><?php echo $g;?></option>
+                    <?php endforeach; ?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">
+                用户名
+            </th>
+            <th width="300">
+                <?php if($admin->id): ?>
+                    <?php echo  $admin->admin_name; ?>
+                <?php else: ?>
+                    <input class="form-control" name="admin_name" type="text" value="<?php echo  $admin->admin_name; ?>" placeholder="请输入用户名">
+                <?php endif; ?>
+            </th>
+        </tr>
+        <tr>
+            <th width="109">
+                身份证
+            </th>
+            <th width="300">
+                <input class="form-control" name="idnum" type="text" value="<?php echo $admin->idnum; ?>" placeholder="请输入身份证">
+            </th>
+        </tr>
+        <tr>
+            <th width="109">
+                联系方式
+            </th>
+            <th width="300">
+                <input class="form-control" name="phone" type="text" value="<?php echo $admin->phone; ?>" placeholder="请输入联系方式">
+            </th>
+        </tr>
+        <tr id="fl">
+            <th width="109">
+                每月返利额度
+            </th>
+            <th width="300">
+                <input class="form-control" name="limit" type="text" value="<?php echo $admin->limit; ?>" placeholder="请输入数字">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="109">
+                密码 （请认真填写 并记住）
+            </th>
+            <th width="300">
+                <input class="form-control" name="password" type="text" value="" placeholder="请输入密码">
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+                头像
+            </th>
+            <td colspan="3" width="600" id="l_upload" data-uploaded="" style="position: relative;">
+                <div class="panel panel-default img-box img-upload"
+                     style="z-index: 1;width:130px;height:130px;float: left">
+                    点击上传图片
+                </div>
+                <div id="html5_1905r4ojgvh61ln71q8j63v1ggs3_container" class="moxie-shim moxie-shim-html5"
+                     style="position: absolute; top: 13px; left: 153px; width: 130px; height: 130px; overflow: hidden; z-index: 0;">
+                    <input id="html5_1905r4ojgvh61ln71q8j63v1ggs3" type="file"
+                           style="font-size: 999px; opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                           multiple="" accept="image/jpeg,image/gif,image/png">
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <th></th>
+            <th>
+                <input type="hidden" name="type" value="2">
+                <input type="hidden" name="id" value="<?php echo $admin->id; ?>">
+                <input type="submit" value="保存" class="btn btn-primary" data-loading-text="提交中..."/>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+<script type="text/javascript" src="/js/plupload.full.min.js"></script>
+<script>
+    (function () {
+
+        $(".bind_user").click(function () {
+            uid = $(this).attr('att-v');
+            bind_uid = $(this).parent().find('input').val()
+            $.post('/wftadlogin/setting/binduser', {uid: uid, bind_uid: bind_uid}, function (data) {
+                if (data.status == 1) {
+                    alert('绑定成功');
+                    window.location.reload()
+                } else {
+                    window.location.reload()
+                }
+            }, 'json');
+
+        });
+
+//        if(($('#js').children('option:selected').val())==3){
+//            $('#fl').show();
+//        }else{
+//            $('#fl').hide();
+//        };
+//
+//        $('#js').change(function() {
+//            var r = $(this).children('option:selected').val();//这就是selected的值
+//            if(r == 3){
+//                $('#fl').show();
+//            }else{
+//                $('#fl').hide();
+//            }
+//
+//        });
+
+        var upload = $('#l_upload'),
+            buttons = upload.find('.img-upload'),
+            maxCount = 1,
+            uploaded = upload.find('.img-box').length - 1,
+            uploader = new plupload.Uploader({
+                runtimes: "html5,flash,silverlight,html4",
+
+                browse_button: [].slice.call(buttons),
+
+                url: '/wftadlogin/index/upload',
+                flash_swf_url: '/js/Moxie.swf',
+                file_data_name: 'file',  //键名
+                multi_selection: true,
+                unique_names: true,
+                dragdrop: true,
+                filters: {
+                    max_file_size: '10mb',
+                    mime_types: [
+                        {title: "Image files", extensions: "jpg,gif,png"},
+                    ]
+                }
+            }),
+            imgContainer = '<div class="panel panel-default img-box"  style="float: left;text-align: center;line-height: 130px;position: relative;"><img class="img-thumb" width="130"; height="130" src="{url}" /><div class="close">&times;</div><input type="hidden" name="image" value="{url}" /></div>';
+
+        uploader.init();
+
+        uploader.bind('FilesAdded', function (up, files) {
+            var extra;
+            extra = uploaded + files.length - maxCount;
+
+            //如果选择图片过多
+            if (extra > 0) {
+                $.each(files.splice(maxCount - uploaded, extra), function (index, file) {
+                    up.removeFile(file);
+                });
+            }
+
+            uploaded += files.length;
+
+            setTimeout(function () {
+                up.start();
+            }, 10);
+        });
+
+        uploader.bind('FileUploaded', function (up, file, data) {
+            var json = $.parseJSON(data.response),
+                img = $(imgContainer.replace(/{url}/g, json.url));
+
+            upload.prepend(img);
+        });
+
+        uploader.bind('UploadComplete', function () {
+            if (uploaded === 10) {
+                buttons.hide();
+            }
+        });
+
+
+        upload.on('click', '.close', function (e) {
+            if (uploaded === 10) {
+                buttons.show();
+            }
+            uploaded--;
+            $(e.target).parent().remove();
+        });
+    }());
+</script>

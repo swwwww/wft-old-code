@@ -1,0 +1,215 @@
+
+<hgroup class="box">
+    <header>
+        <h3>财务管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/business/transfer">预付款审批</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $organizer_name = null;
+        $city = null;
+        $start_time = null;
+        $end_time = null;
+        $transfer_start = null;
+        $transfer_end = NULL;
+        $contract_no = NULL;
+
+        if (isset($_GET['organizer_name']) && $_GET['organizer_name']) {
+            $organizer_name = $_GET['organizer_name'];
+        }
+
+        if (isset($_GET['city']) && $_GET['city']) {
+            $city = $_GET['city'];
+        }
+
+        if (isset($_GET['start_time']) && $_GET['start_time']) {
+            $start_time = $_GET['start_time'];
+        }
+
+        if (isset($_GET['end_time']) && $_GET['end_time']) {
+            $end_time = $_GET['end_time'];
+        }
+
+        if (isset($_GET['transfer_start']) && $_GET['transfer_start']) {
+            $transfer_start = $_GET['transfer_start'];
+        }
+
+        if (isset($_GET['transfer_end']) && $_GET['transfer_end']) {
+            $transfer_end = $_GET['transfer_end'];
+        }
+
+        if (isset($_GET['contract_no']) && $_GET['contract_no']) {
+            $contract_no = $_GET['contract_no'];
+        }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="120">选择城市</th>
+            <th>
+                <select name="city">
+                    <option value="">全部</option>
+                    <?php foreach($this->city as $kr => $ty):?>
+                        <option <?php echo ($kr == $city) ? 'selected' : ''; ?> value="<?php echo $kr;?>"><?php echo $ty;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+            <th width="120">查找商家</th>
+            <th>
+                <input type="text" class="cssInput" name="organizer_name" value="<?php echo $organizer_name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">申请时间</th>
+            <th>
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $start_time;?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+            <th>到账时间</th>
+            <th>
+                <input name="transfer_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $transfer_start;?>">
+                <input name="transfer_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $transfer_end;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">合同编号</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="contract_no" value="<?php echo $contract_no;?>">
+            </th>
+
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/business/transfer" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/business/outTransfer" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="50">合同编号</th>
+                <th width="120">申请时间</th>
+                <th width="120">到账时间</th>
+                <th width="50">商家ID</th>
+                <th width="80">商家名称</th>
+                <th width="50">城市</th>
+                <th width="150">原因</th>
+                <th width="90">预付款</th>
+                <th width="50">状态</th>
+                <th width="100">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><input type="checkbox" name="check_ids" value="<?php echo $row['id']; ?>"></td>
+                    <td width="50"><?php echo $row['contract_no']; ?></td>
+                    <td width="120"><?php echo $row['check_dateline'] ? date('Y-m-d H:i',$row['check_dateline']) : '';?></td>
+                    <td width="120"><?php echo $row['sub_dateline'] ? date('Y-m-d H:i',$row['sub_dateline']) : '';?></td>
+                    <td width="50"> <?php echo $row['mid'];?></td>
+                    <td width="80"> <?php echo $row['name'];?></td>
+                    <td width="50"><?php echo $this->city[$row['city']];?></td>
+                    <td width="150">预付款</td>
+                    <td width="90"><?php echo $row['pre_money']; ?></td>
+                    <td width="50">
+                        <?php
+                            if($row['pay_pre_status'] < 2) {
+                                echo '等待审批';
+                            } else {
+                                echo '已审批';
+                            }
+                        ?>
+                    </td>
+
+                    <td width="100">
+                        <?php if($row['pay_pre_status'] < 2):?>
+                            <a class="ui-button" href="/wftadlogin/business/transferCharge?type=1&id=<?php echo $row['id']; ?>">审批通过</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-all">当前页面全选
+        <button class="ui-button" id="cash-arrival">当前页面审批通过</button>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        //导出订单
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+        //全选和全不选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //提现到账
+        $('#cash-arrival').click(function() {
+            if (confirm('确定将所有选中的申请提现到账？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/business/transferCharge?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+                if (id == '') {
+                    alert('没有选中');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+
+    });
+</script>
+
+
+
+

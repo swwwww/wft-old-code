@@ -1,0 +1,56 @@
+<form class="box box-form" action="/wftadlogin/contract/saveInventoryLast" method="post">
+    <header class="box-title">
+        库存修改
+    </header>
+    <table class="table">
+        <?php if(!$buy):?>
+        <tr>
+            <th width="160">采购价</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="account_money" value="<?php echo $inventoryData->account_money;?>">
+                <input type="hidden"  class="cssInput" name="buy" value="1">
+            </th>
+        </tr>
+        <?php else:?>
+            <tr>
+                <th width="160"></th>
+                <th colspan="3">
+                    <input type="hidden"  class="cssInput" name="buy" value="0">
+                </th>
+            </tr>
+        <?php endif;?>
+
+        <tr>
+            <th width="160">预付金</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="pre_money" value="<?php echo floatval($inventoryData->pre_money);?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">采购数量</th>
+            <th colspan="3">
+                <input type="text" style="width: 80px" class="cssInput" name="purchase_number" value="<?php echo $inventoryData->purchase_number;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">库存地点</th>
+            <th colspan="3">
+                <select name="inventory_address">
+                    <option value="1" <?php echo ($inventoryData->inventory_address == 1) ? 'selected' : ''; ?>>玩翻天</option>
+                    <option value="2" <?php echo ($inventoryData->inventory_address == 2) ? 'selected' : ''; ?>>商家仓库</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="id" value="<?php echo $inventoryData->id; ?>">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+
+    </table>
+</form>

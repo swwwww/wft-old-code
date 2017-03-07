@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title id="title"><?php echo $data['title'] . '遛娃活动'; ?></title>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <link href="/css/wap/activestyle.css?ver=<?php echo time(); ?>" rel="stylesheet"/>
+    <link href="/css/wap/photoswipe.css" rel="stylesheet"/>
+    <link href="/css/wap/default-skin.css" rel="stylesheet"/>
+
+    <script>(function () {
+            var w = window.screen.width, s = w / 750, u = navigator.userAgent, m = '<meta name="viewport" content="width=750,';
+            if (/android (\d+\.\d+)/i.test(u)) {
+                if (parseFloat(RegExp.$1 > 2.3)) {
+                    m += "minimum-scale = " + s + ", maximum-scale = " + s + ","
+                }
+            } else {
+                m += "user-scalable=no,"
+            }
+            m += 'target-densitydpi=device-dpi">';
+            document.write(m)
+        }());</script>
+    <!--    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,' + "minimum-scale = "+s+", maximum-scale = "+s+",";if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>-->
+    <style>
+        body{
+            position: relative;
+        }
+        .traveller-button {
+            display: block;
+            width: 100%;
+            height: 80px;
+            background-color: #fa6e51;
+            color: white;
+            font-size: 1.2rem;
+            text-align: center;
+            position: fixed;
+            bottom: 0px;
+        }
+
+        .banner-store {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(0, 0, 0, 0.5) url(/images/wap/f-star.png) no-repeat 9px 8px;
+        }
+
+        .intro p {
+            margin: 0 45px;
+        }
+
+        .link-list-p {
+            padding-left: 30px !important;
+        }
+
+        .link-list-p mark {
+            margin-left: 15px;
+        }
+
+        .intro-pre {
+            width: 640px;
+            white-space: pre-wrap;
+            margin: 0 26px;
+            display: inline-block;
+            text-align: justify;
+            font-size: 28px;
+            font-family: "microsoft yahei", Helvetica, Arial, sans-serif;
+        }
+
+        .disabled {
+            background-color: #b8b8b8 !important;
+        }
+
+        .favorite {
+            background: rgba(0, 0, 0, 0.5) url("/images/wap/has-store.png") no-repeat 9px 8px;
+        }
+        .store-info{
+            background: rgba(0,0,0, 0.6);
+            position: fixed;
+            top: 45%;
+            left: 32%;
+            display: block;
+            font-size: 30px;
+            color: #ffffff;
+            padding: 20px 43px;
+            border-radius: 15px;
+            letter-spacing: 5px;
+        }
+        .policy-content pre{
+            height: 639px;
+            font-size: 27px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+
+            white-space: pre-wrap;
+            margin: 0 10px;
+            display: inline-block;
+            line-height: 40px;
+            text-align: justify;
+            font-family: "microsoft yahei", Helvetica, Arial, sans-serif;
+        }
+        .policy-popup .policy-content h5 {
+            height: 120px !important;
+            line-height: 120px !important;
+        }
+        .policy-popup {
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+<a id="download" href="http://play.wanfantian.com/location/redirectHome" title="">
+    <img src="/images/wap/newbanner.png" alt=""/>
+</a>
+<?php //var_dump($data);?>
+<div class="content">
+    <header class="banner">
+        <input type="hidden" id="info_id" value='<?php echo $data['id']; ?>'>
+        <input type="hidden" id="uid" value='<?php echo $_COOKIE['uid']; ?>'>
+        <?php if ($data['is_collect'] == 0): ?>
+            <a class="banner-store" onclick="favorite(1)"></a>
+        <?php else: ?>
+            <a class="banner-store favorite" onclick="favorite(0)"></a>
+        <?php endif; ?>
+
+        <span style="background: url('<?php echo $data['cover']; ?>') no-repeat center;background-size: cover;"></span>
+        <div class="banner-shape">
+            <span style="display: block;height: 131px;background: url('<?php echo $data['player_level']; ?>') no-repeat center center;margin-bottom: 0;"></span>
+            <p style="margin: 0 auto">
+                金牌遛娃师
+            </p>
+        </div>
+    </header>
+    <article class="intro">
+        <h1 style="font-size: 32px;"><?php echo $data['title']; ?></h1>
+        <pre class="intro-pre"><?php echo $data['desc']; ?></pre>
+        <span><mark></mark></span>
+    </article>
+    <div class="process">
+        <p>
+            <mark><?php echo $data['date']; ?></mark>
+            &nbsp;&nbsp;
+            <mark><?php echo $data['session']; ?></mark>
+            场
+        </p>
+        <span><?php echo $data['time']; ?>&nbsp;&nbsp;费用：<mark>&yen;<?php echo $data['price']; ?> 起</mark></span>
+        <ul class="process-content">
+            <li class="first">参加活动/定制</li>
+            <li class="second">达到人数开始活动</li>
+            <li class="third">未达到退款</li>
+        </ul>
+    </div>
+    <?php if ($data['man_num'] > 0): ?>
+        <a class="join" href="/web/kidsplay/members?id=<?php echo $data['id']; ?>">
+            <p><?php echo $data['man_num'] + $data['kids_num']; ?>个小孩和父母参加</p> <!-- $data['man_num']-->
+            <ul class="join-portrait" style="height: 54px;overflow: hidden">
+                <?php foreach ($data['members'] as $v): ?>
+                    <li>
+                        <img src="<?php echo $v['image']; ?>" onerror="this.src='http://test.wan.deyi.com/images/applogo.png'"/>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <i class="arrow-right"></i>
+        </a>
+    <?php endif; ?>
+    <div class="link">
+        <div class="link-list">
+            <a class="link-list-content">
+                <p class="link-list-p">
+                    <span>适合年龄：</span>
+                    <mark><?php echo $data['age_for']; ?></mark>
+                </p>
+            </a>
+            <a class="link-list-content frame">
+                <p class="link-list-p">
+                    <span>集合方式：</span>
+                    <mark><?php echo $data['gather_method']; ?></mark>
+                </p>
+                <i class="arrow-right"></i>
+            </a>
+            <?php if ($data['attention']): ?>
+                <a class="link-list-content" href="javascript:;">
+                    <p class="link-list-p frame">
+                        <span>注意事项：</span>
+                        <mark><?php echo $data['attention']; ?></mark>
+                    </p>
+                    <i class="arrow-right"></i>
+                </a>
+            <?php endif; ?>
+            <a class="link-list-content " href="tel:<?php if ($data['phone'] > 0) {
+                echo $data['phone'];
+            } else {
+                echo '4008007221';
+            }; ?>">
+                <p class="link-list-p">
+                    <span>联系电话：</span>
+                    <mark><?php if ($data['phone'] > 0) {
+                            echo $data['phone'];
+                        } else {
+                            echo '4008007221';
+                        }; ?></mark>
+                </p>
+                <i class="arrow-right"></i>
+            </a>
+
+            <?php if (count($data['place_list'] > 0)): ?>
+                <p class="link-list-title">游玩地</p>
+                <?php foreach ($data['place_list'] as $v): ?>
+                    <a class="link-list-content address" href="/web/place/index?id=<?php echo $v['id']; ?>">
+                        <p>
+                            <span><?php echo $v['name']; ?></span><br/>
+                            <mark><?php echo $v['desc']; ?></mark>
+                        </p>
+                        <i class="arrow-right"></i>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if (count($data['place_list']) > 3) {?>
+            <a id="addressMore" href="#">
+                    查看更多...
+                 </a>
+            <?php }?>
+            <?php if ($v['custom'] == 1): ?>
+                <a id="joinActive" href="/web/h5/privateParty">
+                    <p>我想为孩子或小伙伴定制这个活动</p>
+                    <span><?php echo $v['custom_value']; ?></span>
+                    <i class="arrow-right"></i>
+                </a>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<nav class="activeInfo">
+    <a class="item cur" data="info">
+        <p>活动亮点</p>
+        <span></span>
+    </a>
+    <a class="item" href="javascript:;" id="schedule">
+        <p>行程安排</p>
+        <span></span>
+    </a>
+    <a id="rated" class="item" href="javascript:;">
+        <p>往期点评</p>
+        <span></span>
+    </a>
+</nav>
+<section id="activePoint" class="advs content">
+    <div class="point">
+        <div class="point-content">
+            <?php echo $info; ?>
+        </div>
+    </div>
+</section>
+
+<!--行程安排-->
+<section id="scheduling" class="advs" style="display: none;margin-top:50px;margin-bottom: 150px;">
+    <?php foreach ($schedule as $k => $v): ?>
+        <div class="trip">
+            <div class="trip-title">
+                <span><?php echo $k; ?>DAY</span>
+                <mark class="trip-title-time"><?php echo date("H:i",$v[0]['dateline']);?>—<?php echo date("H:i",$v[count($v)-1]['end_dateline']);?></mark>
+            </div>
+            <i></i>
+            <div class="trip-content" style="">
+                <?php
+                $info = array();
+                foreach ($v as $k => $val) {
+                    if (date("H", $val['dateline']) <= 12) {
+                        $info['am'][] = $val;
+                    } else {
+                        $info['pm'][] = $val;
+                    }
+                }
+                ?>
+                <div class="trip-content-node">
+                    <?php if ($info['am']): ?>
+                        <div class="trip-content-node-morning">
+                            <p>上午</p>
+                        </div>
+                        <?php foreach ($info['am'] as $key => $val): ?>
+                            <div class="trip-content-node-style <?php if (!$info['pm'] && $key + 1 == count($val)) {
+                                echo 'lastNode';
+                            } ?>">
+                                <p><?php echo date("H:i", $val['dateline']); ?></p>
+                                <span><?php echo $val['content']; ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <?php if ($info['pm']): ?>
+                        <div class="trip-content-node-morning">
+                            <p>下午</p>
+                        </div>
+                        <?php foreach ($info['pm'] as $key => $val): ?>
+                            <div class="trip-content-node-style <?php if ($key + 1 == count($val)) {
+                                echo 'lastNode';
+                            } ?>">
+                                <p><?php echo date("H:i", $val['dateline']); ?></p>
+                                <span><?php echo $val['content']; ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</section>
+
+<!-- 往期回顾-->
+<section id="toReview" class="advs" style="display: none;margin-bottom: 150px;">
+    <?php if (!$data['history']): ?>
+        <div class="nodata" style="text-align: center"><img src="/images/wap/nodata.gif"/></div>
+    <?php else: ?>
+        <?php foreach ($data['history'] as $k => $v): ?>
+            <div class="review">
+                <div class="review-date">
+                    <mark><?php echo date("d", $v['dateline']); ?></mark>
+                    <span><?php echo date("Y-m", $v['dateline']); ?></span>
+                </div>
+                <i></i>
+                <div class="review-content">
+                    <p class="review-content-title"><?php echo $v['title']; ?></p>
+                    <div id="reviewUl" class="gallery">
+                        <?php foreach ($v['images'] as $val): ?>
+                            <a href="#" data-size="750x750" data-med-size="750x1000">
+                                <img src="<?php echo $server_url . $val; ?>"/>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="link-list-content address reviewAddress">
+                        <p>
+                            <span><?php echo $v['place']['name']; ?></span><br/>
+                            <mark><?php echo $v['place']['address']; ?></mark>
+                        </p>
+                        <?php if ($v['place']['id'] > 0): ?>
+                            <a class="arrow-right" href="/web/place?id=<?php echo $v['place']['id']; ?>"></a>
+                        <?php endif; ?>
+                    </div>
+                    <?php foreach ($v['post_list'] as $post): ?>
+                        <a href="/web/kidsplay/commend?eid=<?php echo $v['history_eid']; ?>">
+                            <div class="review-content-comment">
+                                <img src="<?php echo $post['author_img']; ?>"/>
+                    <span>
+                        <mark class="review-content-comment-id"><?php echo $post['author']; ?></mark>
+                        <mark class="review-content-comment-time"><?php echo date("Y-m-d", $post['dateline']); ?></mark>
+                    </span>
+                                <p>
+                                    <?php
+                                    foreach ($post['message'] as $msg) {
+                                        if ($msg['t'] == 1) {
+                                            echo $msg['val'];
+                                        }
+                                    }
+                                    ?>
+                                </p>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                    <div class="review-content-footer">
+                        <span><?php echo $v['dateline'] > time() ? '活动进行中' : '活动已结束'; ?></span>
+                        <a href="/web/kidsplay/commend?eid=<?php echo $v['history_eid']; ?>">
+                            <mark><?php echo $v['post_num'] > 0 ? $v['post_num'] : 0; ?></mark>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <!-- 图片弹出模态框 -->
+    <section class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar" style="opacity:0;">
+                    <div class="pswp__counter"></div>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                            <div class="pswp__preloader__cut">
+                                <div class="pswp__preloader__donut"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__loading-indicator">
+                    <div class="pswp__loading-indicator__line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<div class="item-action footer">
+    <a class="go-consult" href="/web/kidsplay/consult?id=<?php echo $data['id']; ?>">
+        <span>咨询</span>
+        <mark><?php echo $data['consult_num'] > 0 ? $data['consult_num'] : ''; ?></mark>
+    </a>
+    <a class="go-rated" href="/web/kidsplay/commend?bid=<?php echo $data['id']; ?>&buy_log=<?php echo $data['buy_log']; ?>&eid=<?php echo $data['my_history_eid']; ?>">
+        <span>评价</span>
+        <mark><?php echo $data['post_num'] > 0 ? $data['post_num'] : ''; ?></mark>
+    </a>
+    <a class="go-share">
+        <span>分享</span>
+    </a>
+    <?php if ($data['btn_status'] == 1): ?> <!--1-->
+        <a class="go-join" href="<?php if ($data['one_session'] > 0) {
+            echo "/web/kidsplay/order?sid={$data['one_session']}";
+        } else {
+            echo "/web/kidsplay/selectlist?id={$data['id']}";
+        } ?>">
+            <span>我要参加</span>
+        </a>
+    <?php elseif ($data['btn_status'] == 2): ?>
+        <a class="go-join disabled" href="javascript:;" title="">即将开始</a>
+    <?php else: ?>
+        <a class="go-join disabled" href="javascript:;" title="">停止报名</a>
+    <?php endif; ?>
+</div>
+<!--<div class="popup-address" style="display: none">
+            <div class="popup-address-title">
+                <p>选择集合地点</p>
+            </div>
+            <section class="lists">
+                <?php foreach($data['meeting'] as $k=>$v):?>
+                <div class="popup-address-item">
+                    <span><?php echo $v['meeting_place']."&nbsp;&nbsp;&nbsp;".date("m-d H:i",$v['meeting_time']);?></span>
+                    <input type="radio" name="radio" id="address0<?php echo $k+1;?>" data-id="<?php echo $v['id'];?>" />
+                    <label for="address0<?php echo $k+1;?>"></label>
+                </div>
+                <?php endforeach;?>
+            </section>
+            <div class="popup-address-btn">
+                <a class="cancelBtn">否</a>
+                <a class="confirmBtn">是</a>
+            </div>
+        </div>-->
+<div class="gatherPopup" style="display: none">
+    <div class="matte"></div>
+    <div class="policy-popup">
+        <div class="policy-content">
+            <h5><span></span></h5>
+            <div class="policy-text">
+                <pre></pre>
+            </div>
+        </div>
+        <div class="close-btn">
+            <div class="cross"></div>
+        </div>
+    </div>
+</div>
+<div class="sharebtn" style="display: none">
+    <div class="matte"></div>
+    <span class="pic" style="width:406px;height:353px;background: url('/images/wap/sharepic.png') no-repeat;position:fixed;top: 20px;left: 50%;transform: translate(-33%,0);-webkit-transform: translate(-33%,0); z-index: 999;"></span>
+</div>
+
+<!--收藏成功 、取消收藏-->
+<div class="store-info" style="display: none"></div>
+
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/wap/template.js"></script>
+<script src="/js/wap/photoswipe.min.js"></script>
+<script src="/js/wap/photoswipe-ui-default.min.js"></script>
+<script src="/js/wap/jquery.transit.js"></script>
+<script src="/js/wap/hammer.js"></script>
+<script src="/js/wap/jquery.hammer.js"></script>
+<script src="/js/wap/initPhotoSwipeFromDOM.js"></script>
+<script>initPhotoSwipeFromDOM('.gallery');</script>
+<script>
+    (function () {
+        $(".frame").on("click", function (e) {
+            e.preventDefault();
+            var title = $(this).find('span').text();
+            var content = $(this).find('mark').text();
+            $('.gatherPopup').find('span').text(title);
+            $('.gatherPopup').find('pre').text(content);
+            $(".gatherPopup").show();
+        });
+        $(".close-btn").on("click", function () {
+            $(".gatherPopup").hide();
+        });
+
+        $(".go-share").on("click", function () {
+            $(".sharebtn").show();
+        });
+
+        $(".pic").on("click", function () {
+            $(".sharebtn").hide();
+
+        });
+        $(".item").on("click", function (e) {
+            e.preventDefault();
+            var data = $(this).attr('data'),
+                itemIndex = $(this).index();
+            if (data != 'info') {
+                $(".content").hide();
+//                $(".footer").hide();
+            } else {
+                $(".content").show();
+//                $(".footer").show();
+            }
+            $('body').animate({scrollTop: 0}, 0);
+            $(this).addClass('cur').siblings('.item').removeClass('cur');
+            $('.advs').eq(itemIndex).show().siblings('.advs').hide();
+        });
+
+        //咨询
+        $(".go-consult").on("click", function () {
+            $(".content").hide();
+            $(".footer").hide();
+            $("#oNav").hide();
+            $("#consult-module").show();
+            $('body').animate({scrollTop: 0}, 0);
+        });
+
+        // 读取尺寸大小
+        var imgReady = (function () {
+            var list = [], intervalId = null,
+            // 用来执行队列
+                tick = function () {
+                    var i = 0;
+                    for (; i < list.length; i++) {
+                        list[i].end ? list.splice(i--, 1) : list[i]();
+                    }
+                    ;
+                    !list.length && stop();
+                },
+            // 停止所有定时器队列
+                stop = function () {
+                    clearInterval(intervalId);
+                    intervalId = null;
+                };
+            return function (url, ready, load, error) {
+                var onready, width, height, newWidth, newHeight, img = new Image();
+                img.src = url;
+                // 如果图片被缓存，则直接返回缓存数据
+                if (img.complete) {
+                    ready.call(img);
+                    load && load.call(img);
+                    return;
+                };
+                width = img.width;
+                height = img.height;
+                img.onerror = function () {
+                    error && error.call(img);
+                    onready.end = true;
+                    img = img.onload = img.onerror = null;
+                };
+                // 图片尺寸就绪
+                onready = function () {
+                    newWidth = img.width;
+                    newHeight = img.height;
+                    if (newWidth !== width || newHeight !== height || newWidth * newHeight > 1024) {
+                        // 如果图片已经在其他地方加载可使用面积检测
+                        ready.call(img);
+                        onready.end = true;
+                    };
+                };
+                onready();
+                // 完全加载完毕的事件
+                img.onload = function () {
+                    // onload在定时器时间差范围内可能比onready快
+                    // 这里进行检查并保证onready优先执行
+                    !onready.end && onready();
+                    load && load.call(img);
+                    // IE gif动画会循环执行onload，置空onload即可
+                    img = img.onload = img.onerror = null;
+                };
+                // 加入队列中定期执行
+                if (!onready.end) {
+                    list.push(onready);
+                    // 无论何时只允许出现一个定时器，减少浏览器性能损耗
+                    if (intervalId === null) intervalId = setInterval(tick, 40);
+                }
+            };
+        })();
+    })();
+
+    function favorite(flag) {
+        var uid = $("#uid").val();
+        var info_id = $("#info_id").val();
+        var act = "add";
+
+        if (flag == 0) {
+            act = "del";
+        }
+        if(uid==0){
+            var ask=confirm('请先登录');
+            if(ask==true){
+                window.location.href="/web/wappay/register?tourl="+decodeURI('/web/place/index?id='+id);
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: "/user/collect/update",
+            dataType: 'json',
+            async: false,
+            data: {"uid": uid, "link_id": info_id, "act": act, "type": "kidsplay"},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+//                    alert(result.response_params.message);
+                    setTimeout($('.store-info').text(result.response_params.message).show(), 35000);
+                } else {
+//                    alert(result.response_params.message);
+                    setTimeout($('.store-info').text(result.response_params.message).show(), 35000);
+                    window.location.reload();
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //alert('授权失败');
+                    // 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+                    alert('请求参数错误');
+                }
+                else {
+                    alert('接口异常，返回状态码：' + XMLHttpRequest.status)
+                }
+            }
+
+        });
+    }
+</script>
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement('script');
+        hm.src = '//hm.baidu.com/hm.js?a1b66f5bbc7b8808ef15aef7c152d9eb';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml'); ?>
+</body>
+</html>

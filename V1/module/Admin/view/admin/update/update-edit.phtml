@@ -1,0 +1,60 @@
+<hgroup class="box">
+    <header>
+        <h3>升级管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.back(-1)">返回</a>
+    </header>
+    <aside class="tips">
+
+    </aside>
+</hgroup>
+<body>
+
+
+<form method="post" action="updateSave" enctype="multipart/form-data">
+    <input name="id" style="display: none" value="<?php echo $res->id ?: 0; ?>">
+    <table class="table" width="100px;">
+
+<!--        <tr>-->
+<!--            <td width="100px;">版本号</td>-->
+<!--            <td><input name="version_name" class="form-control" value="--><?php //echo $res->version_name ?: ''; ?><!--"></td>-->
+<!--        </tr>-->
+<!--        <tr>-->
+<!--            <td width="100px;">VersionCode</td>-->
+<!--            <td><input name="version_code" class="form-control" value="--><?php //echo $res->version_code ?: ''; ?><!--"></td>-->
+<!--        </tr>-->
+        <tr>
+            <td width="100px;">升级提示</td>
+            <td><textarea class="form-control" rows="6"
+                          name="version_info"><?php echo $res->version_info ?: ''; ?></textarea></td>
+        </tr>
+
+        <tr>
+            <td width="100px;">升级包</td>
+            <td>
+                <label for="exampleInputFile"><?php echo $file?'已上传':'选择文件';?></label>
+                <input type="file" id="apkfile" name="file">
+
+            </td>
+        </tr>
+
+
+        <tr>
+            <td width="100px;">此版本是否强制升级</td>
+            <td>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="old_update" <?php echo $res->old_update ? 'checked' : ''; ?>
+                               value="1"> 强制升级
+                    </label>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <button type="submit" class="btn btn-default">提交</button>
+
+</form>
+
+
+</body>

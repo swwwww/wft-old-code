@@ -1,0 +1,91 @@
+<hgroup class="box">
+    <header>
+        <h3>分组管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/authgroup">返回分组</a>
+    </header>
+</hgroup>
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <form action="/wftadlogin/authgroup/rules" method="post"  id="menu-save">
+                <?php foreach ($node as $n): ?>
+                    <?php if($n['title'] == '未命名操作'): continue;?>
+
+                    <?php endif; ?>
+                    <?php if (array_key_exists('child', $n) || (array_key_exists('pid', $n) && (int)$n['pid'] === 0)
+                    ):
+                        if($end == 'a'){ echo '</div>'; }
+                        ?>
+                        <div title="moudle" <?php if($end): ?> style="margin-top: 30px;" <?php endif; ?> class="box-title"><input onclick="checkall(this.id);" id="<?php echo $n['pid'].'_'.$n['id']; ?>" <?php if($n['have']): ?>checked<?php endif; ?> name="rule[]" value="<?php echo $n['id']; ?>" type="checkbox"><?php echo $n['title'].$n['id'];; ?></div>
+                    <?php $end = 'm'; endif; ?>
+
+                    <?php if (array_key_exists('operator', $n)):
+                        if($end == 'a'){ echo '</div>'; }
+                        ?>
+                        <div style="margin-left: 20px; <?php if($end == 'a'): ?> margin-top: 20px; <?php endif; ?> " title="controller"><input onclick="checkall(this.id);" id="<?php echo $n['pid'].'_'.$n['id']; ?>" <?php if($n['have']): ?>checked<?php endif; ?> name="rule[]" value="<?php echo $n['id']; ?>" type="checkbox"><?php echo $n['title'].$n['id'];; ?></div>
+                    <?php $end = 'o'; endif; ?>
+
+                    <?php if (!array_key_exists('operator', $n) && !array_key_exists('child',
+                            $n) && ((int)$n['pid'] !== 0)
+                    ):
+                        if($end !== 'a'){ echo '<div style="margin-left: 40px;">'; }
+                        ?>
+                        <span title="action" class="tips"><input onclick="checkall(this.id);" id="<?php echo $n['pid'].'_'.$n['id']; ?>" <?php if($n['have']): ?>checked<?php endif; ?> name="rule[]" value="<?php echo $n['id']; ?>" type="checkbox"><?php echo $n['title'].$n['id']; ?></span>
+                    <?php  $end = 'a';
+
+                    endif; ?>
+                <?php endforeach; ?>
+                <input type="hidden" name="id"  value="<?php echo $this->gid ?: 0;?>">
+                <span type="submit" class="btn btn-primary" id="ti-new">提交</span>
+            </form>
+
+        </ul>
+    </div>
+</div>
+<script>
+$(function () {
+    checkall = function(id){
+        cids = id.split('_');
+        checks = $("input[id^='"+cids[1]+"_']");
+        if($('#'+id).is(':checked')==true){
+            checks.each(function(){
+                $(this).prop('checked',true);
+                actid = $(this).attr("id").split('_');
+                actionids = $("input[id^='"+actid[1]+"_']");
+                if(actionids.length > 0){
+                    actionids.each(function() {
+                        $(this).prop('checked', true);
+                    })
+                }
+
+            });
+        }else{
+            checks.each(function(){
+                $(this).prop('checked',false);
+                actid = $(this).attr("id").split('_');
+
+                actionids = $("input[id^='"+actid[1]+"_']");
+                if(actionids.length > 0) {
+                    actionids.each(function() {
+                        $(this).prop('checked', false);
+                    })
+                }
+            });
+        }
+    }
+
+
+    $('#ti-new').click(function () {
+        $.post('/wftadlogin/authgroup/rules', $('#menu-save').serialize(), function (data) {
+            if (data.status == 1) {
+                alert('保存成功');
+                window.location.href = document.referrer;
+            } else {
+                alert(data.message);
+            }
+        }, 'json');
+        return false;
+    })
+});
+</script>

@@ -1,0 +1,112 @@
+<ul class="breadcrumb">
+    <li>
+        <a href="#">Home</a><span class="divider"></span>
+    </li>
+    <li>
+        <span class="divider"><a href="/wftadlogin/activity">活动管理</a></span>
+    </li>
+    <li class="active">关联资讯</li>
+</ul>
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="javascript:void(0)">绑定资讯</a></li>
+            <form action="#" method="get">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="搜索资讯名称" name="k" value="">
+                      <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit">搜索要添加的资讯</button>
+                      </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden"  name="aid" value="<?php echo $_GET['aid'];?>">
+            </form>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th scope="col">　</th>
+                    <th scope="col">资讯ID</th>
+                    <th scope="col">资讯名称</th>
+                    <th scope="col">
+                        <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                状态
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/wftadlogin/activity/news?aid=<?php echo $_GET['aid'];?>&status=1&<?php unset($_GET['status'], $_GET['p']); echo http_build_query($_GET); ?>">所有</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/wftadlogin/activity/news?aid=<?php echo $_GET['aid'];?>&status=2&<?php unset($_GET['status'], $_GET['p']); echo http_build_query($_GET); ?>">未发布</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="/wftadlogin/activity/news?aid=<?php echo $_GET['aid'];?>&status=3&<?php unset($_GET['status'], $_GET['p']); echo http_build_query($_GET); ?>">正在进行</a></li>
+                            </ul>
+                        </div>
+                    </th>
+                </tr>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                        <th scope="col"><input type="checkbox" name="news_id" <?php echo (in_array($v->id, $newsIds)) ? "checked" : '';?> value="<?php echo $v->id;?>"></th>
+                        <td><?php echo $v->id; ?></td>
+                        <td><?php echo $v->title; ?></td>
+                        <td>
+                            <?php
+                            if ($v->status == 0) {
+                                echo '未发布';
+                            } elseif ($v->status == 1) {
+                                echo '正在进行';
+                            } else {
+                                echo '请联系 技术';
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr class="all-choice">
+                    <td></td>
+                    <td></td>
+                    <td colspan="8"><a id="add-all" data-mid="<?php echo $_GET['aid'];?>" class="btn btn-primary" data-src="/wftadlogin/activity/donews?aid=<?php echo $_GET['aid'];?>">添加到专题</a></td>
+                </tr>
+            </table>
+        </ul>
+        <div>
+            <?php echo$this->pagedata; ?>
+        </div>
+    </div>
+</div>
+<script src="/js/jquery.cookie.js" type="text/javascript"></script>
+<script>
+    $("[name='news_id']").change(function(){
+        var chkNewId = $(this).attr('value');
+        if ($(this).prop("checked") == true) {
+            $.post($('#add-all').attr("data-src")+'&type=1','news_id=' + chkNewId);
+        } else {
+            $.post($('#add-all').attr("data-src")+'&type=2','news_id=' + chkNewId);
+        }
+        return false;
+    })
+
+    $('#add-all').click(function() {
+        $.post($(this).attr("data-src")+'&type=3',
+            function(result){
+                if(result.status == 1){
+                    alert('添加成功');
+                    window.location.href=result.href;
+                } else {
+                    alert(result.message);
+                }
+            }, 'json'
+        );
+        return false;
+    });
+
+    $("input[name='news_id']").each(function(){
+        if($.cookie('link_newId'+$('#add-all').attr("data-mid")).indexOf($(this).val()) >= 0) {
+            $(this).prop("checked", true);
+        }
+    })
+</script>
+

@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>订单详情</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        #footBtn{
+            width: 630px;
+            margin: 45px auto 68px;
+
+        }
+        #footBtn p{
+            width: 630px;
+            height: 85px;
+            font: 28px 'Helvetica', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, STHeiTi, sans-serif;
+            line-height: 85px;
+            text-align: center;
+            border: 1px solid #b5b5b5;
+            border-radius: 20px 20px 20px 20px;
+            -webkit-border-radius:   20px 20px 20px 20px;
+            background: #fff;
+            position: relative;
+            top: 20px;
+        }
+        #tipsDia{display: none; width: 60%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+
+        .detail{
+            width: 750px;
+        }
+        .input-label{
+            position: absolute;
+            top: 43%;
+            right: 15px;
+            z-index: 111;
+        }
+        .popup-address-item input{
+             display: block !important;
+            -webkit-appearance:  checkbox;
+        }
+
+        .cancelOrder{
+            z-index:1; display:none;width: 540px;height: 380px;border-radius: 15px 15px 15px 15px;-webkit-border-radius: 15px 15px 15px 15px;background: #fff;position: fixed;top: 50%;left: 50%;transform: translate(-50%,-50%);-webkit-transform: translate(-50%,-50%);
+        }
+        .cancelOrder-content{
+            height:143px;
+            margin: 72px 45px 40px 45px;
+        }
+        .cancelOrder-btn{
+            height: 86px;font-size: 34px;text-align: center;line-height: 86px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 75px;
+        }
+    </style>
+</head>
+<body>
+<?php //var_dump($data)?>
+<section class="detail">
+    <header class="order-banner">
+        <p style="width: 100%;height: 80px;background:#fa6d51 url('/images/wap/banner-34.png?ver=<?php echo time();?>') no-repeat center 0;"></p>
+    </header>
+    <p class="detail-code">订单号：<?php echo $data['id'];?></p>
+    <div class="detail-title">
+        <p><?php echo $data['title'];?></p>
+    </div>
+    <div class="detail-info">
+        <p>
+            <span>总价：</span>
+            <span class="info-price">￥<?php echo $data['price'];?></span>
+        </p></div>
+    <?php if($data['status']==0):?>
+    <div class="countdown">
+        <p>
+            <span id="time_d"></span>
+            <span>天</span>
+            <span id="time_h"></span>
+            <span>小时</span>
+            <span id="time_m" ></span>
+            <span>分</span>
+            <span id="time_s" ></span>
+            <span>秒</span>
+            <span class="countintro">停止报名</span>
+        </p>
+        <mark>未达到人数要求，可退款或参加同期非定制活动</mark>
+    </div>
+    <?php elseif($data['status']==1):?>
+        <div class="success">
+            <p>
+                <span>恭喜！活动报名成功</span>
+            </p>
+        </div>
+    <?php elseif($data['status']==2):?>
+        <div class="fail">
+            <p>
+                <span>抱歉！活动报名失败</span>
+                <mark>已进入退款流程</mark>
+            </p>
+        </div>
+    <?php else:?>
+        <div class="fail">
+            <p>
+                <span>抱歉！活动报名失败</span>
+                <mark>未在指定时间达到人数，订单自动进入退款流程</mark>
+            </p>
+        </div>
+    <?php endif;?>
+    <a class="link-list-content deadline" href="#" style="background: #fff">
+        <P class="newstyle">
+            <i class="title">活动时间：</i>
+            <span><?php echo date('Y年m月d日 H:i',$data['user_datetime']);?></span>
+        </P>
+    </a>
+    <a class="link-list-content phone" href="#" style="background: #fff">
+        <P class="newstyle">
+            <i class="title">联系电话：</i>
+            <span><?php echo $data['service_phone'];?></span>
+        </P>
+        <i class="arrow-right"></i>
+    </a>
+    <a class="link-list-content address" href="/web/place/index?id=<?php echo $data['place']['id'];?>" style="background: #fff">
+        <P class="newstyle">
+            <i class="title">游玩地：</i>
+            <span><?php echo $data['place']['name'];?></span><br/>
+            <mark><?php echo $data['place']['address'];?></mark>
+        </p>
+        <i class="arrow-right"></i>
+    </a>
+    <div class="detail-info diff02">
+        <a style="display: block" href="/web/travel/traveller?order_sn=<?php echo $data['id'];?>&type=2&ids=<?php echo rtrim($ids,',');?>&total_people_num=<?php echo $peopleTotal;?>&type=2&tip=1">
+        <p>请补充出行人的真实姓名和信息</p>
+        <!--        --><?php //echo "/web/travel/traveller?&order_sn={$data['id']}&type=3&ids=".rtrim($ids,',');?>
+        <?php if($data['lack_associates'] == 0):?>
+            <p class="no-info">您的出行人信息已添加完成</p>
+            <a class="arrow" href="/web/travel/traveller?&order_sn=<?php echo $data['id'];?>&type=2&ids=<?php echo rtrim($ids,',');?>&total_people_num=<?php echo count($data['associates']);?>&tip=1"></a>
+        <?php else:?>
+            <p class="no-info">您有<?php echo $data['lack_associates'];?>个出行人信息未添加</p>
+            <a class="arrow"></a>
+            <!--            <a class="arrow" href="/web/travel/traveller?order_sn=--><?php //echo $data['id'];?><!--&type=2&ids=--><?php //echo rtrim($ids,',');?><!--&total_people_num=--><?php //echo $data['lack_associates'];?><!--&type=2&tip=1"></a>-->
+        <?php endif;?>
+        </a>
+    </div>
+    <div class="detail-info">
+        <p><span class="info-name">联系人：</span><span class="info-content"><?php echo $data['user_name'];?></span></p>
+        <p><span class="info-name">手机号：</span><span class="info-content"><?php echo $data['user_phone'];?></span></p>
+    </div>
+    <div class="activity-num" style="margin: 30px 0;">
+        <div class="activity-num-title">
+            <p>上车地点</p>
+        </div>
+        <a class="activity-num-sel <?php if(count($data['meetings'])>1){echo 'addr_sel';}?>">
+            <span><?php if(count($data['meetings'])==1){echo $data['meetings'][0]['meeting_place'];}else{
+                    echo '请选择上车地点';
+                }?></span>
+            <i class="arrow-right"></i>
+        </a>
+    </div>
+    <div class="order-list">
+        <?php foreach($data['member_order_list'] as $v):?>
+        <div class="detail-info2">
+            <p>
+                <span class="info-name">验证码：</span>
+                <span class="info-content2"><?php echo $v['sn'];?></span>
+            </p>
+            <p>
+                <span class="info-name info-title"><?php echo $v['info'];?></span>
+            </p>
+            <div class="refund-btn diff-refund01 ">
+                <i>
+                    <?php
+                    if($v['status']==0){
+                        echo "待使用";
+                    }elseif($v['status']==1){
+                        echo "已使用";
+                    }
+                    ?>
+                </i>
+                <?php if($v['status']==0 && $data['user_datetime']>time() && $data['back_time']>time()):?>
+                    <a class="back_code js-back-code" data="1" data-code="<?php echo $v['sn'];?>" data-num="<?php echo $v['people_number'];?>">申请退款</a>
+                <?php endif;?>
+            </div>
+            <?php if($v['status']==2):?>
+                <div class="refund-btn diff-refund01 ">
+<!--                    <i style="background:#fa6e51 ">已退款</i>-->
+                    <a>退款中</a>
+                </div>
+            <?php endif;?>
+            <?php if($v['status']==3):?>
+                <div class="refund-btn diff-refund01 ">
+                    <!--                        <i style="background:#fa6e51 ">退款中...</i>-->
+                    <a>退款中...</a>
+                </div>
+            <?php endif;?>
+        </div>
+        <?php endforeach;?>
+        <input type="hidden" id="people-total" value="<?php echo  $peopleTotal;?>">
+        <?php foreach($data['other_order_list'] as $v):?>
+            <div class="detail-info2">
+                <p>
+                    <span class="info-name">附加码：</span>
+                    <span class="info-content2"><?php echo $v['sn'];?></span>
+                </p>
+                <p>
+                    <span class="info-name info-title"><?php echo $v['info'];?></span>
+                </p>
+                <div class="refund-btn diff-refund01 ">
+                    <i>
+                        <?php
+                        if($v['status']==0){
+                            echo "待使用";
+                        }elseif($v['status']==1){
+                            echo "已使用";
+                        }
+                        ?>
+                    </i>
+                    <?php if($v['status']==0 && $data['user_datetime']>time() && $data['back_time']>time()):?>
+                    <a class="back_code" data="2" data-code="<?php echo $v['sn'];?>">申请退款</a>
+                    <?php endif;?>
+                </div>
+                <?php if($v['status']==2):?>
+                    <div class="refund-btn diff-refund01 ">
+<!--                        <i style="background:#fa6e51 ">退款中...</i>-->
+                                                <a>已退款</a>
+                    </div>
+                <?php endif;?>
+                <?php if($v['status']==3):?>
+                    <div class="refund-btn diff-refund01 ">
+<!--                        <i style="background:#fa6e51 ">退款中...</i>-->
+                                                <a>退款中...</a>
+                    </div>
+                <?php endif;?>
+            </div>
+        <?php endforeach;?>
+    </div>
+
+    <?php if($data['user_datetime'] > time() && $data['back_time']>time() && $data['pay_status'] != 3 && $data['pay_status'] !=4):?>
+        <footer id="footBtn">
+            <p id="back_all">申请全部退款</p>
+        </footer>
+    <?php endif;?>
+</section>
+<div class="popup">
+    <div class="matte" style="display: none"></div>
+    <!--选择上车地点弹窗-->
+    <div class="popup-address address-frame" style="display: none">
+        <div class="popup-address-title">
+            <p>选择上车地点</p>
+        </div>
+        <section class="lists">
+            <?php foreach($data['meetings'] as $k=>$v):?>
+                <div class="popup-address-item">
+                    <span><?php echo $v['meeting_place']."&nbsp;&nbsp;&nbsp;".date("m-d H:i",$v['meeting_time']);?></span>
+                    <input type="radio" name="radio" id="address0<?php echo $k+1;?>" data-id="<?php echo $v['id'];?>" />
+                    <label for="address0<?php echo $k+1;?>"></label>
+                </div>
+            <?php endforeach;?>
+        </section>
+        <div class="popup-address-btn">
+            <a class="confirmBtn confirmaddrBtn">是</a>
+            <a class="cancelBtn canceladdrBtn">否</a>
+        </div>
+    </div>
+<!--    出行人是否完整弹框-->
+    <div class="matte-detail"></div>
+    <div class="travel-detail">
+        <p id="tip"></p>
+        <a class="go-travel" href="/web/travel/traveller?order_sn=<?php echo $data['id'];?>&total_people_num=<?php echo $data['lack_associates'];?>&type=2&tip=1">填写出行人信息</a>
+    </div>
+
+    <!--出行人退款页面弹窗-->
+    <div class="popup-traveller confirm_traveller" style="display: none">
+        <p>
+            <span>确认退款</span>
+            <mark>为此<i>出行人</i>退款</mark>
+        </p>
+            <span>
+                <a class="confirm_traveller_submit go-submit backall-submit" href="#">是</a>
+                <a class="backall-del go-del" href="#">否</a>
+            </span>
+    </div>
+
+<!--    全部退款-->
+    <div class="popup-traveller back_all" style="display: none">
+        <p>
+            <span style="font-size: 30px">确认为<mark style="color:#fb5f39;"><?php echo $data['title'];?></mark>整单退款?</span>
+        </p>
+            <span>
+                <a class="go-submit backall-submit" href="javascript:;">是</a>
+                <a class="backall-del go-del" href="javascript:;">否</a>
+            </span>
+    </div>
+
+    <!--划船票推款-->
+    <div class="popup-traveller otherPopup" style="display: none;">
+        <p>
+            <span>确认退款</span>
+            <mark>为<i>划船票</i>票退款</mark>
+        </p>
+            <span>
+                <a class="go-submit back_code_sub" href="#">是</a>
+                <a class="go-del back_code_del" href="#">否</a>
+            </span>
+    </div>
+
+    <!--    确认取消活动订单-->
+    <div class="cancelOrder" style="">
+        <div class="cancelOrder-content" style="">
+            <p style="font-size: 40px;text-align: center;" class="order-text">确认取消订单？</p>
+            <span style="display: block;font-size: 28px;margin-top: 30px;">财务审核后，退款将于3-5个工作日 内退回至支付账户</span>
+        </div>
+        <div class="cancelOrder-btn" style="">
+            <a class="btnCancel go-del" style="float: left;width: 269px;border-right: 1px solid #e0e0e0;">不退了</a>
+            <a class="btnConfirm" style="float: left;width: 270px;">确定</a>
+        </div>
+    </div>
+
+    <div class="popup-address popup-travel popup-traveller" style="display: none"> <!-- style="display: none"-->
+        <div class="popup-address-title">
+            <p>你想为谁退款</p>
+        </div>
+        <section class="lists orderList">
+            <?php foreach($data['associates'] as $k=>$v):?>
+                <div class="popup-address-item label">
+                    <span><?php echo $v['name'];?></span>
+                    <mark><?php echo $v['id_num'];?></mark>
+                    <input class="input-label traveller-form-radio r_149 active" type="checkbox" name="travel_chk<?php echo $v['insure_id'];?>" id="address0<?php echo $k;?>" data-id="<?php echo $v['insure_id'];?>"/>
+                    <label for="address0<?php echo $k;?>"></label>
+                </div>
+
+            <?php endforeach;?>
+            <input type="hidden" id="popup_sum" value="<?php echo count($data['associates']);?>">  <!--未绑定出行人的人数-->
+        </section>
+        <div class="popup-address-btn">
+            <a class="confirmBtn confirmtravelBtn">确定</a>
+            <a class="cancelBtn canceltravelBtn">不退了</a>
+        </div>
+    </div>
+</div>
+
+<div id="tipsDia"></div>
+<input type="hidden" id="traveller_sum" value="<?php echo $data['lack_associates'];?>">  <!--未绑定出行人的人数-->
+<input type="hidden" id="join_number" value="<?php echo $data['join_number'];?>">  <!--已报名人数-->
+<input type="hidden" id="people_total" value="<?php echo $peopleTotal;?>">  <!--已报名人数-->
+<!--<div class="matte" style="display:none;position: fixed;top: 0;right: 0;bottom: 0;left: 0;background: rgba(0,0,0,0.7);"></div>-->
+<script src="/js/zepto1.1.6.min.js?ver=<?php echo time();?>" type="text/javascript"></script>
+<script>
+
+    var loginTip = $("#tipsDia");
+
+        $(function(){
+        show_time();
+        var traveller_sum = $("#traveller_sum").val(),  //未填写的出行人个数
+            pay_status = <?php echo $data['pay_status'];?>, //账单支付状态 2，支付成功
+            order_sn = <?php echo $data['id'];?>,  //订单号
+            popup_detail = $(".travel-detail"); //出行人是否// 完整弹框
+            //出行人总数
+            var traveller_total = $('#people-total').val();
+            var back_code_len = $('.js-back-code').length;  //出行人申请退票的票数量
+//            console.log(traveller_total);
+
+            if(pay_status !=3 || pay_status!=4){
+            if(traveller_sum>0){
+                $("#tip").text("您还有"+parseInt(traveller_sum)+"个出行人的信息未填写，这些信息将被用于购买保险");
+                popup_detail.show();
+                $(".matte").show();
+                setTimeout(function(){
+                    popup_detail.hide();
+                    $(".matte").hide();
+                },2000);
+            }
+        }else{
+            popup_detail.hide();
+            $(".matte").hide();
+        }
+        //选择上车地点
+        var addr;
+        $(".activity-num-sel").on("tap",function(e){
+            e.preventDefault();
+            $(".matte").show();
+            $(".address-frame").show();
+        });
+
+        $(".confirmaddrBtn").on("tap",function(e){
+            e.preventDefault();
+            $(".lists").find("input").each(function(){
+                var sel = $(this).is(':checked');
+                if(sel == true){
+                    var sel_id = $(this).attr("data-id");
+                    if(sel_id>0){
+                        $.ajax({
+                            type:'POST',
+                            url:"/pay/excercise/updateOrderMeeting", //集合地点
+                            dataType:'json',
+                            async: true,
+                            data:{'uid':<?php echo $_COOKIE['uid'];?>,'order_sn':order_sn,'meeting_id':sel_id},
+                            headers: {
+                                "VER": 10
+                            },
+                            beforeSend:function(){
+                                loginTip.text("正在操作...");
+                                loginTip.show();
+                            },
+                            success: function (result) {
+                                if (result.response_params.status == 0) {
+                                    loginTip.text(result.response_params.message);
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                } else if(result.response_params.status == 1) {
+                                    //todo 成功
+                                    loginTip.text(result.response_params.message);
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                }
+                            },
+
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                if (XMLHttpRequest.status == 401) {
+                                    //todo 跳转授权页面
+                                    //alert(XMLHttpRequest.responseJSON.message);
+                                    window.location.href = '<?php echo $authorUrl;?>';
+                                }
+                                else if (XMLHttpRequest.status == 403) {
+                                    alert('接口验证失败，非法访问');
+                                }
+                                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                                }
+                                else {
+                                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                }
+                            }
+                        });
+
+                        addr = $(this).prev().text();
+                        $(".activity-num-sel").find("span").text(addr);
+                        $(".matte").hide();
+                        $(".popup-address").hide();
+                    }
+                }
+            })
+        });
+
+        $(".cancelBtn").on("tap",function(){
+            $(".matte").hide();
+            $(".popup-address").hide();
+            $(".otherPopup").hide();
+        });
+
+        //单个code退款  点击申请退款按钮的事件
+        $(".back_code").on("tap",function(e){
+            e.preventDefault();
+            $('.matte').show();
+            var name = $(this).parent().parent().find(".info-title").text(), //票的类型-->成人、123
+                otherPopup = $(".otherPopup"),  //划船票弹窗
+                type = $(this).attr('data'),  //票的类型  1->成人票  2->其他
+                code = $(this).attr("data-code");  //票的验证码
+            otherPopup.find("i").text(name);  //填充退款的类型
+            //判断出行人是否满，选择相应的弹框
+            otherPopup.show();
+            //判断是否为套票(一张票对应几个出行让人)
+            var personVal = $(this).attr("data-num");
+            var data = {'uid':<?php echo $_COOKIE['uid'];?>,'order_sn':order_sn,'code':code};
+
+            $(".back_code_sub").on('tap',function(e){
+               var popup_travel = $(".popup-travel"),  //选择退款人弹框
+                    insure_id;
+                var insure_array = [];//存放选择出行人的uid数据
+                var  insure_arrays = [];
+                var insurse_str = null; //点击checkbox获取没有重复uid的字符串
+                var cancel_num = 1; //取消出行人的数据
+                var len=0;
+
+
+                if(type == 2){ //附加码，直接退款
+                    dobackAjax("/pay/excercise/backpay",data);
+                    loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                    },8000);
+                }else if(traveller_sum == 0){ //订单完整
+                    if(back_code_len > 1){ //有多个要退票的订单
+                        popup_travel.show();
+                        $('.popup-address-item').on('click', '.input-label', function () {
+                            var $this = $(this);
+                            insure_id = $(this).attr('data-id');
+                            var str =  'travel_chk'+insure_id;
+                            len = $("input[type='checkbox']:checked").length;
+                            //console.log(len + '--' + personVal);
+
+                            if($this.attr('checked') == true){
+                                if(len > personVal){
+                                    $this.attr('checked', 'false');
+                                    $this.removeAttr('checked');
+                                    loginTip.text("一张票只能退"+personVal+"个出行人退款");
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },5000);
+                                }
+                                len = $("input[type='checkbox']:checked").length;
+                            }else{
+
+                            }
+                            insure_array = [];
+                            $("input[type='checkbox']").each(function (item, target) {
+                                insure_id = $(this).attr('data-id');
+
+                                if($(target).attr('checked')){
+                                    if(insure_array.length < personVal) {
+                                        console.log(insure_id);
+                                        insure_array.push(insure_id);
+                                    }
+                                }
+                            });
+                            cancel_num = insure_array.length;
+                        });
+
+                        $(".confirmtravelBtn").on('tap',function(e){  //选择出行人确定退票
+                            e.preventDefault();
+                            if(cancel_num < personVal){ //判断选定出行人数是否是套票对应的人数
+                                loginTip.text("你选择的退款出行人数少于套票出行人的数量，请重新选择！");
+                                loginTip.show();
+                                setTimeout(function(){
+                                    loginTip.hide();
+                                },2000);
+                                return ;
+                            }
+                            if(cancel_num == personVal){
+                                insurse_str = insure_array.toString();
+//                                console.log(insurse_str)
+                                data['insure_id'] = insurse_str;
+                                dobackAjax("/pay/excercise/backpay",data);
+                                loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                                loginTip.show();
+                                setTimeout(function(){
+                                    loginTip.hide();
+                                },8000);
+                            }else{
+                                loginTip.text("请选择退款出行人");
+                                loginTip.show();
+                                setTimeout(function(){
+                                    loginTip.hide();
+                                },8000);
+                            }
+                        });
+
+                    }else if(back_code_len == 1){ //最后一个订单
+                        dobackAjax("/pay/excercise/backpay",data);
+                        loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },8000);
+                    }
+
+                }else if(traveller_sum > 0){//选择的出行人数信息不完整
+                    var hide_people_total = parseInt($('#people_total').val(), 10);
+
+                    if(traveller_sum == hide_people_total){
+                        dobackAjax("/pay/excercise/backpay",data);
+                        loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },10000);
+                    }else{
+                        loginTip.text("请将您要退票的出行人取消勾选！");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },10000);
+                        if(back_code_len > 1){ //不是最后一个订单就进行跳转
+                            window.location.href = '/web/travel/traveller?order_sn=<?php echo $data['id'];?>&type=2&ids=<?php echo rtrim($ids,',');?>&total_people_num=<?php echo $data['lack_associates'];?>&type=2&tip=1'; //确定跳转至确定出行人页面的链接(要对应到order_sn)
+                        }
+                        dobackAjax("/pay/excercise/backpay",data);
+                        loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },10000);
+                    }
+                }
+            });
+
+
+
+ /*           //点击确定退票动作
+            $(".back_code_sub").on('tap',function(e){
+                e.preventDefault();
+                var data = {'uid':<?php echo $_COOKIE['uid'];?>,'order_sn':order_sn,'code':code},
+                    //选择为谁退款弹框
+                    popup_travel = $(".popup-travel"),  //选择退款人弹框
+                    insure_id;
+                var insure_array = []; //存放选择出行人的uid数据
+                var insurse_str = null; //点击checkbox获取没有重复uid的字符串
+                var cancel_num = 0; //取消出行人的数据
+
+
+                if(type==2){  //其他费用退票
+                    dobackAjax("/pay/excercise/backpay",data);
+                }else{
+                    if(traveller_sum == 0){  //选择的出行人数信息完整
+                        otherPopup.show();
+                        if(back_code_len > 1){
+                            popup_travel.show();
+                            $('.label').on('click', 'input', function () {
+                                /!* $("input[name='travel_chk']").attr("checked","checked");*!/
+                                console.log('personVal:' + personVal);
+                                console.log('cancel_num:' + cancel_num);
+                                if(personVal>cancel_num){
+                                    $(this).toggleClass('check-box');
+                                    if (true == $(this).attr("checked")) {
+                                        insure_id = $(this).attr('data-id');
+                                        insure_array.push(insure_id);
+                                        insure_array = unique(insure_array);//把数组中uid值相同的值过滤掉
+                                        console.log(insure_array);
+                                    }
+                                    cancel_num = insure_array.length;
+                                }else {
+                                    loginTip.text("一张票只能退"+personVal+"个出行人退款");
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                }
+                            });
+
+                            $(".confirmtravelBtn").on('tap',function(e){  //选择出行人确定退票
+                                e.preventDefault();
+                                if(cancel_num < personVal){ //判断选定出行人数是否是套票对应的人数
+                                    loginTip.text("你选择的退款的出行人数少于对应套票对应出行人的数量，请重新选择！");
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                    return ;
+                                }
+                                if(cancel_num == personVal){
+                                    insurse_str = insure_array.toString();
+                                    console.log(insurse_str)
+                                    data['insure_id'] = insurse_str;
+                                    dobackAjax("/pay/excercise/backpay",data);
+                                    loginTip.text("退款将于3~4个工作日返回至您的支付账户");
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                }else{
+                                    loginTip.text("请选择退款出行人");
+                                    loginTip.show();
+                                    setTimeout(function(){
+                                        loginTip.hide();
+                                    },2000);
+                                }
+                            });
+
+                        }else if(back_code_len == 1){
+                            dobackAjax("/pay/excercise/backpay",data);
+                        }
+
+
+                    }else if(traveller_sum>0){//选择的出行人数信息不完整
+                        var diff_num =  traveller_total -traveller_sum; //还剩下没有选中的购买保险的出行人
+                            dobackAjax("/pay/excercise/backpay",data);
+                            window.location.href = '/web/travel/traveller?order_sn=<?php echo $data['id'];?>&type=2&ids=<?php echo rtrim($ids,',');?>&total_people_num=<?php echo $data['lack_associates'];?>&type=2&tip=1'; //确定跳转至确定出行人页面的链接(要对应到order_sn)
+                    }else if(traveller_sum == traveller_total){
+                        loginTip.text("请勾选出行人信息");
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                    }
+                }
+        });*/
+    });
+
+        //整单退款
+
+        $("#back_all").on("tap",function(e){
+            e.preventDefault();
+            $(".cancelOrder").show();
+            $('.matte').show();
+        });
+
+        $(".btnConfirm").on("tap",function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:"/pay/excercise/backpay", //退票
+                dataType:'json',
+                async: true,
+                data:{'uid':<?php echo $_COOKIE['uid'];?>,'order_sn':order_sn,'all_back':1},
+                headers: {
+                    "VER": 10
+                },
+                beforeSend:function(){
+                    loginTip.text("正在操作...");
+                    loginTip.show();
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        loginTip.text(result.response_params.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                    } else if(result.response_params.status == 1) {
+                        //todo 成功
+                        loginTip.text(result.response_params.message);
+                        loginTip.show();
+                        setTimeout(function(){
+                            loginTip.hide();
+                        },2000);
+                        setTimeout(function(){window.location.reload()},2000);
+                    }
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                        alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+            });
+        });
+
+        $(".go-del").on("tap",function(e){
+            e.preventDefault();
+            $(".popup-traveller").hide();
+            $('.cancelOrder').hide();
+            $('.matte').hide();
+        });
+
+    }());
+
+    function show_time(){
+        var end = <?php echo $data['end_dateline'];?>;
+        var time_start = new Date().getTime(); //设定当前时间
+        var time_end =  new Date(parseInt(end)*1000).getTime(); //设定目标时间
+        // 计算时间差
+        var time_distance = time_end - time_start;
+        // 天
+        var int_day = Math.floor(time_distance/86400000);
+        time_distance -= int_day * 86400000;
+        // 时
+        var int_hour = Math.floor(time_distance/3600000);
+        time_distance -= int_hour * 3600000;
+        // 分
+        var int_minute = Math.floor(time_distance/60000);
+        time_distance -= int_minute * 60000;
+        // 秒
+        var int_second = Math.floor(time_distance/1000);
+
+        if(int_hour < 10){
+            int_hour = "0" + int_hour;
+        }
+        if(int_minute < 10){
+            int_minute = "0" + int_minute;
+        }
+        if(int_second < 10){
+            int_second = "0" + int_second;
+        }
+        // 显示时间
+        $("#time_d").text(int_day);
+        $("#time_h").text(int_hour);
+        $("#time_m").text(int_minute);
+        $("#time_s").text(int_second);
+        // 设置定时器
+
+        setTimeout("show_time()",1000);
+    }
+
+    function dobackAjax(url,data){
+        $.ajax({
+            type:'POST',
+            url:url,
+            dataType:'json',
+            async: true,
+            data:data,
+            headers: {
+                "VER": 10
+            },
+            beforeSend:function(){
+                loginTip.text("正在操作...");
+                loginTip.show();
+            },
+            success: function (result) {
+//                console.log("dobackAjax-res");
+//                console.log(result);
+                if (result.response_params.status == 0) {
+                    loginTip.text(result.response_params.message);
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                    },2000);
+                } else if(result.response_params.status == 1) {
+                    //todo 成功
+                    loginTip.text(result.response_params.message);
+                    loginTip.show();
+                    setTimeout(function(){
+                        loginTip.hide();
+                    },2000);
+                    setTimeout(function(){window.location.reload()},2000);
+                }
+            },
+
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+            }
+        });
+    }
+//过滤掉数组中相同的字符串
+    function unique(arr) {
+        var result = [], hash = {};
+        for (var i = 0, elem; (elem = arr[i]) != null; i++) {
+            if (!hash[elem]) {
+                result.push(elem);
+                hash[elem] = true;
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

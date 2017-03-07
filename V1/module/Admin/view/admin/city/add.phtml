@@ -1,0 +1,78 @@
+<hgroup class="box">
+    <header>
+        <h3>用户迁移</h3>
+        <i class="icon icon-add"></i>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/city/hold" method="post">
+    <header class="box-title">添加数据</header>
+
+
+    <form method="post" action="/wftadlogin/good/saveGood" id="save-good-form">
+        <table class="table">
+            <tr>
+                <th width="80">uid (可以为空)</th>
+                <th width="80">电话号码 (可以为空 但是uid 与 电话号码必填一个)</th>
+                <th width="80">充值金额 (可填)</th>
+                <th width="80">现金券id (可填, 单个写现金券id 多个用#相连)</th>
+                <th width="80"></th>
+                <th width="80"></th>
+            </tr>
+            <tr>
+                <th width="80">10013</th>
+                <th width="80">136xxxx0021</th>
+                <th width="80">39.5</th>
+                <th width="80">83  OR 82#83#84#83</th>
+                <th width="80"><i id="ad-view" class="icon icon-add"></i</th>
+            </tr>
+
+
+            <tr>
+                <td width="80">
+                    <input class="cssInput" style="width: 80px" type="text" name="uid[]" value="">
+                </td>
+                <td width="80">
+                    <input class="cssInput" style="width: 160px" type="text" name="phone[]" value="">
+                </td>
+                <td width="80">
+                    <input class="cssInput" style="width: 80px" type="text" name="money[]" value="">
+                </td>
+
+                <td width="80">
+                    <input class="cssInput" style="width: 120px" type="text" name="cash_id[]" value="">
+                </td>
+
+                <td width="80">
+
+                </td>
+            </tr>
+        </table>
+        <input type="submit">
+    </form>
+
+
+
+</form>
+
+<script>
+    $(function () {
+        $('#ad-view').on('click', function () {
+
+            var tk = $(this).parent().parent().parent();
+
+            var html = '<tr>' +
+                '<td width="80"><input class="cssInput" style="width: 80px" type="text" name="uid[]" value=""></td>' +
+                '<td width="80"><input class="cssInput" style="width: 160px" type="text" name="phone[]" value=""></td>' +
+                '<td width="80"><input class="cssInput" style="width: 80px" type="text" name="money[]" value=""></td>' +
+                '<td width="80"><input class="cssInput" style="width: 120px" type="text" name="cash_id[]" value=""></td>' +
+                '<td width="80"></td></tr>';
+            tk.append(html);
+        });
+    });
+
+</script>
+

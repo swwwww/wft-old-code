@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>我的奖励</title>
+    <link href="/invite/style.css?v=<?php echo time();?>" rel="stylesheet"/>
+</head>
+<body>
+<header class="aw-head">
+    您已赢取<mark><?php if($this->rule->r_inviter_type==0): if($this->myTotalCredits > 0): echo $this->myTotalCredits;else: echo 0;endif;?>积分<?php else:if($this->myTotalCredits > 0): echo $this->myTotalCredits;else: echo 0;endif;?>现金券<?php endif;?>、<?php if($this->myTotalCash > 0): echo $this->myTotalCash;else: echo 0;endif;?>元</mark>推荐奖励
+</header>
+<section>
+    <ul class="aw-list" id="aw-list">
+        <?php
+        //var_dump($this->list);
+        if(!empty($this->list)) :
+            foreach ($this->list as $data):
+        ?>
+            <li>
+                <figure class="aw-user">
+                    <img src="<?php if(!empty($data['img'])): echo $data['img']; else:echo '/invite/img/user.gif';endif;?>" />
+                    <figcaption><?php echo $data['phone']?></figcaption>
+                </figure>
+                <span class="aw-status"><?php if($data['status'] == 0):echo '待使用玩翻天';elseif($data['status'] == 1):echo '已注册，首单未开启';else: echo '推荐成功';endif;?></span>
+                <div class="aw-tip">
+                    <!--如果已经提醒 添加类 disabled 按钮变灰-->
+                    <a class="aw-remind check-remind <?php if($data['remind'] == 0 or $data['status'] == 2 or $data['status'] == 3):echo 'disabled';endif; if($data['status'] == 2):echo ' over';endif; if($data['status'] == 3):echo ' unavailable';endif;?>" data-id="<?php echo $data['id'];?>"><?php if($data['status'] == 2):echo '奖励已发放';elseif($data['status'] == 3):echo '非每日有奖机会用户';else:echo '提醒他';endif;?></a>
+                </div>
+            </li>
+        <?php
+            endforeach;
+        endif;
+        ?>
+
+
+
+<!--        <li>-->
+<!--            <figure class="aw-user">-->
+<!--                <img src="/invite/img/user.gif" />-->
+<!--                <figcaption>137****1111</figcaption>-->
+<!--            </figure>-->
+<!--            <span class="aw-status">待使用玩翻天</span>-->
+<!--           <div class="aw-tip">-->
+               <!--如果已经提醒 添加类 disabled 按钮变灰-->
+<!--               <a class="aw-remind check-remind">提醒他</a>-->
+<!--           </div>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <figure class="aw-user">-->
+<!--                <img src="/invite/img/user.gif" />-->
+<!--                <figcaption>137****1111</figcaption>-->
+<!--            </figure>-->
+<!--            <span class="aw-status">已注册，首单未开启</span>-->
+<!--            <div class="aw-tip">-->
+<!--                <a class="aw-remind check-remind disabled">提醒他</a>-->
+<!--            </div>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--            <figure class="aw-user">-->
+<!--                <img src="/invite/img/user.gif" />-->
+<!--                <figcaption>137****1111</figcaption>-->
+<!--            </figure>-->
+<!--            <span class="aw-status">推荐成功</span>-->
+<!--            <div class="aw-tip">-->
+<!--                <a class="aw-remind disabled">奖励已发放</a>-->
+<!--            </div>-->
+<!--        </li>-->
+    </ul>
+<!--    --><?php //echo $this->pagedata; ?>
+</section>
+<div class="check-win" id="check-win">
+    <div class="check-win-box" id="check-win-box">
+        <!--over-->
+        <div class="check-win-list check-win-over">
+            <div id="over">
+                <p>该好友已经完成邀约啦~</p>
+            </div>
+            <a class="check-win-close over-close">确定</a>
+        </div>
+        <!--remind-->
+        <div class="check-win-list check-win-remind">
+            <div id="remind">
+                <p>您已经提醒过啦~</p>
+                <p>自邀请后每<?php echo $this->rule->remind_per_day;?>天才能提醒一次噢~</p>
+            </div>
+            <a class="check-win-close">确定</a>
+        </div>
+        <!--unavailable-->
+        <div class="check-win-list check-win-unavailable">
+            <div id="unavailable">
+                <p>该好友为当日超出邀约有奖次数的好友</p>
+            </div>
+            <a class="check-win-close unavailable-close">确定</a>
+        </div>
+        <!--send-->
+        <div class="check-win-list check-win-send">
+            <form action="javascript:void(0)">
+                <fieldset class="name">
+                    <label>您的昵称：</label><input type="text" name="username" id="username" value="" placeholder="<?php echo $this->username;?>（点击修改..)">
+                </fieldset>
+                <fieldset id="send">
+                    Hi玩翻天小伙伴，我是<span id="user"><?php echo $this->username;?></span><br>
+                    别忘了我送你的10元现金券哟。<br>
+                    下载链接：
+                </fieldset>
+                <fieldset class="set">
+                    <a class="check-win-close send-close">取消</a>
+                    <a class="sending" id="sending">发送</a>
+                </fieldset>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/invite/main.min.js"></script>
+</html>

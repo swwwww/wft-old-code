@@ -1,0 +1,280 @@
+<hgroup class="box">
+    <header>
+        <h3>财务</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/charge/list">充值审核</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/approve/index">订单审核</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+
+        $username = null;
+        $uid = null;
+        $time_start = null;
+        $time_end = null;
+        $check_status = 1;
+        $trade_no = null;
+        $order_id = null;
+        $action_type_id = 0;
+
+        if (isset($_GET['username']) && $_GET['username']) {
+            $username = $_GET['username'];
+        }
+
+        if (isset($_GET['uid']) && $_GET['uid']) {
+            $uid = $_GET['uid'];
+        }
+
+        if (isset($_GET['time_start']) && $_GET['time_start']) {
+            $time_start = $_GET['time_start'];
+        }
+
+        if (isset($_GET['time_end']) && $_GET['time_end']) {
+            $time_end = $_GET['time_end'];
+        }
+
+        if (isset($_GET['check_status']) && $_GET['check_status']) {
+            $check_status = $_GET['check_status'];
+        }
+
+        if (isset($_GET['trade_no']) && $_GET['trade_no']) {
+            $trade_no = $_GET['trade_no'];
+        }
+
+        if (isset($_GET['order_id']) && $_GET['order_id']) {
+            $order_id = $_GET['order_id'];
+        }
+
+        if (isset($_GET['action_type_id']) && $_GET['action_type_id']) {
+            $action_type_id = $_GET['action_type_id'];
+        }
+
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="username" value="<?php echo $username;?>">
+            </th>
+            <th width="160">用户uid</th>
+            <th>
+                <input type="text" class="cssInput" name="uid" value="<?php echo $uid;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">交易时间</th>
+            <th>
+                <input name="time_start" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_start;?>">
+                <input name="time_end" type="date" class="cssInput" style="width:190px"  value="<?php echo $time_end;?>">
+            </th>
+            <th width="160">交易号</th>
+            <th>
+                <input type="text" class="cssInput" name="trade_no" value="<?php echo $trade_no;?>">
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">订单号</th>
+            <th>
+                <input type="text" class="cssInput" name="order_id" value="<?php echo $order_id;?>">
+            </th>
+            <th width="160">审批状态</th>
+            <th>
+                <select name="check_status">
+                    <option value="3" <?php echo ($check_status == 3) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($check_status == 1) ? 'selected' : '';?>>待审批</option>
+                    <option value="2" <?php echo ($check_status == 2) ? 'selected' : '';?>>已审批</option>
+                </select>　　　
+                交易渠道
+                <select name="action_type_id">
+                    <option value="0" <?php echo ($action_type_id == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="2" <?php echo ($action_type_id == 2) ? 'selected' : '';?>>支付宝</option>
+                    <option value="3" <?php echo ($action_type_id == 3) ? 'selected' : '';?>>银联</option>
+                    <option value="12" <?php echo ($action_type_id == 12) ? 'selected' : '';?>>微信</option>
+                    <option value="17" <?php echo ($action_type_id == 17) ? 'selected' : '';?>>自然童趣</option>
+                    <option value="25" <?php echo ($action_type_id == 25) ? 'selected' : '';?>>新微信网页</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="type" value="3">
+                <a href="/wftadlogin/charge/list" style="background-color: green" class="ui-button">清空</a>
+                <button  class="ui-button">提交</button>
+                <a href="javascript:void(0)" data-src="/wftadlogin/charge/outData" id="out-data" style="background-color: green" class="ui-button">导出</a>
+            </th>
+        </tr>
+    </table>
+</form>
+
+
+
+<div class="panel panel panel-primary">
+    <div class="panel-heading">用户充值记录列表</div>
+    <div class="panel-body">
+
+        <table class="table table-striped table-hover">
+            <tr>
+                <th scope="col">选择</th>
+                <th scope="col">用户uid</th>
+                <th scope="col">用户名</th>
+                <th scope="col">交易时间</th>
+                <th scope="col">交易号</th>
+                <th scope="col">订单号</th>
+                <th scope="col">交易金额</th>
+                <th scope="col">账户余额</th>
+                <th scope="col">交易账号</th>
+                <th scope="col">支付渠道</th>
+                <th scope="col">审批状态</th>
+                <th scope="col">操作</th>
+            </tr>
+            <?php foreach ($this->data as $v): ?>
+                <tr>
+                    <td><input type="checkbox" name="check_ids" value="<?php echo $v['id']; ?>" class="check_ids"></td>
+                    <td><?php echo $v['uid']; ?></td>
+                    <td><?php echo $v['username']; ?></td>
+                    <td><?php echo date('Y-m-d H:i:s', $v['dateline']); ?></td>
+                    <td><?php echo $v['trade_no']; ?></td>
+                    <td><?php echo 'WFTREC'. $v['id']; ?></td>
+                    <td><?php echo $v['flow_money']; ?></td>
+                    <td><?php echo $v['surplus_money']; ?></td>
+                    <td><?php echo $v['user_account']; ?></td>
+                    <td>
+                        <?php
+                            if ($v['action_type_id'] == 2) {
+                                echo '支付宝';
+                            }elseif ($v['action_type_id'] == 3) {
+                                echo '银联';
+                            } elseif ($v['action_type_id'] == 12) {
+                                echo '微信';
+                            } elseif ($v['action_type_id'] == 17) {
+                                echo '自然童趣';
+                            } elseif ($v['action_type_id'] == 25) {
+                                echo '新微信网页';
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            if ($v['check_status'] == 0) {
+                                echo '待审批';
+                            }elseif ($v['check_status'] == 1) {
+                                echo '已审批';
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if($v['check_status'] == 0):?>
+                            <a class="ui-button" href="/wftadlogin/charge/charge?type=1&id=<?php echo $v['id']; ?>">审批到账</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+
+        </table>
+        <input type="checkbox" id="check-all">当前页面全选
+        <button class="ui-button" id="approve-by">当前页面审批到账</button>
+        <a href="javascript:void(0)" data-src="/wftadlogin/charge/charge" id="all-in" class="ui-button">前搜索条件下全部审批到账</a>
+        <style>
+            #tongji{
+                padding:5px 5px;
+                margin: 5px 5px;
+            }
+            #tongji span{
+                color:red;
+                font-size:16px;
+                padding: 10px;
+            }
+        </style>
+        <div id="tongji">
+            <div>
+                <span>已审核金额：<mark><?php echo $counter['have_money'];?></mark></span>
+                <span>待审核金额：<mark><?php echo $counter['wait_money'];?></mark></span>
+                <span>个数 : <?php echo $counter['count_num'];?></span>
+            </div>
+        </div>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        //导出
+        $('#out-data').click(function() {
+            $('#out-data-form').attr('action', $(this).attr('data-src'));
+            $('#out-data-form').submit();
+            $('#out-data-form').attr('action', '');
+
+        });
+
+        //全选
+        $('#check-all').click(function() {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //批量审批到账
+        $('#approve-by').click(function() {
+            if (confirm('确定将所有选中的审批到账？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/charge/charge?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id='';//如果这样定义var s;变量s中会默认被赋个null值
+
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked){
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中');
+                }
+
+                $.post(href, {ids:id}, function (data) {
+                    if (data.status) {
+                        alert('成功');
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+        });
+
+        //全选审批到账
+        $('#all-in').click(function() {
+            if (confirm('前搜索条件下全部审批到账?')) {
+                $('#out-data-form').attr('action', $(this).attr('data-src'));
+                $('#out-data-form').submit();
+                $('#out-data-form').attr('action', '');
+            }
+        });
+
+    });
+</script>
+
+
+

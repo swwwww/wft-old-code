@@ -1,0 +1,223 @@
+<hgroup class="box">
+    <header>
+        <h3>定制活动列表</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/excercise">返回活动</a>
+
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span></div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/excercise/blist" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $begin_time = null;
+    $end_time = null;
+    $bid = null;
+    $eid = null;
+    $name = null;
+    $type = null;
+    $city = null;
+
+    if (isset($_GET['start_time']) && $_GET['start_time']) {
+        $start_time = $_GET['start_time'];
+    }
+
+    if (isset($_GET['end_time']) && $_GET['end_time']) {
+        $end_time = $_GET['end_time'];
+    }
+
+    if (isset($_GET['bid']) && $_GET['bid']) {
+        $bid = $_GET['bid'];
+    }
+
+    if (isset($_GET['eid']) && $_GET['eid']) {
+        $eid = $_GET['eid'];
+    }
+
+    if (isset($_GET['name']) && $_GET['name']) {
+        $name = $_GET['name'];
+    }
+
+    if (isset($_GET['city']) && $_GET['city']) {
+        $city = $_GET['city'];
+    }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">定制活动时间</th>
+            <th>
+                <input name="start_time" type="date" class="cssInput" style="width:190px"  value="">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="">
+            </th>
+            <th width="160"></th>
+            <th>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">原生活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="bid" value="<?php echo $bid;?>">
+            </th>
+            <th width="160">定制活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="id" value="<?php echo $eid;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">定制活动名称</th>
+            <th>
+                <input type="text" class="cssInput" name="name" value="<?php echo $name;?>">
+            </th>
+            <th width="160">定制活动状态</th><!-- 售卖状态 -1 删除  0停止售卖(活动暂停) 1正常售卖 2已满员 3活动结束 -->
+            <th> <select name="status">
+                    <option <?php if($_GET['status']==0): ?>selected="selected" <?php endif; ?> value="0">全部状态</option>
+                    <option <?php if($_GET['status']==1): ?>selected="selected" <?php endif; ?> value="1">已删除</option>
+                    <option <?php if($_GET['status']==2): ?>selected="selected" <?php endif; ?> value="2">活动暂停</option>
+                    <option <?php if($_GET['status']==3): ?>selected="selected" <?php endif; ?> value="3">正常售卖</option>
+                    <option <?php if($_GET['status']==4): ?>selected="selected" <?php endif; ?> value="4">已满员</option>
+                    <option <?php if($_GET['status']==5): ?>selected="selected" <?php endif; ?> value="5">活动结束</option>
+                </select>
+            <th>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/excercise/blist" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">定制ID  </th>
+                <th class="size1">原生ID  </th>
+                <th class="size1">活动名称</th>
+                <th class="size1">更新时间</th>
+                <th class="size1">游玩地</th>
+                <th class="size1">区域</th>
+                <th class="size1">浏览</th>
+                <th class="size1">评论</th>
+                <th class="size1">分享</th>
+                <th class="size1">咨询</th>
+                <th class="size1">虚拟票</th>
+                <th class="size1">状态</th>
+                <th class="size1">操作</th>
+            </tr>
+            <?php if (count($data)): ?>
+                <?php foreach ($data as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1">
+                            <a href="/wftadlogin/excercise/edite?id=<?php echo $row['id']; ?>">
+                                <?php echo $row['id']; ?>
+                            </a>
+                        </td>
+                        <td class="size1">
+                            <a href="/wftadlogin/excercise/edit?id=<?php echo $row['bid']; ?>">
+                                <?php echo $row['bid']; ?>
+                            </a>
+                        </td>
+                        <td class="size1"><?php echo $row['name'].' 第'.$row['no'].'期'; ?></td>
+                        <td class="size1"><?php echo date('Y-m-d H:i',$row['update_dataline']); ?></td>
+                        <td class="size1"><?php echo $shop[$row['shop_id']]['shop_name']; ?></td>
+                        <td class="size1"><?php echo $circle[$row['shop_id']]; ?></td>
+                        <td class="size1"><?php echo $row['view_number']; ?></td>
+                        <td class="size1"><?php echo $row['comment_number']; ?></td>
+                        <td class="size1"><?php echo $row['vir_number']; ?></td>
+                        <td class="size1">
+                            <?php echo $row['share_number']; ?>
+                        </td>
+                        <td class="size1">
+                            <?php echo $row['query_number']; ?>
+                        </td>
+                        <!-- 售卖状态 -1 删除  0停止售卖(活动暂停) 1正常售卖 2已满员 3活动结束 -->
+                        <td class="size1">
+                            <?php if($row['sell_status']==0){
+                                echo '活动暂停';
+                            }elseif($row['sell_status']==-1){
+                                echo '已经删除';
+                            }elseif($row['sell_status']==1){
+                                echo '正常售卖';
+                            }elseif($row['sell_status']==2){
+                                echo '已满员';
+                            }elseif($row['sell_status']==3){
+                                echo '活动结束';
+                            }
+                            ?>
+                        </td>
+                        <td class="size3">
+                            <a href="/wftadlogin/excercise/editc?id=<?php echo $row['id']; ?>"
+                               class="ui-button">编辑</a>
+                            <a href="/wftadlogin/excercise/customize?id=<?php echo $row['id']; ?>"
+                               class="ui-button">查看详情</a>
+                            <a href="javascript:void(0);" title="http://wan.wanfantian.com/web/kidsplay/info?id=<?php echo $row['id']; ?>" onclick="copyToClipBoard()";
+                               class="ui-button btns">复制连接</a>
+                    <?php if($row['join_number'] >= $row['least_number']): ?>
+                            <a href="/wftadlogin/excercise/personlist?id=<?php echo $row['id']; ?>"
+                               class="ui-button">投保</a>
+                        <?php endif; ?>
+<!--                            --><?php //if ($row['is_close']): ?>
+<!--                                <a href="/wftadlogin/excercise/estatus?id=--><?php //echo $row['id']; ?><!--&isclosed=0"-->
+<!--                                   class="ui-button"></a>-->
+<!--                            --><?php //else: ?>
+<!--                                <a href="/wftadlogin/excercise/estatus?id=--><?php //echo $row['id']; ?><!--&isclosed=1"-->
+<!--                                   class="ui-button">停止发放</a>-->
+<!--                            --><?php //endif; ?>
+                            <a onclick="del_confirm(<?php echo $row['id']; ?>);" href="#"
+                               class="ui-button">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无内容 你可以添加哦</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<script src="/js/clipboard.min.js"></script>
+<script>
+    function copyToClipBoard(){
+        var clipboard = new Clipboard('.btns', {
+            text: function(trigger) {
+                return trigger.getAttribute('title');
+            }
+        });
+
+        alert('链接已复制到剪切板！');
+    }
+
+    function del_confirm(id)
+    {
+        var r=confirm("是否确定要删除？");
+        if (r==true)
+        {
+            window.location.href="/wftadlogin/excercise/estatus?id="+id+"&isclose=-1";
+        }
+
+    }
+</script>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="app-mobile-web-app-capable" content="yes">
+    <title>修改用户名</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/my.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content">
+    <section class="wrapper">
+        <form class="edit-name">
+            <div class="name">
+                <input type="text" name="name" class="search" placeholder="请输入用户名" autocomplete="off" value="<?php echo $name;?>" id="name"/>
+                <input type="reset" value="×" />
+            </div>
+            <div class="tips">必须小于16个字符</div>
+            <input class="submit" type="button" value="保存" id="sub"/>
+        </form>
+    </section>
+</main>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script>
+    $("#sub").click(function(){
+        var newName = $("#name").val();
+        if(!newName){
+            alert("请输入新的用户名");
+            return false;
+        }
+
+        $.ajax({
+            type:'POST',
+            url:"/user/info/resetNew",
+            dataType:'json',
+            async: true,
+            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,'username':newName},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.error_code == 0) {
+                    alert(result.response_params.error_msg);
+                }
+                if (result.response_params.status == 0) {
+                    alert(result.response_params.message);
+                }
+                if (result.response_params.status == 1) {
+                    alert(result.response_params.message);
+                    self.location=document.referrer;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+
+            }
+        })
+    })
+</script>
+</html>

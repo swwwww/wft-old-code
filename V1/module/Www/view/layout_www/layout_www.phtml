@@ -1,0 +1,92 @@
+<!DOCTYPE html >
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="玩翻天 亲子 游玩管家 遛娃 遛娃学院 儿童剧 周末遛娃" />
+    <meta name="description" content="玩翻天是0-12岁家长必备的遛娃神器、孩子们的游玩管家。专注组织口碑优良的精品亲子遛娃活动，全力解决家长“去哪儿玩”、“怎么玩”、“好好玩”的三大痛点问题。是深受广大家长信赖的中国家庭亲子游玩消费媒体第一品牌。" />
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no" />
+    <title>玩翻天-孩子们的游玩管家,家长们的遛娃宝典</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon"/>
+    <!--<link href="css/style.css" rel="stylesheet" type="text/css" />-->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css?t=100">
+    <link rel="stylesheet" href="/static/css/wft.css?t=210" />
+    <!--[if lt IE 9]>
+    <script src="/static/js/html5shiv.min.js?t=100"></script>
+    <script src="/static/js/respond.min.js?t=100"></script>
+    <script src="/static/js/selectivizr.js" type="text/javascript"></script>
+    <![endif]-->  <!--兼容性-->
+    <script src="/static/js/jquery.min.js?t=100"></script>
+    <script src="/static/js/bootstrap.min.js?t=100"></script>
+</head>
+<body>
+<!--nav start-->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!--小屏幕导航按钮和logo-->
+            <div class="navbar-header">
+                <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!--小屏幕导航按钮和logo-->
+                <a href="/" class="navbar-brand">
+                    <!--玩翻天-->
+                    <img src="/static/images/logo.gif">
+                </a>
+            </div>
+            <!--导航-->
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="<?php echo ($active == 'school' || ($active == 'artical' && isset($_GET['type']))) ? 'current' : '';?>" href="/www/index/school">遛娃学院</a></li>
+                    <li><a class="<?php echo ($active == 'index' || ($active == 'artical' && !isset($_GET['type']))) ? 'current' : '';?>" href="/">用户版</a></li>
+                    <li><a target="_blank" href="http://play.wanfantian.com/">WAP版</a></li>
+                    <li><a class="<?php echo ($active == 'business') ? 'current' : '';?>" href="/www/index/business">商家版</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<?php echo $this->content; ?>
+    <section class="container" id="contact">
+        <h2 class="contact-title">联系我们</h2>
+        <div class="raw">
+            <div class="col-md-6 col-sm-6">
+                <div class="col-sm-6">
+                    <div class="Wuhan">
+                        <dl>
+                            <dt>武汉站</dt>
+                            <dd><b>地址: </b> 武汉市汉阳区龟山北路一号汉阳造文化创意产业园13栋3楼</dd>
+                            <dd><b>座机:</b> 4008007221</dd>
+                            <dd><b>商务合作:</b> 18672962818</dd>
+                            <dd><b>QQ:</b> 277026888</dd>
+                            <dd><b>微信:</b> wanfantian8</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-sm-6 center-img">
+                    <img src="/static/images/fot_r4_c11wuhan.png" class="img-responsive Qcode">
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-6">
+                <div class="col-sm-6">
+                    <div class="Nanjing">
+                        <dl>
+                            <dt>南京站</dt>
+                            <dd><b>地址:</b> 南京市秦淮区莫愁路329号越界梦幻城B栋二楼</dd>
+                            <dd><b>座机:</b> 4008007221</dd>
+                            <dd><b>商务合作:</b> 18602558780</dd>
+                            <dd><b>QQ: </b>66931779</dd>
+                            <dd><b>微信:</b> Wanfantiannanjing</dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="col-sm-6 center-img">
+                    <img src="/static/images/fot_r3_c18nanjing.png" class="img-responsive Qcode">
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

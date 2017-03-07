@@ -1,0 +1,660 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/game">返回商品列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+
+<header class="box-title">
+    <?php echo !$goodData ? '添加商品' : ''; ?>
+    <?php if ($goodData): ?>
+        <a href="/wftadlogin/good/new?type=basis&gid=<?php echo $goodData->id ?>">商品--基本信息</a>　　　
+        <a href="/wftadlogin/good/new?type=info&gid=<?php echo $goodData->id ?>">商品描述</a>        　　
+        <?php if ($goodData->is_together == 1): ?>
+            <?php if($goodData->need_use_time): ?>
+        <a href="/wftadlogin/good/priceInfo?gid=<?php echo $goodData->id ?>">商品——价格套系</a><?php endif ?>　　　　
+            <?php endif; ?>
+        <a href="/wftadlogin/good/new?type=welfare&gid=<?php echo $goodData->id ?>">商品--奖励与返利</a>　　　　
+        <?php if(in_array($goodData->id, array(2010, 1987, 2091))):?>
+            <a href="/wftadlogin/good/new?type=code&gid=<?php echo $goodData->id?>">商品--美团码发送情况</a>
+        <?php endif?>
+    <?php endif; ?>
+
+</header>
+
+<br/>
+
+<!--<header class="box-title">验证商家</header>
+<?php /*foreach($infoUsedData as $fod):*/ ?>
+    <?php /*echo $fod->organizer_name. '  ';*/ ?>
+<?php /*endforeach;*/ ?>
+<br />-->
+
+<br/>
+
+<?php $new = $goodData->need_use_time == 2 ? 1 : 0; ?>
+
+<header class="box-title">合同规定限制</header>
+<table class="table">
+    <tr>
+        <th>原价</th>
+        <th>现价</th>
+        <th>结算价</th>
+        <!-- <th>数量</th>-->
+        <th>操作</th>
+    </tr>
+    <?php foreach ($contractLinkData as $contractLink): ?>
+        <tr>
+            <td width="80">
+                <?php echo $contractLink->money; ?>
+            </td>
+            <td width="80">
+                <?php echo $contractLink->price; ?>
+            </td>
+            <td width="80">
+                <?php echo $contractLink->account_money; ?>
+            </td>
+            <!--<td width="80">
+                <?php /*echo $contractLink->total_num; */ ?>
+            </td>-->
+            <td width="80">
+                <!--<a onclick="if(confirm('会让合同处于未审核状态?')==false)return false;" href="/wftadlogin/contract/deletePrice?id=<?php /*echo $contractLink->id;*/ ?>">删除</a>-->
+                <?php if ($new): ?>
+                    <a class="ui-button"
+                       href="/wftadlogin/good/newPriceInfo?gid=<?php echo $goodData->id ?>&lid=<?php echo $contractLink->id; ?>">添加价格系列</a>
+                <?php else: ?>
+                    <a class="ui-button"
+                       href="/wftadlogin/good/price?gid=<?php echo $goodData->id ?>&lid=<?php echo $contractLink->id; ?>">添加价格系列</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    <tr>
+        <th colspan="4">合同编号：<?php echo $contract_on; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $tip; ?></th>
+    </tr>
+
+
+</table>
+
+<br/>
+<br/>
+
+<header class="box-title">套系</header>
+<table class="table">
+    <tr>
+        <th>系列名称</th>
+        <th>原价</th>
+        <th>现价</th>
+        <th>结算价</th>
+        <!-- <th>数量</th>-->
+        <th>开始售卖时间<br/>
+            结束售卖时间
+        </th>
+        <th>退款规则</th>
+        <?php if($new): ?>
+        <th>预约时间</th>
+        <?php endif; ?>
+        <th>限购分数范围</th>
+        <th>是否需要资格券</th>
+        <th>是否新用户专享</th>
+        <th>特别说明</th>
+        <th>兑换方式</th>
+        <th>所需积分</th>
+        <th>保险类型</th>
+        <th>保险单价</th>
+        <th>每单保险人数</th>
+        <th>智游宝商品码</th>
+        <th>特例商品</th>
+        <th>操作</th>
+    </tr>
+    <?php $priceData->buffer(); ?>
+    <?php foreach ($priceData as $price): ?>
+        <tr>
+            <td width="80">
+                <?php echo $price->name; ?>
+            </td>
+            <td width="50"><!-- 原价 -->
+                <?php echo $price->money; ?>
+            </td>
+            <td width="50"><!-- 现价 -->
+                <?php echo $price->price; ?>
+            </td>
+            <td width="50"><!-- 结算价 -->
+                <?php echo $price->account_money; ?>
+            </td>
+
+            <td width="100">
+                <?php echo date('Y-m-d', $price->up_time) . '<br/>'; ?>
+                <?php echo date('Y-m-d', $price->down_time); ?>
+            </td>
+            <td width="80"><!-- 退款规则 -->
+
+                <?php if ($new) { ?>
+                    <?php if ($price->back_rule) { ?>
+                        自游玩日期起<?php echo $price->refund_before_day; ?>天<br/>
+                        <?php echo date('H:i', $price->refund_before_time); ?>内支持退款
+                    <?php } else { ?>
+
+                        <?php echo $back_money = ($price->refund_time < $price->up_time) ? '不支持退款' : (($price->refund_time > $price->down_time) ? '支持随时退款' : date('Y.m.d H:i',
+                                $price->refund_time) . '前支持退款');
+                        ?>
+                    <?php } ?>
+                <?php } else { ?>
+                    <?php echo $back_money = ($price->refund_time < $price->up_time) ? '不支持退款' : (($price->refund_time > $price->down_time) ? '支持随时退款' : date('Y.m.d H:i',
+                            $price->refund_time) . '前支持退款');
+                    ?>
+                <?php } ?>
+
+            </td>
+            <?php if ($new): ?>
+            <td width="80"><!-- 预约时间 -->
+                提前<?php echo $price->book_hours; ?>小时<br/>
+                <?php echo date('H:i:s', $price->book_time); ?>前
+            </td>
+            <?php endif; ?>
+            <td width="80"><!-- 限购分数范围 -->
+                <?php echo $price->limit_low_num . '-' . $price->limit_num; ?>
+            </td>
+            <td width="80"><!-- 是否需要资格券 -->
+                <?php echo $price->qualified == 2 ? '是' : '否'; ?>
+            </td>
+            <td width="80"><!-- 是否新用户专享 -->
+                <?php echo $price->for_new == 1 ? '是' : '否'; ?>
+            </td>
+            <td width="80"><!-- 特别说明 -->
+                <?php echo mb_substr($price->remark, 0, 12, 'utf-8') . ((mb_strlen($price->remark,
+                            'utf-8') > 12) ? "..." : ''); ?>
+            </td>
+            <td width="80"><!-- 兑换方式 -->
+                <?php echo mb_substr($price->order_method, 0, 12, 'utf-8') . ((mb_strlen($price->order_method,
+                            'utf-8') > 12) ? "..." : ''); ?>
+            </td>
+            <td width="80"><!-- 所需积分 -->
+                <?php echo $price->integral; ?>
+            </td>
+            <td width="80"><!-- 保险类型 -->
+                <?php foreach ($baoyoulist as $v) {
+                    if ($v['RateCode'] == $price->insure_days) {
+                        echo "{$v['PlanName']}({$v['DayRange']}天)";
+                    }
+                }; ?>
+
+            </td>
+            <td width="80"><!-- 保险单价 -->
+                <?php echo $price->insure_price; ?>
+            </td>
+            <td width="80"><!-- 每单保险人数 -->
+                <?php echo $price->insure_num_per_order; ?>
+            </td>
+            <td width="80"><!-- 智游宝商品码 -->
+                <?php echo $price->goods_sm; ?>
+            </td>
+            <td width="80"><!-- 特例商品 -->
+                <?php echo $price->excepted?'是':'否'; ?>
+            </td>
+            <td width="80"><!--  -->
+                <a onclick="if(confirm('确定删除?')==false)return false;"
+                   href="/wftadlogin/good/deletePrice?id=<?php echo $price->id; ?>">删除</a>
+                <?php if ($new): ?>
+                    <a class="ui-button" href="/wftadlogin/good/newPriceInfo?id=<?php echo $price->id ?>">修改</a>
+                <?php else: ?>
+                    <a class="ui-button" href="/wftadlogin/good/price?id=<?php echo $price->id ?>">修改</a>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <?php
+        $money[$price->id] = $price->name;
+        ?>
+    <?php endforeach; ?>
+</table>
+
+<br/>
+<br/>
+
+<header class="box-title">时间地点关联 　　　<?php if (count($priceData)): ?>
+        <?php if ($new): ?>
+            <a class="ui-button"
+               href="/wftadlogin/good/newPlaceInfo?gid=<?php echo $goodData->id ?>&lid=<?php echo $contractLink->id; ?>">
+                添加</a>
+        <?php else: ?>
+            <a class="ui-button"
+               href="/wftadlogin/good/oldPlaceInfo?gid=<?php echo $goodData->id ?>&lid=<?php echo $contractLink->id; ?>">添加</a>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
+</header>
+<form method="get" action="" id="save-good-form">
+    <input name="gid" type="hidden" value="<?php echo $goodData->id ?>"/>
+    <input name="lid" type="hidden" value="<?php echo $contractLink->id ?>"/>
+    <table class="table">
+        <tr>
+            <th width="120px">使用时间：</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo $startl; ?>" name="time_startl">
+                - <input type="date" value="<?php echo $endl; ?>" name="time_endl">
+            </th>
+            <th width="120px">价格套系：</th>
+            <th colspan="3">
+                <select name="price_id">
+                    <option>请选择</option>
+                    <?php foreach ($priceData as $pr): ?>
+                        <option <?php if ($price_id == $pr['id']): ?>selected="selected" <?php endif; ?>
+                                value="<?php echo $pr['id']; ?>"><?php echo $pr['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </th>
+            <th width="120px">展示条数：</th>
+            <th colspan="3">
+                <select name="pageSum">
+                    <option value="10" <?php if ($pageSum == 10): ?>selected="selected" <?php endif; ?>>10条</option>
+                    <option value="50" <?php if ($pageSum == 50): ?>selected="selected" <?php endif; ?>>50条</option>
+                    <option value="100" <?php if ($pageSum == 100): ?>selected="selected" <?php endif; ?>>100条</option>
+                    <option value="150" <?php if ($pageSum == 150): ?>selected="selected" <?php endif; ?>>150条</option>
+                </select>
+            </th>
+
+            <th width="">
+                <input class="ui-button" type="submit" value="搜索"/>
+                <a href="/wftadlogin/good/priceInfo?gid=<?php echo $goodData->id ?>"> 清除搜索条件 </a>
+            </th>
+            <th></th>
+            <th colspan="3">
+            </th>
+        </tr>
+    </table>
+</form>
+<form method="post" action="" id="save-good-form">
+    <table class="table">
+        <tr>
+            <th width="10">选择</th>
+            <th width="80">关联游玩地</th>
+            <th width="80">使用时间</th>
+            <th width="80">支持的价格系列</th>
+
+            <th width="80">原价</th>
+            <th width="80">售价</th>
+            <th width="80">结算价</th>
+
+            <th width="40">接纳人数</th>
+            <th width="40">报名人数</th>
+
+            <th width="100">验证商家</th>
+
+            <th width="80">操作</th>
+        </tr>
+        <?php foreach ($goodInfoData as $info): ?>
+            <tr <?php if (!$info['status']): ?> style="color: #7f7f7f" <?php endif; ?> >
+                <td width="10">
+                    <?php if ($info['status']): ?>
+                    <input name="check_ids"
+                           type="checkbox" value="<?php echo $info['id'] . '-' . $info['contract_price_id']; ?>">
+                    <?php endif; ?>
+                </td>
+                <td width="80">
+                    <?php echo $info['shop_name']; ?>
+                </td>
+                <td width="80">
+                    <?php if ($new): ?>
+                        <?php echo date('Y-m-d', $info['start_time']); ?>
+                    <?php else: ?>
+                        <?php echo date('Y-m-d H:i:s', $info['start_time']); ?><br/>
+                        <?php echo date('Y-m-d H:i:s', $info['end_time']); ?>
+                    <?php endif; ?>
+
+                </td>
+
+                <td width="80">
+                    <?php echo $info['price_name']; ?>
+                </td>
+
+
+                <td width="80">
+                    <?php echo $info['money']; ?>
+                </td>
+                <td width="80">
+                    <?php echo $info['price']; ?>
+                </td>
+                <td width="80">
+                    <?php echo $info['account_money']; ?>
+                </td>
+
+                <td width="40">
+                    <?php echo $info['total_num']; ?>
+                </td>
+                <td width="40">
+                    <?php echo $info['buy']; ?>
+                </td>
+
+
+                <td width="100">
+                    <?php echo $info['organizer_name']; ?>
+                </td>
+
+                <td width="80">
+                    <?php if ($info['status']): ?>
+                        <?php if ($new): ?>
+                            <a href="/wftadlogin/good/newPlaceInfo?id=<?php echo $info['id']; ?>">修改</a>
+                        <?php else: ?>
+                            <a href="/wftadlogin/good/oldPlaceInfo?id=<?php echo $info['id']; ?>">修改</a>
+                        <?php endif; ?>
+                        <a onclick="if(confirm( '<?php echo $info['status'] ? '确定隐藏' : '确定取消隐藏'; ?> ')==false)return false; "
+                           href="/wftadlogin/good/deleteGoodInfo?id=<?php echo $info['id']; ?>">隐藏</a>
+                    <?php else: ?>
+                        已隐藏
+                    <?php endif; ?>
+
+                </td>
+            </tr>
+        <?php endforeach; ?>
+
+        <tr style="display: none" id="tr-hidden">
+            <td width="80" id="ad-place-view">
+                <input type="text" value="" class="orTz">
+
+                <div>
+                </div>
+            </td>
+            <td width="80">
+                <input type="date" value="<?php echo date('Y-m-d', time() + 184000); ?>" name="time_startl">
+                <input type="time" value="<?php echo '08:00'; ?>" name="time_startr">　
+            </td>
+            <td width="80">
+                <input type="date" value="<?php echo date('Y-m-d', time() + 5184000); ?>" name="time_endl">
+                <input type="time" value="<?php echo '08:00'; ?>" name="time_endr">　
+            </td>
+            <td width="80">
+                <select name="price">
+                    <?php foreach ($money as $k => $v): ?>
+                        <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            <td width="40">
+                <input class="cssInput" style="width: 40px" type="text" name="total_num" value="">
+            </td>
+            <td width="40">
+                <input class="cssInput" style="width: 40px" type="text" disabled value="0">
+            </td>
+            <td width="40">
+                <input class="cssInput" style="width: 40px" type="text" name="integral" value="">
+            </td>
+            <td width="40">
+                <input class="cssInput" style="width: 40px" type="text" name="insure_num_per_order" value="">
+            </td>
+            <td width="40">
+                <input class="cssInput" style="width: 40px" type="text" name="insure_price" value="">
+            </td>
+            <td width="40">
+                <select name="insure_days">
+                    <?php foreach ($baoyoulist as $v): ?>
+                        <option
+                            value="<?php echo $v['RateCode']; ?>"><?php echo "{$v['PlanName']}({$v['DayRange']}天)"; ?></option>
+                    <?php endforeach; ?>
+
+                </select>
+            </td>
+
+            <td width="100">
+                <input type="radio" name="use_organizer_id"
+                       value="<?php echo $marketData->id; ?>"><?php echo $marketData->name; ?><br/>
+                <?php foreach ($branchData as $branch): ?>
+                    <input type="radio" name="use_organizer_id"
+                           value="<?php echo $branch->id; ?>"><?php echo $branch->name; ?><br/>
+                <?php endforeach; ?>
+            </td>
+
+            <td width="80">
+                <input class="cssInput" style="width: 100px" type="text" name="goods_sm" value="">
+            </td>
+
+            <td width="80">
+                <input type="hidden" name="gid" value="<?php echo $goodData->id; ?>">
+                <button type="submit" class="ui-button" id="save-good">保存</button>
+            </td>
+        </tr>
+    </table>
+    <input type="checkbox" id="check-all">全选
+    <?php if($new): ?>
+    <button class="ui-button" onclick="return false" id="validate_all">批量修改</button>
+    <?php endif; ?>
+    <button onclick="return false;" class="ui-button" id="back_all">批量隐藏</button>
+
+</form>
+
+<footer>
+    <?php echo $this->pageData; ?>
+</footer>
+
+<div style="height: 400px;" class="hide-body special_back_body">
+    <div class="close-window special_back_close">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+
+        <h3 style="text-align: center">批量修改</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform2">
+        <form class="" style="text-align: left;" name="backform" action="/wftadlogin/good/batchingPrice" id="spback"
+              method="post" autocomplete="off">
+            <input id="ids" type="hidden" value="" name="ids"/>
+            <input type="hidden" value="<?php echo $goodData->id; ?>" name="vgid"/>
+            <input type="hidden" value="<?php echo $goodData->contract_id; ?>" name="contractid"/>
+            <table style="width: 400px">
+                <tr style="height: 40px">
+                    <td>原价：</td>
+                    <td><input style="width: 180px" name="money" type="text " class="cssInput"/></td>
+                </tr>
+                <tr style="height: 40px">
+                    <td>售价：</td>
+                    <td><input style="width: 180px" name="price" type="text " class="cssInput"/></td>
+                </tr>
+                <?php if($goodData->account_type==3 or $goodData->account_type==2): ?>
+                <tr style="height: 40px">
+                    <td>结算价：</td>
+                    <td><input style="width: 180px" name="account_money" type="text " class="cssInput"/></td>
+                </tr>
+                <?php endif; ?>
+                <tr style="height: 40px">
+                    <td>可接纳人数：</td>
+                    <td><input style="width: 180px" name="total_num" type="text " class="cssInput"/></td>
+                </tr>
+                <tr style="height: 40px">
+                    <td></td>
+                    <td>
+                        <button onclick="if(confirm('确定批量修改?')==false) return false;" type="submit" id="validate"
+                                style="margin-left: 10px">批量修改
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 60%;
+        left: 50%;
+        width: 500px;
+        height: 200px;
+        margin: -180px 0 0 -250px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        box-shadow: 0 0 10px #666;
+        display: none;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+
+    .xiala {
+        width: 400px;
+        position: relative;
+        height: 24px;
+        background-color: #4F463D;
+        color: white;
+    }
+</style>
+<script>
+
+    $(function () {
+
+        var dd = function (id) { //jquery的点击事件
+            $('.special_back_body').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.special_back_close').slideDown(200);//将隐藏的窗口div显示出来
+
+            var money = $(this).attr('data-money');
+            $('#ids').val(id);
+        };
+
+        $('.close-window .close').click(function () {
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        });
+
+        //批量验证
+        $('#validate_all').click(function () {
+            //执行修改操作
+            var check_ids = document.getElementsByName('check_ids');
+            var id = '';//如果这样定义var s;变量s中会默认被赋个null值
+            for (var i = 0; i < check_ids.length; i++) {
+                if (check_ids[i].checked) {
+                    if (i == check_ids.length - 1) {
+                        id += check_ids[i].value;
+                    } else {
+                        id += check_ids[i].value + ',';
+                    }
+                }
+            }
+            if (id == '') {
+                alert('没有选中任何订单');
+            } else {
+                dd(id);
+            }
+        });
+
+        //批量退费
+        $('#back_all').click(function () {
+            //执行修改操作
+            var href = '/wftadlogin/good/batchingdeleteGoodInfo';//跳转的链接
+            var check_ids = document.getElementsByName('check_ids');
+            var id = '';//如果这样定义var s;变量s中会默认被赋个null值
+            for (var i = 0; i < check_ids.length; i++) {
+                if (check_ids[i].checked) {
+                    if (i == check_ids.length - 1) {
+                        id += check_ids[i].value;
+                    } else {
+                        id += check_ids[i].value + ',';
+                    }
+                }
+            }
+
+            if (id == '') {
+                alert('没有选中任何订单');
+            } else {
+                if (confirm('确定批量隐藏')) {
+                    window.location.href = href + '?id=' + id;
+                }
+            }
+        });
+
+        //全选和全不选
+        var count = $("#count").val(),
+            sum_income = $("#sum_income").val(),
+            sum_out = $("#sum_out").val();
+
+        $('#check-all').click(function () {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+        //保存提交
+        $('#save-good').click(function () {
+            $.post('/wftadlogin/good/saveGood', $('#save-good-form').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href = "/wftadlogin/good/priceInfo?gid=" + data.gid;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        });
+
+        //显示添加商品
+        $('#add-place').click(function () {
+            $('#tr-hidden').css('display', '');
+        });
+
+        //搜索店铺的
+        $('#ad-place-view').on('input propertychange', '.orTz', function () {
+            var k = $(this).val();
+            var that = $(this).next();
+            that.empty();
+            $.get('/wftadlogin/good/getShop?k=' + k,
+                function (result) {
+                    $.each(result.data, function (entryIndex, entry) {
+                        var html = '<div class="xiala" data-name="' + entry['name'] + '" data-sid="' + entry['sid'] + '">';
+                        html += entry['name'] + '</div>';
+                        that.append(html);
+                    })
+                }, 'json'
+            );
+        });
+
+        $('#ad-place-view').on('click', '.xiala', function () {
+            var shop_name = $(this).attr('data-name');
+            var shop_id = $(this).attr('data-sid');
+
+            var tk = $(this).parent('div').parent('td');
+            var html = '<input type="hidden" name="shop_id"  value="' + shop_id + '"><input type="hidden" name="shop_name"  value="' + shop_name + '">' + shop_name;
+            $(this).parent('div').prev().remove();
+            $(this).parent('div').remove();
+            tk.append(html);
+        });
+
+
+    })
+</script>
+

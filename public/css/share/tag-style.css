@@ -1,0 +1,246 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    width: 100%;
+    color: #4C4B46;
+    background: #F0F0EF;
+    font: 12px 'Microsoft YaHei';
+    -webkit-text-size-adjust: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+a {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.cl {
+    clear: both;
+}
+
+.block {
+    display: block;
+}
+
+.none {
+    display: none;
+}
+
+.bg img {
+    width: 100%;
+    display: block;
+}
+
+pre {
+    padding: 10px;
+    color: #545454;
+    display: block;
+    overflow: auto;
+    word-wrap:break-word;
+    word-break:break-all;
+    line-height: 20px;
+    background-color: #ffffff;
+}
+
+#topHeight {
+    margin-bottom: 20px;
+}
+
+.tab {
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #E6E6E6;
+    position: relative;
+    z-index: 9;
+    left: 0;
+    top:0;
+}
+
+.blank {
+    width: 100%;
+    height: 35px;
+    position: relative;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    display: none;
+}
+
+.tab #place,  .tab #ticket {
+    float: left;
+    width: 50%;
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
+    text-align: center;
+    display: block;
+    color: #545454;
+    font-size: 14px;
+}
+
+.tab .line {
+    width: 1px;
+    height: 39px;
+    background-color: #E6E6E6;
+    position: absolute;
+    left: 50%;
+    top: 0;
+}
+
+.activ {
+    border-bottom: 4px solid #FFBF00;
+    width: 49%;
+}
+
+#placeCont, #ticketCont {
+    padding: 10px 0;
+    width: 94%;
+    margin-left: 3%;
+}
+
+#placeCont ul li, #ticketCont ul li {
+    background-color: #ffffff;
+    margin-top: 10px;
+}
+
+#placeCont ul li .place-imgDiv {
+    position: relative;
+}
+
+#placeCont ul li .place-imgDiv img {
+    width: 100%;
+    display: block;
+}
+
+#placeCont ul li .place-imgDiv .place-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    line-height: 28px;
+    vertical-align: middle;
+    text-align: left;
+    background: #8C8C8C;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    width: 98%;
+    padding-left: 2%;
+    font-size: 14px;
+}
+
+#placeCont ul li .place-det {
+    padding: 5px 8px;
+}
+
+#placeCont ul li .place-det .place-price {
+    font-size: 17px;
+    color: #D83500;
+    display: block;
+    float: left;
+}
+
+#placeCont ul li .place-det .place-hasTicket {
+    background-color: #FFC926;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: padding-box;
+    width: 44px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    float: right;
+    position: relative;
+}
+
+#placeCont ul li .place-det .place-hasTicket span {
+    display: block;
+    background: url("../../images/tagicon.png") no-repeat;
+    background-size: 12px 12px;
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    left: 5px;
+    top: 4px;
+}
+
+#placeCont ul li .place-det .place-hasTicket .place-text {
+    position: absolute;
+    right: 4px;
+    top: 1px;
+    font-size: 10px;
+    color: #000000;
+}
+
+#placeCont ul li .place-det p {
+    margin-top: 5px;
+    height: 32px;
+    line-height: 16px;
+    word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
+    color: #4C4B46;
+}
+
+#ticketCont ul li {
+    border-top: 1px solid #E6E6E6;
+    border-bottom: 1px solid #E6E6E6;
+    padding: 10px 3%;
+}
+
+#ticketCont ul li .ticket-boxDiv {
+    width: 100%;
+}
+
+#ticketCont ul li .ticket-boxDiv img {
+    width: 29%;
+    height: auto;
+    display: block;
+    float: left;
+}
+
+#ticketCont ul li .ticket-boxDiv .ticket-det {
+    float: left;
+    margin-left: 4%;
+    overflow: hidden;
+    width: 67%;
+}
+
+#ticketCont ul li .ticket-boxDiv .ticket-det h2 {
+    font-size: 15px;
+    color: #111111;
+    font-weight: normal;
+}
+
+#ticketCont ul li .ticket-boxDiv .ticket-det p {
+    margin-top: 5px;
+    height: 32px;
+    line-height: 16px;
+    word-wrap:break-word;
+    word-break:break-all;
+    overflow: hidden;
+    color: #777777;
+}
+
+#ticketCont ul li .ticket-boxDiv .ticket-det .ticket-price {
+    font-size: 17px;
+    color: #D83500;
+    display: block;
+    float: left;
+}
+
+#ticketCont ul li .ticket-boxDiv .ticket-det .discount {
+    background-color: #55D5BE;
+    font-size: 10px;
+    border-radius: 3px 3px 3px 3px;
+    background-clip: padding-box;
+    padding: 1px 3px;
+    color: #000000;
+    display: block;
+    float: left;
+    margin: 3px 0 0 3px;
+}

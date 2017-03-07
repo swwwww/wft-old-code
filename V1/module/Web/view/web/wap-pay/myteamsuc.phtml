@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的同玩团</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/score.css" rel="stylesheet"/>
+    <style>
+        .intro{
+            height: 60px; overflow:hidden; white-space: normal; text-overflow:ellipsis;width:100%
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <section class="wrapper">
+        <ul class="category">
+            <li><a class="item" href="/web/wappay/myteam" title="">组团中</a></li>
+            <li><a class="item active" href="/web/wappay/myteamsuc?status=2" title="">已成团</a></li>
+            <li><a class="item " href="/web/wappay/myteamfail?status=0" title="">未成团</a></li>
+        </ul>
+    </section>
+    <section class="wrapper">
+        <ul class="in-list i-bnr">
+            {{if response_params[0]}}
+            {{each response_params}}
+            <li class="item" id="grouping">
+                <a class="pic" href="/web/wappay/groupinfo?order_sn={{$value.order_sn}}&gid={{$value.group_buy_id}}"><img src="{{$value.img}}"/></a>
+                <div class="info">
+                    <h2><a class="title" href="/web/wappay/groupinfo?order_sn={{$value.order_sn}}&gid={{$value.group_buy_id}}">{{$value.title}}</a></h2>
+                    <div class="intro"><a href="/web/wappay/groupinfo?order_sn={{$value.order_sn}}&gid={{$value.group_buy_id}}" title="">{{$value.description}}</a></div>
+                    <div class="operate">
+                        <span class="num">有效期  {{$value.end_time}}</span>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+            {{else}}
+            <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+            {{/if}}
+        </ul>
+    </section>
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    (function(){
+        $.ajax({
+            type:'POST',
+            url:"/user/groupbuy/index",
+            dataType:'json',
+            async: true,
+            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,'status':2},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                } else {
+                    //todo 成功
+                    var len = result.response_params.length;
+                    var info;
+                    for(var i=0;i<len;i++){
+                        info = result.response_params[i];
+                        var b=new Date(parseInt(info.end_time)*1000);
+                        info.end_time = b.getFullYear()+'-'+ (b.getMonth()+1 < 10 ? '0'+(b.getMonth()+1) : b.getMonth()+1)+'-'+ b.getDate();
+                    }
+                    var html = template('test', result);
+                    document.getElementById('content').innerHTML = html;
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+
+            }
+        })
+    }());
+</script>
+</html>

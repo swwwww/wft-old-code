@@ -1,0 +1,46 @@
+<form class="box box-form" action="/wftadlogin/distribution/duct" method="post">
+    <header class="box-title">扣除收益　　　　
+        <a href="/wftadlogin/distribution/seller">返回</a>
+    </header>
+    <table class="table">
+
+        <tr>
+            <th width="160">累计总收益</th>
+            <th colspan="3">
+                <?php echo bcadd($data['have_arrived_income'], $data['not_arrived_income'], 2); ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">收益账户余额</th>
+            <th colspan="3">
+                <?php echo $data['account_money']; ?>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">扣除金额</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" style="width:80px" name="duct_money" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">扣除理由</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="duct_reason" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">　　</th>
+            <th colspan="3">
+                <input type="hidden" name="uid" value="<?php echo $uid;?>">
+                <button type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+
+    </table>
+</form>
+
+

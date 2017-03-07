@@ -1,0 +1,106 @@
+<div class="info2">
+    <div class="info-title">
+        <img src="<?php echo $userdata->img; ?>" height="37" width="37"/>
+        <p><?php echo $userdata->name; ?><br/>疯狂指数:<span><?php echo $userdata->chance_number ?></span></p>
+        <div class="numbers">剩余抽奖机会:<span><?php echo $userdata->chance_number ?></span></div>
+    </div>
+    <p class="time">
+<!--        <span>奖品领取时间：</span>2016/04/29-2016/05/2<br/>-->
+        <span>奖品领取方式：</span>
+        <mark>1非实物奖品：玩翻天2元通用券、30积分，直接点领取即到玩翻天帐户。<br/>
+            2.实物奖品：果倍爽、极地海洋世界门票、小蝌蚪首次体验券、迪士尼立体造型贴、罗兰婴儿衣物洗涤皂,请凭中奖人微信/玩翻天帐户昵称、手机号前往得意生活领取。<br/>
+            3.其他实物奖品，请凭中奖人微信/玩翻天帐户昵称、手机号前往对应门店领取。<br/>
+            *实物奖品请以商家实际奖品规则为准。
+        </mark>
+    </p>
+</div>
+<div class="myprize">
+    <div class="myprize-title">我的奖品</div>
+
+    <!--两种奖品分别对应两种领取状态-->
+
+    <?php foreach ($prizedata as $v): ?>
+
+        <!--现金券类奖品-->
+        <?php if ($v->cash_id or $v->integral): ?>
+
+            <!--未领取-->
+            <?php if ($v->prize_status == 0): ?>
+                <!-- 领取现金券 -->
+                <div class="myprize-content2">
+                    <img src="<?php echo $v->small_img; ?>"/>
+                    <div class="myprize-info">
+                        <p>奖品名称：<?php echo $v->name; ?></p>
+                        <span class="style01 lingqu" data-id="<?php echo $v->log_id; ?>">领取</span>
+                    </div>
+                </div>
+            <?php else: ?>
+                <!--    现金券已领券 -->
+                <div class="myprize-content2">
+                    <img src="<?php echo $v->small_img; ?>"/>
+                    <div class="myprize-info">
+                        <p>奖品名称：<?php echo $v->name; ?></p>
+                        <span class="style02">已放入<mark><a href="http://wan.wanfantian.com/web/wappay/nindex">您的</a></mark>玩翻天账户</span>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php else: ?>
+                <!--需要输入验证码的奖品-->
+                <div class="myprize-content">
+                    <img src="<?php echo $v->small_img; ?>"/>
+                    <div class="myprize-info">
+                        <p>奖品名称：<?php echo $v->name; ?></p>
+<!--                        <input type="text" id="myprize-code1" name="myprize-code" placeholder="请工作人员输入验证码"/>-->
+<!--                        <a class="button lingqu" data-id="--><?php //echo $v->log_id; ?><!--" data-a="1">领取</a>-->
+                        <span class="style02">领取时间:<?php  echo $v->get_time;?></span><br>
+                        <span class="style02">领取地点:<?php  echo $v->get_address;?></span>
+                    </div>
+                </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+<div class="records">
+    <div class="records-intro">投票记录</div>
+    <div class="records-title">
+        <span class="records-title-name">商家名称</span>
+        <span class="records-title-time">投票时间</span>
+        <span class="records-title-num">投票次数</span>
+    </div>
+
+    <?php foreach ($votedata as $v): ?>
+        <div class="records-title " id="recordInfo">
+            <span class="records-title-name"><?php echo $v->name; ?></span>
+            <span class="records-title-time"><?php echo date('Y-m-d H:i', $v->dateline); ?></span>
+            <span class="records-title-num">1票</span>
+        </div>
+    <?php endforeach; ?>
+
+
+</div>
+
+<script>
+    (function () {
+        $('.lingqu').on('click', function () {
+            var value = $(this).prev().val();
+            var id = $(this).attr('data-id');
+            var a = $(this).attr('data-a');
+
+            if (a) {
+                if (value != 1234565) {
+                    alert('验证码错误');
+                    return false;
+                }
+            }
+
+            $.post('/activity/pingxuan/getprize', {'id':id}, function (data) {
+                if (data.status == 1) {
+                    alert('恭喜你验证成功');
+                    window.location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+
+        });
+    })();
+</script>

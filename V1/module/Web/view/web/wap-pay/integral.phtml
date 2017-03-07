@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的积分</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/score.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .intro{
+            height: 60px; overflow:hidden; white-space: normal; text-overflow:ellipsis;width:100%
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+<!--    <header class="header top">-->
+<!--        <a class="header-back" href="javascript:history.go(-1);"></a>-->
+<!--        <a class="header-title">我的积分</a>-->
+<!--        <a class="header-rule" href="integralrule" title="">积分规则</a>-->
+<!--    </header>-->
+    <section class="wrapper">
+        <div class="in-header">
+            <div class="user">
+                <img src="{{img}}"/>
+                <span>{{username}}</span>
+                <i>{{user_detail}}</i>
+                <a class="rule" href="/web/H5/introduce">积分规则</a>
+            </div>
+            <div class="totle"><span>{{score}}</span>积分</div>
+            <div class="more">
+                <!--未签到时-->
+                {{if today_sign==0}}
+                <a class="sign" id="sign"><i class="icon"></i>APP签到赚积分</a>
+                {{else}}
+                <!--签到后显示-->
+                <a class="sign-done" id="sign">
+                <i class="icon"></i>已签到 明日+{{tomorrow_score}}
+                <div class="tips">已连续签到 {{sign_day}} 天</div>
+                </a>
+                {{/if}}
+                <a class="share" id="share" href="/webinvite/index"><i class="icon"></i>邀请有礼</a>
+            </div>
+        </div>
+        <a class="in-get-num"href="/web/wappay/seckill">
+            <h2 class="title">积分换秒杀资格</h2>
+            <span class="num">已有资格 {{cash_coupon}}张</span>
+            <i class="arrowent"></i>
+        </a>
+        <ul class="in-list i-bnr">
+            {{each coupon_list}}
+            <li class="item">
+                <a class="pic" href="{{if score < $value.integral || $value.begin_time > time || $value.end_time < time || $value.surplus_num==0}}#{{else}}/web/organizer/shops?id={{$value.id}}{{/if}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title" href="{{if score < $value.integral || $value.begin_time > time || $value.end_time < time || $value.surplus_num==0}}#{{else}}/web/organizer/shops?id={{$value.id}}{{/if}}">{{$value.title}}</a></h2>
+                    <div class="intro"><a href="{{if score < $value.integral || $value.begin_time > time || $value.end_time < time || $value.surplus_num==0}}#{{else}}/web/organizer/shops?id={{$value.id}}{{/if}}" title="">{{$value.editor_talk}}</a></div>
+                    <div class="operate">
+                        <span class="status">
+                            <i>&yen;</i>
+                            <mark>{{$value.price}}</mark>
+                            <span class="score">-{{$value.integral}}积分</span>
+                        </span>
+                        <a class="button {{if score < $value.integral || $value.begin_time > time || $value.end_time < time || $value.surplus_num==0}}disabled{{/if}}" href="/web/organizer/shops?id={{$value.id}}">{{if score<$value.integral}}积分不足{{else if $value.begin_time > time}}未开始{{else if $value.end_time < time}}已结算{{$value.surplus_num==0}}已售罄{{else}}去换购{{/if}}</a>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+</script>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    $(function(){
+        $.ajax({
+            type: "POST",
+            url: "/score/index",
+            dataType:"json",
+            async: true,
+            data:{
+                'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>
+            },
+
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+
+                    //签到
+                    $("#sign").click(function(){
+                        $.ajax({
+                            type:'POST',
+                            url:"/user/index/signin",
+                            dataType:'json',
+                            async: true,
+                            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                            headers: {
+                                "VER": 10
+                            },
+                            success: function (result) {
+                                if (result.response_params.status == 0) {
+                                    alert(result.response_params.message);
+                                } else {
+                                    //todo 成功
+                                    //window.location.href = "";
+                                    //console.log(result.response_params);
+                                    window.location.reload()
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                if (XMLHttpRequest.status == 401) {
+                                    //todo 跳转授权页面
+                                    //alert(XMLHttpRequest.responseJSON.message);
+                                    window.location.href = '<?php echo $authorUrl;?>';
+                                }
+                                else if (XMLHttpRequest.status == 403) {
+                                    alert('接口验证失败，非法访问');
+                                }
+                                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                                }
+                                else {
+                                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                }
+
+                            }
+                        });
+
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+                    alert(XMLHttpRequest.responseJSON.message);
+//                window.location.href = '<?php //echo $authorUrl;?>//';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+        });
+    });
+</script>
+</html>

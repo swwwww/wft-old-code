@@ -1,0 +1,141 @@
+<hgroup class="box">
+    <header>
+        <h3>会员专区亲子游</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/first/memberindex">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：① <span style="color:green">有问题 请及时联系</span> ② 请及时 记得删除无效的</div>
+    </aside>
+</hgroup>
+
+<form class="box box-form" action="/wftadlogin/first/excercisefreelist" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    if (isset($_GET['bid']) && $_GET['bid']) {
+        $bid = $_GET['bid'];
+    }
+
+    if (isset($_GET['name']) && $_GET['name']) {
+        $name = $_GET['name'];
+    }
+
+    if (isset($_GET['city']) && $_GET['city']) {
+        $city = $_GET['city'];
+    }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="bid" value="<?php echo $bid;?>">
+            </th>
+            <th width="160">活动名称</th>
+            <th>
+                <input type="text" class="cssInput" name="name" value="<?php echo $name;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/first/excercisefreelist" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<div class="box">
+    <div class="box-title">
+        会员专区亲子游列表
+    </div>
+    <div class="box-table">
+        <table class="">
+            <tbody>
+            <tr>
+                <th class="size1">活动id</th>
+                <th class="size2">活动名称</th>
+                <th class="size2">游玩地</th>
+                <th class="size1">总场次</th>
+                <th class="size1">免费玩场次</th>
+                <th class="size1">会员总报名</th>
+                <th class="size1">浏览</th>
+                <th class="size1">分享</th>
+                <th class="size3">操作</th>
+            </tr>
+            <?php if (count($data_kidsplay_list)): ?>
+                <?php foreach ($data_kidsplay_list as $key => $row): ?>
+                    <tr style="text-align: left">
+                        <td class="size1">
+                            <a href="/wftadlogin/excercise/edit?id=<?php echo $row['id']; ?>">
+                                <?php echo $row['id']; ?>
+                            </a>
+                        </td>
+                        <td class="size2"><?php echo $row['name']; ?></td>
+                        <td class="size2"><?php echo rtrim($data_shop[$row['id']],',<br>'); ?></td>
+                        <td class="size1">
+                            <?php echo $row['all_number']; ?>
+                        </td>
+                        <td class="size1">
+                            <?php echo $row['free_coupon_event_max']; ?>
+                        </td>
+                        <td class="size1">
+                            <?php echo $data_price_count[$row['id']]; ?>
+                        </td>
+                        <td class="size1"><?php echo $row['view_number']; ?></td>
+                        <td class="size1"><?php echo $row['share_number']; ?></td>
+                        <td class="size3">
+                            <a href="/wftadlogin/excercise/edit?id=<?php echo $row['id']; ?>"
+                               class="ui-button">详情</a>
+                            <a href="/wftadlogin/first/eventFreeList?bid=<?php echo $row['id']; ?>"
+                               class="ui-button">亲子游场次</a>
+                            <?php if ($data_index_block[$row['id']]['status'] == 1): ?>
+                                <a onclick= "if(confirm( '确定从会员专区亲子游活动列表隐藏？ ')==false)return false;" href="/wftadlogin/first/excercisefreelistinmemberindex?id=<?php echo $row['id']; ?>&status=0"
+                                   class="ui-button">隐藏</a>
+                            <?php elseif($data_index_block[$row['id']]['status'] == 0): ?>
+                                <a onclick= "if(confirm( '确定上架到会员专区亲子游显示列表？ ')==false)return false;" href="/wftadlogin/first/excercisefreelistinmemberindex?id=<?php echo $row['id']; ?>&status=1"
+                                   class="ui-button">显示</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无数据 快去活动列表页面设置吧</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $data_paginator; ?>
+        </footer>
+    </div>
+</div>
+
+
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                //$("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+                $("#cover1").attr('value' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#add_url').click(function(){
+        $('#add_form').show();
+    });
+
+</script>

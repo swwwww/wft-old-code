@@ -1,0 +1,35 @@
+<div id="all" class="check">
+    <header><a class="h-btn back" href="#"></a>
+
+        <h3>查看订单</h3></header>
+    <div class="container ib">
+        <div class="title bg2">
+            <a href="/shop/index/order" class="ce-btn c-btn s-btn">查看</a>
+            <a style="color: green; position: absolute; top:14px; right:20px;font-size:15px" href="/shop/index/logout">退出</a>
+            <a href="/shop" class="ce-btn e-btn">兑换</a>
+        </div>
+        <table class="editable bg1">
+            <tr class="order-title">
+                <td class="number-row">使用码</td>
+                <td class="name-row">卡券名称</td>
+                <td class="amount-row">金额</td>
+                <td class="status-row">使用时间</td>
+            </tr>
+            <?php if (!count($data)): ?>
+                <tr>
+                    <th colspan="4">没有相关订单</th>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($data as $v): ?>
+                    <tr>
+                        <td><?php echo $v->id . $v->password; ?></td>
+                        <th><?php echo $v->coupon_name; ?></th>
+                        <th><?php echo $v->coupon_unit_price ?>元</th>
+                        <td><?php echo $v->use_datetime ? date('Y-m-d H:i', $v->use_datetime) : ''; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </table>
+        <?php echo $pagedata; ?>
+    </div>
+</div>

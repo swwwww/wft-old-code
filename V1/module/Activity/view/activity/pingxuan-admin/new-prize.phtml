@@ -1,0 +1,148 @@
+<form action="/activity/pingxuanadmin/savePrize" method="post">
+    <table class="table">
+        <tr>
+            <th width="160">奖品名称</th>
+            <th colspan="3"><input type="text" class="cssInput" name="name"
+                                   value="<?php echo $data ? $data->name : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">是否在奖品支持中显示</th>
+            <th colspan="3">
+                <select name="big_view">
+                    <option <?php echo $data ? (($data->big_view == 1) ? 'selected' : '') : ''; ?> value="1">显示</option>
+                    <option <?php echo $data ? (($data->big_view == 2) ? 'selected' : '') : ''; ?> value="2">不显示</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">发放数量</th>
+            <th colspan="3"><input type="text" class="cssInput" name="limit_num"
+                                   value="<?php echo $data ? (int)$data->limit_num : 1; ?>">
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160">领取时间</th>
+            <th colspan="3"><input type="text" class="cssInput" name="get_time"
+                                   value="<?php echo $data ? $data->get_time : ""; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">领取地址</th>
+            <th colspan="3"><input type="text" class="cssInput" name="get_address"
+                                   value="<?php echo $data ? $data->get_address :""; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">现金券id</th>
+            <th colspan="3"><input type="text" class="cssInput" name="cash_id"
+                                   value="<?php echo $data ? (int)$data->cash_id :0; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">积分</th>
+            <th colspan="3"><input type="text" class="cssInput" name="integral"
+                                   value="<?php echo $data ? $data->integral : 0; ?>">
+            </th>
+        </tr>
+
+
+        <tr>
+            <th>奖品支持照片</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload1" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" name="big_img" value="<?php echo $data ? $data->big_img : ''; ?>"/>
+                </fieldset>
+                <div>
+                    <img width="138px" height="138px" class="fileupload1"
+                         src="<?php echo $data ? $data->big_img : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th>我的奖品照片</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload2" name="file"
+                               style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                               multiple/>
+                    </div>
+
+                    <input type="hidden" name="small_img" value="<?php echo $data ? $data->small_img : ''; ?>"/>
+                </fieldset>
+                <div>
+                    <img width="138px" height="138px" class="fileupload2"
+                         src="<?php echo $data ? $data->small_img : ''; ?>">
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">中奖概率</th>
+            <th colspan="3"><input type="text" class="cssInput" name="probability"
+                                   value="<?php echo $data ? $data->probability : ''; ?>">
+            </th>
+        </tr>
+
+
+
+
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="id" value="<?php echo $data ? $data->id : 0; ?>">
+                <button id="ti-place" class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+
+    $('#fileupload1').fileupload({
+        url: '/activity/manage/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='big_img']").attr('value', data.result.url);
+                $(".fileupload1").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/activity/manage/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='small_img']").attr('value', data.result.url);
+                $(".fileupload2").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+
+</script>
+

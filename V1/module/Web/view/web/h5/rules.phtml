@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>优惠券规则</title>
+    <link href="/css/h5/style.css" rel="stylesheet"/>
+</head>
+<body>
+<section id="tab">
+    <div class="tabList coupon">
+        <ul>
+            <li class="cur">如何领</li>
+            <li>如何使用</li>
+        </ul>
+    </div>
+    <div class="tabCon">
+        <div class="cur">
+            <h2>消费返券</h2>
+            <p>特定返券商品，在购买、使用或点评后可获得特定现金券</p>
+            <h2>传播码对券</h2>
+            <p>在【我的现金券】输入特定传播码，可兑换特定现金券</p>
+            <h2>特殊福利</h2>
+            <p>小玩采纳的点评或攻略，将对用户特定奖励</p>
+            <h2>活动获券</h2>
+            <p>参与特定活动，可获得现金券</p>
+        </div>
+        <div>
+            <br>
+            <p>1、每笔订单只能使用一张现金券</p><br>
+            <p>2、特定现金券有对应的有效期，过期自动失效</p><br>
+            <p>3、特定现金券有指定接券商品，现金券仅在购买接券商品时才能使用</p><br>
+            <p>4、若退订使用了现金券的商品，现金券不予退回</p><br>
+        </div>
+    </div>
+</section>
+</body>
+<script style="text/javascript">
+    (function(){
+        "use strict";
+        var oDiv = document.getElementById("tab"),
+            oLi = oDiv.getElementsByTagName("div")[0].getElementsByTagName("li"),
+            aCon = oDiv.getElementsByTagName("div")[1].getElementsByTagName("div");
+        for (var i = 0; i < oLi.length; i++) {
+            oLi[i].index = i;
+            oLi[i].ontouchstart = function() {
+                show(this.index);
+            };
+            oLi[i].onclick = function() {
+                show(this.index);
+            };
+        }
+        function show(a) {
+            var  index = a;
+            for (var j = 0; j < oLi.length; j++) {
+                oLi[j].className = "";
+                aCon[j].className = "";
+            }
+            oLi[index].className = "cur";
+            aCon[index].className = "cur";
+        }
+    }());
+</script>
+</html>

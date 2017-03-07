@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>打开链接</title>
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>-->
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/share.css" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+    <header class="banner use">
+        <div class="use-info">
+                <span class="use-info-id">
+                    <img src="<?php echo $avast?:'http://userpic.deyi.com/ucenter/data/avatar/000/57/28/99_avatar_middle.jpg'?>">
+                    <mark><?php echo $username; ?></mark>
+                </span>
+            <div class="use-info-content">
+                <p><mark><?php echo $couponprice; ?></mark>&nbsp;&nbsp;元</p>
+                <span><?php echo $couponname; ?></span>
+                <mark class="date"><?php echo $timearea; ?></mark>
+            </div>
+            <p class="use-info-count">红包已放入你的玩翻天账户
+                <mark><?php echo $phone; ?></mark></p>
+            <button id="go-use">去使用</button>
+        </div>
+    </header>
+    <h5>
+        <span>看朋友们的手气如何</span>
+    </h5>
+    <div class="item">
+        <div class="item-list">
+            <?php foreach ($data as $k => $v): ?>
+                <div class="item-list-content">
+                    <img
+                        src="<?php echo $imgs[$v['uid']] ?: 'http://userpic.deyi.com/ucenter/data/avatar/000/57/28/99_avatar_middle.jpg'; ?>">
+                <span>
+                    <mark class="name"><?php echo $users[$v['uid']]; ?></mark>
+                    <mark class="time"><?php echo date('Y-m-d', $v['create_time']); ?></mark><br/>
+                    <mark class="info"><?php echo $messages[($v['get_order_id']*$v['uid']) % 4]; ?></mark>
+                </span>
+                    <span class="price"><?php echo $v['price']; ?>元</span>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <div class="ticket inner">
+        <div class="ticket-title">
+            <p>用券即省</p>
+        </div>
+        <div class="ticket-list more">
+            <?php if($coupon->range==3 or $coupon->range==4): ?>
+            <?php foreach($gdata as $g): ?>
+            <div class="ticket-list-content">
+                <img src="<?php echo $g['cover']; ?>">
+                <div class="detail">
+                    <p class="detail-info">
+                        <span class="detail-info-address"><?php echo $g['title']; ?></span>
+                        <span class="detail-info-price">
+                            <mark class="ticket-price">￥<?php echo $g['price']; ?></mark>
+                            <a class="ticket-button" href="<?php echo $g['gurl']; ?>">立即报名</a>
+                        </span>
+                    </p>
+                    <p class="detail-time">
+                        <span class="detail-time-num">已<?php echo $g['buynum']; ?>人报名</span>
+                        <span class="detail-time-date"><?php echo $g['start_time'].'-'.$g['end_time'].' '.$g['num']; ?>场可选</span>
+                        <i class="icon"></i>
+                    </p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach($gdata as $g): ?>
+                    <div class="ticket-list-content">
+                        <img src="<?php echo $g['cover']; ?>">
+                        <div class="detail">
+                            <p class="detail-info">
+                                <span class="detail-info-address"><?php echo $g['title']; ?></span>
+                        <span class="detail-info-price">
+                            <mark class="ticket-price">￥<?php echo $g['price']; ?></mark>
+                            <a class="ticket-button" href="<?php echo $g['gurl']; ?>">立即报名</a>
+                        </span>
+                            </p>
+                            <p class="detail-time">
+                                <span class="detail-time-num">剩余：<?php echo $g['has']; ?></span>
+                                <span class="detail-time-date">结束购买 <?php echo $g['end_time']; ?></span>
+                                <i class="icon"></i>
+                            </p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/js/drop.min.js"></script>
+
+    <script type="text/javascript">
+        (function(){
+            $("#go-use").on("click",function(){
+                var val =  $(".item").outerHeight(true);
+                var totalHeight = val + 1114;
+                $("body").animate({scrollTop:totalHeight},200);
+                return false;
+            });
+
+            var counter = 1,
+                inner = $(".inner");
+            var lists = $(".more");
+            // dropload
+            var dropload = inner.dropload({
+                scrollArea : window,
+                domDown : {
+                    domClass   : 'dropload-down',
+                    domRefresh : '<div class="dropload-refresh" style="height:40px;line-height:40px;text-align: center;">上拉加载更多</div>',
+                    domLoad    : '<div class="dropload-load" style="height:40px;line-height: 40px;text-align: center;"><span class="loading"></span>加载中...</div>',
+                    domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;">暂无数据</div>'
+                },
+                loadDownFn : function(me){
+                    counter++;
+                    $.ajax({
+                        type: "POST",
+                        url: "/web/generalize/accepted?sid=<?php echo $sid; ?>",
+                        dataType: 'json',
+                        async: true,
+                        data:{'uid':<?php echo $_COOKIE['uid'] ?  : 0;?>,'page': counter,'wap':1},
+
+                        success: function(data){
+                            datas = data.response_params.data;
+                            var result = '';
+                            var len =datas.length;
+                            for(var i = 0; i < len; i++){
+                                <?php if($coupon->range==3 or $coupon->range==4): ?>
+                                result += '<div class="ticket-list-content">'+
+                                '<img src="'+datas[i].cover+'">'+
+                                '<div class="detail">'+
+                                '<p class="detail-info">'+
+                                '<span class="detail-info-address">'+datas[i].title+'</span>'+
+                                '<span class="detail-info-price">'+
+                                '<mark class="ticket-price">￥'+datas[i].price+'</mark>'+
+                                '<a class="ticket-button" href="'+datas[i].gurl+'">立即报名</a>'+
+                                '</span></p><p class="detail-time">'+
+                                '<span class="detail-time-num">已'+datas[i].buynum+'人报名</span>'+
+                                '<span class="detail-time-date">'+datas[i].start_time+'-'+datas[i].end_time+' '+datas[i].num+'场可选</span>'+
+                                '<i class="icon"></i>'+
+                                '</p></div></div>';
+                                <?php else: ?>
+                                result += '<div class="ticket-list-content">'+
+                                '<img src="'+datas[i].cover+'">'+
+                                '<div class="detail">'+
+                                '<p class="detail-info">'+
+                                '<span class="detail-info-address">'+datas[i].title+'</span>'+
+                                '<span class="detail-info-price">'+
+                                '<mark class="ticket-price">￥'+datas[i].price+'</mark>'+
+                                '<a class="ticket-button" href="'+datas[i].gurl+'">立即报名</a>'+
+                                '</span></p><p class="detail-time">'+
+                                '<span class="detail-time-num">剩余：'+datas[i].has+'</span>'+
+                                '<span class="detail-time-date">结束购买 '+datas[i].end_time+'</span>'+
+                                '<i class="icon"></i>'+
+                                '</p></div></div>';
+                                <?php endif; ?>
+                            }
+                            // 为了测试，延迟1秒加载
+                            setTimeout(function(){
+                                lists.append(result);
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            },1000);
+
+                            if(len==0){
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown){
+                            me.resetload();
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+<?php echo $this->partial('web/generalize/sharejs.phtml'); ?>
+</html>

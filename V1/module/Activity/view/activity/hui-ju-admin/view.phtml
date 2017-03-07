@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>玩翻天后台管理</title>
+    <script type="text/javascript">(function () {
+            if (!/*@cc_on!@*/0)return;
+            var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+            while (i--) {
+                document.createElement(e[i])
+            }
+        })();</script>
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/vnd.microsoft.icon',
+        'href' => $this->basePath() . '/img/favicon.ico'
+    ))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+        ->prependStylesheet($this->basePath() . '/css/loginDialog.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+</head>
+<body>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+
+        <h1 id="top-logo">
+            <a target="_blank" href="http://wan.wanfantian.com">
+                <img width="123" height="32" src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+        </h1>
+
+        <nav id="top-user">
+            <a href="javascript:;"></a>
+            <a href="/activity/manage/logout">安全退出</a>
+        </nav>
+    </header>
+
+    <nav id="side-nav">
+        <dl>
+            <dt class="box-title">荟聚活动</dt>
+            <dd class="box">
+                <ul>
+                    <li><a href="/activity/huijuadmin/list">查看参与用户</a></li>
+                    <li><a href="/activity/huijuadmin/prizelist">设置奖品</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </nav>
+
+    <div id="content" style="margin-top: 10px;">
+        <form class="box box-form" action="/activity/huijuadmin/updateImg" method="post">
+            <tr>
+                <th>上传图</th>
+                <th colspan="3">
+                    <fieldset>
+                        <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                            <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                            <input type="file" id="fileupload1" name="file"
+                                   style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;"
+                                   multiple/>
+                        </div>
+
+                        <input type="hidden" name="prize_img" value="<?php echo $userInfo->activity_img; ?>"/>
+                    </fieldset>
+                    <div>
+                        <img width="240px" height="120px" class="fileupload1"
+                             src="<?php echo $userInfo->activity_img; ?>">
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th width="160"></th>
+                <th colspan="3" width="600">
+                    <input type="hidden" name="id" value="<?php echo $userInfo->id; ?>">
+                    <button id="ti-place" class="ui-button">提交</button>
+                </th>
+            </tr>
+            </table>
+        </form>
+    </div>
+</div>
+</body>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+
+    $('#fileupload1').fileupload({
+        url: '/activity/manage/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='prize_img']").attr('value', data.result.url);
+                $(".fileupload1").attr('src', data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+
+</script>
+</html>
+
+

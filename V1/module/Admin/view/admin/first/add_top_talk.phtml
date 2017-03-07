@@ -1,0 +1,263 @@
+<hgroup class="box">
+    <header>
+        <h3>首页管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="javascript:history.go(-1)">返回</a>
+    </header>
+</hgroup>
+<header class="box-title">  为公告添加数据</header>
+<table class="table">
+    <form action="/wftadlogin/first/add" method="get">
+        <tr>
+            <th width="160">
+                <select name="link_type">
+                        <option value="1" <?php echo ($link_type == 1) ? 'selected' : '';?>>专题</option>
+                        <option value="4" <?php echo ($link_type == 4) ? 'selected' : '';?>>游玩地</option>
+                        <option value="5" <?php echo ($link_type == 5) ? 'selected' : '';?>>商品</option>
+                        <option value="7" <?php echo ($link_type == 7) ? 'selected' : '';?>>话题</option>
+                        <option value="8" <?php echo ($link_type == 8) ? 'selected' : '';?>>圈子</option>
+                </select>
+            </th>
+            <th colspan="3">
+                <input type="text" class="cssInput" placeholder="输入id或者标题关键字" name="k" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3" width="600">
+                <input type="hidden" name="type" value="3">
+                <button class="btn btn-default" type="submit">确定</button>
+            </th>
+        </tr>
+    </form>
+</table>
+
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="100">编辑</th>
+                <th width="150">添加时间</th>
+                <th width="80">名称</th>
+                <th width="170">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['id']; ?></td>
+                    <td width="100"><?php echo $row['username']; ?></td>
+                    <td width="150"><?php echo date('Y-m-d',$row['create_time']); ?></td>
+                    <td width="80"><?php echo $row['name']; ?></td>
+                    <td width="170">
+                        <?php if(!in_array(array('link_id' =>$row['id']), $have)):?>
+                            <a class="pusher" data-type="<?php echo $link_type; ?>" data-id="<?php echo $row['id']; ?>">添加</a>
+                        <?php else:?>
+                            已添加
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<style>
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc,.theme-version {
+        padding-top: 0
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity = 40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 30%;
+        left: 40%;
+        width: 1000px;
+        height: 800px;
+        margin: -180px 0 0 -330px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        display: none;
+        box-shadow: 0 0 10px #666;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<form class="hide-body box box-form" action="/wftadlogin/first/save?link_type=<?php echo $link_type;?>&type=3" method="post" id="menu-save">
+    <div class="close-window">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+
+    </div>
+    <table class="table">
+        <tr>
+
+            <th width="160">公告文字</th>
+            <th colspan="3">
+                <input type="text" class="cssInput" name="title" id="title" value="">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input type="hidden" name="link_id" id="push-id" value="">
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<script>
+    $(function () {
+        $('.pusher').click(function(){ //jquery的点击事件
+            $('.body-color').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.hide-body').slideDown(200);//将隐藏的窗口div显示出来
+            id = $(this).attr('data-id');
+            type = $(this).attr('data-type');
+
+            $('#push-id').val(id);
+
+            $.post('/wftadlogin/first/search?type=' + type + '&id=' + id, function (data) {
+                if (data.status == 1) {
+                    $('#title').val(data.title);
+                }
+            }, 'json');
+            return false;
+        })
+        $('.close-window .close').click(function(){
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        })
+
+
+    });
+</script>
+
+

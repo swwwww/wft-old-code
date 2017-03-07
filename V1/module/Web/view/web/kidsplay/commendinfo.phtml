@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>往期回顾讨论</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        #tipsDia{display: none; width: 60%; background-color: rgba(0,0,0,0.5); color: #fff; position: fixed; left: 50%;top: 40%; z-index: 99999; text-align: center; letter-spacing: 2px; -webkit-transform: translate(-50%, -40%); -moz-transform: translate(-50%, -40%); -ms-transform: translate(-50%, -40%); transform: translate(-50%, -40%); padding: 5%; box-sizing: border-box; border-radius: 10px 10px 10px 10px;font-size: 25px; }
+    </style>
+</head>
+<body>
+<div class="comment">
+    <div class="review-content-comment">
+        <img src="<?php echo $data['img'];?>" />
+                                    <span>
+                                        <mark class="review-content-comment-id"><?php echo $data['username'];?></mark>
+                                        <mark class="review-content-comment-time"><?php echo date("Y-m-d",$data['dateline']);?></mark>
+                                    </span>
+        <p>
+            <?php foreach($data['message'] as $val):?>
+                <?php if($val['t']==1):?>
+                    <?php echo $val['val'];?>
+                <?php endif;?>
+            <?php endforeach;?>
+        </p>
+    </div>
+    <div class="comment-pic">
+        <ul>
+            <?php foreach($data['message'] as $pic):?>
+            <?php if($pic['t']==2):?>
+            <li style="height: auto">
+                <img src="<?php echo $server_url.$pic['val']; ?>" alt="">
+            </li>
+                <?php endif;?>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <p class="comment-title"><?php echo $data['link_name'];?></p>
+    <div class="comment-btn">
+                    <span class="comment-btn-write">
+                        <a href="#"><mark><?php echo $data['reply_number'];?></mark></a>
+                    </span>
+                    <span class="comment-btn-like">
+                        <a class="<?php echo $data['is_like']==1 ? 'active' : '';?>"><mark><?php echo $data['like_number'];?></mark></a>
+                    </span>
+    </div>
+    <?php if($data['like_list']):?>
+    <div class="comment-listPic">
+        <ul>
+            <?php foreach($data['like_list'] as $v):?>
+            <li><img src="<?php echo $v['img'];?>" /></li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+    <?php endif;?>
+</div>
+<div class="consult">
+    <?php foreach($data['reply_list'] as $v):?>
+        <div class="consult-dialogue commentAnswer">
+        <div class="consult-dialogue-answer" data-repid="<?php echo $v['repid'];?>">
+            <p class="answer-info">
+                <span class="answer-name"><?php echo $v['username'];?></span>
+                <span class="answer-time"><?php echo date("Y-m-d",$data['dateline']);?></span>
+            </p>
+            <p class="answer-content">
+                <?php foreach($v['message'] as $val):?>
+                    <?php if($val['t']==1):?>
+                        <?php echo $val['val'];?>
+                    <?php endif;?>
+                <?php endforeach;?>
+            </p>
+            <div class="triangle-up"></div>
+            <img class="consult-portrait portrait-margin" src="<?php echo $v['img'];?>" />
+        </div>
+    </div>
+    <?php endforeach;?>
+</div>
+<a id="commentFixed">
+    <input type="text" placeholder="说点什么..." name="msg" id="msg" style="font-size: 30px;">
+    <mark id="post">点评</mark>
+</a>
+<input type="hidden" name="pid" id="pid" value="<?php echo $pid;?>">
+<div id="tipsDia"></div>
+</body>
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script>
+    (function(){
+        $("#post").on("tap",function(e){
+            e.preventDefault();
+            var msg = $("#msg").val(),
+                pid = $("#pid").val(),
+                messageJson = [],
+                tipsDia = $("#tipsDia");
+
+            if(msg == ""){
+                tipsDia.text("请输入评论！");
+                tipsDia.show();
+                setTimeout(function(){
+                    tipsDia.hide();
+                    tipsDia.text("");
+                },2000);
+                return;
+            }
+
+            messageJson.push({'t':1,'val':msg});
+
+            $.ajax({
+                type: "POST",
+                url: "/post/index/index",
+                dataType:"json",
+                async: true,
+                data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,'message':JSON.stringify(messageJson),'pid':pid},
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                    } else{
+                        tipsDia.text("回复成功！");
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //alert('授权失败');
+                        // 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('频率过高');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+            });
+        })
+    }());
+</script>
+</html>

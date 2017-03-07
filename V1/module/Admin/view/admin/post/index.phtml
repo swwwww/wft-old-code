@@ -1,0 +1,69 @@
+
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li class="active"><a href="/wftadlogin/post">评论管理</a></li>
+    </ul>
+</div>
+
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li class="<?php echo (!isset($_GET['type']) || $_GET['type'] == 'activity') ? 'active' : ''; ?>"><a href="/wftadlogin/post?type=activity">专题</a></li>
+            <li class="<?php echo (isset($_GET['type']) && $_GET['type'] == 'coupon') ? 'active' : ''; ?>"><a href="/wftadlogin/post?type=coupon">卡券</a></li>
+            <li class="<?php echo (isset($_GET['type']) && $_GET['type'] == 'news') ? 'active' : ''; ?>"><a href="/wftadlogin/post?type=news">资讯</a></li>
+            <li class="<?php echo (isset($_GET['type']) && $_GET['type'] == 'shop') ? 'active' : ''; ?>"><a href="/wftadlogin/post?type=shop">游玩地</a></li>
+            <li class="<?php echo (isset($_GET['type']) && $_GET['type'] == 'game') ? 'active' : ''; ?>"><a href="/wftadlogin/post?type=game">商品</a></li>
+            <form method="get" action="/wftadlogin/post">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="搜索对应类型名称" name="k" value="">
+                                    <input type="hidden"  name="type" value="<?php echo (isset($_GET['type'])) ? $_GET['type'] : 'activity' ;?>">
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit">搜索</button>
+                                    </span>
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">标题</th>
+                    <th scope="col">用户名</th>
+                    <th scope="col">发布时间</th>
+                    <th scope="col">评论内容</th>
+                    <th scope="col">相关图片</th>
+                    <th scope="col">操作</th>
+                </tr>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                        <td><?php echo $v->pid; ?></td>
+                        <td style="width: 150px;overflow: hidden"><?php echo $v->subject; ?></td>
+                        <td><a href="/wftadlogin/user?k=<?php echo $v->uid; ?>#"> <?php echo $v->author; ?></a></td>
+                        <td><?php echo date('Y-m-d H:i:s', $v->dateline); ?></td>
+                        <td style="width: 200px;overflow: hidden" ><?php echo strip_tags(htmlspecialchars_decode($v->message)); ?></td>
+                        <td><?php echo $v->photo_number; ?></td>
+                        <td>
+                            <a class="btn btn-warning " href="/wftadlogin/post/display?order=0&pid=<?php echo $v->pid; ?>
+                        ">删除</a>
+                            <a class="btn btn-primary" href="/wftadlogin/post/display?order=2&pid=<?php echo $v->pid; ?>">置顶</a>
+                            <a href="/wftadlogin/post/add?type=<?php echo$_GET['type'];?>&id=<?php echo $v->object_id; ?>&tid=<?php echo $v->pid; ?>" class="btn btn-primary">回复</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </ul>
+        <div>
+            <?php echo $this->pagedata; ?>
+        </div>
+    </div>
+</div>
+

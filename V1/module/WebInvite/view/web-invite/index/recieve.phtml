@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>领取奖励，来玩翻天一起快乐遛娃</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <link href="/css/invite.css" rel="stylesheet" />
+<!--    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>-->
+</head>
+<body>
+    <section id="share" class="share clearfix">
+    	<div class="head">
+    		<i class="head-log"></i>
+    		<span class="head-font">玩翻天</span>
+    		<i class="head-home"></i>
+    	</div>
+    	
+        <div class="share-socre">
+            <span id="share_num" class="share-socre-num"><?php echo $ir->r_reciever_award; ?></span>
+            <span id="share_tip" class="share-socre-unit"><?php echo $desc; ?></span>
+            <span class="share-socre-font">可兑换游玩门票</span>
+        </div>
+        <span class="share-city">
+            限用城市： <mark id="location"><?php echo $ctzh; ?></mark> <a class="share-city-chan"> 修改</a>
+        </span>
+        <div class="share-user">
+            <img src="<?php echo $inviteImg; ?>" class="share-user-img">
+            <div id="share_font" class="share-user-font"><?php echo $info; ?></div>
+        </div>
+        <form action="javascript:void(0)" class="share-cont">
+            <input class="share-cont-input"  name="phone" id="phone"  placeholder="输入手机号，领取奖励">
+            <input type="hidden" name="token" id="token"  class="share-cont-input" value="<?php echo $token; ?>">
+            <input type="hidden" name="city" id="city"  class="share-cont-input" value="<?php echo $city; ?>">
+            <input type="hidden" name="orcity" id="orcity"  class="share-cont-input" value="<?php echo $city; ?>">
+            <button id="submitBtn" type="submit" class="share-cont-button">领取奖励</button>
+        </form>
+    </section>
+    <!--    修改城市弹窗-->
+    <div class="cityModify">
+        <div class="cityModify-popup">
+            <div class="cityModify-popup-content">
+                <p class="modify"><span>修改城市</span></p>
+                <p class="info">当前奖励限用城市:武汉</p>
+                <p class="info2">请选择城市：</p>
+                <div class="city-btn">
+                    <a id="city-wuhan">武汉</a>
+                    <a id="city-nanjing">南京</a>
+                </div>
+                <div class="circle-top"></div>
+                <div class="circle-right"></div>
+                <div class="circle-bottom"></div>
+                <div class="circle-left"></div>
+            </div>
+            <div id="modify-close">
+                <i class="cross"></i>
+            </div>
+        </div>
+    </div>
+    <div class="matte"></div>
+    <script src="/js/order-center/zepto.js" type="text/javascript"></script>
+    <script>
+        (function(){
+            $(".share-city-chan").on("click",function(){
+                $(".cityModify").show();
+                $(".matte").show();
+            });
+
+            $("#city-wuhan").on("tap",function(){
+                var wuhan = $(this).text();
+                $(".cityModify").hide();
+                $(".matte").hide();
+                $("#location").empty().text(wuhan);
+                $("#city").val('WH');
+                $("#share_num").empty().text("<?php echo $allir['WH']['v']; ?>");
+                $("#share_tip").empty().text("<?php echo $allir['WH']['t']; ?>");
+                $("#share_font").empty().html("<?php echo $allir['WH']['info']; ?>");
+            });
+
+            $("#city-nanjing").on("tap",function(){
+                var nanjing = $(this).text();
+                $(".cityModify").hide();
+                $(".matte").hide();
+                $("#location").empty().text(nanjing);
+                $("#city").val('NJ');
+                $("#share_num").empty().text("<?php echo $allir['NJ']['v']; ?>");
+                $("#share_tip").empty().text("<?php echo $allir['NJ']['t']; ?>");
+                $("#share_font").empty().html("<?php echo $allir['NJ']['info']; ?>");
+            });
+
+            $("#modify-close").on("tap",function(){
+                $(".cityModify").hide();
+                $(".matte").hide();
+            });
+
+            $("#submitBtn").on('click',function(){
+                var oTel = $('.share-cont-input');
+                if(!(oTel.val() && /^1\d{10}$/.test(oTel.val()))) {
+                    //alert("请输入正确的手机号");
+                    //return false;
+                }
+//                $.post(url,oTel.val(),function(){
+//                });
+            });
+        })();
+    </script>
+    <div class="check-win" id="check-win" style="display: none">
+        <div class="check-win-box" id="check-win-box">
+            <!--tips-->
+            <div class="check-win-list check-win-tips">
+                <div id="loginTip" class="wx_text">
+                    <i></i>
+                </div>
+                <a class="check-win-close">确定</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/invite/main.min.js?t=<?php echo time(); ?>"></script>
+<?php echo $this->partial('web-invite/index/sharejs.phtml'); ?>
+</html>

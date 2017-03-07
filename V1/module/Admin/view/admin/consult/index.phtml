@@ -1,0 +1,245 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/consult">咨询管理</a></li>
+    </ul>
+</div>
+<form class="box box-form" action="/wftadlogin/consult" method="get" id="out-data-form">
+    <header class="box-title">搜索条件</header>
+    <?php
+    $begin_time = null;
+    $end_time = null;
+    $user = null;
+    $goods = null;
+    $goods_id = null;
+    $type = null;
+    $is_buy = 0;
+    $hidden = 0;
+
+    if (isset($_GET['begin_time']) && $_GET['begin_time']) {
+        $begin_time = $_GET['begin_time'];
+    }
+
+    if (isset($_GET['end_time']) && $_GET['end_time']) {
+        $end_time = $_GET['end_time'];
+    }
+
+    if (isset($_GET['goods_id']) && $_GET['goods_id']) {
+        $goods_id = $_GET['goods_id'];
+    }
+
+    if (isset($_GET['goods']) && $_GET['goods']) {
+        $goods = $_GET['goods'];
+    }
+
+    if (isset($_GET['type']) && $_GET['type']) {
+        $type = $_GET['type'];
+    }
+
+    if (isset($_GET['is_buy']) && $_GET['is_buy']) {
+        $is_buy = $_GET['is_buy'];
+    }
+
+    if (isset($_GET['hidden']) && $_GET['hidden']) {
+        $hidden = $_GET['hidden'];
+    }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="160">咨询时间</th>
+            <th>
+                <input name="begin_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $begin_time;?>">
+                <input name="end_time" type="date" class="cssInput" style="width:190px"  value="<?php echo $end_time;?>">
+            </th>
+            <th width="160">隐藏状态</th>
+            <th>
+                <select name="hidden">
+                    <option value="0" <?php echo ($hidden == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($hidden == 1) ? 'selected' : '';?>>已隐藏</option>
+                    <option value="2" <?php echo ($hidden == 2) ? 'selected' : '';?>>未隐藏</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">咨询对象ID</th>
+            <th>
+                <input type="text" class="cssInput" name="goods_id" value="<?php echo $goods_id;?>">
+            </th>
+            <th width="160">咨询对象名称</th>
+            <th>
+                <input type="text" class="cssInput" name="goods" value="<?php echo $goods;?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">回复状态</th>
+            <th>
+                <select name="type">
+                    <option value="0" <?php echo ($type == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($type == 1) ? 'selected' : '';?>>已回复</option>
+                    <option value="2" <?php echo ($type == 2) ? 'selected' : '';?>>未回复</option>
+                </select>
+            </th>
+            <th width="160">是否购买咨询产品</th>
+            <th>
+                <select name="is_buy">
+                    <option value="0" <?php echo ($is_buy == 0) ? 'selected' : '';?>>全部</option>
+                    <option value="1" <?php echo ($is_buy == 1) ? 'selected' : '';?>>已购买</option>
+                    <option value="2" <?php echo ($is_buy == 2) ? 'selected' : '';?>>未购买</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <a href="/wftadlogin/consult" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button  class="ui-button">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+<div class="box">
+    <div class="box-title">
+        发言列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索发言" name="k" value="">
+                <input type="hidden" name="id" value="<?php echo $circle ? $circle['_id'] : '';?>">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+<!--                <th width="15">id</th>-->
+                <th width="100">用户名</th>
+                <th width="100">手机号</th>
+                <th width="100">咨询时间</th>
+                <th width="200">商品/活动名称</th>
+                <th width="100">咨询类别</th>
+                <th width="200">内容</th>
+                <th width="50">是否购买咨询产品</th>
+                <th width="150">回复状态</th>
+                <th width="50">回复人员</th>
+                <th width="50">城市&nbsp;&nbsp;<?php echo $filtercity; ?></th>
+                <th width="200">操作</th>
+            </tr>
+            <?php if ($data->count()): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+<!--                        <td  width="15"><?php echo $row['_id']; ?></td>-->
+                        <td  width="100"><a target="_blank" href="<?php echo '/wftadlogin/user/info?uid='.$row['uid']; ?>"> <?php echo $row['username']; ?></a></td>
+                        <td  width="100"><?php echo $userData[$row['uid']]; ?></td>
+                        <td  width="100"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                        <?php if($row['object_data']['object_id']): ?>
+                            <?php if($row['type']==7){
+                                $pa = 'excercise/edite?id';
+                            }else{
+                                $pa = 'good/new?gid';
+                            } ?>
+                            <td  width="120">
+                                <a target="_blank" href="/wftadlogin/<?php echo $pa ?>=<?php echo $row['object_data']['object_id'];?>"><?php echo $row['object_data']['object_title']; ?></a>
+                            </td>
+                        <?php else: ?>
+                            <td  width="120"><a target="_blank" href="/wftadlogin/excercise/edit?id=<?php echo $row['object_data']['object_bid'];?>"><?php echo $row['object_data']['object_title']; ?></a></td>
+                        <?php endif; ?>
+                        <td  width="100">
+                            <?php if($row['type']==7){
+                                echo '活动';
+                            }else{
+                                echo '商品';
+                            } ?></td>
+                        <td  width="200">
+                            <a href="/wftadlogin/consult/wordinfo?id=<?php echo $row['_id']; ?>">
+                                <?php
+                                if($row['msg']) {
+                                    echo $row['msg'];}
+                                else {
+                                    echo '内容无';
+                                };
+                                ?>
+                            </a>
+                        </td>
+                        <td  width="50">
+                            <?php echo $row['is_buy'] ? '是' : '否'; ?>
+                        </td>
+                        <td  width="150">
+                            <a href="/wftadlogin/consult/wordinfo?id=<?php echo $row['_id']; ?>">
+                            <?php
+                                if(isset($row['reply']['msg']) && $row['reply']['msg']) {
+                                    echo $row['reply']['msg'];
+                                } else {
+                                    echo '未回复';
+                                }
+                            ?>
+                            </a>
+                        </td>
+                        <td  width="50" class=""><?php echo $row['reply']['username']; ?></td>
+                        <td  width="50" class=""><?php echo $citys[$row['city']]; ?></td>
+                        <td  width="200">
+                            <?php
+                                if($row['status'] == 0) {
+                                    echo '<a class="ui-button" href="/wftadlogin/consult/update?type=same&id='. $row['_id'] .'">取消隐藏</a>';
+                                    echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=up&id='. $row['_id'] .'">置顶</a>';
+                                } elseif ($row['status'] == 1) {
+                                    echo '<a class="ui-button" href="/wftadlogin/consult/update?type=hidden&id='. $row['_id'] .'">隐藏</a>';
+                                    echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=up&id='. $row['_id'] .'">置顶</a>';
+                                } elseif ($row['status'] == 2) {
+                                    echo '<a class="ui-button" href="/wftadlogin/consult/update?type=hidden&id='. $row['_id'] .'">隐藏</a>';
+                                    echo '  <a class="ui-button" href="/wftadlogin/consult/update?type=same&id='. $row['_id'] .'">取消置顶</a>';
+                                }
+                            ?>
+                                <a href="/wftadlogin/consult/newreply?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>"  class="ui-button">回复</a>
+                        </td>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="9"><p>暂无发言</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //获取点赞
+        $.each($('.share_prise'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/consult/getWordShare?type=prise&cid=' + cid);
+        })
+
+        //获取回复
+        $.each($('.share_reply'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/consult/getWordShare?type=reply&cid=' + cid);
+        })
+
+        //获取焦点图
+        $.each($('.share_fock'), function (k, v) {
+            var cid = $(v).parent().find('td:first').html();
+            $(v).load('/wftadlogin/consult/getWordShare?type=fock&cid=' + cid);
+        })
+
+    })
+</script>
+
+

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>玩翻天商家后台</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body class="zf-pay">
+    <header class="zf-title">
+        请选择对应商品，输入商家支付密码，确认使用。
+    </header>
+    <section>
+        <?php if(!count($this->data)):?>
+        <div class="tips">还没有流水记录哦</div>
+        <?php else:?>
+        <ul class="zf-main">
+            <?php foreach($this->data as $v):?>
+            <li>
+                <div class="zf-top">
+                    <div class="zf-info">
+                        <h3><?php echo $v['coupon_name']; ?></h3>
+                        <p>售价：&yen;<span><?php echo $v['coupon_unit_price']; ?></span></p>
+                    </div>
+                </div>
+                <div class="zf-middle">
+                    <p>参与方式：<span><?php echo $v['price_name']; ?></span></p>
+                    <p>验证码：<mark><?php echo $v['code']; ?></mark></p>
+                    <p>订单号：<span><?php echo $v['order_sn']; ?></span></p>
+                    <p>下单时间：<span><?php echo $v['dateline']; ?></span></p>
+                    <p>购买用户：<span><?php echo $v['phone']; ?></span></p>
+                    <p>使用地点：<span><?php echo $v['address']; ?></span></p>
+                </div>
+                <form class="zf-form">
+                    <fieldset>
+                        <input type="hidden" name="coupon_id" value="<?php echo $v['code']?>" id="couponId">
+                        <input type="hidden" name="shop_id" value="<?php echo $v['shop_id']?>" id="shopId">
+                        <input class="text zf-text" name="tel" type="text" placeholder="请输入商家支付密码" id="shopPwd">
+                        <input type="button" value="确认使用" class="button gf-button" id="payBtn">
+                    </fieldset>
+                </form>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif;?>
+    </section>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script>
+    $(function(){
+        var couponId = document.getElementById("couponId"),
+            shopId = document.getElementById("shopId"),
+            payBtn = document.getElementById("payBtn"),
+            payAble = true,
+            shopPwd = document.getElementById("shopPwd");
+        $("#payBtn").click(function(){
+            var shopPwdValue = shopPwd.value.trim(),
+                couponIdValue = couponId.value.trim();
+                shopIdValue = shopId.value.trim();
+            if(shopPwdValue == ""){
+                alert("您还未输入支付密码哦");
+                return false;
+            }
+            payAble = false;
+            payBtn.value = "验证中...";
+
+            //ajax
+            var url = '/seller/index/doPay'; //请求URL
+            $.post("/seller/index/doPay",{'shop_pwd':shopPwdValue,'coupon_id':couponIdValue,'shop_id':shopIdValue},function(data){
+                if(data.response_params.status==1){
+                    alert(data.response_params.message);
+                    window.location.reload(true);
+                }else{
+                    alert(data.response_params.message);
+                    payBtn.value = "验证失败";
+                    payAble = true;
+                    window.location.reload(true);
+                }
+            });
+        })
+    })
+
+</script>
+</html>

@@ -1,0 +1,157 @@
+<hgroup class="box">
+    <header>
+        <h3>分享设置</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/index">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/setting/sharesettingsave" method="post">
+    <header class="box-title">支付成功跳转界面&nbsp;&nbsp;<?php echo $filtercity; ?></header>
+
+    <table class="table" id="main_content">
+
+        <tr>
+            <th width="160">模式控制</th>
+            <th colspan="3">
+                <input type="radio" class="" name="share_status" value="0" <?php echo $data_share['share_status'] ? '' : 'checked'; ?>> 默认&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" class="" name="share_status" value="1" <?php echo $data_share['share_status'] ? 'checked' : ''; ?>> 指定界面及分享链接url&nbsp;&nbsp;&nbsp;&nbsp;
+            </th>
+        </tr>
+        <tr>
+            <th width="160">跳转的url</th>
+            <th colspan="3"><input type="text" class="cssInput" name="share_url" value="<?php echo $data_share['share_url']; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="4"><input class="btn btn-primary add-title-content" type="button" value="添加分享标题和文字说明"></th>
+        </tr>
+    </table>
+
+    <?php
+        if ($data_share['share_title']) {
+            foreach ($data_share['share_title'] as $key => $val) {
+    ?>
+    <table class="table content" id="content<?php $n++; echo $n;?>">
+        <tr>
+            <th width="160">分享标题</th>
+            <th colspan="3"><input type="text" class="cssInput" name="share_title[]" value="<?php echo $val; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">分享文字说明</th>
+            <th colspan="3"><textarea class="cssInput" style="height:200px;" name="share_content[]" /><?php echo $data_share['share_content'][$key]; ?></textarea>
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3"><input onclick="chargeremove(<?php echo $n;?>)" class="btn btn-primary del-title-content" type="button" value="刪除"></textarea></th>
+        </tr>
+    </table>
+    <?php
+            }
+        } else {
+    ?>
+    <table class="table content" id="content1">
+        <tr>
+            <th width="160">分享标题</th>
+            <th colspan="3"><input type="text" class="cssInput" name="share_title[]" value=""/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">分享文字说明</th>
+            <th colspan="3"><textarea class="cssInput" style="height:200px;" name="share_content[]" /></textarea>
+            </th>
+        </tr>
+    </table>
+    <?php
+        }
+    ?>
+
+    <table class="table">
+        <tr>
+            <th width="160">缩略图</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+                    <input type="hidden" name="share_img" value="<?php echo $data_share['share_img']; ?>" />
+                    <span>　380*375
+                </fieldset>
+                <br />
+                <div>
+                    <img width="380" height="375" id="img" class="fileupload" src="<?php echo $data_share['share_img']; ?>">
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <input name="city" value="<?php echo $city; ?>" type="hidden" />
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+
+<script>
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='share_img']").attr('value', data.result.url);
+                $("#img").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $(document).on('click', '.add-title-content', function () {
+        var n = $('.content').length;
+
+        if (n == 0) {
+            var content = $('#main_content');
+        } else {
+            var content = $('.content').eq(n-1);
+        }
+
+        var html    = '<table class="table charge" id="content' + n + '">'+
+            '<tr>' +
+            '<th width="160">分享标题</th>' +
+            '<th colspan="3"><input type="text" class="cssInput" name="share_title[]" value=""/>' +
+            '</th>' +
+            '</tr>' +
+            '<tr>' +
+            '<th width="160">分享文字说明</th>' +
+            '<th colspan="3"><textarea class="cssInput" style="height:200px;" name="share_content[]" /></textarea>' +
+            '</th>' +
+            '</tr>' +
+            '<tr>' +
+            '<th width="160"></th>' +
+            '<th colspan="3"><input onclick="chargeremove('+n+')" class="btn btn-primary del-title-content" type="button" value="刪除"></textarea></th>' +
+            '</tr>' +
+            '</table>';
+        content.after(html);
+    });
+
+    var chargeremove = function(n){
+        var content = $('#content'+n);
+        if(confirm( '是否确定删除！')==false)return false;
+        content.remove();
+    };
+</script>
+
+
+

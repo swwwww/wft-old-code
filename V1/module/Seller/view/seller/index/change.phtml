@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>修改密码</title>
+    <link href="/css/wap-admin-style.css" rel="stylesheet"/>
+</head>
+<body>
+    <form action="" class="cg-form" id="form1">
+        <fieldset>
+            <input class="text" name="user" type="text" placeholder="请输入用户名/ID" id="user">
+        </fieldset>
+        <fieldset>
+            <input class="text"  name="pwd" type="password" placeholder="请输入原密码" id="pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="text"  name="new_pwd" type="password" placeholder="请输入新密码" id="new_pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="text"  name="re_pwd" type="password" placeholder="请再次输入新密码" id="re_pwd">
+            <aside class="lf-error password-error"></aside>
+        </fieldset>
+        <fieldset>
+            <input class="submit gf-button" type="button" value="确定" id="changeBtn" />
+        </fieldset>
+    </form>
+    <footer class="footer">
+        <img class="in-logo" src="/img/logo_m.gif" />
+        <h4>孩子们的游戏管家</h4>
+    </footer>
+    <div class="check-win" id="check-win">
+        <div class="check-win-box" id="check-win-box">
+            <!--tips-->
+            <div class="check-win-list check-win-tips">
+                <div id="loginTip" class="wx_text">
+                    <i></i>
+                </div>
+                <a class="check-win-close">确定</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.min.js"></script>
+<script>
+    $(function(){
+        $("#sub").click(function(){
+            $.post("/seller/index/change",$("#form1").serialize(),function(data){
+                alert(data)
+            },'json')
+        })
+    })
+</script>
+</html>

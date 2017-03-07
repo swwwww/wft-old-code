@@ -1,0 +1,220 @@
+<hgroup class="box">
+    <header>
+        <h3>商品管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/good/priceInfo?type=price&gid=<?php echo $goodData->id; ?>">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示： 有问题 请及时联系 </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/good/newsaveGood" method="post" id="price-save">
+    <table class="table">
+
+        <tr>
+            <th width="160">游玩地</th>
+            <th colspan="3">
+                <input id="ad-place-view" <?php if($_GET['id']): ?>readonly <?php endif; ?> name="shop_name" type="text" class="cssInput"
+                       value="<?php echo $gameInfo->shop_name; ?>"/>
+
+                <div id="places">
+
+                </div>
+                <input name="shop_id" value="<?php echo $gameInfo->shop_id; ?>" type="hidden"/>
+            </th>
+        </tr>
+        <?php if ($goodData->need_use_time == 1): ?>
+            <tr>
+                <th width="120px">开始使用时间：</th>
+                <th colspan="3">
+            <span>
+                <input type="date" value="<?php echo ($gameInfo && $gameInfo->start_time) ? date('Y-m-d',
+                    $gameInfo->start_time) : date('Y-m-d', time() + 0); ?>" name="time_startl">
+                <input type="time" value="<?php echo ($gameInfo && $gameInfo->start_time) ? date('H:i',
+                    $gameInfo->start_time) : '23:59'; ?>" name="time_startr">
+            </span>
+                    　<span style="color:red"></span>
+                </th>
+            </tr>
+
+            <tr>
+                <th width="120px">停止使用时间：</th>
+                <th colspan="3">
+        <span>
+            <input type="date" value="<?php echo ($gameInfo && $priceData->end_time) ? date('Y-m-d',
+                $gameInfo->end_time) : date('Y-m-d', time() ); ?>" name="time_endl">
+            <input type="time" value="<?php echo ($gameInfo && $priceData->end_time) ? date('H:i',
+                $gameInfo->end_time) : '23:59'; ?>" name="time_endr">
+        </span>
+                </th>
+            </tr>
+        <?php elseif ($goodData->need_use_time == 2): ?>
+            <?php if (!$_GET['id']): ?>
+                <tr>
+                    <th width="120px">使用起止日期：</th>
+                    <th colspan="3">
+        <span>
+            <input type="date" value="<?php echo ($gameInfo && $gameInfo->start_time) ? date('Y-m-d',
+                $gameInfo->start_time) : date('Y-m-d', time()); ?>" name="time_startl">
+             - <input type="date" value="<?php echo ($gameInfo && $gameInfo->end_time) ? date('Y-m-d',
+                $gameInfo->end_time) : date('Y-m-d', time()); ?>" name="time_endl">
+        </span><span>一次添加，时间请不要超过3个月，日期跨度越大，操作等待时间会更长，重复数据将自动跳过</span>
+            </th>
+                </tr>
+            <?php endif; ?>
+            <?php if ($_GET['id']): ?>
+                <tr>
+                    <th width="120px">使用日期：</th>
+                    <th colspan="3">
+        <span>
+            <input type="date" readonly disabled value="<?php echo ($gameInfo && $gameInfo->start_time) ? date('Y-m-d',
+                $gameInfo->start_time) : date('Y-m-d', time()); ?>" name="time_startl">
+
+        </span>
+                    </th>
+                </tr>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <tr>
+            <th width="120px">价格套系：</th>
+            <th colspan="3">
+            <span>
+                <select name="pid">
+                    <?php foreach ($priceData as $price): ?>
+                        <?php if ($_GET['id'] and $gameInfo->pid == $price['id']) { ?>
+                            <option value="<?php echo $price['id']; ?>"><?php echo $price['name']; ?></option>
+                        <?php } elseif (!$_GET['id']) { ?>
+                            <option value="<?php echo $price['id']; ?>"><?php echo $price['name']; ?></option>
+                        <?php } ?>
+                    <?php endforeach; ?>
+                </select>
+            </span>
+            </th>
+        </tr>
+
+        <?php if ($_GET['id']): ?>
+            <tr>
+                <th width="120px">原价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->money; ?>" style="width: 180px" name="money"
+                                       type="text " class="cssInput"/></th>
+            </tr>
+            <tr>
+                <th width="120px">售价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->price; ?>" style="width: 180px" name="price"
+                                       type="text " class="cssInput"/></th>
+            </tr>
+            <tr>
+                <?php if($goodData->account_type == 1): ?>
+                <th width="120px">结算价：</th>
+                <th colspan="3"><input readonly value="<?php echo $gameInfo->account_money; ?>" style="border:none;color:#666666;width: 180px"
+                                       name="account_money" type="text" class="cssInput"/></th>
+                <?php else: ?>
+                <th width="120px">结算价：</th>
+                <th colspan="3"><input value="<?php echo $gameInfo->account_money; ?>" style="width: 180px"
+                                       name="account_money" type="text" class="cssInput"/></th>
+                <?php endif; ?>
+            </tr>
+        <?php endif; ?>
+        <tr>
+            <th width="160">接纳人数</th>
+            <th colspan="3">
+                <input class="cssInput" style="width: 100px" type="text" name="total_num"
+                       value="<?php echo $gameInfo->total_num; ?>">
+                <span style="color:red"></span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">验证商家</th>
+            <th colspan="3">
+                <select  name="organizer_id">
+                    <?php foreach ($shop as $s): ?>
+                        <?php if($_GET['id'] and $organizer_id != $s['id']){continue;} ?>
+                        <option value="<?php echo $s['id']; ?>"><?php echo $s['name']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <span></span>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th width="160"></th>
+            <th colspan="3">
+                <?php if ($linkData): ?>
+                    <input type="hidden" name="lid" value="<?php echo $linkData->id; ?>">
+                <?php endif; ?>
+                <input type="hidden" name="gid" value="<?php echo $goodData->id; ?>">
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                <button id="ti-price" type="submit" class="btn btn-primary">保存</button>
+            </th>
+        </tr>
+    </table>
+</form>
+
+<script>
+    $('#bak_t1').show();
+    $('#bak_t2').hide();
+    $("input[name='back_rule']").change(function () {
+        if ($(this).val() == 1) {
+            $('#bak_t2').show();
+            $('#bak_t1').hide();
+        } else if ($(this).val() == 0) {
+            $('#bak_t1').show();
+            $('#bak_t2').hide();
+        }
+    });
+
+    $("#ad-place-view").bind("propertychange input", function () {
+        var k = $(this).val();
+        var that = $("#places");
+        that.empty();
+        $.get('/wftadlogin/place/getShop?k=' + k,
+            function (result) {
+                $.each(result.data, function (entryIndex, entry) {
+                    var html = '<div onclick="add_place($(this))" class="xiala" data-name="' + entry['name']
+                        + '" data-sid="' + entry['sid'] + '">';
+                    html += entry['name'] + '</div>';
+                    that.append(html);
+
+                })
+            }, 'json'
+        );
+    });
+    var checkeds = [<?php echo $checked; ?>];
+    add_place = function (obj) {
+        var b = $.inArray(obj.attr('data-sid'), checkeds);
+        console.log(checkeds);
+        if (b == -1) {
+            $("input[name$='shop_name']").val(obj.attr('data-name'));
+            $("input[name$='shop_id']").val(obj.attr('data-sid'));
+        }
+
+        $("#places").empty();
+    };
+
+    $(function () {
+        //保存提交
+        $('#ti-price').click(function () {
+            $('#ti-price').attr("disabled","disabled");
+            $.post('/wftadlogin/good/newsaveGood<?php if($id): ?>Info<?php endif; ?>', $('#price-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    if(data.log_days){
+                        alert(data.log_days);
+                    }
+                    window.location.href = '<?php echo array_key_exists('url',$_COOKIE)?$_COOKIE['url']:"/wftadlogin/good/priceInfo?gid=".$goodData->id; ?>';
+                } else {
+                    alert(data.message);
+                    $('#ti-price').removeAttr("disabled");
+                }
+            }, 'json');
+            return false;
+        });
+    })
+</script>
+
+

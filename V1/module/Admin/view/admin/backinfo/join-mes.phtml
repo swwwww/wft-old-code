@@ -1,0 +1,58 @@
+<hgroup class="box">
+    <header>
+        <h3>商家合作记录</h3>
+        <i class="icon icon-list"></i>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+</hgroup>
+<style>
+    .warning1{color:Red;text-decoration:none;font-weight:bold;margin-right:20px;}
+</style>
+<table class="table table-hover">
+    <tr>
+        <th>商家名称</th>
+        <th>商家地址</th>
+        <th>经营内容</th>
+        <th>联系人姓名</th>
+        <th>联系人电话</th>
+        <th>处理状态</th>
+        <th>申请时间</th>
+        <th>操作</th>
+    </tr>
+    <?php foreach ($data as $value): ?>
+
+        <tr <?php echo ($value['is_ok']) ? '' : 'class="warning1"';?>>
+            <td><?php echo $value['market_name']; ?></td>
+            <td><?php echo $value['market_address']; ?></td>
+            <td><?php echo $value['market_area']; ?></td>
+            <td><?php echo $value['market_user']; ?></td>
+            <td><?php echo $value['market_phone']; ?></td>
+            <td><?php echo ($value['is_ok']) ? '<b style="color:green">ok</b>' : '未处理'; ?></td>
+            <td><?php echo $value['insert_time']; ?></td>
+            <td>
+                <?php if (!$value['is_ok']):?>
+                    <a class="btn btn-primary onyes" href="/wftadlogin/backinfo/doJoin?id=<?php echo $value['_id']; ?>">确认处理</a>
+                <?php endif;?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<div>
+    <?php echo $this->pageData;?>
+</div>
+<script>
+    $(function () {
+        $('.onyes').click(function () {
+            url = $(this).attr('href');
+            $.get(url, function(result){
+                if(result.status == 1){
+                    window.location.reload();
+                } else {
+                    alert(result.message);
+                }
+            });
+            return false;
+        })
+    })
+</script>
+

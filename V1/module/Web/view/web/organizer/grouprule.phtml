@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>拼团订单详情</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/order.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content">
+    <header class="rule-title">
+        <h2 class="left"><?php echo $res['title'];?></h2>
+        <div class="right">拼图价：<mark>&yen;<?php echo $res['price'];?></mark></div>
+    </header>
+    <section class="wrapper">
+        <ul class="rule-main">
+            <?php foreach($res['group_data'] as $v):?>
+            <li class="item">
+                <div class="pic left"><img src="<?php echo $v['img'];?>"></div>
+                <div class="info">
+                    <h3><?php echo $v['name'];?></h3>
+                    <p>团员：<?php echo $v['join_number'];?>/<?php echo $v['limit_number'];?></p>
+                    <p><?php echo date("Y-m-d H:i:s",$v['end_time']);?>后截团</p>
+                </div>
+                <a class="add-btn" href="/web/wappay/ordersubmit?id=<?php echo $v['game_id'];?>&tid=<?php echo $v['game_info_id'];?>&g_buy=1&group_buy_id=<?php echo $v['id'];?>&group_buy=2">参团</a>
+                <div class="more">
+                    <div class="more_or">还缺</div>
+                    <div class="more_add"><?php echo ($v['limit_number']-$v['join_number']);?>人</div>
+                </div>
+            </li>
+            <?php endforeach;?>
+        </ul>
+    </section>
+</main>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/main.min.js"></script>
+</html>

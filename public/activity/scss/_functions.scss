@@ -1,0 +1,246 @@
+$prefixes: spec, -webkit-, -moz-, -ms-;
+
+@mixin high{
+    @media screen and (min-width: 1600px){
+        @content;
+    }
+}
+
+@mixin middle{
+    @media screen and (min-width: 960px) and (max-width: 1600px){
+        @content;
+    }
+}
+
+@mixin low{
+    @media screen and (min-width: 760px){
+        @content;
+    }
+}
+
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    filter: alpha(opacity=$opacity*100);
+}
+
+@mixin prefixer($name, $prop, $key: true, $value: null) {
+    @if index($prefixes, spec) {
+        #{$name} : $prop;
+    }
+
+    @if $key or $value{
+        $newProps: null;
+
+        @each $prefix in $prefixes {
+            @if ($prefix != spec) {
+                @if type_of($prop) == 'list' and list-separator($prop) == ',' and $value{
+                    $newProps: ();
+                    $separator: list-separator($prop);
+
+                    @each $p in $prop {
+                        @if type_of($value) == 'list'{
+                            @if nth($value, index($prop, $p)) {
+                                $newProps: append($newProps, $prefix + $p, ',');
+                            } @else {
+                                $newProps: append($newProps, $p, ',');
+                            }
+                        } @else {
+                            $newProps: append($newProps, $prefix + $p, ',');
+                        }
+                    }
+                } @else if $value{
+                    $newProps: $prefix + $prop;
+                } @else {
+                    $newProps: $prop;
+                }
+
+                @if $key {
+                    #{$prefix + $name}: $newProps;
+                } @else {
+                    #{$name}: $newProps;
+                }
+            }
+        }
+    }
+}
+
+@mixin transition($prop, $prefix: null) {
+    @include prefixer(transition, ($prop), $value:($prefix));
+}
+
+@mixin box-shadow($args...){
+    -webkit-box-shadow: $args;
+    box-shadow: $args;
+}
+
+@mixin radius($radius){
+    border-radius: $radius;
+    -webkit-border-radius: $radius $radius $radius $radius;
+    background-clip: padding-box;
+}
+
+@mixin border-radius($top-left: null, $top-right: null, $bottom-right: null, $bottom-left: null, $right: null, $left: null, $bottom: null, $top: null){
+    @if $top-left{
+        border-top-left-radius: $top-left;
+        -webkit-border-top-left-radius: $top-left;
+    }
+    @if $top-right{
+        border-top-right-radius: $top-right;
+        -webkit-border-top-right-radius: $top-right;
+    }
+    @if $bottom-left{
+        border-bottom-left-radius: $bottom-left;
+        -webkit-border-bottom-left-radius: $bottom-left;
+    }
+    @if $bottom-right{
+        border-bottom-right-radius: $bottom-right;
+        -webkit-border-bottom-right-radius: $bottom-right;
+    }
+
+    @if $right{
+        border-bottom-right-radius: $right;
+        -webkit-border-bottom-right-radius: $right;
+        border-top-right-radius: $right;
+        -webkit-border-top-right-radius: $right;
+    }
+
+    @if $left{
+        border-bottom-left-radius: $left;
+        -webkit-border-bottom-left-radius: $left;
+        border-top-left-radius: $left;
+        -webkit-border-top-left-radius: $left;
+    }
+
+    @if $bottom{
+        border-bottom-left-radius: $bottom;
+        -webkit-border-bottom-left-radius: $bottom;
+        border-bottom-right-radius: $bottom;
+        -webkit-border-bottom-right-radius: $bottom;
+    }
+
+    @if $top {
+        border-top-left-radius: $top;
+        -webkit-border-top-left-radius: $top;
+        border-top-right-radius: $top;
+        -webkit-border-top-right-radius: $top;
+    }
+    background-clip: padding-box;
+}
+
+@mixin select($value){
+    @include prefixer(user-select, $value);
+}
+
+@mixin appearance($value){
+    @include prefixer(appearance, $value);
+}
+
+@mixin ellipsis{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin box-sizing($value) {
+    @include prefixer(box-sizing, $value);
+}
+
+@mixin animation($animations...) {
+    @include prefixer(animation, $animations);
+}
+
+@mixin animation-name($names...) {
+    @include prefixer(animation-name, $names);
+}
+
+@mixin animation-duration($times...) {
+    @include prefixer(animation-duration, $times);
+}
+
+@mixin animation-timing-function($motions...) {
+    // ease | linear | ease-in | ease-out | ease-in-out
+    @include prefixer(animation-timing-function, $motions);
+}
+
+@mixin animation-iteration-count($values...) {
+    // infinite | <number>
+    @include prefixer(animation-iteration-count, $values);
+}
+
+@mixin animation-direction($directions...) {
+    // normal | alternate
+    @include prefixer(animation-direction, $directions);
+}
+
+@mixin animation-play-state($states...) {
+    // running | paused
+    @include prefixer(animation-play-state, $states);
+}
+
+@mixin animation-delay($times...) {
+    @include prefixer(animation-delay, $times);
+}
+
+@mixin animation-fill-mode($modes...) {
+    // none | forwards | backwards | both
+    @include prefixer(animation-fill-mode, $modes);
+}
+
+@mixin keyframes($name) {
+    $temp: $prefixes;
+
+    @if (index($prefixes, -webkit-)) {
+        $prefixes: -webkit- !global;
+        @-webkit-keyframes #{$name} {
+            @content;
+        }
+    }
+
+    $prefixes: spec !global;
+    @keyframes #{$name} {
+        @content;
+    }
+
+    $prefixes: $temp !global;
+}
+
+@mixin transform($args...) {
+    @include prefixer(transform, $args);
+}
+
+@mixin translate($x, $y) {
+    @include prefixer(transform, translate3D($x, $y, 0));
+}
+
+@mixin rotate($deg) {
+    @include prefixer(transform, rotate($deg));
+}
+
+@mixin placeholder{
+    &::-webkit-input-placeholder{
+        @content;
+    }
+    &:-ms-input-placeholder,
+    &::-moz-placeholder{
+        @content;
+    }
+}
+
+@mixin origin($x: 0, $y: 0) {
+    @include prefixer(transform-origin, $x $y);
+}
+
+@mixin scale($value, $x: null, $y: null){
+    @if ($x) {
+        @include prefixer(transform, scaleX($x));
+    } @else if ($y) {
+        @include prefixer(transform, scaleY($y));
+    } @else {
+        @include prefixer(transform, scale($value));
+    }
+}
+
+@mixin backface-visibility($value) {
+    @include prefixer(backface-visibility, $value);
+}

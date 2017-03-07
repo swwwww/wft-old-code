@@ -1,0 +1,130 @@
+<hgroup class="box">
+    <header>
+        <h3>城市管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/city">返回</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/city/save" method="post">
+    <header class="box-title">添加站点</header>
+
+    <table class="table">
+        <tr>
+            <th width="160">站点名称</th>
+            <th colspan="3"><input type="text" class="cssInput" name="city_name" value="<?php echo $data->city_name; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">站点城市编号</th>
+            <th colspan="3"><input type="text" class="cssInput" name="city_number" value="<?php echo $data->city_number; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">所在城市名称——拼音</th>
+            <th colspan="3"><input type="text" class="cssInput" name="city" value="<?php echo $data->city; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">图片</th>
+            <th colspan="3">
+                <fieldset>
+                    <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                        <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                        <input type="file" id="fileupload" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                    </div>
+
+                    <input type="hidden" name="cover" value="<?php echo $data->city_img; ?>" />
+                    <span>　城市圆形图标126*126
+                </fieldset>
+                <br />
+
+                <div>
+                    <img width="120" height="60" class="fileupload" src="<?php echo $data->city_img; ?>">
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">站点类型
+            <th colspan="3" width="600">
+                <input name="source" type="radio" value="1" <?php if(!$data->type):?> checked <?php endif; ?> /> 直营 &nbsp;&nbsp;&nbsp;
+                <input name="source" type="radio" value="2" <?php if($data->type):?> checked <?php endif; ?> /> 合作
+            </th>
+        </tr>
+        <tr>
+            <th width="160">地址</th>
+            <th colspan="3"><input type="text" class="cssInput" name="address" value="<?php echo $data->address; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">站点负责人</th>
+            <th colspan="3"><input type="text" class="cssInput" name="username" value="<?php echo $data->username; ?>"/>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">站点联系方式</th>
+            <th colspan="3"><input type="text" class="cssInput" name="contact" value="<?php echo $data->contact; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">负责人联系方式</th>
+            <th colspan="3"><input type="text" class="cssInput" name="phone" value="<?php echo $data->phone; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">每月积分限制</th>
+            <th colspan="3"><input type="text" class="cssInput" name="integral" value="<?php echo $data->integral; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">每月返利限制</th>
+            <th colspan="3"><input type="text" class="cssInput" name="return" value="<?php echo $data->return; ?>"/>
+            </th>
+        </tr>
+        <tr>
+            <th width="160">站点状态
+            <th colspan="3" width="600">
+                <input name="is_close" type="radio" value="2" <?php if($data->is_close == 2):?> checked <?php endif; ?> /> 添加内容中
+                <input name="is_close" type="radio" value="0" <?php if($data->is_close == 0):?> checked <?php endif; ?> /> 开启
+                <input name="is_close" type="radio" value="1" <?php if($data->is_close == 1):?> checked <?php endif; ?> /> 关闭
+
+            </th>
+        </tr>
+        <tr>
+            <th width="160">
+                <input type="hidden" name="id" value="<?php echo $data->id; ?>" /></th>
+            <th colspan="3">
+                <button type="submit" class="btn btn-primary">提交</button>
+            </th>
+        </tr>
+
+    </table>
+
+</form>
+
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+</script>
+

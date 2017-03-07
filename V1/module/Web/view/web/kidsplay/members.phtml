@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>活动成员</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<ul class="member">
+    <?php foreach($members as $v):?>
+        <li><img src="<?php echo $v['image'];?>" onerror="this.src='http://test.wan.deyi.com/images/applogo.png'" /></li>
+    <?php endforeach;?>
+</ul>
+</body>
+</html>

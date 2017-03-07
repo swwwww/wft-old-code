@@ -1,0 +1,48 @@
+
+
+   <p>
+       <a  class="ui-button" href="/activity/pingxuanadmin/editbusiness">添加商家</a>
+   </p>
+
+
+<div class="box">
+    <div class="box-title">
+        商家列表
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">id</th>
+                <th width="150">商家名称</th>
+                <th width="100">投票数</th>
+                <th width="100">查看数</th>
+                <th width="300">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['id']; ?></td>
+                    <td width="150">
+                        <?php echo $row['name']; ?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['votes']; ?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['view_number']; ?>
+                    </td>
+                    <td width="300">
+                        <a class="ui-button" href="/activity/pingxuanadmin/editbusiness?id=<?php echo $row['id']; ?>">修改</a>
+                        <a class="ui-button" href="/activity/pingxuanadmin/delbusiness?id=<?php echo $row['id']; ?>">删除</a>
+                        <a class="ui-button" href="/activity/pingxuanadmin/Up?id=<?php echo $row['id']; ?>">刷新上浮</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->page; ?>
+        </footer>
+    </div>
+</div>
+

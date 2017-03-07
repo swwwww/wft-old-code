@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <title>游玩地</title>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/index.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <style>
+        .list-nav .cat .tag_menu{
+            height:auto;
+        }
+        #cate_menu{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<main class="align fixed-bottom-80" id="content"></main>
+<script id="test" type="text/html">
+    <section>
+        <nav class="list-nav">
+            <ul class="cat Fix"  id="select_menu">
+                <li>
+                    <a class="trigger show_category_menu">所有分类 <i class="drop"></i></a>
+                    <ul class="tag_menu" id="cate_menu">
+                        {{each tag}}
+                        <li>
+                            <a href="/web/tag/category?id={{$value.id}}" data-id="{{$value.id}}" id="id_{{$value.id}}">
+                                {{$value.name}}
+                            </a>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </li>
+                <li class="tags">
+                    <a class="trigger show_age_menu">所有年龄<i class="drop"></i></a>
+                    <ul class="tag_menu">
+                        <li>
+                            <a href="/web/tag/category?age_min=0&age_max=1" data-min="0" data-max="1" id="age_min_0">
+                                0-1岁
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/web/tag/category?age_min=1&age_max=3" data-min="1" data-max="3" id="age_min_1">
+                                1-3岁
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/web/tag/category?age_min=3&age_max=6" data-min="3" data-max="6" id="age_min_3">
+                                3-6岁
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/web/tag/category?age_min=6&age_max=12" data-min="6" data-max="12" id="age_min_6">
+                                6-12岁
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/web/tag/category?age_min=12" data-min="12" id="age_min_12">
+                                12岁以上
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tags">
+                    <a class="trigger last-one show_order_menu">有票优先<i class="drop"></i></a>
+                    <ul class="tag_menu">
+                        <li>
+                            <a class="" href="/web/tag/category?order=hot" data-order="hot" id="hot">
+                                最热门
+                            </a>
+                        </li>
+                        <li>
+                            <a class="" href="/web/tag/category?order=ticket" data-order="ticket" id="ticket">
+                                有票优先
+                            </a>
+                        </li>
+                        <li>
+                            <a class="" href="/web/tag/category?order=close" data-order="close" id="close">
+                                离我最近
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </section>
+    {{include 'list'}}
+</script>
+<script id="list" type="text/html">
+    <section class="wrapper fixed-top-60">
+        <div class="cur-position">
+            <div class="addr">
+                <span class="left">当前：</span>
+                <span class="left now" id="baidu_geo">正在GPS定位中...</span>
+            </div>
+<!--            <a class="icon" onclick="getLocation();"></a>-->
+        </div>
+        <div class="group">
+
+        </div>
+        <div class="inner">
+            <div class="lists">
+                {{each place_list}}
+                <div class="search-main">
+                    <div class="search-head">
+                        <a class="img" href="/web/place/index?id={{$value.id}}" title="">
+                            <i class="tips">{{if $value.ticket_num > 0}}有票{{else}}售罄{{/if}}</i>
+                            <img src="{{$value.cover}}"/>
+                        </a>
+                        <div class="info">
+                            <a class="shopname" href="/web/place/index?id={{$value.id}}" title="">{{$value.title}}</a>
+                            <div class="title">{{$value.editor_word}}</div>
+                            <aside class="aside">
+                                {{if $value.prise}}
+                                {{each $value.prise}}
+                                <span class="sale">{{$value}}</span>
+                                {{/each}}
+                                {{/if}}
+                                <div class="distance"><i class="icon"></i>{{$value.circle}}</div>
+                            </aside>
+                        </div>
+                    </div>
+                    {{if $value.ticket_num>0}}
+                    <div class="search-list">
+                        <div class="arrow-up"></div>
+                        {{each $value.ticket_list}}
+                        <a href="/web/organizer/shops?id={{$value.id}}" title="" class="item">
+                            <i class="icon"></i>
+                            <span class="title">{{$value.ticket_name}}</span>
+                            <div class="price">
+                                <span class="symbol">¥</span>
+                                <span class="num"><mark>{{$value.low_money}}</mark>起</span>
+                                <i class="arrowent"></i>
+                            </div>
+                        </a>
+                        {{/each}}
+                        {{if $value.ticket_num > 3}}
+                        <a title="" class="item more" href="/web/place/index?id={{$value.id}}">
+                            查看全部{{$value.ticket_num}}个热卖票券
+                        </a>
+                        {{/if}}
+                    </div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </section>
+</script>
+<script id="more" type="text/html">
+    {{each place_list}}
+    <div class="search-main">
+        <div class="search-head">
+            <a class="img" href="/web/place/index?id={{$value.id}}" title="">
+                <i class="tips">{{if $value.ticket_num > 0}}有票{{else}}售罄{{/if}}</i>
+                <img src="{{$value.cover}}"/>
+            </a>
+            <div class="info">
+                <a class="shopname" href="/web/place/index?id={{$value.id}}" title="">{{$value.title}}</a>
+                <div class="title">{{$value.editor_word}}</div>
+                <aside class="aside">
+                    {{if $value.prise}}
+                    {{each $value.prise}}
+                    <span class="sale">{{$value}}</span>
+                    {{/each}}
+                    {{/if}}
+                    <div class="distance"><i class="icon"></i>{{$value.circle}}</div>
+                </aside>
+            </div>
+        </div>
+        {{if $value.ticket_num>0}}
+        <div class="search-list">
+            <div class="arrow-up"></div>
+            {{each $value.ticket_list}}
+            <a href="/web/organizer/shops?id={{$value.id}}" title="" class="item">
+                <i class="icon"></i>
+                <span class="title">{{$value.ticket_name}}</span>
+                <div class="price">
+                    <span class="symbol">¥</span>
+                    <span class="num"><mark>{{$value.low_money}}</mark>起</span>
+                    <i class="arrowent"></i>
+                </div>
+            </a>
+            {{/each}}
+            {{if $value.ticket_num > 3}}
+            <a title="" class="item more" href="/web/place/index?id={{$value.id}}">
+                查看全部{{$value.ticket_num}}个热卖票券
+            </a>
+            {{/if}}
+        </div>
+        {{/if}}
+    </div>
+    {{/each}}
+</script>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+</body>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/web.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script src="/js/wap/template.js"></script>
+<!--<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>-->
+<script>
+    (function(){
+        $(".features-find").addClass("current");
+        var city = localStorage.getItem("select_city");
+        var addr = localStorage.getItem("ADDRESS");
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return decodeURI(r[2]); return null;
+        }
+
+        var id = GetQueryString('id');
+        var age_min = GetQueryString('age_min');
+        var age_max = GetQueryString('age_max');
+        var order = GetQueryString('order');
+        var addr_x = localStorage.getItem('lat');
+        var addr_y = localStorage.getItem("lng");
+
+        //        var city = $("#city").val();
+        if(order==null){
+            order='ticket';
+        }
+        if(age_max==null){
+            age_max=100;
+        }
+        if(age_min==null){
+            age_min=0
+        }
+        $.ajax({
+            type: "POST",
+            url: "/tag/index",
+            dataType:"json",
+            async: true,
+            data:{'id':id,'order':order,'age_min':age_min,'age_max':age_max,'addr_x':addr_x,'addr_y':addr_y},
+            headers: {
+                "VER": 10,
+                "CITY":encodeURI(city)
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+                    $("#baidu_geo").html(addr);
+
+                    var select_menu = $("#select_menu");
+                    select_menu.on('click',function(e){
+                        console.log("click");
+                        var event = $(e.target);
+                        event.next().slideToggle(300);
+                        event.parent().siblings().find('.tag_menu').hide();
+                    });
+
+
+                    //加载更多
+                    var counter = 2;
+                    // dropload
+                    var dropload = $('.inner').dropload({
+                        scrollArea : window,
+                        domDown : {
+                            domClass   : 'dropload-down',
+                            domRefresh : '<div class="dropload-refresh" style="height:50px;text-align: center;margin-bottom: 25px;">↑上拉加载更多</div>',
+                            domLoad    : '<div class="dropload-load" style="height:50px;line-height: 50px;text-align: center;margin-bottom: 30px;"><span class="loading"></span>加载中...</div>',
+                            domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;margin-bottom: 15px;">暂无数据</div>'
+                        },
+                        loadDownFn : function(me){
+                            counter++;
+                            $.ajax({
+                                type: "POST",
+                                url: "/tag/index",
+                                dataType: 'json',
+                                async: true,
+                                data:{'id':id,'order':order,'age_min':age_min,'age_max':age_max,'page':counter},
+                                headers: {
+                                    "VER": 10,
+                                    "CITY":encodeURI(city)
+                                },
+                                success: function(data){
+                                    var len= data.response_params.place_list.length;
+                                    // 为了测试，延迟1秒加载
+                                    setTimeout(function(){
+                                        $('.lists').append(template('more', data.response_params));
+                                        // 每次数据加载完，必须重置
+                                        me.resetload();
+                                    },500);
+
+                                    if(len==0){
+                                        // 锁定
+                                        me.lock();
+                                        // 无数据
+                                        me.noData();
+                                        return;
+                                    }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown){
+//                                    alert('Ajax error!');
+                                    // 即使加载出错，也得重置
+                                    me.resetload();
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+//                    alert(XMLHttpRequest.responseJSON.message);
+                window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    window.location.href = '<?php echo $authorUrl;?>';
+//                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+        });
+    }());
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

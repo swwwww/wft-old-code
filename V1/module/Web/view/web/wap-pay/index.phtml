@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信菜单页</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<div class="banner">
+    <div class="slider">
+        <ul>
+            <?php foreach ($data['maps'] as $k => $v): ?>
+                <li><a data-type="<?php echo $v['type']; ?>" data-id="<?php echo $v['id']; ?>"><img
+                            src="<?php echo $v['cover']; ?>"/></a></li>
+            <?php endforeach;?>
+        </ul>
+    </div>
+</div>
+<div class="menu">
+    <?php foreach ($data['tag'] as $k => $v): ?>
+        <a data-id="<?php echo $v['id']; ?>"><img src="<?php echo $v['coin']; ?>"><?php echo $v['name'];?></a>
+    <?php endforeach;?>
+</div>
+<a id="bottom-fixed" href="http://wan.deyi.com/app/index.php">
+    <p>玩翻天——孩子们的游玩管家。<br/>下载app，获得更多优惠！</p>
+</a>
+<script src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/yxMobileSlider.js"></script>
+<script>
+
+    function getTypeToUrl(type, id) {
+        var url = '<?php echo $url;?>';
+        if (type == 1) {
+            //专题
+            return url + '/web/coupon/newactivity?id=' + id;
+        } else if (type == 2) {
+            //卡券
+            return url + '/web/coupon?id=' + id;
+        } else if (type == 4) {
+            //游玩地
+            return url + '/web/place?id=' + id;
+        } else if (type == 5) {
+            //活动
+            return url + '/web/organizer/shops?id=' + id;
+        } else if (type == 6) {
+            //标签
+            return url + '/web/tag?id=' + id;
+        } else {
+            alert('类型错误，请联系客服');
+        }
+    }
+    
+    $(function () {
+        //滚动跳转
+        $('.slider a').click(function () {
+            var type = $(this).attr('data-type');
+            var id = $(this).attr('data-id');
+            window.location.href = getTypeToUrl(type, id);
+            return false;
+        });
+
+        //列表跳转
+        $('.menu a').click(function () {
+            var id = $(this).attr('data-id');
+            window.location.href = getTypeToUrl(6, id);
+            return false;
+        })
+    });
+    $(".slider").yxMobileSlider({width: 640, height: 260, during: 3000});
+</script>
+</body>
+</html>

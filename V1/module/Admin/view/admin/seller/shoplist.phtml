@@ -1,0 +1,78 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/">Home</a></li>
+        <li class="active"><a href="/wftadlogin/seller/marketlist">商户管理</a></li>
+        <select style="margin-left: 200px;">
+            <option selected>武汉</option>
+        </select>
+        选择城市
+    </ul>
+</div>
+<div class="panel panel panel-primary">
+    <div class="panel-body">
+        <ul class="nav nav-tabs">
+            <li><a href="/wftadlogin/seller/marketlist">商家</a></li>
+            <li  class="active"><a href="/wftadlogin/seller/shoplist">店铺</a></li>
+            <form action="#" method="get">
+                <table border="0">
+                    <tr>
+                        <td>
+                            <div class="col-lg-6" style="width: 400px;padding-bottom: 10px;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="搜索店铺名称" name="k" value="">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">搜索</button>
+                      </span>
+                                </div>
+                                <!-- /input-group -->
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <table class="table table-striped table-hover">
+                <tr>
+                    <th scope="col">店铺ID</th>
+                    <th scope="col">店铺名称</th>
+                    <th scope="col">店铺密码 (默认密码)</th>
+                    <th scope="col">联系电话</th>
+                    <th scope="col">操作</th>
+                </tr>
+                <?php foreach ($this->data as $v): ?>
+                    <tr>
+                        <td><?php echo $v->shop_id; ?></td>
+                        <td><?php echo $v->shop_name; ?></td>
+                        <td><?php echo $v->password; ?></td>
+                        <td><?php echo $v->shop_phone; ?></td>
+                        <td>
+                            <a class="btn btn-primary" href="/wftadlogin/seller/shop?marketId=<?php echo $v->shop_mid;?>&id=<?php echo $v->shop_id; ?>">详情</a>
+                            <a class="btn btn-success" href="/wftadlogin/coupons/new?mid=<?php echo $v->shop_mid; ?>">添加卡券</a>
+                            <a class="btn btn-primary" href="/wftadlogin/coupons?mid=<?php echo $v->shop_mid; ?>&sid=<?php echo $v->shop_id;?>">所有卡券</a>
+                            <a class="btn btn-danger" href="/wftadlogin/seller/deleteshop?&sid=<?php echo $v->shop_id; ?>">删除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </ul>
+        <div>
+            <?php echo $this->pagedata; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.btn-danger').click(function () {
+            var r = confirm("确定要删除吗");
+            if (r == true) {
+                url = $(this).attr('href');
+                $.get(url, function (result) {
+                    if (result.status == 1) {
+                        window.location.reload();
+                    }
+                });
+            }
+            return false;
+        })
+    });
+</script>

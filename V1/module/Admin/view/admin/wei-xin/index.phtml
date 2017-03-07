@@ -1,0 +1,99 @@
+<hgroup class="box">
+    <header>
+        <h3>微信管理</h3>
+
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/weixin/add">添加自动回复</a>
+
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/weixin/setMenu">设置微信菜单</a>
+
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/weixin/concern">查看用户关注情况</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<div class="box">
+    <div class="box-title">
+        自动回复关键字列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px"
+                       placeholder="输入关键字搜索" name="k"
+                       value="<?php echo isset($_GET['k']) ? $_GET['k'] : ''; ?>">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px"
+                       placeholder="输入回复关键字搜索" name="reply"
+                       value="<?php echo isset($_GET['reply']) ? $_GET['reply'] : ''; ?>">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="box-table">
+        <table>
+            <tr>
+                <th class="size3">关键字</th>
+                <th class="size1">完全匹配</th>
+                <th class="size4">回复内容</th>
+                <th class="size1">类型</th>
+                <th class="size1">操作</th>
+            </tr>
+
+            <?php foreach ($data as $row) : ?>
+                <tr style="text-align: left">
+                    <td class="size3">
+                        <?php
+                            foreach ($row['keywords'] as $v) {
+                                echo '  ' . $v['keyword'];
+                            }
+                        ?>
+                    </td>
+                    <td class="size1"><?php echo $row['keywords'][0]['match_all'] == 1 ? '是' : '否'; ?></td>
+                    <td class="size4">
+                        <?php if ($row['type'] == 'news') : ?>
+                            <a href="<?php echo $row['to_url']; ?>"
+                               target="_blank"><img src="<?php echo $row['img']; ?>" width="200" height="150"></a>
+                        <?php else : ?>
+                            <?php echo $row['message']; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td class="size1"><?php echo ($row['type'] == 'text') ? '文字' : '图文'; ?></td>
+                    <td class="size1">
+                        <a href="/wftadlogin/weixin/add?id=<?php echo $row['id']; ?>" class="ui-button">修改</a>
+                        <a href="/wftadlogin/weixin/delete?id=<?php echo $row['id']; ?>" class="ui-button" onclick="return confirm('确定要删除吗？不可恢复')">删除</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<style>
+    th {
+        max-width: 200px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    td {
+        max-width: 200px;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        text-align: left;
+    }
+
+    .box-table td{
+        text-align: left;
+    }
+</style>

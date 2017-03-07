@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>玩翻天后台管理</title>
+    <script type="text/javascript">(function () {
+            if (!/*@cc_on!@*/0)return;
+            var e = "abbr,article,aside,audio,canvas,datalist,details,dialog,eventsource,figure,footer,header,hgroup,mark,menu,meter,nav,output,progress,section,time,video".split(','), i = e.length;
+            while (i--) {
+                document.createElement(e[i])
+            }
+        })();</script>
+    <link href="/css/wan_layout.css" type="text/css" rel="stylesheet"/>
+
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+
+    <!-- Le styles -->
+    <?php echo $this->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/vnd.microsoft.icon',
+        'href' => $this->basePath() . '/img/favicon.ico'
+    ))
+        ->prependStylesheet($this->basePath() . '/css/style.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+        ->prependStylesheet($this->basePath() . '/css/loginDialog.css')
+        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
+</head>
+<body>
+<div id="container" h-combine="submit">
+    <!--顶部导航开始-->
+    <header id="top-nav">
+
+        <h1 id="top-logo">
+            <a target="_blank" href="http://wan.wanfantian.com">
+                <img width="123" height="32" src="/images/wan_images/logo.png"></a>
+            <a href="/wftadlogin/"><span>玩翻天</span></a>
+        </h1>
+
+        <nav id="top-user">
+            <a href="javascript:;"></a>
+            <a href="/activity/manage/logout">安全退出</a>
+        </nav>
+    </header>
+
+    <nav id="side-nav">
+        <dl>
+            <dt class="box-title">荟聚活动</dt>
+            <dd class="box">
+                <ul>
+                    <li><a href="/activity/huijuadmin/list">查看参与用户</a></li>
+                    <li><a href="/activity/huijuadmin/prizelist">设置奖品</a></li>
+                </ul>
+            </dd>
+        </dl>
+    </nav>
+
+    <div id="content" style="margin-top: 10px;">
+        <hgroup class="box">
+            <header>
+                <h3>用户管理</h3>
+                <i class="icon icon-list"></i>
+                <a href="/activity/huijuadmin/list">用户列表</a>
+            </header>
+            <aside class="tips">
+                <i class="icon icon-notice"></i>
+                <div>温馨提示： 有问题 请及时联系</div>
+            </aside>
+        </hgroup>
+
+        <div class="box">
+            <div class="box-title">
+                用户列表
+            </div>
+            <div>
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <th width="50">id</th>
+                        <th width="150">uid</th>
+                        <th width="100">open_id</th>
+                        <th width="80">用户名</th>
+                        <th width="300">操作</th>
+                    </tr>
+                    <?php foreach ($data as $key => $row): ?>
+                        <tr style="text-align: left">
+                            <td width="50"><?php echo $row['id']; ?></td>
+                            <td width="150">
+                                <?php echo $row['uid']; ?>
+                            </td>
+                            <td width="100">
+                                <?php echo $row['open_id']; ?>
+                            </td>
+                            <td width="80">
+                                <?php echo $row['user_name']; ?>
+                            </td>
+                            <td width="300">
+                                <a class="ui-button" href="/activity/huijuadmin/view?id=<?php echo $row['id']; ?>">查看图像</a>
+                                <a class="ui-button" href="/activity/huijuadmin/info?id=<?php echo $row['id']; ?>">查看获奖情况</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <footer>
+                    <?php echo $this->page; ?>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+

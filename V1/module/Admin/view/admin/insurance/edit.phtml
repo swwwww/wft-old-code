@@ -1,0 +1,62 @@
+<style>
+    * {
+        font-size: 14px;
+    }
+</style>
+<hgroup class="box">
+    <header>
+        <h3>保单</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/Insurance/index?good_id=<?php echo $data->coupon_id; ?>">返回保单列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<div>
+    <form method="post" action="/wftadlogin/Insurance/save?insure_id=<?php echo $data->insure_id; ?>">
+
+        <input type="hidden" name="insure_id" value="<?php echo $data->insure_id; ?>">
+        <input type="hidden" name="coupon_id" value="<?php echo $data->coupon_id; ?>">
+        <input type="hidden" name="order_sn" value="<?php echo $data->order_sn; ?>">
+        <table class="table">
+            <tr>
+                <th width="160">真实姓名</th>
+                <th>
+                    <input type="text" name="name" value="<?php echo $data->name; ?>">
+                </th>
+            </tr>
+
+            <tr>
+                <th width="160">身份证号</th>
+                <th>
+                    <input type="text" name="id_num" value="<?php echo $data->id_num; ?>">
+                </th>
+            </tr>
+
+
+        </table>
+        <input type="submit" value="提交">
+    </form>
+
+    <script>
+        setchecked('<?php echo isset($data->sex) ? $data->sex : 0; ?>', '.sex');
+        //多选（单选）按钮组设置默认值
+        function setchecked(data_string, classs) {
+            var v = data_string.split(',');
+            $(classs).each(function () {
+                category = $(this);
+                $.each(v, function (index, value) {
+                    if (category.val() == value) {
+                        category.attr("checked", true);
+                    }
+                });
+            })
+        }
+
+    </script>
+</div>
+
+

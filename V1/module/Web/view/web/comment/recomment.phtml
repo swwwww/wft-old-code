@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>点评回复</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+<!--    <link href="/css/wap/travel.css" rel="stylesheet"/>-->
+    <script>(function () {
+            var w = window.screen.width, s = w / 640, u = navigator.userAgent, m = '<meta name="viewport" content="width=640,';
+            if (/android (\d+\.\d+)/i.test(u)) {
+                if (parseFloat(RegExp.$1 > 2.3)) {
+                    m += "minimum-scale = " + s + ", maximum-scale = " + s + ","
+                }
+            } else {
+                m += "user-scalable=no,"
+            }
+            m += 'target-densitydpi=device-dpi">';
+            document.write(m)
+        }());</script>
+</head>
+<style type="text/css">
+    .content {
+        background-color: #ffffff;
+        padding: 15px;
+        border-bottom: 1px solid #CCCCCC;
+    }
+
+    .content .user-img {
+        display: inline-block;
+        float: left;
+        height: 76px;
+        width: 76px;
+        border-radius: 38px;
+    }
+
+    .content .name-time {
+        display: inline-block;
+        float: left;
+        font-size: 26px;
+        margin-left: 10px;
+    }
+
+    .content .name-time .user-name {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .content .name-time .comment-time {
+        display: block;
+    }
+
+    .content .product-bar {
+        display: inline-block;
+        margin-left: 45px;
+        margin-top: 5px;
+        float: left;
+        width: 162px;
+        height: 24px;
+        background: url("/images/wap/stars-bg.gif") no-repeat 0 0;
+    }
+
+    .content .product-bar-cur {
+        height: 24px;
+        background: url("/images/wap/stars.gif") no-repeat 0 0;
+    }
+
+    .content .comment-info {
+        font-size: 30px;
+        padding: 20px 0;
+    }
+
+    .content .foot {
+        float: right;
+        padding-top: 15px;
+        font-size: 26px;
+    }
+
+    .content .foot .like-num {
+        display: inline-block;
+        padding-left: 50px;
+        width: 100px;
+        height: 31px;
+        background: url("/images/wap/icons.png?ver=4") no-repeat -15px -2149px;
+    }
+
+    .content .foot .comment-num {
+        display: inline-block;
+        padding-left: 50px;
+        width: 100px;
+        height: 31px;
+        background: #fff url("/images/wap/icons.png?ver=4") no-repeat -14px -2187px;
+    }
+
+    .reply {
+        margin-top: 20px;
+    }
+
+    .reply .head-icon {
+        display: block;
+        width: 100px;
+        height: 31px;
+        margin: 0 45px 20px 60px;
+        background: url("/images/wap/icons.png?ver=4") no-repeat -15px -2149px;
+    }
+
+    .reply .list {
+        margin-bottom: 160px;
+    }
+
+    .reply .list-item {
+        background-color: #ffffff;
+        border-bottom: 1px solid #CCCCCC;
+    }
+
+    .reply .reply-img {
+        float: left;
+        width: 60px;
+        height: 60px;
+        display: inline-block;
+        border-radius: 30px;
+        margin: 25px 20px 0 25px;
+    }
+
+    .reply .item-head {
+        padding: 25px 30px 0 0;
+        font-size: 24px;
+    }
+
+    .reply .reply-name,
+    .reply .reply-time {
+        display: inline-block;
+    }
+
+    .reply .reply-name {
+        float: left;
+    }
+
+    .reply .reply-time {
+        float: right;
+    }
+
+    .reply .relpy-msg {
+        padding: 0 30px 20px 105px;
+        display: inline-block;
+        font-size: 26px;
+    }
+
+    .comment-in {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        line-height: 95px;
+        height: 95px;
+        border-top: 1px solid #2e2e2e;
+        background-color: #ffffff;
+    }
+
+    .comment-in .input {
+        display: inline-block;
+        width: 460px;/*70%;*/
+        border: 1px solid #CCCCCC;
+        line-height: 60px;
+        border-radius: 5px;
+        margin-left: 20px;
+        font-size: 30px;
+        margin-top: 20px;
+        padding-left: 15px;
+    }
+
+    .comment-in .submit {
+        display: inline-block;
+        margin-left: 20px;
+        line-height: 60px;
+        background-color: #fa6e51;
+        color: #ffffff;
+        font-size: 30px;
+        width: 100px;/*17%;*/
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+    .clearfix:after {
+        content: ' ';
+        height: 0;
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
+    .dropload-down{
+        margin-top: 15px;
+    }
+</style>
+<body>
+<section class="align" id="main_data"></section>
+<script id="main_script" type="text/html">
+    <section class="content clearfix">
+        <div class="head-info clearfix">
+            <img class="user-img" src={{comment.img}}>
+            <div class="name-time">
+                <span class="user-name">{{comment.author}}</span>
+                <span class="comment-time">{{comment.dateline}}</span>
+            </div>
+            <div class="product-bar">
+                <div class="product-bar-cur" style={{comment.score}}></div>
+            </div>
+        </div>
+        <p class="comment-info">{{comment.message[0].val}}</p>
+        <div class="foot">
+            <span class="like-num" id="like">{{comment.like_number}}</span>
+            <span class="comment-num">{{comment.reply_number}}</span>
+        </div>
+    </section>
+    <section class="reply">
+        <ul class="list">
+            {{if reply_list[0]}}
+            {{each reply_list as value}}
+            <li class="list-item clearfix">
+                <img class="reply-img" src={{value.img}}>
+                <div class="item-head clearfix">
+                    <span class="reply-name">{{value.username}}</span>
+                    <span class="reply-time">{{value.dateline}}</span>
+                </div>
+                <p class="relpy-msg">
+                    {{value.message[0].val}}
+                </p>
+            </li>
+            {{/each}}
+            {{/if}}
+        </ul>
+    </section>
+</script>
+
+<!--分页加载-->
+<script id="more" type="text/html">
+    {{each reply_list as value}}
+
+    <li class="list-item clearfix">
+        <img class="reply-img" src={{value.img}}>
+        <div class="item-head clearfix">
+            <span class="reply-name">{{value.username}}</span>
+            <span class="reply-time">{{value.dateline}}</span>
+        </div>
+        <p class="relpy-msg">
+            {{value.message[0].val}}
+        </p>
+    </li>
+    {{/each}}
+</script>
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+
+<div class="comment-in">
+    <input id="reply_content" class="input" type="text" placeholder="说点什么吧" autofocus>
+    <a class="submit" id="reply_comment">发送</a>
+</div>
+
+<input type="hidden" id="comment" value='<?php echo $comment ?>'>
+<input type="hidden" id="type" value='<?php echo $type ?>'>
+<input type="hidden" id="object_id" value='<?php echo $object_id ?>'>
+<input type="hidden" id="pid" value='<?php echo $pid ?>'>
+<!--<input type="hidden" id="last_repid" value='--><?php //echo $last_repid ?><!--'>-->
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script>
+    (function () {
+        var result = new Array(1);
+        var like = $("#like").val();
+        var comment = $("#comment").val();
+        var last_repid = null;
+        var pid = $("#pid").val();
+//        console.log(comment);
+
+        result['comment'] = JSON.parse(comment);
+        result['reply_list'] = result['comment']['reply_list'];
+
+        for(var i=0;i<result['reply_list'].length;i++){
+            var info = result['reply_list'][i];
+            var d=new Date(parseInt(info.dateline)*1000);
+            info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ d.getMinutes()+':'+ d.getSeconds();
+            last_repid = info.repid;
+        }
+
+//        console.log(result);
+        var html = template('main_script', result);
+        document.getElementById('main_data').innerHTML = html;
+
+        var reply = $("#reply_comment");
+        reply.on('click', function () {
+            var type = $("#type").val();
+            var object_id = $("#object_id").val();
+
+            var last_repid = $("last_repid").val();
+            console.log(last_repid);
+            var messageJson = [];
+            messageJson.push({'t':1,'val':$("#reply_content").val()});
+
+            $.ajax({
+                type: 'POST',
+                url: "/post/index/index",
+                dataType: 'json',
+                async: true,
+                data: {
+                    'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                    'type': type,
+                    'object_id': object_id,
+                    'message': JSON.stringify(messageJson),
+                    'pid': pid
+                },
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        alert(result.response_params.message);
+                    } else{
+                        alert(result.response_params.message);
+                        window.location.href="/web/comment/recomment?id="+object_id+"&type="+type+"&pid="+pid;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //todo 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        //                            window.location.href = '<?php //echo $authorUrl;?>//';
+                        alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                    }
+                    else {
+                        alert('接口异常，返回状态码：' + XMLHttpRequest.status)
+                    }
+
+                }
+            })
+        });
+
+
+        //加载更多
+        var counter = 1;
+        // dropload
+        var dropload = $('.list').dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh" style="height:50px;text-align: center;margin-bottom: 25px;">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load" style="height:50px;line-height: 50px;text-align: center;margin-bottom: 30px;"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData" style="height:20px;text-align: center;margin-bottom: 15px;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/post/index/info",
+                    dataType: 'json',
+                    async: true,
+                    data:{
+                        'pid': pid,
+                        'uid': <?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                        'last_repid': last_repid,
+                        'pagenum': 1
+                    },
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function(data){
+                        console.log(data);
+                        var len= data.response_params.reply_list.length;
+
+                        for(var i=0;i<len;i++){
+                            var info = data.response_params['reply_list'][i];
+                            var d=new Date(parseInt(info.dateline)*1000);
+                            info.dateline=d.getFullYear()+'-'+ (d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : d.getMonth()+1)+'-'+ d.getDate()+' '+ d.getHours()+':'+ d.getMinutes()+':'+ d.getSeconds();
+                            last_repid = info.repid;
+                        }
+                        console.log(last_repid);
+
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.list').prepend(template('more', data.response_params));
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },500);
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                            return;
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        alert('Ajax error!');
+                        // 即使加载出错，也得重置
+//                    me.resetload();
+                    }
+                });
+            }
+        });
+
+    })();
+
+
+
+
+    /**
+     * 对日期进行格式化，
+     * @param date 要格式化的日期
+     * @param format 进行格式化的模式字符串
+     *     支持的模式字母有：
+     *     y:年,
+     *     M:年中的月份(1-12),
+     *     d:月份中的天(1-31),
+     *     h:小时(0-23),
+     *     m:分(0-59),
+     *     s:秒(0-59),
+     *     S:毫秒(0-999),
+     *     q:季度(1-4)
+     * @return String
+     * @author yanis.wang
+     * @see	http://yaniswang.com/frontend/2013/02/16/dateformat-performance/
+     */
+    template.helper('dateFormat', function (date, format) {
+
+        date = new Date(date);
+
+        var map = {
+            "M": date.getMonth() + 1, //月份
+            "d": date.getDate(), //日
+            "h": date.getHours(), //小时
+            "m": date.getMinutes(), //分
+            "s": date.getSeconds(), //秒
+            "q": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds() //毫秒
+        };
+        format = format.replace(/([yMdhmsqS])+/g, function(all, t){
+            var v = map[t];
+            if(v !== undefined){
+                if(all.length > 1){
+                    v = '0' + v;
+                    v = v.substr(v.length-2);
+                }
+                return v;
+            }
+            else if(t === 'y'){
+                return (date.getFullYear() + '').substr(4 - all.length);
+            }
+            return all;
+        });
+        return format;
+    });
+
+</script>
+</html>

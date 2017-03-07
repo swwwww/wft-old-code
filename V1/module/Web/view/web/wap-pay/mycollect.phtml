@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp”/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的同玩团-收藏</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/score.css?ver=<?php echo time(); ?>" rel="stylesheet"/>
+    <script>(function () {
+            var w = window.screen.width, s = w / 640, u = navigator.userAgent, m = '<meta name="viewport" content="width=640,';
+            if (/android (\d+\.\d+)/i.test(u)) {
+                if (parseFloat(RegExp.$1 > 2.3)) {
+                    m += "minimum-scale = " + s + ", maximum-scale = " + s + ","
+                }
+            } else {
+                m += "user-scalable=no,"
+            }
+            m += 'target-densitydpi=device-dpi">';
+            document.write(m)
+        }());</script>
+</head>
+<body>
+<ul id="oNav">
+    <li class="item commodity active">
+        <p>商品</p>
+        <mark></mark>
+    </li>
+    <li class="item activity">
+        <p>活动</p>
+        <mark></mark>
+    </li>
+    <li class="item play">
+        <p>游玩地</p>
+        <mark></mark>
+    </li>
+</ul>
+
+<input type="hidden" id="shop" value='<?php echo $shop; ?>'>
+<input type="hidden" id="good" value='<?php echo $good; ?>'>
+<input type="hidden" id="kidsplay" value='<?php echo $kidsplay; ?>'>
+<div class="inner">
+    <section class="align" id="part02"></section>
+    <section class="align" id="part03" style="display: none"></section>
+    <section class="align" id="part01" style="display: none"></section>
+</div>
+<script id="list01" type="text/html">
+    <section class="wrapper">
+        <ul class="in-list">
+
+            {{if shop}}
+            {{each shop}}
+            <li class="item">
+                <a class="pic" href="/web/place/index?id={{$value.id}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title" href="/web/place/index?id={{$value.id}}">{{$value.title}}</a></h2>
+                    <div class="intro"><a href="/web/place/index?id={{$value.id}}" title="">{{$value.editor_talk}}</a>
+                    </div>
+                    <aside>
+                        {{if $value.tag}}
+                        {{each $value.tag}}
+                        <span class="sale">{{$value}}</span>
+                        {{/each}}
+                        {{/if}}
+                        <div class="address">{{$value.address}}</div>
+                    </aside>
+                </div>
+            </li>
+            {{/each}}
+            {{else}}
+            <div class="nodata"><img src="/images/wap/nodata.gif"/></div>
+            {{/if}}
+        </ul>
+    </section>
+</script>
+<!--商品列表-->
+<script id="list02" type="text/html">
+
+    <section class="wrapper">
+        <ul class="in-list">
+            {{if good}}
+            {{each good}}
+            <li class="item">
+                <a class="pic" href='/web/organizer/shops?id={{$value.coupon_id}}'><img src='{{$value.cover}}'/></a>
+                <div class="info">
+                    <h2><a class="title diff" href="/web/organizer/shops?id={{$value.coupon_id}}">{{$value.name}}</a></h2>
+                    <p class="price">
+                        <span class="now-price">￥{{$value.low_money}}</span>
+                        <span class="pre-price">￥{{$value.price}}</span>
+                    </p>
+                    <aside>
+                        <div class="num">已售{{$value.buy_num}}份</div>
+                        <div class="address">{{$value.circle}}</div>
+                    </aside>
+                </div>
+
+            </li>
+            {{/each}}
+            {{else}}
+            <div class="nodata"><img src="/images/wap/nodata.gif"/></div>
+            {{/if}}
+        </ul>
+    </section>
+</script>
+
+<!--活动列表-->
+<script id="list03" type="text/html">
+    <section class="wrapper">
+        <ul class="in-list">
+
+            {{if kidsplay}}
+            {{each kidsplay}}
+            <li class="item">
+                <a class="pic" href="/web/kidsplay/index?id={{$value.id}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title diff" href="/web/kidsplay/index?id={{$value.id}}">{{$value.title}}</a></h2>
+                    <p class="price">
+                        <span class="now-price">￥{{$value.price}}</span>
+                        <span class="date">{{$value.start_date}}-{{$value.end_date}}   {{$value.num}}场</span>
+                    </p>
+                    <aside>
+                        <div class="num">{{if $value.buy_num}}已有{{$value.buy_num}}人报名{{else}}报名中{{/if}}</div>
+                        <div class="address">{{$value.circle}}</div>
+                    </aside>
+                </div>
+
+            </li>
+            {{/each}}
+            {{else}}
+            <div class="nodata"><img src="/images/wap/nodata.gif"/></div>
+            {{/if}}
+        </ul>
+    </section>
+</script>
+
+<script id="shop_more" type="text/html">
+    <section class="wrapper">
+        <ul class="in-list">
+
+            {{each shop}}
+            <li class="item">
+                <a class="pic" href="/web/place/index?id={{$value.id}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title" href="/web/place/index?id={{$value.id}}">{{$value.title}}</a></h2>
+                    <div class="intro"><a href="/web/place/index?id={{$value.id}}" title="">{{$value.editor_talk}}</a>
+                    </div>
+                    <aside>
+                        {{if $value.tag}}
+                        {{each $value.tag}}
+                        <span class="sale">{{$value}}</span>
+                        {{/each}}
+                        {{/if}}
+                        <div class="address">{{$value.address}}</div>
+                    </aside>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+</script>
+
+<script id="good_more" type="text/html">
+
+    <section class="wrapper">
+        <ul class="in-list">
+            {{each good}}
+            <li class="item">
+                <a class="pic" href="/web/organizer/shops?id={{$value.coupon_id}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title diff" href="/web/organizer/shops?id={{$value.coupon_id}}">{{$value.title}}</a></h2>
+                    <p class="price">
+                        <span class="now-price">￥{{$value.low_money}}</span>
+                        <span class="pre-price">￥{{$value.price}}</span>
+                    </p>
+                    <aside>
+                        <div class="num">已售{{$value.buy}}份</div>
+                        <div class="address">{{$value.circle}}</div>
+                    </aside>
+                </div>
+
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+</script>
+
+<script id="activity_more" type="text/html">
+    <section class="wrapper">
+        <ul class="in-list">
+
+            {{each kidsplay}}
+            <li class="item">
+                <a class="pic" href="/web/kidsplay/index?id={{$value.id}}"><img src="{{$value.cover}}"/></a>
+                <div class="info">
+                    <h2><a class="title diff" href="/web/kidsplay/index?id={{$value.id}}">{{$value.title}}</a></h2>
+                    <p class="price">
+                        <span class="now-price">￥{{$value.price}}</span>
+                        <span class="date">{{$value.start_date}}-{{$value.end_date}} {{$value.num}}场可选</span>
+                    </p>
+                    <aside>
+                        <div class="num">已有{{$value.buy_num}}人报名</div>
+                        <div class="address">{{$value.circle}}</div>
+                    </aside>
+                </div>
+
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+</script>
+
+
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script>
+
+    $(function () {
+        var shop = $("#shop").val();
+        var good = $("#good").val();
+        var kidsplay = $("#kidsplay").val();
+
+        var result_good = new Array(1);
+        var result_shop = new Array(1);
+        var result_activity = new Array(1);
+
+        var shop_tmp = JSON.parse(shop);
+        var good_tmp = JSON.parse(good);
+        var kidslpay_tmp = JSON.parse(kidsplay);
+
+        result_shop['shop'] = shop_tmp.response_params;
+        result_good['good'] = good_tmp.response_params;
+        result_activity['kidsplay'] = kidslpay_tmp.response_params;
+
+        for (var i = 0; i < result_activity['kidsplay'].length; i++) {
+            var info = result_activity['kidsplay'][i];
+
+            var d_start = new Date(parseInt(info.start_date) * 1000);
+            var d_end = new Date(parseInt(info.end_date) * 1000);
+
+            if (d_start.getFullYear() != d_end.getFullYear()) {
+                info.start_date = d_start.getFullYear() + '年' + (d_start.getMonth() + 1 < 10 ? '0' + (d_start.getMonth() + 1) : d_start.getMonth() + 1)+'月';
+                info.end_date = d_end.getFullYear() + '年' + (d_end.getMonth() + 1 < 10 ? '0' + (d_end.getMonth() + 1) : d_end.getMonth() + 1)+'月';
+
+            } else {
+                info.start_date = (d_start.getMonth() + 1 < 10 ? '0' + (d_start.getMonth() + 1) : d_start.getMonth() + 1) + '月' + d_start.getDate()+'日';
+                info.end_date = (d_end.getMonth() + 1 < 10 ? '0' + (d_end.getMonth() + 1) : d_end.getMonth() + 1) + '月' + d_end.getDate()+'日';
+            }
+
+        }
+        var html_good = template('list02', result_good);
+        var html_activity = template('list03', result_activity);
+        var html_shop = template('list01', result_shop);
+
+        document.getElementById('part02').innerHTML = html_good;
+        document.getElementById('part03').innerHTML = html_activity;
+        document.getElementById('part01').innerHTML = html_shop;
+
+
+        var itemIndex = 0;
+        var tab1LoadEnd = false;
+        var tab2LoadEnd = false;
+        var tab3LoadEnd = false;
+        var item = $(".item");
+        item.on('click', function () {
+            var $this = $(this);
+            itemIndex = $this.index();
+            $this.addClass('active').siblings('.item').removeClass('active');
+            $('.align').eq(itemIndex).show().siblings('.align').hide();
+
+            if (itemIndex == '0') {
+                if (!tab1LoadEnd) {
+                    dropload.unlock();
+                    dropload.noData(false);
+                } else {
+                    dropload.lock('down');
+                    dropload.noData();
+                }
+            } else if (itemIndex == '1') {
+                if (!tab2LoadEnd) {
+                    dropload.unlock();
+                    dropload.noData(false);
+                } else {
+                    dropload.lock('down');
+                    dropload.noData();
+                }
+            } else if (itemIndex == '2') {
+                if (!tab3LoadEnd) {
+                    dropload.unlock();
+                    dropload.noData(false);
+                } else {
+                    dropload.lock('down');
+                    dropload.noData();
+                }
+            }
+            dropload.resetload();
+        });
+
+        //加载更多
+        var counter_shop = 1;
+        var counter_good = 1;
+        var counter_kidsplay = 1;
+        var dropload = $('.inner').dropload({
+            scrollArea: window,
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData" style="font-size: 20px;height:50px;line-height:50px;text-align: center;margin-bottom: 100px;">暂无数据</div>'
+            },
+            loadDownFn: function (me) {
+                // 加载菜单一的数据
+                if (itemIndex == '2') {
+                    counter_shop++;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/collect/shopList',
+                        dataType: 'json',
+                        data: {
+                            'type': "shop",
+                            'p': counter_shop,
+                            'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                        async: false,
+                        headers: {
+                            "VER": 10,
+                            "CITY": tounicode("武汉")
+                        },
+                        success: function (data) {
+                            var result = [];
+                            result['shop'] = data.response_params;
+                            var len = data.response_params.length;
+
+                            setTimeout(function () {
+                                $('.align').eq(2).append(template('shop_more', result));
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            }, 500);
+
+                            if (len == 0) {
+                                tab1LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                                return;
+                            }
+                        },
+                        error: function (xhr, type) {
+//                        alert('加载出错');
+                            // 即使加载出错，也得重置
+//                        me.resetload();
+                        }
+                    });
+                    // 加载菜单二的数据
+                } else if (itemIndex == '0') {
+                    counter_good++
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/collect/shopList',
+                        dataType: 'json',
+                        async: true,
+                        data: {
+                            'type': 'good',
+                            'p': counter_good,
+                            'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                        headers: {
+                            "VER": 10,
+                            "CITY": tounicode("武汉")
+                        },
+                        success: function (data) {
+                            var result = [];
+                            result['good'] = data.response_params;
+                            var len = data.response_params.length;
+                            setTimeout(function () {
+                                $('.align').eq(0).append(template('good_more', result));
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            }, 500);
+
+                            if (len == 0) {
+                                tab2LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                                return;
+                            }
+                        },
+                        error: function (xhr, type) {
+//                            console.log(xhr);
+//                        alert('加载出错');
+                            // 即使加载出错，也得重置
+//                            me.resetload();
+                        }
+                    });
+                    // 加载菜单二的数据
+                } else if (itemIndex == '1') {
+                    counter_kidsplay++;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/collect/shopList',
+                        dataType: 'json',
+                        async: true,
+                        data: {
+                            'type': 'kidsplay',
+                            'p': counter_kidsplay,
+                            'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                        headers: {
+                            "VER": 10,
+                            "CITY": tounicode("武汉")
+                        },
+                        success: function (data) {
+                            var result = [];
+                            result['kidsplay'] = data.response_params;
+                            var len = data.response_params.length;
+
+                            for (var i = 0; i < result['kidsplay'].length; i++) {
+                                var info = result['kidsplay'][i];
+
+                                var d_start = new Date(parseInt(info.start_date) * 1000);
+                                var d_end = new Date(parseInt(info.end_date) * 1000);
+
+                                if (d_start.getFullYear() != d_end.getFullYear()) {
+                                    info.start_date = d_start.getFullYear() + '年' + (d_start.getMonth() + 1 < 10 ? '0' + (d_start.getMonth() + 1) : d_start.getMonth() + 1)+'月';
+                                    info.end_date = d_end.getFullYear() + '年' + (d_end.getMonth() + 1 < 10 ? '0' + (d_end.getMonth() + 1) : d_end.getMonth() + 1)+'月';
+
+                                } else {
+                                    info.start_date = (d_start.getMonth() + 1 < 10 ? '0' + (d_start.getMonth() + 1) : d_start.getMonth() + 1) + '月' + d_start.getDate()+'日';
+                                    info.end_date = (d_end.getMonth() + 1 < 10 ? '0' + (d_end.getMonth() + 1) : d_end.getMonth() + 1) + '月' + d_end.getDate()+'日';
+                                }
+                            }
+                            setTimeout(function () {
+                                $('.align').eq(1).append(template('activity_more', result));
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            }, 500);
+
+                            if (len == 0) {
+                                tab3LoadEnd = true;
+                                // 锁定
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                                return;
+                            }
+                        },
+                        error: function (xhr, type) {
+//                        alert('加载出错');
+                            // 即使加载出错，也得重置
+//                            me.resetload();
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    //将汉字转化unicode码
+    function tounicode(data)
+    {
+        if(data == '') return '请输入汉字';
+        var str ='';
+        for(var i=0;i<data.length;i++)
+        {
+            str+="\\u"+parseInt(data[i].charCodeAt(0),10).toString(16);
+        }
+        return str;
+    }
+</script>
+</html>

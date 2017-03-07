@@ -1,0 +1,747 @@
+<link rel="stylesheet" href="/js/wap/plugin/laydate/skins/molv/laydate.css">
+<hgroup class="box">
+    <header>
+        <h3>活动订单</h3>
+        <i class="icon icon-list"></i>
+    </header>
+    <aside class="tips">
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="#" method="get" id="out-data-form">
+    <header class="box-title">订单搜索</header>
+    <?php
+
+    $bid = null;
+    $coupon_name = null;
+    $coupon_id = null;
+    $order_status = null;
+    $order_sn = null;
+    $activity_type = null;
+    $username = null;
+    $phone = null;
+    $buy_start = null;
+    $buy_end = null;
+    $pageNum = 10;
+
+    if (isset($_GET['coupon_name']) && $_GET['coupon_name']) {
+        $coupon_name = $_GET['coupon_name'];
+    }
+
+    if (isset($_GET['bid']) && $_GET['bid']) {
+        $bid = $_GET['bid'];
+    }
+
+    if (isset($_GET['order_sn']) && $_GET['order_sn']) {
+        $order_sn = $_GET['order_sn'];
+    }
+
+    if (isset($_GET['coupon_id']) && $_GET['coupon_id']) {
+        $coupon_id = $_GET['coupon_id'];
+    }
+
+    if (isset($_GET['buy_start']) && $_GET['buy_start']) {
+        $buy_start = $_GET['buy_start'];
+    }
+
+    if (isset($_GET['buy_end']) && $_GET['buy_end']) {
+        $buy_end = $_GET['buy_end'];
+    }
+
+    if (isset($_GET['order_status']) && $_GET['order_status']) {
+        $order_status = $_GET['order_status'];
+    }
+
+    if (isset($_GET['activity_type']) && $_GET['activity_type']) {
+        $activity_type = $_GET['activity_type'];
+    }
+
+    if (isset($_GET['username']) && $_GET['username']) {
+        $username = $_GET['username'];
+    }
+
+    if (isset($_GET['phone']) && $_GET['phone']) {
+        $phone = $_GET['phone'];
+    }
+
+    if (isset($_GET['event_start_time']) && $_GET['event_start_time']) {
+        $event_start_time = $_GET['event_start_time'];
+    }
+
+    if (isset($_GET['event_end_time']) && $_GET['event_end_time']) {
+        $event_end_time = $_GET['event_end_time'];
+    }
+
+    ?>
+    <table class="table">
+        <tr>
+            <th width="100">活动ID</th>
+            <th>
+                <input type="text" class="cssInput" name="bid" value="<?php echo $bid; ?>">
+            </th>
+            <th width="100">活动名称</th>
+            <th>
+                <input type="text" class="cssInput" name="coupon_name" value="<?php echo $coupon_name; ?>">
+            </th>
+            <th width="100">下单时间</th>
+            <th>
+                <input name="buy_start" type="date" class="cssInput " value="<?php echo $buy_start; ?>">
+                <input name="buy_end" type="date" class="cssInput " value="<?php echo $buy_end; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="100">场次id</th>
+            <th>
+                <input name="coupon_id" type="text" class="cssInput" value="<?php echo $coupon_id; ?>">
+            </th>
+
+            <th width="100">用户名</th>
+            <th>
+                <input type="text" class="cssInput" name="username" value="<?php echo $username; ?>">
+            </th>
+            <th width="100">用户手机</th>
+            <th>
+                <input type="text" class="cssInput" name="phone" value="<?php echo $phone; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="100">订单号</th>
+            <th>
+                <input name="order_sn" type="text" class="cssInput" value="<?php echo $order_sn; ?>">
+            </th>
+            <th width="100">活动类型</th>
+            <th>
+                <select name="activity_type" style="width: 150px;">
+                    <option value="0">全部</option>
+                    <option value="1" <?php echo ($activity_type == 1) ? 'selected' : ''; ?>>原生活动</option>
+                    <option value="2" <?php echo ($activity_type == 2) ? 'selected' : ''; ?>>定制活动</option>
+                </select>
+            </th>
+            <th width="100">订单状态</th>
+            <th>
+                <select name="order_status" style="width: 150px;">
+                    <option value="0">全部订单</option>
+                    <option value="1" <?php echo ($order_status == 1) ? 'selected' : ''; ?>>未付款</option>
+                    <option value="2" <?php echo ($order_status == 2) ? 'selected' : ''; ?>>待使用</option>
+                    <option value="3" <?php echo ($order_status == 3) ? 'selected' : ''; ?>>已使用</option>
+                    <option value="4" <?php echo ($order_status == 4) ? 'selected' : ''; ?>>已退款</option>
+                    <option value="5" <?php echo ($order_status == 5) ? 'selected' : ''; ?>>退款中</option>
+                </select>
+            </th>
+        </tr>
+        <tr>
+            <th width="100">场次开始时间</th>
+            <th>
+                <input name="event_start_time" type="date" class="cssInput " value="<?php echo $event_start_time; ?>">
+                <input name="event_end_time" type="date" class="cssInput " value="<?php echo $event_end_time; ?>">
+            </th>
+            <th width="100"></th>
+            <th>
+            </th>
+            <th width="100"></th>
+            <th>
+            </th>
+        </tr>
+        <tr>
+            <th width="100"></th>
+            <th colspan="5">
+                <a href="/wftadlogin/excercise/orderlist" style="background-color: green" class="ui-button">清空所有选项</a>
+                <button class="ui-button" id="tijiao">提交</button>
+                <input type="hidden" name="out" value="0" id="out-act">
+                <button class="ui-button" id="out-data">导出</button>
+
+            </th>
+        </tr>
+    </table>
+</form>
+
+<div class="box">
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="50">选择</th>
+                <th width="120">订单号</th>
+                <th width="120">下单时间</th>
+                <th width="50">活动ID</th>
+                <th width="50">场次ID</th>
+                <th width="100">活动名称</th>
+                <th width="150">区域/游玩地</th>
+                <th width="50">用户ID</th>
+                <th width="80">用户名</th>
+                <th width="100">联系方式</th>
+                <th width="50">出行人份数</th>
+                <th width="50">收费项份数</th>
+                <th width="50">其他费用数量</th>
+                <th width="50">使用亲子游次数</th>
+                <th width="50">金额</th>
+                <th width="50">活动类型</th>
+                <th width="50">订单状态</th>
+                <th width="50">订单说明</th>
+                <th width="150">操作</th>
+            </tr>
+            <?php foreach ($data as $key => $row): ?>
+                <tr style="text-align: left">
+                    <td width="50">
+                        <input type="checkbox" name="check_ids" value="<?php echo $row['order_sn']; ?>"
+                               class="check_ids"></td>
+                    <td width="120">
+                        <?php echo $row['order_sn']; ?>
+                    </td>
+                    <td width="120"><?php echo date('Y-m-d H:i', $row['dateline']); ?></td>
+                    <td width="50">
+                        <?php echo $row['bid']; ?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['coupon_id']; ?>
+                    </td>
+                    <td width="100">
+                        <?php echo $row['coupon_name']; ?>
+                    </td>
+                    <td width="150">
+                        <?php echo $row['circle'] . ' / ' . $row['shop_name']; ?>
+                    </td>
+                    <td width="50">
+                        <?php echo $row['user_id']; ?>
+                    </td>
+                    <td width="50"><?php echo $row['username']; ?></td>
+                    <td width="50"><?php echo($row['phone']); ?></td>
+                    <td width="50"><?php echo $row['traveller_num']*$row['person']; ?></td>
+                    <td width="50"><?php echo $row['traveller_num']?></td>
+                    <td width="50"><?php echo $row['other_num']; ?></td>
+                    <td width="50"><?php echo $row['free_num']; ?></td>
+                    <td width="50"><?php echo $row['real_pay'] + $row['account_money']; ?></td>
+                    <td width="50">
+                        <?php
+                        if ($row['customize'] == 1) {
+                            echo '定制活动';
+                        } else {
+                            echo '原生活动';
+                        }
+                        ?>
+                    </td>
+                    <td width="100">
+                        <?php
+                        $res=\Deyi\OrderAction\OrderInfo::getOrderStatus($row['pay_status'], $row['buy_number'], $row['backing_number'], $row['back_number'], $row['use_number']);
+                        echo $res['desc'];
+                        ?>
+                    </td>
+                    <td width="50">
+                        <?php echo $res['back_desc']; ?>
+                    </td>
+                    <td width="150">
+                        <a href="/wftadlogin/excercise/orderinfo?order_sn=<?php echo $row['order_sn']; ?>" class="
+ ui-button">详情</a>
+                        <a href="javascript:void(0)" class="ui-button validate"
+                           data-src="/wftadlogin/excercise/validate?order_sn=<?php echo $row['order_sn']; ?>&type=1">验证</a>
+                        <a href="javascript:void(0)" class="ui-button policy" style="background-color: #FFA625;"
+                           data-src="/wftadlogin/insurance/toubao?order_sn=<?php echo $row['order_sn']; ?>"
+                           data-join="<?php echo $row['join_number']; ?>"
+                           data-least="<?php echo $row['least_number']; ?>"
+                           data-sn="<?php echo (int)$row['order_sn']; ?>"
+                           data-day="<?php echo $row['days'] > 0 ? $row['days'] : 0; ?>">投保</a>
+                        <?php if ($res['status'] == '2'): ?>
+                            <a onclick="if(confirm( '确定退款？ ')==false)return false;"
+                               href="/wftadlogin/excercise/back?order_sn=<?php echo $row['order_sn']; ?>&type=1"
+                               class="ui-button back">提交退款</a>
+                        <?php elseif($res['status'] == '5'): ?>
+                            <?php if($row['can_use_back_money'] > 0):?>
+                                <a href="javascript:void(0)" class="ui-button special_back"
+                                   data-src="<?php echo $row['order_sn']; ?>" data-money="<?php echo $row['can_use_back_money']; ?>">特殊退款</a>
+                            <?php else:?>
+                                <span class="ui-button" style="background-color: gray">特殊退款</span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+        <input type="checkbox" id="check-all">全选
+        <button onclick="if(confirm('批量验证?')==false) return false;" class="ui-button" id="validate_all">批量验证</button>
+        <button onclick="if(confirm('批量退款?')==false) return false;" class="ui-button" id="back_all">批量退款</button>
+        <!--        <button onclick="if(confirm('批量投保?')==false) return false;" class="ui-button policy" style="background-color: #FFA625;" id="back_all">批量投保</button>-->
+
+
+        <style>
+            #tongji{
+                padding:5px 5px;
+                margin: 5px 5px;
+            }
+            #tongji span{
+                color:red;
+                font-size:16px;
+                padding: 10px;
+            }
+        </style>
+        <div id="tongji">
+            <div>
+                <span>总计订单数：<mark><?php echo $order_sum;?></mark></span>
+                <span>支付数量：<mark><?php echo $pay_sum;?></mark></span>
+            </div>
+            <div>
+                <span>入账数额：<mark><?php echo $income;?></mark></span>
+                <span>出账数额：<mark><?php echo $outSum;?></mark></span>
+            </div>
+        </div>
+
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+<style>
+    #tipsDia {
+        display: none;
+        width: 40%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        position: fixed;
+        left: 50%;
+        top: 40%;
+        z-index: 99999;
+        text-align: center;
+        letter-spacing: 2px;
+        -webkit-transform: translate(-50%, -40%);
+        -moz-transform: translate(-50%, -40%);
+        -ms-transform: translate(-50%, -40%);
+        transform: translate(-50%, -40%);
+        padding: 5%;
+        box-sizing: border-box;
+        border-radius: 10px 10px 10px 10px;
+        font-size: 25px;
+    }
+
+    .btn-info {
+        background-image: linear-gradient(to bottom, #5bc0de 0px, #2aabd2 100%);
+        background-repeat: repeat-x;
+        border-color: #28a4c9;
+    }
+
+    .btn {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 12px;
+        font-weight: bold;
+        height: 27px;
+        line-height: 27px;
+        min-width: 52px;
+        padding: 0 12px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 2px;
+        border: 1px solid #ddd;
+        color: #666;
+        background-color: #f5f5f5;
+        background: -webkit-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: -moz-linear-gradient(top, #F5F5F5, #F1F1F1);
+        background: linear-gradient(top, #F5F5F5, #F1F1F1);
+    }
+
+    .login-body {
+        padding: 60px 15px;
+        color: #444;
+        height: 148px;
+    }
+
+    .ipt {
+        border: solid 1px #d2d2d2;
+        border-left-color: #ccc;
+        border-top-color: #ccc;
+        border-radius: 2px;
+        box-shadow: inset 0 1px 0 #f8f8f8;
+        background-color: #fff;
+        padding: 4px 6px;
+        height: 21px;
+        line-height: 21px;
+        color: #555;
+        width: 180px;
+        vertical-align: baseline;
+    }
+
+    .dform {
+        padding: 80px 60px 40px;
+        text-align: center;
+    }
+
+    .dform2 {
+        padding: 50px 60px 40px;
+        text-align: center;
+    }
+
+    .signin {
+        margin: -50px -20px -50px 90px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    .signin h4 {
+        color: #999;
+        font-weight: 100;
+        margin-bottom: 20px;
+        font-size: 12px;
+    }
+
+    .signin li {
+        padding-left: 80px;
+        margin-bottom: 15px;
+    }
+
+    .signin ol {
+        list-style-type: none;
+    }
+
+    .signin li strong {
+        float: left;
+        margin-left: -80px;
+        width: 80px;
+        text-align: right;
+        line-height: 32px;
+    }
+
+    .signin .btn {
+        margin-bottom: 10px;
+    }
+
+    .signin p {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .theme-desc, .theme-version {
+        padding-top: 0
+    }
+
+    .cssInput {
+        width: 150px;
+    }
+
+    #tongji {
+        padding: 5px 5px;
+        margin: 5px 5px;
+    }
+
+    #tongji span {
+        color: red;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .body-color {
+        z-index: 9998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        opacity: 0.4;
+        filter: alpha(opacity=40);
+        display: none
+    }
+
+    .hide-body {
+        z-index: 9999;
+        position: fixed;
+        top: 60%;
+        left: 50%;
+        width: 500px;
+        height: 200px;
+        margin: -180px 0 0 -250px;
+        border-radius: 5px;
+        border: solid 2px #666;
+        background-color: #fff;
+        box-shadow: 0 0 10px #666;
+        display: none;
+    }
+
+    .close-window {
+        border-bottom: 1px solid #ddd;
+        padding: 22px;
+        position: relative;
+    }
+
+    .bottom {
+        margin-top: 180px;
+    }
+
+    .close-window .close {
+        float: right;
+        color: #999;
+        padding: 5px;
+        margin: -2px -5px -5px;
+        font: bold 14px/14px simsun;
+        text-shadow: 0 1px 0 #ddd
+    }
+
+    .close-window .close:hover {
+        color: #444;
+    }
+</style>
+
+<div class="hide-body yz-body">
+    <div class="close-window yz-close">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3 style="text-align: center">输入验证码</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform">
+        <form class="signin" name="loginform" action="" id="zjh" method="post" autocomplete="off">
+            <input name="code" type="text " class="cssInput"/>
+            <button type="submit" id="validate" style="margin-left: 10px">验证</button>
+        </form>
+    </div>
+</div>
+
+<div style="height: 400px;" class="hide-body special_back_body">
+    <div class="close-window special_back_close">
+        <!-- 关闭窗口，也就是触发关闭div的事件-->
+        <a href="javascript:;" title="关闭" class="close">×</a>
+        <h3 style="text-align: center">活动订单特殊退款</h3>
+    </div>
+    <!-- 中间主体显示div 可以增加其他的样式-->
+    <div class="login-body dform2">
+        <form class="" style="text-align: left;" name="backform" action="/wftadlogin/YardsCode/special" id="spback" method="post" autocomplete="off">
+            <input id="order_sn" type="hidden" value="" name="order_sn" />
+            <table>
+                <tr><td>订单号：</td><td><span id="sn"></span></td></tr>
+                <tr><td>退款理由：</td><td><textarea style="width: 300px" name="reason" rows="5" ></textarea></td></tr>
+                <tr><td>退款金额：</td><td><input style="width: 80px" name="money" type="text " class="cssInput"/> 可退的金额是<span id="back-money"></span></td></tr>
+                <tr><td></td><td><button type="submit" id="validate" style="margin-left: 10px">提交</button></td></tr></table>
+        </form>
+    </div>
+</div>
+<div id="LoginBox">
+    <div class="row1">
+        请选择保险生效时间<a href="javascript:void(0)" title="关闭窗口" class="close_btn" id="closeBtn">×</a>
+    </div>
+    <div class="row">
+        开始日(保险天数：
+        <mark id="range"></mark>
+        )：
+        <li class="laydate-icon" id="start" style="width:200px; margin-right:10px;"></li>
+        结束日：
+        <li class="laydate-icon" id="end" style="width:200px;"></li>
+    </div>
+    <div class="row" style="margin-top:130px;">
+        <a href="#" id="loginbtn">确定</a>
+    </div>
+</div>
+<div id="tipsDia"></div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/wap/plugin/laydate/laydate.js"></script>
+<script>
+    var loginTip = $("#tipsDia");
+    $(function () {
+        $('.validate').click(function () { //jquery的点击事件
+            $('.yz-body').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.yz-close').slideDown(200);//将隐藏的窗口div显示出来
+            var url = $(this).attr('data-src');
+            $('#validate').click(function () {
+                var code = $(this).parent().find('input').val();
+                if (code) {
+                    $('#zjh').attr('action', url);
+                } else {
+                    alert("请输入验证码！");
+                    return false;
+                }
+            });
+        });
+
+        $('.special_back').click(function () { //jquery的点击事件
+            $('.special_back_body').fadeIn(100);//全局变得黑的效果，具体的div就是theme-popover-mask这个
+            $('.special_back_close').slideDown(200);//将隐藏的窗口div显示出来
+            var sn = $(this).attr('data-src');
+            var money = $(this).attr('data-money');
+            $('#order_sn').val(sn);
+            $('#back-money').text(money);
+            $('#sn').text(sn);
+            $('#special_back').click(function () {
+                var rs = $(this).parent().find('textarea').val();
+                var money = $(this).parent().find('input').val();
+                if (rs && money) {
+
+                } else {
+                    alert("理由或金额！");
+                    return false;
+                }
+            });
+        });
+
+        $('.close-window .close').click(function () {
+            $('.body-color').fadeOut(100);//
+            $('.hide-body').slideUp(200);//将显示的窗口隐藏起来
+        });
+
+        //全选和全不选
+        var count = $("#count").val(),
+            sum_income = $("#sum_income").val(),
+            sum_out = $("#sum_out").val();
+
+        $('#check-all').click(function () {
+            if ($(this).is(':checked')) {
+                $("[name=check_ids]:checkbox").prop('checked', true);
+            } else {
+                $("[name=check_ids]:checkbox").prop('checked', false);
+            }
+        });
+
+
+        //批量验证
+        $('#validate_all').click(function () {
+            if (confirm('确定将所有选中的订单批量验证？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/excercise/validate?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id = '';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked) {
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&order_sn=' + id;
+                }
+            }
+        });
+
+        //批量退费
+        $('#back_all').click(function () {
+            if (confirm('确定将所有选中的订单批量退费？不可恢复')) {
+                //执行修改操作
+                var href = '/wftadlogin/excercise/back?type=2';//跳转的链接
+                var check_ids = document.getElementsByName('check_ids');
+                var id = '';//如果这样定义var s;变量s中会默认被赋个null值
+                for (var i = 0; i < check_ids.length; i++) {
+                    if (check_ids[i].checked) {
+                        if (i == check_ids.length - 1) {
+                            id += check_ids[i].value;
+                        } else {
+                            id += check_ids[i].value + ',';
+                        }
+                    }
+                }
+
+                if (id == '') {
+                    alert('没有选中任何订单');
+                } else {
+                    window.location.href = href + '&order_sn=' + id;
+                }
+            }
+        });
+
+        //投保
+        var start = {
+            elem: '#start',
+            format: 'YYYY/MM/DD',
+//            min: laydate.now(), //设定最小日期为当前日期
+            max: '2099-06-16', //最大日期
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                end.min = datas; //开始日选好后，重置结束日的最小日期
+                end.start = datas; //将结束日的初始值设定为开始日
+            }
+        };
+        var end = {
+            elem: '#end',
+            format: 'YYYY/MM/DD',
+//            min: laydate.now(),
+            max: '2099-06-16',
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                start.max = datas; //结束日选好后，重置开始日的最大日期
+            }
+        };
+        laydate(start);
+        laydate(end);
+        $(".policy").on("click", function () {
+
+            var join_number = $(this).attr('data-join');
+            var least_number = $(this).attr('data-least');
+            if (join_number < least_number) {
+                loginTip.text("报名中场次人员不可以投保");
+                loginTip.show();
+                setTimeout(function () {
+                    loginTip.hide();
+                }, 2000);
+                return false;
+            }
+            var url = $(this).attr('data-src');
+            var order_sn = $(this).attr('data-sn');
+            var days = $(this).attr('data-day') + '天';
+
+            if (confirm('确定为此订单投保？不可恢复')) {
+
+                $("body").append("<div id='mask'></div>");
+                $("#mask").addClass("mask").fadeIn("slow");
+                $("#LoginBox").fadeIn("slow");
+                $('#range').text(days);
+            }
+
+            //按钮的透明度
+            $("#loginbtn").hover(function () {
+                $(this).stop().animate({
+                    opacity: '1'
+                }, 600);
+            }, function () {
+                $(this).stop().animate({
+                    opacity: '0.8'
+                }, 1000);
+            });
+
+            //文本框不允许为空---按钮触发
+            $("#loginbtn").on('click', function () {
+                var start = $("#start").text();
+                var end = $("#end").text();
+                if (start == "" || end == "") {
+                    loginTip.text("保险日期为必填项");
+                    loginTip.show();
+                    setTimeout(function () {
+                        loginTip.hide();
+                    }, 2000);
+                    return false;
+                }
+
+                window.location.href = url + '&start=' + start + '&end=' + end;
+
+            });
+
+            //关闭
+            $(".close_btn").hover(function () {
+                $(this).css({color: 'black'})
+            }, function () {
+                $(this).css({color: '#999'})
+            }).on('click', function () {
+                $("#LoginBox").fadeOut("fast");
+                $("#mask").css({display: 'none'});
+            });
+
+        });
+
+        $("#out-data").click(function () {
+            $("#out-act").val(1);
+        })
+
+        $("#tijiao").click(function () {
+            $("#out-act").val(0);
+        })
+
+    });
+</script>
+
+
+

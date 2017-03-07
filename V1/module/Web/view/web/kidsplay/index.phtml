@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>遛娃学院:让孩子在玩乐中成长</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .title{margin-top: 20px;}
+    </style>
+</head>
+<body>
+<ul id="oNav" class="indexNav">
+    <a href="/web/kidsplay/index?sort=1" class="item add sel_1">
+        <li class="">
+            <p>本周最热</p>
+            <span></span>
+        </li>
+    </a>
+    <a href="/web/kidsplay/index?sort=2" class="item sel_2">
+        <li >
+            <p>最新活动</p>
+            <span></span>
+        </li>
+    </a>
+    <a href="/web/kidsplay/index?sort=3" class="item sel_3">
+        <li>
+            <p class="item-diff">精彩回顾</p>
+            <span></span>
+        </li>
+    </a>
+</ul>
+<!--本周最热-->
+<section id="hot" class="adv">
+    <div class="inner">
+        <div class="adv-list" style="margin-bottom: 0">
+        <?php foreach($data as $k=>$v):?>
+<!--            --><?php //var_dump($v);?>
+                <a href="/web/kidsplay/info?id=<?php echo $v->id;?>">
+                <div class="adv-list-info">
+                    <span class="imgPic" style="background: url('<?php echo $v->image;?>') no-repeat center center;background-size: cover;"></span>
+                    <p class="title"><?php echo $v->title;?></p>
+                    <p>
+                    <span class="time">
+                        <mark><?php echo $v->date;?></mark>
+                    </span>
+                    <span class="num">
+                        <mark><?php echo $v->session_num;?></mark>场可选
+                    </span>
+                    <?php if($v->circle):?>
+                        <span class="people">
+                            <mark><?php echo $v->circle;?></mark>
+                        </span>
+                    <?php endif;?>
+                    </p>
+                    <div class="new">累计有<mark><?php echo $v->joined_num;?></mark>人参加</div>
+                    <div class="leastPrice">
+                        ￥<mark ><?php echo $v->low_money;?></mark>起
+                    </div>
+                    <div class="tag-list">
+                        <?php foreach($v->tags as $val):?>
+                        <span class="tag-item"><?php echo $val;?></span>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </a>
+        <?php endforeach;?>
+    </div>
+    </div>
+</section>
+<script id="more" type="text/html">
+    {{each response_params}}
+    <a href="/web/kidsplay/info?id={{$value.id}}">
+        <div class="adv-list-info">
+            <span  class="imgPic" style="background: url('{{$value.image}}') no-repeat center center;background-size: cover;"></span>
+
+            <p class="title">{{$value.title}}</p>
+            <p>
+            <span class="time">
+                <mark>{{$value.date}}</mark>
+            </span>
+            <span class="num">
+                <mark>{{$value.session_num}}</mark>场可选
+            </span>
+            {{if $value.circle}}
+                <span class="people">
+                        <mark>{{$value.circle}}</mark>
+                    </span>
+            {{/if}}
+            </p>
+            <div class="new">
+                累计有<mark>{{$value.joined_num}}</mark>人参加
+            </div>
+            <div class="leastPrice">
+                ￥<mark >{{$value.low_money}}</mark>起
+            </div>
+            <div class="tag-list">
+                {{each $value.tags}}
+                    <span class="tag-item">{{$value}}</span>
+                {{/each}}
+            </div>
+        </div>
+    </a>
+    {{/each}}
+</script>
+<div class="features">
+    <?php echo $this->render('layoutwap/footer.phtml'); ?>
+</div>
+<a class="makeActivty" href="/web/h5/privateParty"></a>
+<input type="hidden" name="city" id="city" value="<?php echo $city;?>">
+<input type="hidden" name="sort" id="sort" value="<?php echo $sort;?>">
+<script src="/js/zepto1.1.6.min.js" type="text/javascript"></script>
+<script src="/js/wap/template.js"></script>
+<script src="http://api.map.baidu.com/api?ak=qwEZsiGPPbGt1LFgAufQ0PBd&v=2.0&services=false"></script>
+<script type="text/javascript" src="/js/dropload.min.js"></script>
+<script>
+    (function(){
+        var sort=$("#sort").val();
+        $(".sel_"+sort).addClass('add').siblings().removeClass('add');
+
+        var city = localStorage.getItem('select_city');
+
+        if(!city){
+           function getLocation(){
+               if (navigator.geolocation){
+                   navigator.geolocation.getCurrentPosition(showPosition,showError);
+               }else{
+                   alert("浏览器不支持地理定位。");
+               }
+           }
+           function showPosition(position){
+               var lat = position.coords.latitude;
+               var lon = position.coords.longitude;
+               localStorage.setItem('lat',lat);
+               localStorage.setItem('lng',lon);
+               var point = new BMap.Point(lon, lat);  // 创建坐标点
+               // 根据坐标得到地址描述
+               var myGeo = new BMap.Geocoder();
+               myGeo.getLocation(point, function (result) {
+//                    alert(JSON.stringify(result.addressComponents));
+                   var city = result.addressComponents.city;//定位城市
+                   city = city.substring(0,city.length-1);
+                   var addr =  result.addressComponents.province+result.addressComponents.city+result.addressComponents.district+result.addressComponents.street+result.addressComponents.streetNumber;
+                   localStorage.setItem('select_city',city);
+                   localStorage.setItem("ADDRESS",addr);
+                   document.cookie="sel_city="+encodeURI(city)+';path=/';
+               });
+           }
+
+           function showError(error){
+               switch(error.code) {
+                   case error.PERMISSION_DENIED:
+                       localStorage.setItem("select_city","武汉");
+                    alert("定位失败,用户拒绝请求地理定位");
+                       break;
+                   case error.POSITION_UNAVAILABLE:
+                       alert("定位失败,位置信息是不可用");
+                       break;
+                   case error.TIMEOUT:
+                       alert("定位失败,请求获取用户位置超时");
+                       break;
+                   case error.UNKNOWN_ERROR:
+                       alert("定位失败,定位系统失效");
+                       break;
+               }
+           }
+           getLocation();
+       }
+        //加载更多
+        var counter = 1;
+
+        // dropload
+        var dropload = $('.inner').dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData" style="font-size: 20px;height:50px;line-height:50px;text-align: center;margin-bottom: 100px;">暂无数据</div>'
+            },
+            loadDownFn : function(me){
+                counter++;
+                $.ajax({
+                    type: "POST",
+                    url: "/kidsplay/index/list",
+                    dataType: 'json',
+                    async: false,
+                    data:{'sort':sort,'page': counter,'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                    headers: {
+                        "VER": 10,
+                        "CITY":encodeURI(localStorage.getItem('select_city'))
+                    },
+                    success: function(data){
+                        var len= data.response_params.length;
+                        // 为了测试，延迟1秒加载
+                        setTimeout(function(){
+                            $('.adv-list').append(template('more', data));
+                            // 每次数据加载完，必须重置
+                            me.resetload();
+                        },500);
+
+                        if(len==0){
+                            // 锁定
+                            me.lock();
+                            // 无数据
+                            me.noData();
+                            return;
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        // 即使加载出错，也得重置
+                        me.resetload();
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            window.location.href = '<?php echo $authorUrl;?>';
+//                    alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+//                                    alert('Ajax error!');
+                    }
+                });
+            }
+        });
+    })();
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement('script');
+  hm.src = '//hm.baidu.com/hm.js?a1b66f5bbc7b8808ef15aef7c152d9eb';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>

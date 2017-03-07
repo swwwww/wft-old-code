@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>我要秒杀</title>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/score.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/wap/custom.css">
+    <link rel="stylesheet" href="/css/wap/iosOverlay.css">
+    <style>
+        .intro{
+            height: 60px; overflow:hidden; white-space: normal; text-overflow:ellipsis;width:100%        }
+    </style>
+</head>
+<body>
+<main class="align" id="content"></main>
+<script id="test" type="text/html">
+    <section class="wrapper">
+        <div class="in-seck">
+            <div class="in-link">积分明细</div>
+            <div class="in-num">
+                <span class="num">{{qualify_num}}</span>
+                <span class="aside">次秒杀资格</span>
+                <p>{{exchange_score}}积分=1次秒杀资格</p>
+            </div>
+        </div>
+        <div class="in-exchange">
+            <span class="tips"><i class="icon"></i>{{score}}&nbsp;&nbsp;还可兑换{{score/exchange_score | formatPrice: 'integer'}}次</span>
+            {{if score >= exchange_score}}
+            <a class="confirm" id="exchange">兑换</a>
+            {{else}}
+            <a class="confirm" href="/web/H5/integral">赚取积分</a>
+            {{/if}}
+        </div>
+        <ul class="in-list i-bnr">
+            {{each coupon_list}}
+            <li class="item">
+                <div class="pic"><a href="/web/organizer/shops?id={{$value.id}}"><img src="{{$value.cover}}"/></a></div>
+                <div class="info">
+                    <h2><a class="title" href="/web/organizer/shops?id={{$value.id}}">{{$value.title}}</a></h2>
+                    <div class="intro"><a href="/web/organizer/shops?id={{$value.id}}">{{$value.editor_talk}}</a></div>
+                    <div class="operate">
+                        <span class="status">资格券+<i>&yen;</i><mark>{{$value.price}}</mark></span>
+                        <a class="button {{if $value.begin_time > time || $value.end_time < time}}disabled{{/if}}" href="/web/organizer/shops?id={{$value.id}}">{{if $value.begin_time > time}}未开始{{else if $value.end_time < time}}已结束{{else}}立刻购买{{/if}}</a>
+                    </div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+</script>
+<input type="hidden" id="type" value="<?php echo $type;?>">
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+</body>
+<script type="text/javascript" src="/js/wap/zepto.min.js"></script>
+<script type="text/javascript" src="/js/wap/plugin/loading.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+template.helper('formatPrice', function(price, type) {
+    if(price){
+        var arrayPrice = price.toString().split(".");
+        if(type == 'integer') {
+            return arrayPrice[0]?arrayPrice[0]:"0";
+        }else if (type =='decimal') {
+            return arrayPrice[1]?arrayPrice[1].length == 1?"."+arrayPrice[1]+"0":"."+arrayPrice[1]:".00";
+        }
+    }else{
+        if(type == 'integer') {
+            return "0";
+        }else if (type =='decimal') {
+            return ".00";
+        }
+    }
+});
+$(function(){
+    var city = localStorage.getItem('select_city'),
+        isTouch = ("ontouchend" in document ? "touchend" : "tap"),
+        type=$("#type").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/score/index/seckill",
+            dataType:"json",
+            async: true,
+            data:{
+                'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>
+            },
+            headers: {
+                'VER': 9,
+                'CITY':encodeURI(city)
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+                    //alert(result.response_params.message);
+                } else {
+                    //todo 成功
+                    var html = template('test', result.response_params);
+                    document.getElementById('content').innerHTML = html;
+
+                    $("#exchange").on(isTouch,function(){
+                        $.ajax({
+                            type: "POST",
+                            url: "/score/index/exchange",
+                            dataType:"json",
+                            async: false,
+                            data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>},
+                            headers: {
+                                'VER': 9,
+                                'CITY':encodeURI(city)
+                            },
+                            beforeSend:function(){
+                                loading("正在操作...");
+                            },
+                            success: function (result) {
+                                if (result.response_params.status == 0) {
+                                    loadingErr(result.response_params.message);
+                                } else {
+                                    loadingSuccess(result.response_params.message);
+                                    if(type==1){
+                                        window.location.href = document.referrer;
+                                    }else{
+                                        setTimeout(function(){window.location.reload();},3500);
+                                    }
+                                }
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+//                                alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                if (XMLHttpRequest.status == 401) {
+                                    //todo 跳转授权页面
+//                                    alert(XMLHttpRequest.responseJSON.message);
+                                    window.location.href = '<?php echo $authorUrl;?>';
+                                }
+                                else if (XMLHttpRequest.status == 403) {
+                                    window.location.href = '<?php echo $authorUrl;?>';
+//                                    alert('接口验证失败，非法访问');
+                                }
+                                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                                }
+                                else {
+                                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                }
+                            }
+                        });
+                    })
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //todo 跳转授权页面
+//                    alert(XMLHttpRequest.responseJSON.message);
+//                window.location.href = '<?php //echo $authorUrl;?>//';
+                }
+                else if (XMLHttpRequest.status == 403) {
+//                    alert('接口验证失败，非法访问');
+//                    window.location.href = '<?php //echo $authorUrl;?>//';
+
+                }
+                else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                    alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                }
+                else {
+                    alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                }
+            }
+        });
+    })
+</script>
+</html>

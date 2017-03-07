@@ -1,0 +1,36 @@
+<hgroup class="box">
+    <header>
+        <h3>商家管理</h3>
+        <i class="icon icon-add"></i>
+         <a href="javascript:void(0)">商家联系人</a>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/organizer?oid=<?php echo $oid;?>">返回商家</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+<?php foreach($data as $value):?>
+    联系人：<input  name="name" value="<?php echo $value->name?>"><br/>
+    联系人职位：<input  name="job" value="<?php echo $value->job?>"><br/>
+    联系人电话：<input  name="phone" value="<?php echo $value->phone?>"><br/>
+    联系人QQ：<input  name="qq" value="<?php echo $value->qq?>"><br/>
+    联系人邮箱：<input  name="mail" value="<?php echo $value->mail?>"><br/>
+    <a href="/wftadlogin/organizer/linker?act=del&oid=<?php echo $oid;?>&id=<?php echo $value->id?>" class="btn btn-primary">删除</a>
+<?php endforeach;?>
+
+
+<form action="/wftadlogin/organizer/linker" method="post" style="width:600px;" class="form-inline">
+    <p>
+        <label>新增联系人:</label><br/>
+        联系人：<input class="form-control" name="name"><br/>
+        联系人职位：<input class="form-control" name="job"><br/>
+        联系人电话：<input class="form-control" name="phone"><br/>
+        联系人QQ：<input class="form-control" name="qq"><br/>
+        联系人邮箱：<input class="form-control" name="mail"><br/>
+        <input type = 'hidden' name="oid" value="<?php echo $oid;?>">
+        <button type="submit" class="btn btn-primary">提交</button>
+    </p>
+</form>

@@ -1,0 +1,32 @@
+#header{
+    background: url(../images/banner.jpg) no-repeat center top;
+    background-size: 1024px 412px;
+    height: 412px;
+}
+.download{
+    padding-top: 28%;
+    padding-left: 12%;
+}
+.header {
+    width: 100%;
+}
+#con{
+    width: 95%;
+}
+.message {
+    width: 45%;
+}
+.message h2 {
+    font: normal 45px/2 "Microsoft Yahei";
+}
+.kb {
+    width: 38%;
+}
+.dwl {
+    padding: 0;
+    float: left;
+    margin-top: 20px;
+}
+.footer{
+    width: 95%;
+}

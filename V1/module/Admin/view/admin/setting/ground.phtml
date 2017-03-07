@@ -1,0 +1,84 @@
+<hgroup class="box">
+    <header>
+        <h3>地推活动管理</h3>
+        <i class="icon icon-add"></i>
+        <a href="/wftadlogin/setting/groundadd">新增地推</a>
+        &nbsp;&nbsp;&nbsp;
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+
+        <div>温馨提示：<span style="color:green">有问题 请及时联系</span></div>
+    </aside>
+</hgroup>
+
+
+<div class="box">
+    <div class="box-title">
+        分类列表
+    </div>
+    <div class="box-table">
+        <table>
+            <tbody>
+            <tr>
+                <th class="size1">编号</th>
+                <th class="size1">类别</th>
+                <th class="size1">名称</th>
+                <th class="size1">开始时间</th>
+                <th class="size1">结束时间</th>
+                <th class="size1">关注人数</th>
+                <th class="size1">注册人数</th>
+                <th class="size1">连接</th>
+                <th class="size1">操作</th>
+            </tr>
+            <?php if (count($data)):  ?>
+                <?php foreach ($data as $row): ?>
+                    <?php if($row['id']==0){continue;} ?>
+                    <tr style="text-align: left">
+                        <td class="size1">
+                                <?php echo $row['id']; ?>
+                        </td>
+                        <td class="size1">
+                            <?php echo $row['usefor']==1?'地推活动':'签到'; ?>
+                        </td>
+                        <td class="size1"><?php echo $row['title']; ?></td>
+                        <td class="size1"><?php echo date('Y-m-d H:i:s', $row['stime']); ?></td>
+                        <td class="size1"><?php echo date('Y-m-d H:i:s', $row['etime']); ?></td>
+                        <td class="size1"><?php echo $tj[$row['id']]['ison']?:0; ?></td>
+                        <td class="size1"><?php echo $tj[$row['id']]['reg']?:0; ?></td>
+                        <td class="size1"><?php echo $url.'/web/generalize?dtid='.$row['id']; ?></td>
+                        <td class="size1">
+                            <a href="/wftadlogin/setting/groundnew?id=<?php echo $row['id']; ?>"
+                               class="ui-button">编辑</a>
+                            <?php if ($row['status']==0){ ?>
+                                <a href="/wftadlogin/setting/groundsave?id=<?php echo $row['id']; ?>&isclosed=2"
+                                   class="ui-button">开启</a>
+                            <?php }elseif($row['status']==1){ ?>
+                                <a href="/wftadlogin/setting/groundsave?id=<?php echo $row['id']; ?>&isclosed=1"
+                                   class="ui-button">停止</a>
+                            <?php }else{ ?>
+                                <a href="/wftadlogin/setting/groundsave?id=<?php echo $row['id']; ?>&isclosed=2"
+                                   class="ui-button">开启</a>
+                            <?php }; ?>
+
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无数据</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pageData; ?>
+        </footer>
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+    })
+</script>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){
+            var w=window.screen.width,
+                s=w/750,u=navigator.userAgent,
+                m='<meta name="viewport" content="width=750,';
+            if(/android (\d+\.\d+)/i.test(u)){
+                if(parseFloat(RegExp.$1>2.3)){
+                    m+="minimum-scale = "+s+", maximum-scale = "+s+","
+                }}else{
+                m+="user-scalable=no,"}
+            m+='target-densitydpi=device-dpi">';
+            document.write(m)}());
+    </script>
+    <title>销售员中心</title>
+    <link href="/css/wap/seller_info.css?ver=<?php echo time();?>" rel="stylesheet"/>
+</head>
+<body>
+    <div class="header">
+        <div class="header-info">
+            <p class="header-info-title">收益账户余额</p>
+            <span class="balance" data-item ='<?php echo $data['account_money'];?>'>￥<?php echo $data['account_money'];?></span>
+        </div>
+        <div class="header-btn">
+            <a class="header-btn-link" href="/web/h5/distribution">收益提现说明</a>
+            <span class="header-btn-cash">提现</span>
+        </div>
+    </div>
+    <div class="profit">
+        <div class="profit-detail">
+            <p class="profit-detail-title">累计收益</p>
+            <span class="profit-detail-money">￥<?php echo $data['add_up_income'];?></span>
+            <mark class="profit-detail-other">含未到账收益￥<?php echo $data['not_arrived_income'];?></mark>
+        </div>
+        <div class="profit-cash">
+            <p class="profit-cash-title">已提现金额</p>
+            <span class="profit-cash-info">￥<?php echo $data['withdraw_cash'];?></span>
+        </div>
+    </div>
+    <section class="main">
+        <div class="main-list"></div>
+    </section>
+    <div class="footer">
+        <a class="spread-btn" data-url="/web/user/sellGoods?seller_id=<?php echo $uid?>&city=<?php echo $city?>" href="/web/user/sellGoods?seller_id=<?php echo $uid?>&city=<?php echo $city?>">我要推广赚钱</a>
+        <a class="spread-intro" href="/web/h5/distribution">推广赚钱说明</a>
+    </div>
+    <div class="popup">
+        <div class="popup-spread">
+            <p class="popup-spread-title" data-low="<?php echo $data['can_out'];?>">最小提现金额为<?php echo $data['can_out'];?>元，你的余额不足提现~再接再厉~</p>
+            <a class="popup-spread-btn" href="javascript:;">去推广</a>
+        </div>
+
+        <div class="popup-withdraw">
+            <p class="popup-withdraw-title">本次提现金额为30元，确定提现30元？</p>
+            <div class="popup-withdraw-btn">
+                <a class="cancel">取消</a>
+                <a class="confirm">确认</a>
+            </div>
+        </div>
+
+        <div class="popup-tip">
+            <p class="popup-tip-title">提现申请成功，3~7个工作日将到账你的微信 账户，请注意查收~</p>
+            <a class="popup-tip-btn" href="javascript:;">知道了</a>
+        </div>
+
+        <div class="popup-warn">
+            <p class="popup-warn-title">提现申请中，不要重复提交哦~3~7个工作日将到账你的微信账户，请注意查收~
+            </p>
+            <a class="popup-warn-btn" href="javascript:;">去推广</a>
+        </div>
+        <div class="matte"></div>
+    </div>
+    <input type="hidden" id="state" value="<?php echo $data['withdraw_now'];?>"/>
+    <script id="income_list" type="text/html">
+        {{each income.income_statement}}
+            {{if $value.object_type == 3}}
+            <div class="item deposit">
+                <div class="item-title">提现到微信账户</div>
+                <div class="item-info">
+                    <p class="item-info-cash">-{{$value.flow_money}}</p>
+                    <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+                </div>
+            </div>
+            {{/if}}
+
+            {{if $value.object_type == 4}}
+            <div class="item deduction">
+                <div class="item-title">{{$value.describe}}</div>
+                <div class="item-info">
+                    <p class="item-info-cash">-{{$value.flow_money}}</p>
+                    <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+                </div>
+            </div>
+            {{/if}}
+
+            {{if $value.object_type == 2 && $value.sell_status == 2}}
+            <div class="item income">
+                <div class="item-title">{{$value.describe}}</div>
+                <div class="item-info">
+                    <p class="item-info-cash">+{{$value.flow_money}}</p>
+                    <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+                </div>
+            </div>
+            {{/if}}
+
+            {{if $value.object_type == 2 && $value.sell_status == 3}}
+            <div class="item remind">
+                <div class="item-title">
+                    <p>您有一笔推广收益提醒-{{$value.flow_money}}元</p>
+                    <span>{{$value.describe}}</span>
+                </div>
+                <div class="item-info">
+                    <p class="item-info-cash"></p>
+                    <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+                </div>
+            </div>
+            {{/if}}
+            {{if $value.object_type == 1}}
+            <div class="item remind">
+                <div class="item-title">
+                    <p>您有一笔推广收益提醒{{$value.flow_money}}元（未到账）</p>
+                    <span>{{$value.describe}}</span>
+                </div>
+                <div class="item-info">
+                    <p class="item-info-cash"></p>
+                    <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+                </div>
+            </div>
+            {{/if}}
+        {{/each}}
+    </script>
+    <script id="income_more" type="text/html">
+        {{each income.income_statement}}
+        {{if $value.object_type == 3}}
+        <div class="item deposit">
+            <div class="item-title">提现到微信账户</div>
+            <div class="item-info">
+                <p class="item-info-cash">-{{$value.flow_money}}</p>
+                <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        {{/if}}
+
+        {{if $value.object_type == 4}}
+        <div class="item deduction">
+            <div class="item-title">{{$value.describe}}</div>
+            <div class="item-info">
+                <p class="item-info-cash">-{{$value.flow_money}}</p>
+                <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        {{/if}}
+
+        {{if $value.object_type == 2 && $value.sell_status == 2}}
+
+        <div class="item income">
+            <div class="item-title">{{$value.describe}}</div>
+            <div class="item-info">
+                <p class="item-info-cash">+{{$value.flow_money}}</p>
+                <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        {{/if}}
+
+        {{if $value.object_type == 2 && $value.sell_status == 3}}
+        <div class="item remind">
+            <div class="item-title">
+                <p>您有一笔推广收益提醒-{{$value.flow_money}}元</p>
+                <span>{{$value.describe}}</span>
+            </div>
+            <div class="item-info">
+                <p class="item-info-cash"></p>
+                <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        {{/if}}
+        {{if $value.object_type == 1}}
+        <div class="item remind">
+            <div class="item-title">
+                <p>您有一笔推广收益提醒{{$value.flow_money}}元（未到账）</p>
+                <span>{{$value.describe}}</span>
+            </div>
+            <div class="item-info">
+                <p class="item-info-cash"></p>
+                <span class="item-info-time" data-time="{{$value.dateline | dateFormat:'hh:mm'}}">{{$value.dateline | dateFormat:'yyyy-MM-dd'}}</span>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </script>
+</body>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/drop.min.js"></script>
+<script type="text/javascript" src="/js/zepto1.1.6.min.js"></script>
+<script>
+    function dateFormat(date, format){
+        date = new Date(date*1000);
+        var map = {
+            "M": date.getMonth() + 1, //月份
+            "d": date.getDate(), //日
+            "h": date.getHours(), //小时
+            "m": date.getMinutes(), //分
+            "s": date.getSeconds(), //秒
+            "q": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds() //毫秒
+        };
+
+        format = format.replace(/([yMdhmsqS])+/g, function(all, t){
+            var v = map[t];
+            if (v !== undefined) {
+                if (all.length > 1) {
+                    v = '0' + v;
+                    v = v.substr(v.length - 2);
+                }
+                return v;
+            }
+            else if (t === 'y') {
+                return (date.getFullYear() + '').substr(4 - all.length);
+            }
+            return all;
+        });
+        return format;
+    }
+
+    var sell_url = $('.spread-btn').attr('data-url');
+
+    $.ajax({
+        type: 'POST',
+        url: '/user/sell/info',
+        dataType: 'json',
+        data: {
+            'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+            'page':1
+        },
+        async: false,
+        headers: {
+            "VER": 10
+        },
+        success: function (data) {
+            var result = [];
+            result['income'] = data.response_params;
+            template.helper("dateFormat", dateFormat);
+            $('.main-list').append(template('income_list', result));
+        },
+        error: function (xhr, type) {
+            alert('加载出错！！');
+        }
+    });
+
+    function show_date(){
+        var d = new Date();
+        var vYear = d.getFullYear();
+        var vMon = d.getMonth() + 1;
+        var vDay = d.getDate();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var se = d.getSeconds();
+        s=vYear+'-'+(vMon<10 ? "0" + vMon : vMon)+'-'+(vDay<10 ? "0"+ vDay : vDay);
+        return s;
+    }
+
+    //获取当前日期
+    function show_hours(){
+        var d = new Date();
+        var vYear = d.getFullYear();
+        var vMon = d.getMonth() + 1;
+        var vDay = d.getDate();
+        var h = d.getHours();
+        var m = d.getMinutes();
+        var se = d.getSeconds();
+        t=(h<10 ? "0"+ h : h)+':'+(m<10 ? "0" + m : m)+':'+(se<10 ? "0" +se : se);
+        return t;
+    }
+
+    $('.main-list').find('.item-info-time').each(function(){
+        if($(this).text() == show_date()) {
+            $(this).text($(this).attr('data-time'));
+        }
+    });
+
+    var balance = $('.balance').attr('data-item'),
+        minBalance = $('.popup-spread-title').attr('data-low'),
+        matte = $('.matte'),
+        state = $('#state').val();
+
+    $('.header-btn-cash').on('tap',function(){
+        if(state == 1){
+            $('.popup-warn').show();
+            matte.show();
+            $('.popup-warn-btn').on('tap',function(){
+                $('.popup-warn').hide();
+                matte.hide();
+                window.location.href = sell_url;
+            });
+            matte.on('tap',function(){
+                $('.popup-warn').hide();
+                matte.hide();
+            })
+        }else{
+            if(parseFloat(balance) < parseFloat(minBalance)){
+                $('.popup-spread').show();
+                matte.show();
+                matte.on('tap',function(){
+                    $('.popup-spread').hide();
+                    matte.hide();
+                });
+                $('.popup-spread-btn').on('tap',function(){
+                    $('.popup-spread').hide();
+                    matte.hide();
+                    window.location.href = sell_url;
+                })
+            }else{
+                var total = balance - balance % 10;
+                $('.popup-withdraw-title').text('本次提现金额为'+total+'元，确定提现'+total+'元？');
+                $('.popup-withdraw').show();
+                matte.show();
+                $('.cancel').on('tap',function(){
+                    $('.popup-withdraw').hide();
+                    matte.hide();
+                });
+                matte.on('tap',function(){
+                    matte.hide();
+                    $('.popup-withdraw').hide();
+                });
+                $('.confirm').on('touchend',function(e){
+                    e.preventDefault();
+                    $('.popup-withdraw').hide();
+                    matte.hide();
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/sell/withdraw',
+                        dataType: 'json',
+                        data: {
+                            'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                            'money':total
+                        },
+                        async: false,
+                        headers: {
+                            "VER": 10
+                        },
+                        success: function (data) {
+                            if(data.response_params.status == 1){
+                                $('.popup-tip').show();
+                                matte.show();
+                                matte.on('tap',function(){
+                                    $('.popup-tip').hide();
+                                    matte.hide();
+                                    window.location.reload();
+                                });
+                                $('.popup-tip-btn').on('tap',function(){
+                                    $('.popup-tip').hide();
+                                    matte.hide();
+                                    window.location.reload();
+                                });
+                            }else{
+                                alert(data.response_params.message);
+                            }
+                        },
+                        error: function (xhr, type) {
+                            alert('加载出错！！');
+                        }
+                    });
+                })
+            }
+        }
+    });
+    var page_num = $('.main-list').children().length;
+    if(page_num >= 10){
+        var counter = 1;
+        var dropload = $('.main').dropload({
+            scrollArea: window,
+            domDown: {
+                domClass: 'dropload-down',
+                domRefresh: '<div class="dropload-refresh" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;">↑上拉加载更多</div>',
+                domLoad: '<div class="dropload-load" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData" style="font-size: 20px;height:50px;line-height:50px;text-align: center;margin-bottom: 100px;">全部加载完毕</div>'
+            },
+            loadDownFn: function (me) {
+                counter++;
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/sell/info',
+                    dataType: 'json',
+                    data: {
+                        'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                        'page':counter
+                    },
+                    async: false,
+                    headers: {
+                        "VER": 10
+                    },
+                    success: function (data) {
+                        var result = [];
+                        result['income'] = data.response_params;
+                        setTimeout(function () {
+                            template.helper("dateFormat", dateFormat);
+                            $('.main-list').append(template('income_more', result));
+                            me.resetload();
+                        }, 500);
+                        if (result['income']) {
+                            me.lock();
+                            me.noData();
+                            return;
+                        }
+                    },
+                    error: function (xhr, type) {
+                        alert('加载更多出错！！');
+                    }
+                })
+            }
+        });
+    }
+</script>

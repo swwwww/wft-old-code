@@ -1,0 +1,65 @@
+<hgroup class="box">
+    <header>
+        <h3>智游宝订单</h3>
+        <i class="icon icon-add"></i>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题 请及时联系</div>
+    </aside>
+</hgroup>
+
+
+<div class="box">
+    <div class="box-title">
+        验证码信息
+    </div>
+    <div>
+        <table class="table">
+            <tr>
+                <th width="50">编号</th>
+                <th width="100">玩翻天验证码</th>
+                <th width="100">智游宝辅助使用码</th>
+                <th width="100">时间</th>
+            </tr>
+            <?php $a = 0;?>
+            <?php foreach ($codeData as $row): ?>
+                <tr style="text-align: left">
+                    <td width="50"><?php echo $row['sort']; ?></td>
+                    <td width="100"><?php echo $row['code_id'].$row['password']; ?></td>
+                    <td width="100"><?php echo $row['zyb_code']; ?></td>
+                    <td width="100">
+                        <?php if($row['zyb_code'] && $row['status'] == 2):?>
+                            <input type="date" id="alert-time" name="new_time" value="<?php echo date('Y-m-d', (time()+24*3600));?>">
+                            <a id="alert-ticket" data-id="<?php echo $row['code_id'];?>" href="javascript:void(0)">改签</a>
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+
+        //改签
+        $('#alert-ticket').click(function() {
+            if (confirm('你确定改签')) {
+                var code_id = $(this).attr('data-id');
+                var new_time = $('#alert-time').val();
+                var href = '/wftadlogin/zyb/change';
+                $.post(href, {code_id: code_id, new_time: new_time}, function (data) {
+                    if (data.status == 1) {
+                        alert(data.message);
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                }, 'json');
+                return false;
+            }
+
+        });
+
+    });
+</script>

@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="app-mobile-web-app-capable" content="yes">
+    <title>添加Baby资料</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/my.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style>
+        .edit-intro input[type='button'] {
+            display: block;
+            font-family: "Microsoft YaHei";
+            width: 94%;
+            margin: 50px auto 0;
+            height: 60px;
+            line-height: 60px;
+            color: #fff;
+            background-color: #fa6e51;
+            letter-spacing: 6px;
+            font-size: 30px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<main class="align" id="content">
+    <section class="wrapper">
+        <form class="edit-intro" autocomplete="off">
+            <div class="item item-pic">
+                <span class="tips tips-pic">头像</span>
+                <i class="arrowent"></i>
+                <div class="upload-pic" id="upload-pic">
+                    <img src="<?php echo $data['img']?>"/>
+                </div>
+                <input id="upload-image" type="file" accept="image/*;capture=camera" class="input-file">
+            </div>
+            <a class="item">
+                <span class="tips left">名字：</span>
+                <span class="name left">
+                    <input type="text" name="name" placeholder="输入宝宝名字" value="<?php echo $data['baby_name'] ? $data['baby_name'] : '';?>" id="name">
+                    <input type="reset" value="×">
+                </span>
+            </a>
+            <div class="title">宝宝信息</div>
+            <a class="item" >
+                <span class="tips left">性别：</span>
+
+                <?php if($data['baby_sex']==1):?>
+                    <select class="gender left" id="sex">
+                        <option id="man"  name="1">王子</option>
+                        <option id="woman" name="2">公主</option>
+                    </select>
+                <?php endif;?>
+                <?php if($data['baby_sex']==2):?>
+                    <select class="gender left" id="sex">
+                        <option id="woman" name="2">公主</option>
+                        <option id="man"  name="1">王子</option>
+
+                    </select>
+                <?php else:?>
+                    <select class="gender left" id="sex">
+                        <option id="man" name="1">王子</option>
+                        <option id="woman" name="2">公主</option>
+                    </select>
+                <?php endif;?>
+                <input type="hidden"  id="gender"  name="gender" >
+                <i class="arrowent"></i>
+            </a>
+            <a class="item">
+                <span class="tips left">宝宝生日：</span>
+
+                <span class="time left"><input class="font" type="date" value="<?php echo isset($data['baby_birth']) ? date('Y-m-d',$data['baby_birth']) : '2016-01-01';?>" id="old"/></span>
+                <i class="arrowent"></i>
+            </a>
+            <input class="submit" type="button" value="完成" autocomplete="off" id="sub"/>
+        </form>
+    </section>
+</main>
+<a class="toTop toTop01" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<input type="hidden" id="link_id" value="<?php echo $link_id;?>">
+<div id="tipsDia"></div>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/third-part/binaryajax.js"></script>
+<script type="text/javascript" src="/js/third-part/exif.js"></script>
+<script type="text/javascript" src="/js/third-part/localResizeIMG.js"></script>
+<script type="text/javascript" src="/js/third-part/mobileBUGFix.js"></script>
+<script>
+    (function(){
+        var tipsDia = $("#tipsDia");
+        //上传图片
+        var viewImg = $("#upload-pic");
+        $('#upload-image').localResizeIMG ({
+            width: 800,
+            quality: 0.8,
+            success: function (result) {
+                var status = true;
+                if (result.height > 1600) {
+                    status = false;
+                    alert("照片最大高度不超过1600像素");
+                }
+                if (status) {
+                    viewImg.html('<img src="' + result.base64 + '"/><input type="hidden" id="file' + '" name="fileup[]" value="'+ result.clearBase64 + '">');
+                }
+            }
+        });
+
+
+        $("#sub").on("touchstart",function(e){
+            e.preventDefault();
+            var city = localStorage.getItem('MOBILE_CURRENTCITY') ? localStorage.getItem('MOBILE_CURRENTCITY') : localStorage.getItem('MOBILE_DEFAULTCITY');
+            var img = $('input[name="fileup[]"]').val();
+            var name = $("#name").val();
+            var old = $('#old').val();
+            old = parseInt(new Date(old).getTime()/1000);
+            var sel = document.getElementById("sex");
+            var sex = sel.options[sel.selectedIndex].getAttribute('name');
+            var link_id = $("#link_id").val();
+            var act = $('#act').val();
+            if (!name || !old || !sex) {
+                tipsDia.text("请填齐所有资料");
+                tipsDia.show();
+                setTimeout(function(){
+                    tipsDia.hide();
+                    tipsDia.text("");
+                },2000);
+                return false;
+            }
+            if(link_id){
+                act='fix';
+            }else{
+                act='add';
+            }
+
+            if(act=='add'){
+                tipsDia.text("正在处理...");
+                tipsDia.show();
+                setTimeout(function(){
+                    tipsDia.hide();
+                    tipsDia.text("");
+                },3000);
+                var child_id;
+                $.ajax({
+                    type: 'POST',
+                    url: "/user/info/baby",
+                    dataType: 'json',
+                    async: false,
+                    data: {
+                        'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                        'act': act,
+                        'username': name,
+                        'sex': sex,
+                        'old': old
+                    },
+                    headers: {
+                        "VER": 10,
+                        "CITY": encodeURI(city)
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            //alert(result.response_params.message);
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },3000);
+                        } else {
+                            //todo 成功
+//                            self.location = document.referrer;
+                            child_id = result.response_params.baby_id;
+                            //上传图片
+                            if(img){
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/user/info/memberImg",
+                                    //        dataType:"json",
+                                    async: false,
+                                    data:{'img':img,'uid':<?php echo $_COOKIE['uid'];?>,'child_id':child_id},
+                                    headers: {
+                                        "VER": 10
+                                    },
+                                    success: function (result) {
+                                        if (result.response_params.status == 0) {
+                                            tipsDia.text(result.response_params.message);
+                                            tipsDia.show();
+                                            setTimeout(function(){
+                                                tipsDia.hide();
+                                                tipsDia.text("");
+                                            },3000);
+                                        } else if(result.response_params.status == 1) {
+                                            tipsDia.text("上传成功...");
+                                            tipsDia.show();
+                                            setTimeout(function(){
+                                                tipsDia.hide();
+                                                tipsDia.text("");
+                                            },3000);
+                                            self.location = document.referrer;
+
+                                        }
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                                        if (XMLHttpRequest.status == 401) {
+                                            //alert('授权失败');
+                                            // 跳转授权页面
+                                            //alert(XMLHttpRequest.responseJSON.message);
+                                            window.location.href = '<?php echo $authorUrl;?>';
+
+                                        }
+                                        else if (XMLHttpRequest.status == 403) {
+                                            alert('接口验证失败，非法访问');
+                                        }
+                                        else if (XMLHttpRequest.status == 400) {
+                                            alert('请求参数错误');
+                                        }
+                                        else {
+                                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                                        }
+                                    }
+
+                                });
+                            }
+
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+
+                    }
+                });
+            }else{
+                tipsDia.text("正在处理...");
+                tipsDia.show();
+                setTimeout(function(){
+                    tipsDia.hide();
+                    tipsDia.text("");
+                },3000);
+                if(img){
+                    $.ajax({
+                        type: "POST",
+                        url: "/user/info/memberImg",
+                        //        dataType:"json",
+                        async: false,
+                        data:{'img':img,'uid':<?php echo $_COOKIE['uid'];?>,'child_id':link_id},
+                        headers: {
+                            "VER": 10
+                        },
+                        success: function (result) {
+                            if (result.response_params.status == 0) {
+                                tipsDia.text(result.response_params.message);
+                                tipsDia.show();
+                                setTimeout(function(){
+                                    tipsDia.hide();
+                                    tipsDia.text("");
+                                },3000);
+                            } else if(result.response_params.status == 1) {
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                            if (XMLHttpRequest.status == 401) {
+                                //alert('授权失败');
+                                // 跳转授权页面
+                                //alert(XMLHttpRequest.responseJSON.message);
+                                window.location.href = '<?php echo $authorUrl;?>';
+
+                            }
+                            else if (XMLHttpRequest.status == 403) {
+                                alert('接口验证失败，非法访问');
+                            }
+                            else if (XMLHttpRequest.status == 400) {
+                                alert('请求参数错误');
+                            }
+                            else {
+                                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                            }
+                        }
+
+                    });
+                }
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/user/info/baby",
+                    dataType: 'json',
+                    async: true,
+                    data: {
+                        'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,
+                        'link_id': link_id,
+                        'act': act,
+                        'username': name,
+                        'sex': sex,
+                        'old': old
+                    },
+                    headers: {
+                        "VER": 10,
+                        "CITY": encodeURI(city)
+                    },
+                    success: function (result) {
+                        if (result.response_params.status == 0) {
+                            //alert(result.response_params.message);
+                            tipsDia.text(result.response_params.message);
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },3000);
+                        } else {
+                            //todo 成功
+                            //window.location.href = "";
+                            //console.log(result.response_params);
+                            tipsDia.text("上传成功");
+                            tipsDia.show();
+                            setTimeout(function(){
+                                tipsDia.hide();
+                                tipsDia.text("");
+                            },3000);
+                            self.location = document.referrer;
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                        if (XMLHttpRequest.status == 401) {
+                            //todo 跳转授权页面
+                            //alert(XMLHttpRequest.responseJSON.message);
+                            window.location.href = '<?php echo $authorUrl;?>';
+                        }
+                        else if (XMLHttpRequest.status == 403) {
+                            alert('接口验证失败，非法访问');
+                        }
+                        else if (XMLHttpRequest.status == 400) {
+//                            window.location.href = '<?php //echo $authorUrl;?>//';
+                            alert('请求参数错误:' + XMLHttpRequest.error_msg);
+                        }
+                        else {
+                            alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                        }
+
+                    }
+                });
+            }
+        });
+
+        $("input[type='text']").on("input propertychange",function(){
+            if($("input[type='text']").val()){
+                $(this).next().show();
+            }else{
+                $(this).next().hide();
+            }
+        });
+    }());
+</script>
+</html>
+

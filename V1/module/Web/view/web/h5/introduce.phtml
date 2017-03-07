@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>我要资格</title>
+    <link href="/css/h5/style.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="ag-header">
+    <h2>什么是资格券？</h2>
+
+    <p>1、资格券是秒杀商品和指定特惠商品的购买资格，未获得资格券则无法参与购买秒杀商品和指定特惠商品</p>
+
+    <p>2、资格券仅限本会员手机号使用，不可转让</p>
+
+    <p>3、成功消费秒杀商品或指定特惠商品后，即成功使用一张资格券</p>
+    <p>4、未支付订单被取消时，未成功使用的资格券将自动退回</p>
+    <p>5、已支付订单申请退订的，已使用的资格券不予退回</p>
+</header>
+<section class="ag-main">
+    <h2>获取方式</h2>
+
+    <p>1、积分兑换：<?php echo (int)$score; ?>积分可兑换一张资格券</p>
+    <p>2、特殊福利：参与特定活动可获得资格券</p>
+    <a class="join-btn" onclick="openmy()">立刻兑换资格&gt;&gt;</a>
+
+
+    <a class="join-btn" href="" style="display: none;">立刻参与&gt;&gt;</a>
+</section>
+</body>
+<script>
+
+
+    function openmy() {
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger"){
+            window.location.href="/web/wappay/seckill";
+        }else{
+            if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                document.location.href = 'exchange$$';
+            } else if (navigator.userAgent.match(/android/i)) {
+                window.getdata.exchange()
+            }
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,441 @@
+body{
+    padding: 0;
+    margin: 0;
+    max-width: 750px;
+    font-family: 'microsoft yaHei';
+    color: #000;
+    background: #eee;
+}
+
+a{
+    -webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+.header{
+    width: 750px;
+    height: 117px;
+    padding: 57px 0 50px 0;
+    background: #5fe6a1;
+}
+
+.header-info{
+    float: left;
+    height: 117px;
+    overflow: hidden;
+    padding-left: 190px;
+    background: url("/images/wappay/icons.png?ver=3") no-repeat 35px -698px;
+}
+
+.header-info p{
+    font-size: 30px;
+    color: #fff;
+    line-height: 40px;
+    margin: 0 0 15px 10px;
+}
+
+.header-info span{
+    font-size: 54px;
+    color: #fff;
+    text-align: left;
+}
+
+.header-btn{
+    float: right;
+    height: 117px;
+    width: 140px;
+    margin-right: 40px;
+    overflow: hidden;
+}
+
+.header-btn a{
+    display: block;
+    font-size: 22px;
+    color: #0c6645;
+    margin-bottom: 30px;
+}
+
+.header-btn-cash{
+    float: right;
+    width: 120px;
+    height: 48px;
+    border: 2px solid #fff;
+    border-radius: 24px 24px 24px 24px;
+    -webkit-border-radius: 24px 24px 24px 24px;
+    font-size: 28px;
+    line-height: 48px;
+    text-align: center;
+    color: #fff;
+}
+
+.profit{
+    width: 750px;
+    background: #fff;
+    overflow: hidden;
+    padding: 30px 0 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+
+.profit-detail{
+    float: left;
+    width: 375px;
+    border-right: 1px solid #d5d5d5;
+}
+
+.profit-detail-title{
+    width: 100%;
+    font-size: 26px;
+    text-align: center;
+    color: #666;
+    margin: 0;
+}
+
+.profit-detail-money{
+    display: block;
+    font-size: 40px;
+    color: #000;
+    font-weight: bold;
+    line-height: 65px;
+    text-align: center;
+}
+
+.profit-detail-other{
+    display: block;
+    font-size: 24px;
+    color: #929292;
+    text-align: center;
+    background: none;
+}
+
+.profit-cash{
+    float: left;
+    width: 374px;
+}
+
+.profit-cash-title{
+    width: 100%;
+    font-size: 26px;
+    color: #666;
+    text-align: center;
+    margin: 0;
+}
+
+.profit-cash-info{
+    display: block;
+    font-size: 40px;
+    color: #000;
+    font-weight: bold;
+    line-height: 65px;
+    text-align: center;
+}
+.main{
+    margin-bottom: 190px;
+}
+.main-list{
+    width: 750px;
+    background: #fff;
+}
+
+.item{
+    width: 700px;
+    margin: 0 auto;
+    padding: 44px 0;
+    border-bottom: 1px solid #e5e5e5;
+    overflow: hidden;
+}
+
+.item-title{
+    float: left;
+    width: 475px;
+    font-size: 26px;
+    color: #666;
+    margin-left: 90px;
+}
+
+.item-info{
+    float: right;
+    height: 72px;
+}
+
+.item-info p{
+    height: 42px;
+    font-size: 32px;
+    text-align: right;
+    color: #000;
+    margin: 0;
+}
+
+.item-info span{
+    float: right;
+    font-size: 24px;
+    color: #929292;
+}
+
+.item.deposit{
+    background: url("/images/wappay/icons.png?ver=3") no-repeat -76px 3px;
+}
+
+.item.deduction{
+    background: url("/images/wappay/icons.png?ver=3") no-repeat -76px -162px;
+}
+
+.item.income{
+    background: url("/images/wappay/icons.png?ver=3") no-repeat -76px -330px;
+}
+
+.item.remind{
+    background: url("/images/wappay/icons.png?ver=3") no-repeat -76px -494px;
+}
+
+.item.remind .item-title{
+    line-height: 36px;
+}
+
+.item.remind .item-title p{
+    margin: 0;
+    color: #000;
+}
+
+.item.remind .item-title span{
+    display: block;
+    width: 475px;
+    height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+.item.special{
+    background: url("/images/wappay/icons.png?ver=3") no-repeat -2px -842px;
+}
+
+.item.deposit .item-title{
+    line-height: 72px;
+}
+
+.item.income .item-title{
+    line-height: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item.deduction .item-title{
+    line-height: 72px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.footer{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 140px;
+    background: #fff;
+    border-top: 1px solid #e5e5e5;
+}
+
+.spread-btn{
+    display: block;
+    width: 480px;
+    height: 68px;
+    margin: 15px auto;
+    background: #fb5f39;
+    border-radius: 8px 8px 8px 8px;
+    -webkit-border-radius: 8px 8px 8px 8px;
+    font-size: 28px;
+    line-height: 68px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.spread-intro{
+    display: block;
+    margin: 0 auto;
+    font-size: 20px;
+    text-align: center;
+    color: #666;
+}
+
+.popup-spread{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    width: 640px;
+    height: 288px;
+    transform: translate(-50%,-35%);
+    -webkit-transform: translate(-50%,-35%);
+    background: #fff;
+    border-radius: 8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    z-index: 100;
+}
+
+.popup-spread-title{
+    width: 570px;
+    height: 130px;
+    font-size: 30px;
+    line-height: 40px;
+    margin: 60px auto 0;
+}
+
+.popup-spread-btn{
+    display: block;
+    width: 100%;
+    height: 97px;
+    font-size: 36px;
+    line-height: 97px;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    border-top: 1px solid #cccccc;
+}
+
+.popup-withdraw{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    width: 640px;
+    height: 240px;
+    transform: translate(-50%,-35%);
+    -webkit-transform: translate(-50%,-35%);
+    background: #fff;
+    border-radius: 8px 8px 8px 8px;
+    -webkit-border-radius:8px 8px 8px 8px;
+    z-index: 100;
+}
+
+.popup-withdraw-title{
+    width: 100%;
+    height: 140px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 140px;
+    border-bottom: 1px solid #cccccc;
+    margin: 0;
+}
+
+.popup-withdraw-btn{
+    width: 100%;
+    height: 99px;
+    overflow: hidden;
+}
+
+.cancel{
+    float: left;
+    width: 319px;
+    border-right: 1px solid #cccccc;
+    font-size: 36px;
+    text-align: center;
+    line-height: 99px;
+    color: #666666;
+}
+
+.confirm{
+    float: left;
+    width: 320px;
+    font-size: 36px;
+    text-align: center;
+    line-height: 99px;
+}
+
+.matte{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    bottom: 0;
+    background: rgba(99,99,99,0.6);
+    width: 750px;
+    z-index: 50;
+    transform: translate(-50%,0);
+    -webkit-transform: translate(-50%,0);
+}
+
+.popup-tip{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    width: 640px;
+    height: 288px;
+    transform: translate(-50%,-35%);
+    -webkit-transform: translate(-50%,-35%);
+    background: #fff;
+    border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius:10px 10px 10px 10px;
+    z-index: 100;
+}
+
+.popup-tip-title{
+    width: 570px;
+    height: 130px;
+    font-size: 30px;
+    line-height: 40px;
+    margin: 60px auto 0;
+}
+
+.popup-tip-btn{
+    display: block;
+    width: 100%;
+    height: 97px;
+    font-size: 36px;
+    line-height: 97px;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    border-top: 1px solid #cccccc;
+}
+
+.popup-warn{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 35%;
+    width: 640px;
+    height: 288px;
+    transform: translate(-50%,-35%);
+    -webkit-transform: translate(-50%,-35%);
+    background: #fff;
+    border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius:10px 10px 10px 10px;
+    z-index: 100;
+}
+
+.popup-warn-title{
+    width: 570px;
+    height: 130px;
+    font-size: 30px;
+    line-height: 40px;
+    margin: 60px auto 0;
+}
+
+.popup-warn-btn {
+    display: block;
+    width: 100%;
+    height: 97px;
+    font-size: 36px;
+    line-height: 97px;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    border-top: 1px solid #cccccc;
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,398 @@
+<hgroup class="box">
+    <header>
+        <h3>资讯管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/news?city=<?php echo $city['mark'];?>">返回资讯列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示：添加的资讯为 <mark><b><?php echo $city['name'];?></b></mark>地区 的资讯
+        </div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/news/save" method="post" id="news-save">
+    <header class="box-title"><?php echo count($data)?'修改资讯':'添加资讯';?></header>
+    <table class="table">
+    <tr>
+        <th width="160">资讯名称</th>
+        <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo count($data) ? $data->title : ''; ?>">
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">小编说</th>
+        <th colspan="3" width="600">
+            <textarea class="cssTextArea" name="editor_word"><?php echo count($data) ? $data->editor_word : '';?></textarea>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160">图文详情</th>
+        <th colspan="3" width="600">
+            <script type="text/plain" id="myEditor" style="width:600px;height:240px;"><?php echo count($data) ? htmlspecialchars_decode($data->information) : '<p>这里我可以写一些输入提示</p>';?></script>
+        </th>
+    </tr>
+
+
+    <tr>
+        <th width="160">参考价格<span style="line-height: 15px;color: red">（选填）</span></th>
+        <th width="400"><input type="text" class="cssInput" style="width:50px" name="reference_price" value="<?php echo (count($data) && (float)$data->reference_price) ? (float)$data->reference_price : ''; ?>"><span style="line-height: 15px">&nbsp;元</span><span style="line-height: 15px;color: red"><价格保存至小数点后一位></span>
+        </th>
+        <th colspan="2"></th>
+    </tr>
+
+    <tr>
+        <th width="109">适合年龄<span style="line-height: 15px;color: red">（选填）</span></th>
+        <th colspan="3" width="600">
+            开始年龄：
+            <select name="age_min">
+                <?php for ($i = 0; $i <= 2.5; $i = $i + 0.5): ?>
+                    <option <?php echo (count($data) && (string)$i === $data->age_min) ? 'selected' : ''; ?>
+                        value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                    </option>
+                <?php endfor; ?>
+                <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                    <option <?php echo (count($data) && (string)$i === $data->age_min) ? 'selected' : ''; ?>
+                        value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                    </option>
+                <?php endfor; ?>
+            </select>
+            结束年龄：
+            <select name="age_max">
+                <option <?php echo (!count($data) || 100 == $data->age_max) ? 'selected' : ''; ?>
+                    value="100">以上
+                </option>
+                <?php for ($i = 0.5; $i <= 2.5; $i = $i + 0.5): ?>
+                    <option <?php echo (count($data) && (string)$i === $data->age_max) ? 'selected' : ''; ?>
+                        value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                    </option>
+                <?php endfor; ?>
+                <?php for ($i = 3; $i <= 12; $i = $i + 1): ?>
+                    <option <?php echo (count($data) && (string)$i === $data->age_max) ? 'selected' : ''; ?>
+                        value="<?php echo $i; ?>"><?php echo $i; ?>岁
+                    </option>
+                <?php endfor; ?>
+            </select>
+        </th>
+    </tr>
+
+    <tr>
+        <th width="109">
+            是否允许评论
+        </th>
+        <th width="500">
+            <input name="allow_post" type="radio" value="1" <?php echo (!count($data) || $data->allow_post == 1) ? 'checked' : ''; ?> /> 允许评论 &nbsp;&nbsp;&nbsp;
+            <input name="allow_post" type="radio" value="0" <?php echo (count($data) && $data->allow_post == 0) ? 'checked' : ''; ?>/> 不允许评论
+        </th>
+    </tr>
+
+    <tr>
+        <th width="160" >地址详情 ：</th>
+        <th width="420" id="address_check"><span data-default="right">直接填写</span> <span data-default="left">关联商家</span></th>
+        <th colspan="2"></th>
+    </tr>
+
+    <tr class="zHid" <?php echo (count($data) && json_decode($data->address)->type == 2) ? 'style="display: none"' : ''; ?>>
+        <th width="100"></th>
+        <th width="500">
+            <span style="line-height: 15px;">坐标：</span>
+            <span style="line-height: 15px;color: green">纬度坐标：</span><input type="text" class="cssInput" style="width:90px" name="addr_y" id="addr_y" value="<?php echo (count($data) && json_decode($data->address)->type == 1) ? json_decode($data->address)->mes->y : ''; ?>">
+            <span style="line-height: 15px;color: green">经度坐标：</span><input type="text" class="cssInput" style="width:90px" name="addr_x" id="addr_x" value="<?php echo (count($data) && json_decode($data->address)->type == 1) ? json_decode($data->address)->mes->x : ''; ?>">　　<button type="button" class="btn btn-primary btn-sm setmap">设置坐标点</button>
+        </th>
+        <th colspan="2">
+            <span style="line-height: 15px;">商圈：</span>
+            <!--<input type="text" class="cssInput" style="width:90px" name="circle" value="<?php /*echo (count($data) && json_decode($data->address)->type == 1) ? json_decode($data->address)->mes->circle : ''; */?>">　　<button type="button" class="btn btn-primary btn-sm setmap">设置商圈</button>-->
+            <div class="dropdown">
+                <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary" data-target="#" href="#"><?php echo (count($data) && json_decode($data->address)->type == 1) ?  $cData[json_decode($data->address)->mes->circle] : '选择商圈';?><span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                    <?php foreach ($this->select_circle[1] as $k => $v): ?>
+                        <?php if (!empty($v)): ?>
+                            <li class="dropdown-submenu circle"><a tabindex="-1" href="#" val="<?php echo $this->select_circle[0][$k]['rid']; ?>"><?php echo $this->select_circle[0][$k]['name']; ?></a>
+                                <ul class="dropdown-menu circle">
+                                    <?php for ($i = 1; $i <= count($v); $i++) { ?>
+                                        <li><a class="lalala" href="#" val="<?php echo $v[$i]['rid']; ?>"><?php echo $v[$i]['name']; ?></a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
+                        <?php else: ?>
+                            <li class="circle"><a href="#" val="<?php echo $this->select_circle[0][$k]['rid']; ?>"><?php echo $this->select_circle[0][$k]['name']; ?></a>
+                            </li>
+                        <?php endif ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <input type="hidden" name="circle" id="business" value="<?php echo (count($data) && json_decode($data->address)->type == 1) ? json_decode($data->address)->mes->circle : '';?>">        </th>
+    </tr>
+    <tr class="zHid" <?php echo (count($data) && json_decode($data->address)->type == 2) ? 'style="display: none"' : ''; ?>>
+        <th width="109"></th>
+        <th colspan="3">
+            <span style="line-height: 15px;">地址：</span>
+            <input type="text" class="cssInput" name="address" value="<?php echo (count($data) && json_decode($data->address)->type == 1) ? json_decode($data->address)->mes->address : ''; ?>">
+        </th>
+    </tr>
+
+    <tr class="zSid" <?php echo (!count($data) || (count($data) && json_decode($data->address)->type == 1)) ? 'style="display: none"' : ''; ?>>
+        <th width="109"></th>
+        <th colspan="3">
+            <span style="line-height: 15px;">商家名称：</span>
+            <input type="text" class="cssInput orTz" value="<?php echo $mData ? $mData->market_name : '';?>">
+            <div id="xiala">
+                <?php if(count($sData)):?>
+                    <?php foreach ($shopData as $val): ?>
+                        <div style="width:200px;height:20px;float:left;margin-right:15px;text-align:left;overflow: hidden">
+                            <input name="shopIds[<?php echo $val->shop_id?>]" <?php echo (in_array($val->shop_id, $sData)) ? 'checked' : '';  ?> value="<?php echo $val->shop_name?>"  type="checkbox"/>
+                            <?php echo $val->shop_name; ?>
+                        </div>
+                    <?php endforeach; ?>
+                    <input type="hidden" name="mid" value="<?php echo $mData ? $mData->market_id : '';?>">
+                <?php endif;?>
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th>封面图</th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload1" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" name="cover" value="<?php echo count($data) ? $data->cover : '';?>" />
+                <span>　　样片封面图请上传：<mark>720*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="240px" height="120px" class="fileupload1" src="<?php echo count($data) ? $data->cover : '';?>">
+            </div>
+        </th>
+    </tr>
+
+    <tr>
+        <th>缩略图 <span style="line-height: 15px;color: red">（选填）</span></th>
+        <th colspan="3">
+            <fieldset>
+                <div style="float: left;height: 41px;background: #f5696c;width: 144px;position:relative;">
+                    <div style="text-align:center;line-height:41px;font-size:15px;font-weight:800">上传</div>
+                    <input type="file" id="fileupload2" name="file" style="width: 144px;height: 41px;cursor: pointer;font-size: 30px;outline: medium none;position: absolute;filter:alpha(opacity=0);-moz-opacity:0;opacity:0;left:0px;top: 0px;" multiple/>
+                </div>
+
+                <input type="hidden" class="hidden" name="surface_plot" value="<?php echo count($data) ? $data->surface_plot : '';?>" />
+                <span>　　样片封面图请上传：<mark>360*360px</mark>的“<mark><b>jpg png</b></mark>”格式 size小于<mark>250kb</mark>的图片。</span>
+            </fieldset>
+            <div>
+                <img width="120px" height="120px" class="fileupload2" src="<?php echo count($data) ? $data->surface_plot : '';?>">
+            </div>
+        </th>
+    </tr>
+
+
+    </table>
+    <input type="hidden" name="nid"  value="<?php echo count($data) ? $data->id : '';?>">
+    <input type="hidden" name="news_city"  value="<?php echo count($data) ? $data->news_city : 'WH';?>">
+    <input type="hidden" name="aType" id="aType" value="<?php echo count($data) ? json_decode($data->address)->type : 1;?>" />
+    <span type="submit" class="btn btn-primary" id="ti-new">提交</span>
+</form>
+
+
+<!--   地图   -->
+<div class="modal fade" id="setmap" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none">
+    <div class="modal-dialog" style="width: 1000px;">
+        <div class="modal-content" id="modal_addhouse">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>获取位置信息</h3>
+            </div>
+            <div class="modal-body">
+                <h4>拖动跳动的点,使用滚轮快速放大缩小 <input type="text" value="搜索" id="skey"> <a class="btn btn-primary btn-sm"
+                                                                                  id="mapsearch">搜索</a></h4>
+
+                <iframe name="myFrame" src="/wftadlogin/seller/setmap"
+                        style="width:100%; height:500px; border: 0px;border-radius: 5px;"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="ui-button" data-dismiss="modal" aria-hidden="true">关闭</button>
+                <button class="ui-button getmap" data-dismiss="modal" aria-hidden="true">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .sRt {
+        background-color:#4F463D;
+        color:white;
+    }
+    .xiala {
+        width:400px;
+        position: relative;
+        height:24px;
+        margin-left:75px;
+        background-color: #4F463D;
+        color:white;
+    }
+</style>
+<script src="/js/file_upload/jquery.ui.widget.js"></script>
+<script src="/js/file_upload/jquery.iframe-transport.js"></script>
+<script src="/js/file_upload/jquery.fileupload.js"></script>
+<script>
+    $('#fileupload1').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='cover']").attr('value', data.result.url);
+                $(".fileupload1").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+
+    $('#fileupload2').fileupload({
+        url: '/wftadlogin/index/upload',
+        dataType: 'json',
+        /*limitMultiFileUploadSize: 1,
+        limitMultiFileUploadSizeOverhead: 30,
+        maxFileSize : 34,
+       //autoUpload: false,
+        acceptFileTypes:  /(\.|\/)(gpg|jpeg|png)$/i,
+        maxNumberOfFiles : 1,*/
+
+        done: function (e, data) {
+            if (data.result.status == 1) {
+                $("input[name='surface_plot']").attr('value', data.result.url);
+                $(".fileupload2").attr('src' , data.result.url);
+            } else {
+                alert(data.result.response_params.message);
+            }
+        }
+    });
+</script>
+
+<script>
+    $(function () {
+
+        $('.orTz').bind('input propertychange', function() {
+            var k = $(this).val();
+            $('#xiala').empty();
+            $.post('/wftadlogin/news/getMarket?k='+ k,
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                            var html = '<div class="xiala" data-mid="' + entry['mid'] + '">';
+                            html += entry['mn'] + '</div>';
+                            $('#xiala').append(html);
+                    })
+                }, 'json'
+            );
+        });
+        $('#xiala').on('click','.xiala',function() {
+            $('#xiala').empty();
+            $.post('/wftadlogin/news/returnShop?mid='+ $(this).attr('data-mid'),
+                function(result){
+                    $.each(result.data,function(entryIndex,entry){
+                        var html = '<div style="width:200px;height:20px;float:left;margin-right:15px;text-align:left;overflow: hidden"><input name="shopIds[' + entry['sid'] + ']"  value="' + entry['sn'] + '"  type="checkbox"/>' + entry['sn'] + '</div>';
+                        $('#xiala').append(html);
+                    })
+                }, 'json'
+            );
+            $('#xiala').append('<input type="hidden" name="mid" value="' + $(this).attr('data-mid') + '">');
+        });
+
+        $('#address_check span').click(function(){
+            if ($(this).attr('data-default') == 'right') {
+                $(this).addClass("sRt");
+                $(this).next().removeClass("sRt");
+                $('.zSid').hide();
+                $('.zHid').show();
+                $('#aType').attr('value', 1);
+            } else if ($(this).attr('data-default') == 'left') {
+                $(this).addClass("sRt");
+                $(this).prev().removeClass("sRt");
+                $('.zHid').hide();
+                $('.zSid').show();
+                $('#aType').attr('value', 2);
+            } else {
+                return false;
+            }
+        });
+
+
+        $('#ti-new').click(function () {
+            $.post('/wftadlogin/news/save', $('#news-save').serialize(), function (data) {
+                if (data.status == 1) {
+                    alert('保存成功');
+                    window.location.href=document.referrer;
+                } else {
+                    alert(data.message);
+                }
+            }, 'json');
+            return false;
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    //实例化编辑器
+    var um = UE.getEditor('myEditor');
+
+</script>
+
+<script>
+    $(function () {
+        $('.dropdown-menu a').click(function () {
+            var sval = $(this).text();
+            var bval = $(this).attr('val');
+            $('#business').val(bval)
+            $('#dLabel').text(sval)
+            $('.dropdown').removeClass('open')
+            return false;
+        })
+
+        ////////////////    地图      ///////////////////
+
+        $('.setmap').click(function () {
+            //地图框架地址
+            posturl = $(this).attr("url");
+            init_xy = [];
+            init_xy[0] = $('#addr_x').val();
+            init_xy[1] = $('#addr_y').val();
+            if (init_xy[0] == 0 || init_xy[1] == 0) {
+                init_xy[0] = 114.306655;  //湖北武汉
+                init_xy[1] = 30.571659;
+            }
+
+
+            $("#setmap").modal()
+            try {
+                //初始化地图
+                myFrame.window.initmap(init_xy[0], init_xy[1]);
+            }
+            catch (err) {
+                setTimeout(function () {
+                    myFrame.window.initmap(init_xy[0], init_xy[1]);
+                }, 2000)
+            }
+        })
+        $(".getmap").click(function () {
+            var mapxy = myFrame.window.getmap().split(',');
+            $('#addr_x').val(mapxy[0])
+            $('#addr_y').val(mapxy[1])
+
+        })
+
+        $("#mapsearch").click(function () {
+            var skey;
+            skey = $("#skey").val();
+            myFrame.window.baidusearch(skey);
+        })
+        ////////////////  地图结束 /////////////////
+    });
+</script>
+
+
+

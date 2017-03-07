@@ -1,0 +1,664 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    color: #333;
+    background: #ebebeb;
+    font: 12px 'microsoft yahei';
+}
+ul, li {
+    list-style: none;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+i {
+    color: inherit;
+    font-style: normal;
+}
+mark {
+    color: inherit;
+    background: none;
+}
+img {
+    width: 100%;
+    display: block;
+}
+section {
+    display: block;
+    background: #fff;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border-top: 1px solid #ddd;
+}
+button {
+    display: block;
+    width: 96%;
+    border: none;
+    height: 44px;
+    margin: 0 2%;
+    background: #fb6050;
+    color: #fff;
+    font-size: 16px;
+    line-height: 44px;
+    border-radius: 6px 6px 6px 6px;
+    background-clip: padding-box;
+    font-family: 'microsoft yahei';
+}
+.space10 {
+    padding: 10px;
+}
+
+/* index */
+.banner {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+.focus span {
+    width: 10px;
+    height: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 0;
+}
+.focus span.current {
+    background: #ffb027;
+}
+.menu {
+    padding: 20px 2%;
+    overflow: hidden;
+}
+.menu a {
+    width: 33.3%;
+    float: left;
+    height: 90px;
+    font-size: 13px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+.menu a img {
+    width: 70px;
+    margin: 0 auto 5px;
+}
+
+
+/* activitybuy、activitypay */
+.activity-info .title {
+    overflow: hidden;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ddd;
+}
+.activity-info .sold-price {
+    float: right;
+    color: #d83500;
+    font-size: 17px;
+}
+.activity-info .discount {
+    float: right;
+    width: 40px;
+    text-align: center;
+}
+.activity-info mark {
+    float: left;
+    width: 25px;
+    height: 12px;
+    margin: 0 7px;
+    color: #175e51;
+    font-size: 10px;
+    line-height: 12px;
+    text-align: center;
+    border-radius: 3px;
+    background: #4bd1ba;
+    background-clip: padding-box;
+}
+.activity-info .mark-price {
+    float: left;
+    color: #bbb;
+    font-size: 11px;
+    line-height: 13px;
+    text-decoration: line-through;
+}
+.activity-info .shop-name {
+    display: block;
+    font-size: 14px;
+    line-height: 24px;
+    margin-right: 70px;
+}
+.activity-info .info-more {
+    height: 49px;
+}
+.activity-info li {
+    float: left;
+    width: 33%;
+    height: 40px;
+    padding-top: 9px;
+    border-left: 1px solid #ddd;
+}
+.activity-info li:first-child {
+    border: none;
+}
+.activity-info li p {
+    text-align: center;
+}
+.activity-info li p.numb {
+    color: #888;
+    font-size: 14px;
+    font-weight: bold;
+}
+.activity-way, .activity-time, .activity-place, .activity-number, .activity-buyer {
+    padding: 0 10px;
+}
+.activity-way .title, .activity-time .title, .activity-place .title, .activity-buyer .title {
+    height: 33px;
+    line-height: 33px;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+}
+.activity-way .options {
+    padding: 10px 0;
+    overflow: hidden;
+}
+.activity-time .options, .activity-place .options  {
+    padding: 10px 0 0 0;
+    overflow: hidden;
+}
+.activity-way li {
+    float: left;
+    margin-right: 10px;
+}
+.activity-time li, .activity-place li {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.activity-way input[type="radio"], .activity-time input[type="radio"], .activity-place input[type="radio"] {
+    display: none;
+}
+.activity-way label, .activity-time label, .activity-place label {
+    display: block;
+    padding: 5px 0;
+    line-height: 18px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 6px 6px 6px 6px;
+    background-clip: padding-box;
+}
+.activity-way label {
+    padding: 5px 15px;
+}
+.activity-place label {
+    padding: 5px 10px;
+    text-align: left;
+}
+.activity-way input[type="radio"]:checked + label, .activity-time input[type="radio"]:checked + label, .activity-place input[type="radio"]:checked + label {
+    color: #fff;
+    background: #fb6050;
+    /*border: 1px solid #fb6050;*/
+}
+.activity-place input[type="radio"]:disabled + label {
+    color: #aaa;
+    background: #f0f0ef;
+}
+.activity-way  input[type="radio"]:disabled + label {
+    color: #aaa;
+    background: #f0f0ef;
+}
+.activity-time  input[type="radio"]:disabled + label {
+     color: #aaa;
+     background: #f0f0ef;
+ }
+.activity-number .title,.activity-number .total {
+    height: 30px;
+    padding: 10px 0;
+    font-size: 13px;
+    overflow: hidden;
+    line-height: 30px;
+}
+.activity-number .title {
+    border-bottom: 1px solid #ddd;
+}
+.activity-number span {
+    float: left;
+}
+.activity-number .title mark {
+    float: right;
+    padding-right: 5px;
+    font: 15px/28px arial, sans-serif;
+}
+.activity-number .data {
+    float: right;
+    height: 28px;
+    border: 1px solid #d9d9d9;
+    overflow: hidden;
+    text-align: center;
+}
+.activity-number .data i {
+    float: left;
+    width: 28px;
+    color: #666;
+    font-size: 20px;
+    font-family: arial, sans-serif;
+}
+.activity-number .data i#prev {
+    border-right: 1px solid #d9d9d9;
+}
+.activity-number .data i#next {
+    border-left: 1px solid #d9d9d9;
+}
+.activity-number .data i.grey {
+    color: #bbb;
+}
+.activity-number .data span {
+    width: 38px;
+}
+.activity-number .total mark {
+    float: right;
+    color: #d83500;
+    font-size: 18px;
+}
+.activity-buyer .info {
+    font-size: 14px;
+    overflow: hidden;
+    padding: 5px 0;
+    line-height: 18px;
+}
+.activity-buyer .info span {
+    float: left;
+}
+.activity-buyer .info mark {
+    float: right;
+}
+.activity-order div {
+    padding: 0 10px;
+    font-size: 13px;
+    border-top: 1px solid #ddd;
+    overflow: hidden;
+}
+.activity-order div.title {
+    border: none;
+}
+.activity-order .title {
+    padding: 10px;
+}
+.activity-order .title p {
+    color: #444;
+    font-size: 15px;
+    line-height: 20px;
+}
+.activity-order .title span {
+    color: #777;
+    font-size: 12px;
+}
+.activity-order .name {
+    float: left;
+    line-height: 30px;
+}
+.activity-order .detail {
+    float: right;
+    line-height: 30px;
+}
+
+/* ticketbuy、ticketpay */
+.ticket-info  div {
+    padding: 0 10px;
+    font-size: 13px;
+    border-top: 1px solid #ddd;
+    overflow: hidden;
+}
+.ticket-info  div.title {
+    border: none;
+}
+.ticket-info .title {
+    padding: 10px;
+    line-height: 18px;
+}
+.ticket-info .name {
+    float: left;
+    line-height: 30px;
+}
+.ticket-info .detail {
+    float: right;
+    line-height: 30px;
+}
+.ticket-info mark {
+    color: #d83500;
+    font-size: 17px;
+}
+.ticket-number {
+    padding: 0 10px;
+}
+.ticket-number .title,.ticket-number .total {
+    height: 30px;
+    padding: 10px 0;
+    font-size: 13px;
+    overflow: hidden;
+    line-height: 30px;
+}
+.ticket-number .title {
+    border-bottom: 1px solid #ddd;
+}
+.ticket-number span {
+    float: left;
+}
+.ticket-number .title mark {
+    float: right;
+    padding-right: 5px;
+    font: 15px/28px arial, sans-serif;
+}
+.ticket-number .data {
+    float: right;
+    height: 28px;
+    border: 1px solid #d9d9d9;
+    overflow: hidden;
+    text-align: center;
+}
+.ticket-number .data i {
+    float: left;
+    width: 28px;
+    color: #666;
+    font-size: 20px;
+    font-family: arial, sans-serif;
+}
+.ticket-number .data i#prev {
+    border-right: 1px solid #d9d9d9;
+}
+.ticket-number .data i#next {
+    border-left: 1px solid #d9d9d9;
+}
+.ticket-number .data i.grey {
+    color: #bbb;
+}
+.ticket-number .data span {
+    width: 38px;
+}
+.ticket-number .total mark, .ticket-order .total mark {
+    float: right;
+    color: #d83500;
+    font-size: 18px;
+}
+.ticket-order div {
+    padding: 0 10px;
+    font-size: 13px;
+    border-top: 1px solid #ddd;
+    overflow: hidden;
+}
+.ticket-order div.title {
+    border: none;
+}
+.ticket-order .title {
+    padding: 10px;
+}
+.ticket-order .title p {
+    color: #444;
+    font-size: 15px;
+    line-height: 20px;
+}
+.ticket-order .title span {
+    color: #777;
+    font-size: 12px;
+}
+.ticket-order .name {
+    float: left;
+    line-height: 30px;
+}
+.ticket-order .detail {
+    float: right;
+    line-height: 30px;
+}
+.ticket-order .number, .ticket-order .total {
+    padding: 10px;
+}
+.ticket-order .number span, .ticket-order .total span {
+    float: left;
+    line-height: 20px;
+}
+.ticket-order .number mark {
+    float: right;
+}
+
+/* order-status */
+header {
+    height: 36px;
+    background: #fff;
+    overflow: hidden;
+}
+header a {
+    float: left;
+    width: 33.3%;
+    height: 35px;
+    color: #545454;
+    font-size: 13px;
+    line-height: 36px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+header a.active {
+    height: 33px;
+    border-bottom: 3px solid #ffc926;
+}
+.order-invalid, .order-valid .title {
+    height: 44px;
+    padding: 8px 35px 8px 10px;
+    position: relative;
+}
+.order-invalid .arrow, .order-valid .title .arrow {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 60px;
+    background: url("/images/wappay/arrow.jpg") center center no-repeat;
+    background-size: 9px 12px;
+}
+.order-invalid p {
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    color: #444;
+    font-size: 14px;
+}
+.order-invalid div {
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    color: #777;
+}
+.order-invalid span {
+    float: left;
+    width: 33.3%;
+}
+.order-invalid span.price {
+    color: #d83500;
+    font-size: 17px;
+}
+.order-invalid .status {
+    float: right;
+    width: 62px;
+    height: 20px;
+    background: #ff7963;
+    border-radius: 3px 3px 3px 3px;
+    background-clip: padding-box;
+    color: #fff;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+}
+.order-valid div {
+    overflow: hidden;
+    padding: 0 10px;
+    border-top: 1px solid #ddd;
+}
+.order-valid div:first-child {
+    border: none;
+}
+.order-valid .title p {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 85%;
+    overflow: hidden;
+    color: #444;
+    font-size: 14px;
+    -webkit-transform: translate3D(0, -50%, 0);
+    transform: translate3D(0, -50%, 0);
+}
+.order-valid .name {
+    float: left;
+    width: 65px;
+    margin-right: 10px;
+    text-align: right;
+    font-size: 13px;
+    line-height: 30px;
+}
+.order-valid .detail {
+    float: left;
+    font-size: 13px;
+    line-height: 30px;
+}
+.btn {
+    float: right;
+    width: 60px;
+    height: 20px;
+    margin-top: 5px;
+    border-radius: 3px 3px 3px 3px;
+    background-clip: padding-box;
+    text-align: center;
+    line-height: 20px;
+}
+.return {
+    background: #4bd1ba;
+    color: #175e51;
+}
+.used {
+    background: #d2d2d2;
+    color: #fff;
+}
+.order-valid .qrcode {
+    height: 140px;
+}
+.order-valid .qrcode  img {
+    width: 100px;
+    margin: 20px auto;
+}
+
+/* order-activity-detail */
+h4 {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    padding-left: 15px;
+    position: relative;
+}
+h4:before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    width: 9px;
+    height: 14px;
+    background: #ffbf00;
+    border-radius: 5px 5px 5px 5px;
+    background-clip: padding-box;
+}
+.order-detail {
+    padding: 10px;
+}
+.order-detail p {
+    color: #4c4b46;
+    font-size: 13px;
+    margin-bottom: 5px;
+    line-height: 20px;
+}
+.order-oneline {
+    padding: 10px;
+    font-size: 13px;
+    line-height: 15px;
+}
+.order-oneline .name {
+    float: left;
+}
+.order-oneline .detail {
+    float: right;
+    color: #ff7f00;
+}
+.order-shop a {
+    display: block;
+    height: 34px;
+    font-size: 13px;
+    line-height: 34px;
+    padding: 0 10px;
+    position: relative;
+    overflow: hidden;
+}
+.order-shop .shop-name:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 27px;
+    height: 34px;
+    background: url("/images/wappay/arrow.jpg") center center no-repeat;
+    background-size: 9px 12px;
+}
+.order-shop .shop-adds:after, .order-shop .shop-tel:after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 0;
+    width: 22px;
+    height: 34px;
+    background: url("/images/share-icon.png") no-repeat;
+    background-size: 15px 60px;
+}
+.order-shop .shop-tel:after {
+    background-position-y: -24px;
+}
+.order-shop .shop-tel span {
+    color: #ff7f00;
+    padding-left: 10px;
+}
+.order-place {
+    position: relative;
+    padding: 5px 10px;
+    height: 40px;
+}
+.order-place .arrow {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35px;
+    height: 50px;
+    background: url("/images/wappay/arrow.jpg") center center no-repeat;
+    background-size: 9px 12px;
+}
+.order-place p {
+    font-size: 14px;
+    line-height: 24px;
+}
+.order-place span {
+    line-height: 16px;
+}
+
+#bottom-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    background: url("/images/applogo.png") no-repeat rgba(0,0,0,0.7) 10px 5px;
+    background-size: 40px 40px;
+    z-index: 1111;
+}
+#bottom-fixed p {
+    padding: 5px 10px 0 60px;
+    color: #fff;
+    font-size: 13px;
+    line-height: 20px;
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>玩翻天微信活动支付页</title>
+    <link type="text/css" rel="stylesheet" href="/css/wap-pay-style.css"/>
+</head>
+<body>
+<div id="activity-pay" class="space10">
+    <section class="activity-order">
+        <div class="title">
+            <p><?php echo $orderData->coupon_name;?></p>
+            <span>使用有效期    <?php echo $orderGameData->end_time;?></span>
+        </div>
+        <div>
+            <span class="name">订单号：</span>
+            <span class="detail"><?php echo $orderData->order_sn;?></span>
+        </div>
+        <div>
+            <span class="name">参与方式：</span>
+            <span class="detail"><?php echo $orderGameData->type_name;?></span>
+        </div>
+        <div>
+            <span class="name">出行日期：</span>
+            <span
+                class="detail"><?php echo date('Y-m-d', $orderGameData->start_time)?> 至  <?php echo date('Y-m-d', $orderGameData->end_time)?></span>
+        </div>
+        <div>
+            <span class="name">活动地点：</span>
+            <span class="detail"><?php echo $orderGameData->address;?></span>
+        </div>
+    </section>
+    <section class="activity-number">
+        <div class="title">
+            <span>报名数：</span>
+            <mark><?php echo $orderData->buy_number;?></mark>
+        </div>
+        <div class="total">
+            <span>总价</span>
+            <mark>￥<?php echo $orderData->real_pay;?></mark>
+        </div>
+    </section>
+    <button id="pay">微信支付</button>
+</div>
+<script src="/js/jquery.min.js"></script>
+<script>
+    $(function () {
+        $('#pay').click(function () {
+            if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                    document.addEventListener('WeixinJSBridgeReady', weixinpay, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', weixinpay);
+                    document.attachEvent('onWeixinJSBridgeReady', weixinpay);
+                }
+            } else {
+                weixinpay();
+            }
+            return false;
+        })
+    });
+
+
+    function weixinpay() {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', {
+                "appId": "<?php echo $payData['appId'];?>",     //公众号名称，由商户传入
+                "timeStamp": "<?php echo $payData['timeStamp'];?>",         //时间戳，自1970年以来的秒数
+                "nonceStr": "<?php echo $payData['nonceStr'];?>", //随机串
+                "package": "<?php echo $payData['package'];?>",
+                "signType": "<?php echo $payData['signType'];?>",         //微信签名方式:
+                "paySign": "<?php echo $payData['paySign'];?>" //微信签名
+            },
+            function (res) {
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                    alert('支付成功');
+                    window.location.href = '/web/wappay/orderactivity?is_pay=1&orderId=<?php echo $orderData->order_sn;?>';
+//                    window.location.href='/web/wappay/newallorders';  //个人中心
+                    return false;
+
+                } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                    alert('取消支付');
+                } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+                    alert('支付失败');
+                } else {
+                    alert('其他错误:'+res.err_msg);
+                }
+            }
+        );
+    }
+
+
+</script>
+
+
+</body>
+</html>

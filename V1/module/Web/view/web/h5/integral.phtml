@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>积分中心</title>
+    <link href="/css/h5/style.css" rel="stylesheet"/>
+</head>
+<body>
+<header class="to-header">
+    <div class="user">
+        <img src="<?php echo $userimg; ?>"/>
+        <span><?php echo $username; ?></span>
+        <i><?php echo $user_alias; ?></i>
+        <a class="rule" href="/web/H5/scorerules">积分规则</a>
+    </div>
+    <div class="totle"><span><?php echo $integral; ?></span>积分</div>
+    <a class="more" href="javascript:;">
+        <div class="arrow-outer">
+            <div class="arrow-inner">
+            </div>
+        </div>
+        <span onclick="open_log()">积分明细</span>
+    </a>
+</header>
+<section class="to-main">
+    <h2>最适合我的任务</h2>
+    <ul class="to-info">
+        <li>
+            <a class="way">点评<?php //echo $buy_name; ?></a>
+            <a class="more" href="javascript:;" onclick="open_win(4)">
+                <div class="arrow-outer">
+                    <div class="arrow-inner">
+                    </div>
+                </div>
+                <span><?php echo $buy_max_inte?'最高'.$buy_max_inte:'已完成'; ?></span>
+            </a>
+        </li>
+        <li>
+            <a class="way">更换头像</a>
+            <a class="more" href="javascript:;" onclick="open_win(11)">
+                <div class="arrow-outer">
+                    <div class="arrow-inner">
+                    </div>
+                </div>
+                <span><?php echo $setting->face_integral?$setting->face_integral:'已完成'; ?></span>
+            </a>
+        </li>
+        <li>
+            <a class="way">分享好玩</a>
+            <a class="more" href="javascript:;" onclick="open_win(3)">
+                <div class="arrow-outer">
+                    <div class="arrow-inner">
+                    </div>
+                </div>
+                <span>最高<?php echo $setting->oneday_share_good_integral+$setting->oneday_share_place_integral; ?></span>
+            </a>
+        </li>
+        <li>
+            <a class="way">邀请好友并完成注册</a>
+            <a class="more" href="javascript:;" onclick="open_win(22)">
+                <div class="arrow-outer">
+                    <div class="arrow-inner">
+                    </div>
+                </div>
+                <span>10</span>
+            </a>
+        </li>
+    </ul>
+    <ul class="new-plan">
+        <li>
+            <h3 class="plan">新手任务<span>已完成<i><?php echo $ok_num; ?></i>个任务</span></h3>
+
+            <div class="product">
+                <div class="product-bar">
+                    <div class="product-bar-cur" style="width: <?php echo $new_work_number; ?>%"></div>
+                </div>
+                <span><?php echo $new_work_number; ?>%</span>
+            </div>
+        </li>
+
+        <?php foreach ($new_list as $k => $v): ?>
+
+            <li>
+                <a class="way"><?php echo $v[0]; ?></a>
+                <a class="more" href="javascript:;" onclick="open_<?php echo $k;?>()">
+                    <div class="arrow-outer">
+                        <div class="arrow-inner">
+                        </div>
+                    </div>
+                    <span><?php echo $v[2] == 0 ? $v[1] : '已完成'; ?></span>
+                </a>
+            </li>
+
+            <script>
+                function open_<?php echo $k;?>() {
+                    if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                        document.location.href = 'integral$$id=<?php echo $k;?>';
+                    } else if (navigator.userAgent.match(/android/i)) {
+                        window.getdata.integral<?php echo $k;?>()
+                    }
+
+                    return false;
+                }
+            </script>
+        <?php endforeach; ?>
+        <li class="add">
+            <span class="add-list">全部完成额外获得<?php echo $task->new_plus; ?>分</span>
+            <span class="add-totle"></span>
+
+        </li>
+    </ul>
+    <ul class="new-plan">
+        <li>
+            <h3 class="plan">每日任务<span>已完成<i><?php echo $day_ok_num;?></i>个任务</span></h3>
+
+            <div class="product">
+                <div class="product-bar">
+                    <div class="product-bar-cur" style="width: <?php echo  $day_number;?>%"></div>
+                </div>
+                <span><?php echo  $day_number;?>%</span>
+            </div>
+        </li>
+
+        <?php foreach ($day_list as $k=>$v): ?>
+
+            <li>
+                <a class="way"><?php echo $v[0]; ?></a>
+                <a class="more" href="javascript:;" onclick="open_<?php echo $k;?>()">
+                    <div class="arrow-outer">
+                        <div class="arrow-inner">
+                        </div>
+                    </div>
+                    <span><?php echo $v[2] == 0 ? $v[1] : '已完成'; ?></span>
+                </a>
+            </li>
+
+            <script>
+                function open_<?php echo $k;?>() {
+                    if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+                        document.location.href = 'integral$$id=<?php echo $k;?>';
+                    } else if (navigator.userAgent.match(/android/i)) {
+                        window.getdata.integral(<?php echo $k;?>)
+                    }
+                }
+            </script>
+        <?php endforeach; ?>
+
+        <li class="add">
+            <span class="add-list">全部完成额外获得<?php echo $task->day_plus; ?>分</span>
+
+                <span class="add-totle"></span>
+
+        </li>
+    </ul>
+
+
+</section>
+
+
+<script>
+    function open_log() {
+        if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+            document.location.href = 'integral$$id=0';
+        } else if (navigator.userAgent.match(/android/i)) {
+            window.getdata.integral(0)
+        }
+        return false;
+    }
+
+    function open_win(id) {
+        if (navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iphone os/i) || navigator.userAgent.match(/ipod/i)) {
+            document.location.href = 'integral$$id='+id;
+        } else if (navigator.userAgent.match(/android/i)) {
+            window.getdata.integral(id)
+        }
+        return false;
+    }
+</script>
+
+
+</body>
+</html>

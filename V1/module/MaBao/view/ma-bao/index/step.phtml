@@ -1,0 +1,59 @@
+<body id="step">
+<header>
+    <p>2015年出生 贝乐园送你免费玩三次</p>
+</header>
+<section class="step-bg1">
+    <div class="step-1">
+        <p>下载玩翻天app</p>
+        <?php if ($this->wft == 'yes'): ?>
+            <a class="download" href="javascript:void(0);">点击下载</a>
+        <?php else: ?>
+            <a class="download" href="http://wan.wanfantian.com/app/index.php">点击下载</a>
+        <?php endif; ?>
+    </div>
+</section>
+<section class="step-bg2">
+    <div class="step-2">玩翻天首页<br/>悬浮按钮进入申请页面</div>
+</section>
+<section class="step-bg3">
+    <div class="step-3">
+        <p>分享后，点击参加按钮</p>
+        <?php if ($this->wft == 'yes'): ?>
+            <a class="btn" href="javascript:void(0)">我是羊宝宝，我要参加</a>
+        <?php else: ?>
+            <a class="btn" href="javascript:void(0)">我是羊宝宝，我要参加</a>
+        <?php endif; ?>
+    </div>
+</section>
+<section class="step-bg4">
+    <div class="step-4">填写宝宝信息，<br/>上传出生证明和宝宝近照</div>
+</section>
+<section class="step-bg5">
+    <div class="step-5">提交,申请成功<br/>的弹窗显示</div>
+</section>
+<section class="step-bg6">
+    <div class="step-6">到贝乐园出示申请成功的页面、和<br>出生证明，请贝乐园工作人员验证<br>领取</div>
+</section>
+<?php if ($this->wft == 'no') { ?>
+    <div id="fade" style="display: block;"></div>
+    <div id="pop-up" style="display: block">
+        <a class="close" id="close"></a>
+        <div id="try">
+            <p>下载玩<label style="color:#723a04">翻天app</label>申请免费畅玩卡</p>
+            <a class="btn" href="http://wan.wanfantian.com/app/index.php">下载应用</a>
+        </div>
+    </div>
+<?php } ?>
+</body>
+<script type="text/javascript" src="/mabaobao/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+    (function () {
+        'use strict';
+        $('#pop-up').on('tap', '.close', function (e) {
+            $('#pop-up').css('display', 'none');
+            $('#fade').css('display', 'none');
+            $('#try').html('');
+        });
+    })();
+</script>
+

@@ -1,0 +1,103 @@
+<div class="panel panel panel-primary">
+    <ul class="breadcrumb" style="margin-top:10px;margin-bottom: 10px;background-color: #FFF">
+        <li><a href="/wftadlogin/comment">圈子管理</a></li>
+        <li><a href="/wftadlogin/comment?id=<?php echo $circle['_id'];?>"><?php echo $circle['title'];?></a></li>
+        <li class="active">用户列表</li>
+    </ul>
+</div>
+
+<div class="box">
+    <div class="box-title">
+        用户列表
+        <div style="float:right;margin-right:30px">
+            <form action="#" method="get">
+                <input type="text" class="cssInput"  style="margin-top: 5px;width:200px" placeholder="搜索用户" name="k" value="">
+                <input type="hidden" name="id" value="<?php echo $circle['_id'];?>">
+                <button class="btn btn-default" type="submit">搜索</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th width="15">用户id</th>
+                <th width="100">用户名称</th>
+                <th width="60">
+                    <select class="type_change">
+                        <option <?php echo (!isset($_GET['role']) || !$_GET['role']) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/user?role=0&id=<?php echo $circle['_id'];?>">组内角色</option>
+                        <option <?php echo (isset($_GET['role']) && $_GET['role'] == 1) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/user?role=1&id=<?php echo $circle['_id'];?>">一般用户</option>
+                        <option <?php echo (isset($_GET['role']) && $_GET['role'] == 2) ? 'selected' : ''; ?> data-src="/wftadlogin/comment/user?role=2&id=<?php echo $circle['_id'];?>">管理员</option>
+                    </select>
+                </th>
+                <th width="50">加入时间</th>
+                <th width="50">圈内发言</th>
+                <th width="50">圈内点赞</th>
+                <th width="50">圈内回复</th>
+                <th width="200">操作</th>
+            </tr>
+            <?php if ($data->count()): ?>
+                <?php foreach ($data as $row): ?>
+                    <tr style="text-align: left">
+                        <td  width="15"><?php echo $row['uid']; ?></td>
+                        <td  width="100"><?php echo $row['username']; ?></td>
+                        <td  width="60"><?php echo $role[$row['role']]; ?></td>
+                        <td  width="50"><?php echo date('Y-m-d H:i:s', $row['dateline']); ?></td>
+                        <td  width="50"><a href="/wftadlogin/comment/usermsg?id=<?php echo $row['cid']; ?>&uid=<?php echo $row['uid'];?>&type=word" class="share_word" data-cid="<?php echo $circle['_id'];?>">0</a></td>
+                        <td  width="50"><a href="/wftadlogin/comment/usermsg?id=<?php echo $row['cid']; ?>&uid=<?php echo $row['uid'];?>&type=prise" class="share_prise" data-cid="<?php echo $circle['_id'];?>">0</a></td>
+                        <td  width="50"><a href="/wftadlogin/comment/usermsg?id=<?php echo $row['cid']; ?>&uid=<?php echo $row['uid'];?>&type=reply" class="share_reply" data-cid="<?php echo $circle['_id'];?>">0</a></td>
+                        <td  width="200">
+                            <a href="/wftadlogin/comment/userupdate?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=role&role=<?php echo $row['role'];?>" class="ui-button"><?php echo ($row['role'] == 1) ? '设为' : '取消';?>管理员</a>
+                            <a href="/wftadlogin/comment/userupdate?id=<?php echo $row['_id']; ?>&uid=<?php echo $row['uid'];?>&type=word&status=<?php echo $row['status'];?>" class="ui-button"><?php echo ($row['status'] == 1) ? '禁止' : '可以' ;?>发言</a>
+                            <a href="/wftadlogin/comment/userupdate?id=<?php echo $row['cid']; ?>&uid=<?php echo $row['uid'];?>&type=del" onclick="if(confirm('确定删除?')==false)return false;" class="ui-button">从圈子移除</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="7"><p>暂无用户</p></td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <footer>
+            <?php echo $this->pagedata; ?>
+        </footer>
+    </div>
+</div>
+
+<script>
+    $(function () {
+
+        //类别筛选
+        $('.type_change').change(function () {
+            var href = $(this).find("option:selected").attr('data-src');
+            window.location.href = href;
+            return false;
+        })
+
+        //获取发言
+        $.each($('.share_word'), function (k, v) {
+            var uid = $(v).parent().parent().find('td:first').html();
+            var cid = $(v).attr('data-cid');
+            $(v).load('/wftadlogin/comment/getUserShare?type=word&uid=' + uid +'&cid=' + cid);
+        })
+
+        //获取点赞
+        $.each($('.share_prise'), function (k, v) {
+            var uid = $(v).parent().parent().find('td:first').html();
+            var cid = $(v).attr('data-cid');
+            $(v).load('/wftadlogin/comment/getUserShare?type=prise&uid=' + uid +'&cid=' + cid);
+        })
+
+        //获取回复
+        $.each($('.share_reply'), function (k, v) {
+            var uid = $(v).parent().parent().find('td:first').html();
+            var cid = $(v).attr('data-cid');
+            $(v).load('/wftadlogin/comment/getUserShare?type=reply&uid=' + uid +'&cid=' + cid);
+        })
+
+    })
+</script>
+
+

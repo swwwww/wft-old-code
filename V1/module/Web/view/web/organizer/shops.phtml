@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){ /*document.body.scrollWidth*/  /*window.screen.width*/
+            var w=document.documentElement.clientWidth,
+                s=w/640,
+                u=navigator.userAgent,
+                m='<meta name="viewport" content="width=640,';
+            if(/android (\d+\.\d+)/i.test(u)){
+                if(parseFloat(RegExp.$1>2.3)){
+                    m+="minimum-scale = "+s+", maximum-scale = "+s+","
+                }
+            }else{
+                m+="user-scalable=no,";
+            }
+            m+='target-densitydpi=device-dpi">';
+            document.write(m)}());
+    </script>
+    <link href="/css/wap/common.css?ver=<?php echo time();?>" rel="stylesheet"/>
+    <link href="/css/wap/shop.css?ver=<?php echo time();?>" rel="stylesheet"/>
+<!--    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,' + "minimum-scale = "+s+", maximum-scale = "+s+",";if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>'-->
+    <style>
+        .category li{
+            width:33.33%;
+        }
+        #mess_share img{width:22px;height:22px;}
+        #cover{display:none;position:absolute;left:0;top:0;z-index:18888;background-color:#000000;opacity:0.7;}
+        #guide{display:none;position:absolute;right:18px;top:5px;z-index:19999;}
+        #guide img{width:260px;height:180px;}
+        .disabled{
+            background-color: #cdcdcd;
+        }
+        .package-info-btn a{
+            color:#fff
+        }
+        .greyStyle{
+            background: #cdcdcd;
+        }
+        .store-in{
+            display: inline-block;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: rgba(0,0,0, 0.5) url(/images/wap/f-star.png) no-repeat 7px 6px;
+            z-index: 9;
+        }
+        .share-gift, .remark-gift{
+            font-size: 17.1px;
+            color: #fa6e51;
+            padding: 4px 10px;
+            border: 2px solid #fa6e51;
+            border-radius: 10px;
+        }
+        .share-gift{
+            margin-left: 25px;
+        }
+        .remark-gift{
+            margin-left: 15px;
+        }
+        .remark-on{
+            display: block;
+            background-color: #ffffff;
+            margin: 20px 0;
+            height: 80px;
+            /*line-height: 80px;*/
+            overflow: hidden;
+            padding: 0 60px 0 20px;
+        }
+        .remark-on:after{
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+        }
+        .remark-stars{
+            display: inline-block;
+            line-height: 80px;
+            font-size: 26px;
+        }
+        .stars-num{
+            width: 165px;
+            height: 25px;
+            margin-top: 26px;
+            /*vertical-align: middle;*/
+        }
+        .remark-link{
+            position: relative;
+            display: inline-block;
+            float: right;
+            font-size: 28px;
+            line-height: 80px;
+        }
+        .remark-score{
+            font-size: 30px;
+            margin-left: 15px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .link-to{
+            height: 22px;
+            width: 22px;
+            border: 2px solid #999;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            overflow: hidden;
+            border-bottom: none;
+            border-left: none;
+            position: absolute;
+            right: -22px;
+            bottom: 38%;
+        }
+        .touch{
+            position: relative;
+        }
+        .sell-out{
+            position: fixed;
+            display: block;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
+            font-size: 30px;
+            color: #ffffff;
+            bottom: 40px;
+            right: 245px;
+            background-color: #FF9442;
+            z-index: 9;
+        }
+
+        .sell-font{
+            position: absolute;
+            top: 20px;
+            right: 10px;
+        }
+        .editTalk-pre{
+            width: 510px;
+            white-space: pre-wrap;
+            margin: 0 26px;
+            display: inline-block;
+            font-size: 25px;
+            text-align: justify;
+            font-family: "microsoft yahei", Helvetica, Arial, sans-serif;
+        }
+        .pre-format{
+            white-space: pre-wrap;
+            margin: 0 10px;
+            display: inline-block;
+            line-height: 40px;
+            text-align: justify;
+            font-family: "microsoft yahei", Helvetica, Arial, sans-serif;
+        }
+        .spTitle{
+            display: inline-block;
+        }
+        .banner-footer{
+            width: 605px;
+            overflow: hidden;
+            line-height: 45px;
+            display: inline-block
+        }
+        .favorite {
+            background: rgba(0, 0, 0, 0.5) url("/images/wap/has-store.png") no-repeat  7px 6px;
+        }
+        .store-info{
+            background: rgba(0,0,0, 0.6);
+            position: fixed;
+            top: 45%;
+            left: 32%;
+            display: block;
+            font-size: 30px;
+            color: #ffffff;
+            padding: 20px 43px;
+            border-radius: 15px;
+            letter-spacing: 5px;
+        }
+        .product-bar {
+            display: inline-block;
+            margin-top: 28px;
+            float: left;
+            width: 162px;
+            height: 24px;
+            background: url("/images/wap/stars-bg.gif") no-repeat 0 0;
+        }
+        .product-bar-cur {
+            /*display: inline-block;*/
+            height: 24px;
+            background: url("/images/wap/stars.gif") no-repeat 0 0;
+        }
+        .introPopup pre{
+            display: block;
+            height: 639px;
+            padding: 35px 35px;
+            font-size: 27px;
+            line-height: 50px;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body>
+<a id="download" href="http://play.wanfantian.com/location/redirectHome" title="">
+    <img src="/images/wap/newbanner.png" alt=""/>
+</a>
+
+
+<main class="align fixed-top fixed-bottom" id="content">
+    <section class="wrapper">
+
+        <div class="sp-head">
+            <div class="cover">
+                <input type="hidden" id="good_id" value='<?php echo $res['id']; ?>'>
+                <input type="hidden" id="uid" value='<?php echo $_COOKIE['uid']; ?>'>
+                <?php if ($res['is_collect'] == 0): ?>
+                    <a class="store-in" onclick="favorite(1)"></a>
+                <?php else: ?>
+                    <a class="store-in favorite" onclick="favorite(0)"></a>
+                <?php endif; ?>
+                <img src="<?php echo $res['cover'];?>"/>
+                <em></em>
+            </div>
+        </div>
+        <?php if(!$res['group_id']):?>
+            <div class="sp-info">
+                <p class="spTitle"><?php echo $res['title'];?></p>
+                <div class="banner-footer">
+                <span class="spPrice">￥<mark><?php echo isset($res['game_order'][0]) ? $res['game_order'][0]['price'] : "暂无价格信息" ;?></mark><?php echo isset($res['game_order'][0]) ? '起': '';?></span>
+                <a class="share-gift" href="javascript: ;">分享有礼</a>
+                    <a class="remark-gift" href="javascript: ;">点评有礼</a>
+                <span class="apply">已有<?php echo $res['buy']>0 ? $res['buy'] : 0;?>人报名</span>
+                </div>
+            </div>
+        <?php endif;?>
+    </section>
+    <div class="editTalk">
+        <h5>
+            <span>小玩说</span>
+        </h5>
+        <pre class="editTalk-pre"><?php echo $res['editor_talk'];?></pre>
+        <h4></h4>
+    </div>
+    <a class="orderIntro fitAge">
+        <p>
+            <mark>适合年龄：</mark>
+            <span><?php echo $res['age_for'];?></span>
+        </p>
+    </a>
+    <a class="orderIntro phone" href="tel:<?php if($res['phone']>0){echo $res['phone'];}else{echo '4008007221'; } ;?>">
+        <p>
+            <mark>联系电话：</mark>
+            <span><?php if($res['phone']>0){echo $res['phone'];}else{echo '4008007221'; } ;?></span>
+            <i></i>
+        </p>
+    </a>
+
+    <a class="orderIntro attention">
+        <p>
+            <mark>注意事项：</mark>
+            <span><?php echo $res['matters'];?></span>
+            <i></i>
+        </p>
+    </a>
+
+    <!--点评-->
+    <?php if(round(($res['whole_score']/5)*100) > 0 && $res['post_number']):?>
+    <div class="remark-on">
+        <div class="product-bar">
+            <?php $rate = round(($res['whole_score']/5)*100).'%'; ?>
+            <div class="product-bar-cur" style="width:<?php echo $rate ?>"></div>
+        </div>
+        <span class="remark-score"><?php echo $res['whole_score'];?></span>
+
+        <a class="remark-link" onclick="clickComm()" href="#sign">
+            更多评价
+            (<span class="remark-total"><?php echo $res['post_number'];?></span>)
+            <i class="link-to"></i>
+        </a>
+    </div>
+    <?php endif;?>
+
+    <section class="wrapper i-bnr">
+        <?php if(!$res['group_id']):?>
+            <?php if($res['g_buy'] != 1):?>
+            <div id="shops-focus">
+                <h2 class="sp-shops-title" id="reserve-info">精选套餐</h2>
+                <?php foreach($res['game_order'] as $game):?>
+                <?php if($game['down_time']>time() && $game['surplus_num']>0):?>
+                <div class="packagea">
+                    <p class="package-title"><?php echo $game['price_name'];?></p>
+                    <P class="package-info package" data-way="<?php echo $game['item_info']['get_way']; ?>" data-back="<?php echo $game['item_info']['back_money'];?>" data-special="<?php echo $game['item_info']['special_info'];?>" data-price="<?php echo $game['price'];?>" data-title="<?php echo $game['price_name'];?>" data-num="<?php echo $game['surplus_num'];?>" data-group="<?php echo $game['is_group'];?>">
+                        <span class="package-info-intro">
+                            <?php if($res['select_date'] ==1):?>
+                            <span class="packageDetail">
+                                <mark class="totalPrice">￥<?php echo $game['price'];?>起</mark>
+                                <?php if($game['tag']):?>
+                                <?php foreach($game['tag'] as $val):?>
+<!--                                <mark class="rebate">--><?php //echo $val;?><!--</mark>-->
+                                    <span class="refundMoney"><?php echo $val;?></span>
+                                <?php endforeach;?>
+                                <?php endif;?>
+
+                            </span>
+                            <?php else:?>
+                            <span class="packageDetail">
+                                <mark class="totalPrice">￥<?php echo $game['price'];?></mark>
+                                <?php if($game['tag']):?>
+                                <?php foreach($game['tag'] as $val):?>
+                                    <!--                                <mark class="rebate">--><?php //echo $val;?><!--</mark>-->
+                                    <span class="refundMoney"><?php echo $val;?></span>
+                                <?php endforeach;?>
+                                <?php endif;?>
+                                <i class="surplus">仅剩<?php echo $game['surplus_num'];?>张</i>
+                            </span>
+                            <?php endif;?>
+                            <div class="introContent" style="display: block; overflow: hidden;width: 100%;">
+                                    <i class="packageIntro">套餐说明</i>
+                                    <i class="triangleDown" style="margin-top: 10px;"></i>
+                                    <span class="js-timeout" data-time="<?php echo $game['up_time'];?>" style="float: left;font-size: 20.5px;color: #929292;margin-left: 40px;">
+
+                            </span>
+                                    </div>
+                        </span>
+                        </P>
+                    <?php if($game['down_time']>time() && $game['surplus_num']>0 && $game['buy_qualify']==1):?>
+                        <?php if($game['up_time']>time()):?>
+                            <span class="package-info-btn disabled"><a href="javascript:;" class="disabled">未开始</a></span>
+                        <?php elseif($game['new_user_buy']==2):?>
+                            <span class="package-info-btn greyStyle">
+                                <a href="javascript:;" class="disabled">新用户专享</a>
+                            </span>
+                        <?php else:?>
+                            <span class="package-info-btn">
+                                <a href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $game['order_id'];?>&g_buy=<?php echo $game['is_group'];?>">购买</a>
+                            </span>
+                        <?php endif;?>
+                    <?php else:?>
+                        <span class="package-info-btn"><a href="/web/wappay/seckill?type=1">我要资格</a></span>
+                    <?php endif;?>
+                </div>
+                <?php endif;?>
+                <?php endforeach;?>
+                <?php else:?>
+                <div id="shops-focus">
+                    <h2 class="sp-shops-title" id="reserve-info">精选套餐</h2>
+                    <ul class="sp-list ">
+                        <?php foreach($res['game_order'] as $game):?>
+                            <?php if($game['down_time']>time() && $game['surplus_num']>0):?>
+                                <li class="item">
+                                    <!--                            <i class="icon"></i>-->
+                                    <div class="main">
+                                        <h3><?php echo $game['price_name'];?></h3>
+                                        <div class="others package"  data-way="<?php echo $game['item_info']['get_way']; ?>" data-back="<?php echo $game['item_info']['back_money'];?>" data-special="<?php echo $game['item_info']['special_info'];?>" data-price="<?php echo $game['price'];?>" data-title="<?php echo $game['price_name'];?>" data-num="<?php echo $game['surplus_num'];?>" data-group="<?php echo $game['is_group'];?>">
+                                            <?php if($game['is_group']==1):?>
+                                                <?php if($res['user_group_info'][0]['status']==0 && floor($res['surplus_num']/$res['g_limit'])>1):?>
+                                                    <span class="piao"><?php echo $res['g_limit'];?>人成团，还可开<?php echo floor($res['surplus_num']/$res['g_limit']);?>个团</span>
+                                                    <span class="price">&yen; <mark class="symbol"><?php echo $game['price'];?></mark></span>
+                                                    <?php if($game['tag']):?>
+                                                        <?php foreach($game['tag'] as $val):?>
+                                                            <span class="refundMoney"><?php echo $val;?></span>
+                                                        <?php endforeach;?>
+                                                    <?php endif;?>
+                                                <?php elseif($res['user_group_info'][0]['status']==1 && $res['user_group_info'][0]['end_time']>time()):?>
+                                                    <span class="piao">已参团</span>
+                                                    <span class="price">
+                                        <span><time><?php echo date("Y-m-d H:i:s",$res['user_group_info'][0]['end_time']);?></time>后截止</span>
+                                        <span style="position: relative;left:-5px;"><mark>缺<?php echo $res['user_group_info'][0]['limit_number']-$res['user_group_info'][0]['join_number']-1;?>人</mark></span>
+                                    </span>
+
+                                                <?php elseif($res['user_group_info'][0]['status']==2):?>
+                                                    <span class="piao">仅剩<?php echo $game['surplus_num'];?>张</span>
+                                                    <span class="price">&yen; <mark class="symbol"><?php echo $game['price'];?></mark></span>
+
+                                                <?php else:?>
+                                                    <span class="piao">仅剩<?php echo $game['surplus_num'];?>张</span>
+                                                    <span class="price">&yen; <mark class="symbol"><?php echo $game['price'];?></mark></span>
+                                                <?php endif;?>
+                                            <?php else:?>
+                                                <span class="piao">仅剩<?php echo $game['surplus_num'];?>张</span>
+                                                <span class="price">&yen; <mark class="symbol"><?php echo $game['price'];?></mark></span>
+                                            <?php endif;?>
+                                            <div class="introContent" style="display: block; overflow: hidden;width: 100%;">
+                                                <i class="packageIntro">套餐说明</i>
+                                                <i class="triangleDown"></i>
+                                    <span class="js-timeout" data-time="<?php echo $game['up_time'];?>" style="float: left;font-size: 20.5px;color: #929292;margin-left: 40px;">
+
+                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php if($res['end_sale_time']>time() && $res['buy_qualify']==1 && $res['surplus_num']>0 && $res['start_sale_time']<time()):?>
+                                        <?php if($game['is_group']==1):?>
+                                            <?php if($res['user_group_info'][0]['status']==1 && floor($res['surplus_num']/$res['g_limit'])>1):?>
+                                                <?php if($res['user_group_info'][0]['end_time']>time()):?>
+                                                    <a class="button" href="javascript:;" title="" onclick="_system._guide(true)">邀请好友</a>
+                                                <?php else:?>
+                                                    <a class="button" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $game['order_id'];?>&g_buy=<?php echo $game['is_group'];?>&group_buy=1" title="">开团</a>
+                                                <?php endif;?>
+                                            <?php elseif($res['user_group_info'][0]['status']==2):?>
+                                                <a class="button disabled" href="" title="">拼团成功</a>
+                                            <?php else:?>
+                                                <?php if(floor($res['surplus_num']/$res['g_limit'])<1):?>
+                                                    <a class="button disabled" href="javascript:;" title="">已结束</a>
+                                                <?php else:?>
+                                                    <a class="button" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $game['order_id'];?>&g_buy=<?php echo $game['is_group'];?>&group_buy=1" title="">开团</a>
+                                                <?php endif;?>
+                                            <?php endif;?>
+                                        <?php else:?>
+                                            <a class="button" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $game['order_id'];?>&g_buy=<?php echo $game['is_group'];?>" title="">购买</a>
+                                        <?php endif;?>
+                                    <?php endif;?>
+                                    <?php if($res['start_sale_time']>time()):?>
+                                        <a class="button disabled unbegin" href="javascript:;" title="">等待开抢</a>
+                                    <?php else:?>
+                                        <?php if($res['buy_qualify']==0 && $res['end_sale_time']>time() && $res['surplus_num']>0):?>
+                                            <a class="button mark" href="/web/wappay/seckill?type=1" title="">我要资格</a>
+                                        <?php elseif($res['surplus_num']==0 && $res['end_sale_time']>time()):?>
+                                            <a class="button disabled" href="javascript:;" title="">已售罄</a>
+                                        <?php elseif($res['end_sale_time']<time()):?>
+                                            <a class="button disabled" href="javascript:;" title="">已结束</a>
+                                        <?php endif;?>
+                                    <?php endif;?>
+                                    <?php if($game['is_group']==1):?>
+                                        <i class="invite"><mark>可拼团</mark></i>
+                                    <?php endif;?>
+                                </li>
+                            <?php endif;?>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+                <?php endif;?>
+            </div>
+        <?php else:?>
+            <div class="sp-info">
+                <span class="sl">拼团价：</span>
+                <mark class="sm">&yen;<?php echo $res['group_price'];?></mark>
+                <span class="sr">票价：&yen;<?php echo $res['not_group_price'];?></span>
+                <a class="rule" href="/web/organizer/rule?uid=<?php echo $_COOKIE['uid'];?>&gid=<?php echo $res['group_id']?>&type=2" title="">拼团规则</a>
+            </div>
+            <div class="sp-user bdt-1px">
+                <h4>参与的玩家：</h4>
+                <div class="con">
+                    <span class="num"><?php echo $res['group_join_number'];?>/<?php echo $res['group_limit_number'];?></span>
+                    <div class="pic">
+                        <?php foreach($res['group_info'] as $group_list):?>
+                            <div class="item">
+                                <img src="<?php echo $group_list['userimg'];?>" />
+                                <i class="status colo"><?php echo $group_list['uid']==$res['group_user'] ? '团' : '友';?></i>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
+            </div>
+            <nav class="tw-nav">
+                <i class="icon-time"></i>
+            <span class="info" id="count_down">
+                <time>
+                    <span class="t_d">00天</span>
+                    <span class="t_h">00时</span>
+                    <span class="t_m">00分</span>
+                    <span class="t_s">00秒</span>
+                </time>
+                后截团
+            </span>
+            </nav>
+        <?php endif;?>
+        <?php if($res['g_buy']==1):?>
+            <aside class="sp-process">
+                <div class="info">
+                    <span class="item"><i>1</i>参团/开团</span>
+                    <span class="item"><i>2</i>邀请用户</span>
+                    <span class="item"><i>3</i>达到成团人<br>数/超时退款</span>
+                </div>
+                <div class="border"></div>
+            </aside>
+
+            <?php if(!$res['group_id']):?>
+                <?php if($res['user_group_info'][0]['status']<=0):?>
+                    <?php if($res['group_num']>0):?>
+                        <aside class="sp-invite">
+                            <?php foreach($res['group_data'] as $v):?>
+                                <a class="pic invite" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $v['game_info_id'];?>&g_buy=1&group_buy_id=<?php echo $v['id'];?>&group_buy=2" title="">
+                                    <div class="cover">
+                                        <img src="<?php echo $v['img'];?>"/>
+                                        <em></em>
+                                    </div>
+                                    <span class="need">缺<?php echo $v['limit_number']-$v['join_number']-1;?>人</span>
+                                </a>
+                            <?php endforeach;?>
+                            <?php if($res['group_num']>5):?>
+                                <a class="pic" href="/web/organizer/grouprule?id=<?php echo $res['id'];?>" title="">
+                                    <div class="bg"></div>
+                                    <div class="more">
+                                        <div class="more_or">更多</div>
+                                        <div class="group"><?php echo $res['group_num']-5;?>个团</div>
+                                    </div>
+                                </a>
+                            <?php endif;?>
+                        </aside>
+                    <?php endif;?>
+                <?php endif;?>
+            <?php endif;?>
+        <?php endif;?>
+        <!--  </script>-->
+        <?php if($res['is_private']==1):?>
+            <ul class="sp-intro" style="border-top: 1px solid #ededed">
+                <li>
+                    <a href="/web/h5/privateParty?coupon_id=<?php echo $res['id'];?>">
+                        <i class="icon"></i>
+                        <span>给孩子组织包场活动？</span>
+                        <i class="arrowent"></i>
+                    </a>
+                </li>
+            </ul>
+        <?php endif;?>
+    </section>
+    <div class="playPlace">
+        <p class="playPlace-title">游玩地</p>
+        <?php foreach($res['shop'] as $v):?>
+        <a class="playPlace-info" href="/web/place/index?id=<?php echo $v['shop_id'];?>">
+            <span class="playPlace-info-shop"><?php echo $v['shop_name'];?></span>
+            <span class="playPlace-info-address"><?php echo $v['address'];?></span>
+            <i></i>
+        </a>
+        <?php endforeach;?>
+    </div>
+    <div id="sign" title=""></div>
+    <!--暂时不打开-->
+    <section class="wrapper">
+        <ul class="category">
+            <li><a class="item active info" href="javascript:;" title="" onclick="view(this)" data="info">游玩内容</a></li>
+            <li><a class="item post" href="javascript:;" title="" onclick="view(this)" data="post" id="comm">评价（<mark class="num"><?php echo $res['post_number'];?></mark>）</a></li>
+            <li><a class="item consult" href="javascript:;" title="" onclick="view(this)" data="consult">咨询（<mark class="num"><?php echo count($res['consult']);?></mark>）</a></li>
+
+        </ul>
+    </section>
+    <article class="con-container">
+        <div id="info">
+            <div class="com-main">
+                <?php echo isset($res['information']) ? $res['information'] : ''; ?>
+            </div>
+            <a class="com-more btn" href="javascript:;" data-more="more"><i></i>点击加载更多</a>
+            <section class="wrapper">
+                <h3 class="sp-guess">猜你喜欢</h3>
+                <div class="shopping-guess-container">
+                    <div class="sc-wheel">
+                        <ul class="shopping-guess-list">
+                            <?php foreach($res['game_list'] as $shop):?>
+                                <li class="shopping-guess-item shopping-guess-item-like">
+                                    <a href="/web/organizer/shops?id=<?php echo $shop['id']; ?>" title="">
+                                        <div class="guess-item-pic">
+                                            <img src="<?php echo $shop['cover'];?>"/>
+                                        </div>
+                                        <div class="guess-item-title">
+                                            <?php echo $shop['name'];?>
+                                        </div>
+                                        <div class="guess-item-content">
+                                            <span class="guess-item-price"><mark>&yen;<?php echo $shop['price'];?></mark>&nbsp;起</span>
+                                            <!--                                <span class="guess-item-address">--><?php //echo $shop['shop_addr'];?><!--</span>-->
+                                        </div>
+                                    </a>
+                                </li>
+                            <?php endforeach;?>
+                        </ul>
+                    </div>
+                    <!--                    <a class="button guess-prev" href="javascript:;"><i class="prev"></i></a>-->
+                    <!--                    <a class="button guess-next" href="javascript:;"><i class="next"></i></a>-->
+                </div>
+            </section>
+        </div>
+        <div id="post" style="display: none">
+            <section class="wrapper">
+                <?php if(!count($res['post_list'])):?>
+                    <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+                <?php else:?>
+                <div class="inner">
+                    <ul class="sp-user">
+                        <?php foreach($res['post_list'] as $v):?>
+                            <li class="postlist" data="<?php echo $v['id'];?>">
+                                <img class="photo" src="<?php echo $v['author_img'];?>" style="width:60px ;height:60px ;"/>
+                                <div class="info">
+                                    <div class="stars">
+                                        <span><?php echo $v['author'];?></span>
+                                        <div class="product-bar">
+                                            <div class="product-bar-cur" style="width: <?php echo ceil($v['score']/5*100);?>%"></div>
+                                        </div>
+                                        <!--小编采纳可选-->
+                                        <?php if($v['accept']==1):?>
+                                            <em>小编采纳</em>
+                                        <?php endif;?>
+                                    </div>
+                                    <time><?php echo date("Y-m-d",$v['dateline']);?></time>
+                                    <div class="con">
+                                        <p>
+                                            <?php foreach($v['message'] as $val):?>
+                                                <?php if($val['t']==1):?>
+                                                    <?php echo $val['val'];?>
+                                                <?php endif;?>
+                                            <?php endforeach;?>
+                                        </p>
+                                        <div class="con-pic">
+                                            <?php foreach($v['message'] as $pic):?>
+                                                <?php if($pic['t']==2):?>
+                                                    <img src="<?php echo $pic['val']; ?>" alt="" data-size="750x750"  data-med-size="750x1000">
+                                                <?php endif;?>
+                                            <?php endforeach;?>
+                                        </div>
+                                        <!-- 图片弹出模态框 -->
+                                        <section class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="pswp__bg"></div>
+                                            <div class="pswp__scroll-wrap">
+                                                <div class="pswp__container">
+                                                    <div class="pswp__item"></div>
+                                                    <div class="pswp__item"></div>
+                                                    <div class="pswp__item"></div>
+                                                </div>
+                                                <div class="pswp__ui pswp__ui--hidden">
+                                                    <div class="pswp__top-bar" style="opacity:0;">
+                                                        <div class="pswp__counter"></div>
+                                                        <div class="pswp__preloader">
+                                                            <div class="pswp__preloader__icn">
+                                                                <div class="pswp__preloader__cut">
+                                                                    <div class="pswp__preloader__donut"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pswp__loading-indicator">
+                                                        <div class="pswp__loading-indicator__line"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div class="handle">
+                                            <span><?php echo $v['link_name'];?></span>
+                                            <div class="ctr">
+                                                <!--有点赞和点评时添加active-->
+                                                <div class="like <?php echo $v['is_like']==1 ? 'active' : '';?>" mid="<?php echo $v['id'];?>">
+                                                    <a class="like_num" href="javascript:;"><?php echo $v['like_number'];?></a>
+                                                </div>
+                                                <div class="collect" mid="<?php echo $v['id'];?>">
+                                                    <a id="comment_shop" href="javascript:;"><?php echo $v['reply_number'];?></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                        <?php endforeach;?>
+                        <?php endif;?>
+                    </ul>
+                </div>
+            </section>
+
+            <!--                <a class="review" href="/review?id=--><?php //echo $res['id'];?><!--">-->
+            <!--                    <input class="comment" type="text" name="comment" placeholder="写下你的评论" autocomplte="off">-->
+            <!--                    <button class="submit">点评</button>-->
+            <!--                </a>-->
+        </div>
+        <div id="consult" style="display: none">
+            <section class="wrapper">
+                <form id="form" action="" method="get" class="comm-frame ask-frame">
+                    <div class="all-con">
+                        <input type="hidden" name="uid" value="<?php echo $_COOKIE['uid'];?>" id="uid">
+                        <input type="hidden" name="gid" value="<?php echo $res['id'];?>" id="gid">
+                        <textarea id="W_describe" placeholder="请输入您想要咨询的问题，玩翻天客服会尽快回复您哦！~" name="message" cols="" rows="8" class="tarea" autofocus></textarea>
+                        <div class="ask">
+                            <a class="W_ask" href="javascript:;" title="" onclick="consult(this)">我要提问</a>
+                        </div>
+                    </div>
+                </form>
+            </section>
+            <?php if(!count($res['consult'])):?>
+                <div class="nodata"><img src="/images/wap/nodata.gif" /></div>
+            <?php else:?>
+            <section class="wrapper">
+                <ul class="ask-list lists">
+                    <?php foreach($res['consult'] as $v):?>
+                        <li>
+                            <div class="ask-img">
+                                <img src="<?php echo $v['img'];?>" style="width: 60px;height:60px;"/>
+                            </div>
+                            <div class="ask-info">
+                                <div class="title">
+                                    <span class="name"><?php echo $v['username'];?></span>
+                                    <span class="time"><?php echo date("Y-m-d",$v['dateline']);?></span>
+                                </div>
+                                <div class="question"><?php echo $v['msg'];?></div>
+                                <?php if(count($v['reply'])):?>
+                                    <?php foreach($v['reply'] as $reply):?>
+                                        <div class="ask-replay">
+                                            <div class="arrow-up"></div>
+                                            <div class="ask-main">
+                                                <div class="ask-img img"><img src="<?php echo $reply['img']?>" style="60px;height:60px;"/></div>
+                                                <div class="title">
+                                                    <span class="name"><?php echo $reply['username'];?></span>
+                                                    <span class="time"><?php echo date("Y-m-d H:i:s",$reply['dateline']);?></span>
+                                                </div>
+                                            </div>
+                                            <p class="ask-answer"><?php echo $reply['msg'];?></p>
+                                        </div>
+                                    <?php endforeach;?>
+                                <?php endif;?>
+                            </div>
+                        </li>
+                    <?php endforeach;?>
+                    <?php endif;?>
+                </ul>
+            </section>
+        </div>
+    </article>
+</main>
+<input type="hidden" id="group_status" value="<?php echo $res['user_group_info'][0]['status'];?>">
+<a class="toTop" id="toTop" href="javascript:;"><i class="icon"></i>顶部</a>
+<?php if(!$res['group_id']):?>
+    <div id="footer" style="overflow: hidden;">
+        <?php if($res['double']>1):?>
+            <a class="download-app">
+                app中评论该商品，可获得<mark><?php echo $res['double'];?></mark>倍积分
+                <i class="arrowent"></i>
+            </a>
+        <?php endif;?>
+        <div class="touch">
+            <?php if($res['buy_log']==1):?>
+                <?php if($res['post_number']>0):?>
+                    <a class="ask consult" href="/web/comment/index?type=2&id=<?php echo $res['id'];?>" title="">点评</a>
+                <?php else:?>
+                    <a class="ask consult" href="/web/organizer/review?type=2&id=<?php echo $res['id'];?>" title="">点评</a>
+                <?php endif;?>
+                <a class="go-share">分享</a>
+            <?php else:?>
+                <a class="ask consult" href="javascript:;" id="ask" title="" data="consult" onclick="view(this)">咨询</a>
+                <a class="go-share">分享</a>
+            <?php endif;?>
+            <?php if($res['cooperation']==1):?>
+                <?php if($res['start_sale_time']>time()):?>
+                    <a class="method disabled unbegin" href="javascript:;" title="">
+                        即将开始
+                    </a>
+                <?php elseif($res['end_sale_time']<time() || $res['surplus_num']==0):?>
+                    <a class="method disabled " href="javascript:;" title="">
+                        报名截止
+                    </a>
+                <?php else:?>
+                    <a class="method" href="tel:<?php if($res['phone']>0){echo $res['phone'];}else{echo '4008007221'; } ;?>" title="">电话咨询</a>
+                <?php endif;?>
+            <?php else:?>
+                <?php if($res['sell_status']>0):?>
+                    <a class="method" id="method" href="javascript:;" title="">立即购买</a>
+                <?php else:?>
+                    <?php if($res['qualify_status']>0):?>
+                        <a class="method" href="/web/wappay/seckill?type=1" title="">我要资格</a>
+                    <?php else:?>
+                        <?php if($res['start_status']>0):?>
+                            <a class="method disabled unbegin" href="javascript:;" title="">
+                                <!--                    <time>-->
+                                <!--                        <span class="t_d">00天</span>-->
+                                <!--                        <span class="t_h">00时</span>-->
+                                <!--                        <span class="t_m">00分</span>-->
+                                <!--                        <span class="t_s">00秒</span>-->
+                                <!--                    </time>-->
+                                即将开始
+                            </a>
+                        <?php elseif($res['new_status']>0):?>
+                            <a class="method disabled" id="method" href="javascript:;" title="">新用户专享</a>
+                        <?php elseif($res['end_sale_time']<time() || $res['surplus_num']<=0):?>
+                            <?php if($res['group_data']):?>
+                                <a class="method"  href="/web/organizer/grouprule?id=<?php echo $res['id'];?>" title="">还可参团</a>
+                            <?php else:?>
+                                <a class="method disabled" href="javascript:;" title="">报名截止</a>
+                            <?php endif;?>
+                        <?php endif;?>
+                    <?php endif;?>
+                <?php endif;?>
+            <?php endif;?>
+        </div>
+    </div>
+<?php else:?>
+    <div id="footer">
+        <?php if($res['user_group_buy_status']==1):?>
+            <?php if($res['group_status']==1):?>
+                <a class="to-buy right" style="width: 100%" href="javascript:;" title="" onclick="_system._guide(true)">邀请好友</a>
+            <?php elseif($res['group_status']==2):?>
+                <a class="to-buy right" style="background-color: #b8b8b8;width: 100%" href="javascript:;" title="" onclick="_system._guide(true)">拼团成功</a>
+            <?php endif;?>
+        <?php else:?>
+            <?php if($res['group_end_time']>=time()):?>
+                <a class="to-buy right" style="width:100%" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&pid=<?php echo $res['group_game_info_pid'];?>&tid=<?php echo $res['group_game_info_id'];?>&g_buy=1&group_buy_id=<?php echo $res['group_id'];?>&group_buy=2" title="">立刻参团</a>
+            <?php else:?>
+                <a class="to-buy right" style="width:100%" href="/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&pid=<?php echo $res['group_game_info_pid'];?>&tid=<?php echo $res['group_game_info_id'];?>&g_buy=1&group_buy=1" title="">自己开团</a>
+            <?php endif;?>
+        <?php endif;?>
+    </div>
+<?php endif;?>
+<div id="cover"></div>
+<div id="guide"><img src="/images/wap/wei_share.png"></div>
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+</div>
+<div id="tipsDia"></div>
+
+<!--售罄标识弹窗-->
+<?php if($res['end_sale_time']<time() || $res['surplus_num']==0):?>
+        <span class="sell-out">
+    <p class="sell-font">售罄</p>
+</span>
+<?php endif;?>
+<!--注意事项弹窗-->
+<div class="matte" style="display: none"></div>
+<div class="introPopup" style="display: none;">
+    <p></p>
+    <pre class="pre-format"></pre>
+    <a class="introBtn">关闭</a>
+</div>
+
+<!--套餐说明弹窗-->
+<div class="package-popup" style="display: none;">
+    <p class="package-popup-name">
+        <mark>
+            套餐说明
+        </mark>
+        <span class="crossBtn">
+            <i class="cross"></i>
+        </span>
+    </p>
+    <div class="package-popup-title">
+        <P>超值阳台双人间(有遮挡)DO</P>
+        <span>仅剩93张</span>
+    </div>
+    <div class="package-popup-info">
+        <mark>【兑换方式】</mark>
+        <pre class="exchangeIntro pre-format">取票方式：凭确认短信及本人身份证至汉口码头或武昌红巷码头登船处（码头2选1）换票登船（含餐套餐需视具体规定至相应的码头取票）</pre>
+        <mark>【特别说明】</mark>
+        <pre class="specialIntro pre-format">开放时间内每隔半个小时发不同游轮，每班游轮航行时间为60分钟，可不下船，直到开放时间结束，如结束一次航行后下船再登船，则需再次购票。</pre>
+        <mark>【退订说明】</mark>
+        <pre class="refundIntro pre-format">开放时间内每隔半个小时发不同游轮，每班游轮航行时间为60分钟，可不下船，直到开放时间结束，如结束一次航行后下船再登船，则需再次购票。</pre>
+    </div>
+    <div class="package-popup-btn">
+        <a class="total">
+            <mark>￥268.2</mark>
+        </a>
+        <a class="goBuy">立刻购买</a>
+    </div>
+</div>
+<!--分享按钮弹窗-->
+<div class="sharebtn" style="display: none">
+    <span class="pic" style="width:406px;height:353px;background: url('/images/wap/sharepic.png') no-repeat;position:fixed;top: 20px;left: 50%;transform: translate(-33%,0);-webkit-transform: translate(-33%,0);z-index: 30"></span>
+</div>
+<!--收藏提示弹窗-->
+<div class="store-info" style="display: none">收藏成功</div>
+
+<input type="hidden" id="good_id" value=<?php echo $res['id'];?>>
+</body>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/web.js?ver=<?php echo time();?>"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="/js/wap/template.js"></script>
+<script>
+    setInterval(function(){
+        $('.js-timeout').each(function(item){
+            var $this = $(this);
+            var time = parseInt($this.attr('data-time'), 10);
+            var result = getTimeoutHtml(time);
+            if(result){
+                $this.html(result);
+            }
+        });
+    }, 1000);
+
+    /*点赞效果*/
+    $(".all-comment").on("click","a",function(e){
+        e.preventDefault();
+        var event = $(e.target);
+        event.addClass("star-cur");
+        event.prevAll("a").addClass("star-cur");
+        event.nextAll("a").removeClass("star-cur");
+        $("#W_star_holder").val(event.data("star"));
+    });
+
+
+    function getTimeoutHtml(time_end){
+        var time_start = new Date().getTime(); //设定当前时间
+        // 计算时间差
+        var time_distance = parseInt(time_end*1000) - time_start;
+
+        if(time_distance <= 0){
+            return false;
+        }
+
+        time_distance = time_end - time_start;
+        // 天
+        var int_day = Math.floor(time_distance/86400000);
+        time_distance -= int_day * 86400000;
+        // 时
+        var int_hour = Math.floor(time_distance/3600000);
+        time_distance -= int_hour * 3600000;
+        // 分
+        var int_minute = Math.floor(time_distance/60000);
+        time_distance -= int_minute * 60000;
+        // 秒
+        var int_second = Math.floor(time_distance/1000);
+
+        if(int_hour < 10){
+            int_hour = "0" + int_hour;
+        }
+        if(int_minute < 10){
+            int_minute = "0" + int_minute;
+        }
+        if(int_second < 10){
+            int_second = "0" + int_second;
+        }
+
+
+        var result_arr = [];
+
+        if(int_day >= 1){
+            result_arr.push('<span class="to-day">' + int_day + '天</span>');
+        }else{
+            result_arr.push('<span class="to-hour">' + int_hour + '时</span>');
+            result_arr.push('<span class="to-min">' + int_minute + '分</span>');
+            result_arr.push('<span class="to-sec">' + int_second + '秒</span>');
+            result_arr.push('<span>'+'后开抢'+'</span>');
+        }
+        return result_arr.join('');
+    }
+
+    //注意事项弹窗
+    var introPopup = $(".introPopup");
+    $(".attention").on("click",function(e){
+        e.preventDefault();
+        var title = $(".attention").find("p").find("mark").text();
+        var newTitle = title.substring(0,title.length-1);//去掉字符串最后一位
+        var intro = $(".attention").find("p").find("span").text();
+        console.log(intro);
+        introPopup.find("p").text(newTitle);
+        introPopup.find("pre").text(intro);
+        introPopup.show();
+        $(".matte").show();
+    });
+
+    $(".introBtn").on("click",function(e){
+        e.preventDefault();
+        $(".introPopup").hide();
+        $(".matte").hide();
+    });
+
+    //分享按钮引导分享
+    $(".go-share").on("click",function(){
+        $(".matte").show();
+        $(".sharebtn").show();
+    });
+
+    $(".sharebtn").on("click",function(){
+        $(".sharebtn").hide();
+        $(".matte").hide();
+    });
+
+    //精选套餐
+    $(".package").on("click",function(e){
+        var title = $(this).attr("data-title");
+        var num = $(this).attr('data-num');
+        var price = $(this).attr('data-price');
+        var way = $(this).attr('data-way');
+        var back = $(this).attr('data-back');
+        var special = $(this).attr('data-special');
+        var goBuy = '';
+        var scr = "";
+        var is_group = <?php echo $res['is_group'];?>;
+        if(is_group==2){
+            goBuy=$(this).parent().parent().find('a').text();
+            scr = $(this).parent().parent().find('a').attr('href')
+        }else{
+            goBuy=$(this).parent().find('.package-info-btn').find('a').text();
+            scr = $(this).parent().find('.package-info-btn').find('a').attr('href')
+        }
+
+        $(".package-popup-title").find("p").text(title);
+        $(".package-popup-title").find("span").text('仅剩'+num+'张');
+        $(".package-popup").find(".total").find("mark").text('￥'+price);
+        $('.exchangeIntro').text(way);
+        $(".specialIntro").text(special);
+        $(".refundIntro").text(back);
+        $('.goBuy').text(goBuy);
+        $('.goBuy').attr('href',scr);
+        $(".package-popup").show();
+        $(".matte").show();
+    });
+
+//    $(".package-info-btn").on("click",function(e){
+//        e.stopPropagation();
+//    });
+
+    $(".goBuy").on("click",function(){
+        $(".package-popup").hide();
+        $(".matte").hide();
+        window.location.href="";
+    });
+    $(".crossBtn").on("click",function(){
+        $(".package-popup").hide();
+        $(".matte").hide();
+    });
+
+    var isTouch = ("ontouchend" in document ? "touchend" : "tap"),
+        tipsDia = $("#tipsDia");
+
+    $('.com-more').on(isTouch,function(e){
+        e.preventDefault();
+        $(".com-more").prev().css("height","auto");
+        $(".com-more").hide();
+    });
+
+
+    //点赞和取消点赞
+    $('.like').on(isTouch,function(e){
+        e.preventDefault();
+        var obj = $(this);
+        var mid = obj.attr('mid');
+        var data ={'mid':mid,'uid':<?php echo $_COOKIE['uid']? $_COOKIE['uid'] : 0;?>};
+        if(obj.hasClass('active')){
+            $.ajax({
+                type: "POST",
+                url: "/social/sendpost/deletelike",
+                //        dataType:"json",
+                async: true,
+                data:data,
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                    } else if(result.response_params.message =='已经取消过了'){
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                    }else{
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                        obj.removeClass('active');
+                        var num = obj.find('.like_num').text();
+                        obj.find('a').text(parseInt(num)-1);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //alert('授权失败');
+                        // 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+
+            });
+        }else{
+            $.ajax({
+                type: "POST",
+                url: "/social/sendpost/like",
+                //        dataType:"json",
+                async: true,
+                data:data,
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                    } else if(result.response_params.message=='点赞成功'){
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },2000);
+                        obj.addClass('active');
+                        var num = obj.find('.like_num').text();
+                        obj.find('a').text(parseInt(num)+1);
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //alert('授权失败');
+                        // 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+
+            });
+        }
+    });
+
+    //遮罩层
+    var _system={
+        $:function(id){return document.getElementById(id);},
+        _client:function(){
+            return {w:document.documentElement.scrollWidth,h:document.documentElement.scrollHeight,bw:document.documentElement.clientWidth,bh:document.documentElement.clientHeight};
+        },
+        _scroll:function(){
+            return {x:document.documentElement.scrollLeft?document.documentElement.scrollLeft:document.body.scrollLeft,y:document.documentElement.scrollTop?document.documentElement.scrollTop:document.body.scrollTop};
+        },
+        _cover:function(show){
+            if(show){
+                this.$("cover").style.display="block";
+                this.$("cover").style.width=(this._client().bw>this._client().w?this._client().bw:this._client().w)+"px";
+                this.$("cover").style.height=(this._client().bh>this._client().h?this._client().bh:this._client().h)+"px";
+            }else{
+                this.$("cover").style.display="none";
+            }
+        },
+        _guide:function(click){
+            this._cover(true);
+            this.$("guide").style.display="block";
+            this.$("guide").style.top=(_system._scroll().y+5)+"px";
+            window.onresize=function(){_system._cover(true);_system.$("guide").style.top=(_system._scroll().y+5)+"px";};
+            if(click){_system.$("cover").onclick=function(){
+                _system._cover();
+                _system.$("guide").style.display="none";
+                _system.$("cover").onclick=null;
+                window.onresize=null;
+            };}
+        },
+        _zero:function(n){
+            return n<0?0:n;
+        }
+    };
+
+
+    function view(obj){
+        var data = $(obj).attr("data");
+        $("."+data).addClass('active');
+        $("."+data).parent().siblings().children().removeClass('active');
+        $("#"+data).show();
+        $("#"+data).siblings().hide();
+        if(data=='post' || data=='consult'){
+            $(".infos").hide()
+        }else{
+            $(".infos").show();
+        }
+    }
+
+    function clickComm(){
+        $("#comm").click();
+    }
+
+    //咨询
+    function consult(obj){
+        var mes = $("#W_describe").val();
+        var uid = $("#uid").val();
+        var gid = $("#gid").val();
+        if(mes != ''){
+            $.ajax({
+                type: "POST",
+                url: "/post/consult/index",
+                //        dataType:"json",
+                async: true,
+                data:{"uid":uid,"gid":gid,"message":mes},
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        alert(result.response_params.message);
+
+                    } else {
+                        alert(result.response_params.message);
+                        window.location.reload();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //alert('授权失败');
+                        // 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+
+            });
+        }
+    }
+
+    $(".invite").on(isTouch,function(e){
+        e.preventDefault();
+        var group_status=$("#group_status").val();
+        if(group_status>0){
+            tipsDia.text("抱歉，您已参与本商品拼团活动！");
+            tipsDia.show();
+            setTimeout(function(){
+                tipsDia.hide();
+                tipsDia.text("");
+            },2000);
+            return false;
+        }
+    });
+
+    //页面倒计时相关
+    var group_id = <?php echo $res['group_id']>0 ? $res['group_id'] : 0;?>,
+        group_end_time = <?php echo $res['group_end_time']>0 ? $res['group_end_time'] : 0;?>,
+        now_time = new Date().getTime(),
+        start_time = <?php echo $res['start_sale_time'];?>,
+        check_time,
+        type,
+        count;
+
+    if(group_id>0){
+        check_time = group_end_time;
+        type=1;//团
+    }else if(parseInt(start_time)*1000 > now_time){
+        check_time = start_time;
+        type=2;//未开始
+    }
+
+
+    //参团倒计时
+    function countdown(time,timedelay,type){
+        return setInterval(function(){
+            var now_time = new Date().getTime(),
+                EndTime= new Date(parseInt(time)*1000),
+                t =EndTime.getTime() - now_time,
+                d=Math.floor(t/1000/60/60/24),
+                h=Math.floor(t/1000/60/60%24),
+                m=Math.floor(t/1000/60%60),
+                s=Math.floor(t/1000%60);
+            if(d<0 && h<0 && m<0 && s<0){
+                clearInterval(count);
+                if(type==1){
+                    $("#count_down").text("超时！组团失败");
+                }else{
+                    $(".unbegin").removeClass('disabled');
+                    $(".unbegin").html("立即购买");
+                    $(".unbegin").attr("href","/web/wappay/ordersubmit?id=<?php echo $res['id'];?>&tid=<?php echo $game['order_id'];?>&g_buy=<?php echo $game['is_group'];?>");
+                }
+                return false;
+            }
+            $(".t_d").text(d + "天");
+            $(".t_h").text(h + "时");
+            $(".t_m").text(m + "分");
+            $(".t_s").text(s + "秒");
+        },timedelay);
+    }
+    count = countdown(check_time,1000,type);
+
+
+    function favorite(flag) {
+        var uid = $("#uid").val();
+        var id = $("#good_id").val();
+
+        var act = "add";
+        if (flag == 0) {
+            act = "del";
+        }
+        if(uid==0){
+            var ask=confirm('请先登录');
+            if(ask==true){
+                window.location.href="/web/wappay/register?tourl="+decodeURI('/web/place/index?id='+id);
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: "/user/collect/update",
+            async: true,
+            data: {"uid": uid, "link_id": id, "act": act, "type": "good"},
+            headers: {
+                "VER": 10
+            },
+            success: function (result) {
+                if (result.response_params.status == 0) {
+//                    alert(result.response_params.message);
+                    setTimeout($('.store-info').text(result.response_params.message).show(), 35000);
+                } else {
+//                    alert(result.response_params.message);
+                    setTimeout($('.store-info').text(result.response_params.message).show(), 35000);
+                    window.location.reload();
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                if (XMLHttpRequest.status == 401) {
+                    //alert('授权失败');
+                    // 跳转授权页面
+                    //alert(XMLHttpRequest.responseJSON.message);
+                    window.location.href = '<?php echo $authorUrl;?>';
+                }
+                else if (XMLHttpRequest.status == 403) {
+                    alert('接口验证失败，非法访问');
+                }
+                else if (XMLHttpRequest.status == 400) {
+                    alert('请求参数错误');
+                }
+                else {
+                    alert('接口异常，返回状态码：' + XMLHttpRequest.status)
+                }
+            }
+
+        });
+    }
+
+    $('.collect').click(function(){
+        var obj = $(this);
+        var pid = obj.attr('mid');
+        var object_id = $('#good_id').val();
+        window.location.href="/web/comment/recomment?id="+object_id+"&type=2&pid="+pid
+    });
+</script>
+<?php echo $this->partial('web/kidsplay/share.phtml');?>
+</html>
+<script>(function(){ /*document.body.scrollWidth*/  /*window.screen.width*/
+        var w=document.documentElement.clientWidth,
+            s=w/640,
+            u=navigator.userAgent,
+            m='<meta name="viewport" content="width=640,';
+        if(/android (\d+\.\d+)/i.test(u)){
+            if(parseFloat(RegExp.$1>2.3)){
+                m+="minimum-scale = "+s+", maximum-scale = "+s+","
+            }
+        }else{
+            m+="user-scalable=no,";
+        }
+        m+='target-densitydpi=device-dpi">';
+        document.write(m)}());
+</script>
+

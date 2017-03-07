@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no">
+    <title>专题评论</title>
+    <link href="/css/wap/common.css" rel="stylesheet"/>
+    <link href="/css/wap/travel.css" rel="stylesheet"/>
+    <script>(function(){var w=window.screen.width,s=w/640,u=navigator.userAgent,m='<meta name="viewport" content="width=640,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+</head>
+<body>
+<main class="align" id="content">
+    <header class="header">
+        <a class="header-back" href="javascript:history.go(-1);"></a>
+        <a class="header-title">评论</a>
+        <!--<a class="header-user" href="" title=""></a>-->
+    </header>
+    <section class="wrapper">
+        <form id="form" action="#" method="post" class="comm-frame" autocomplete="off">
+            <div class="all-comment">
+                <span class="name">评分</span>
+                <a href="javascript:;" data-star="10" title="总体评价" class="comm-star star-cur"></a>
+                <a href="javascript:;" data-star="20" title="总体评价" class="comm-star star-cur"></a>
+                <a href="javascript:;" data-star="30" title="总体评价" class="comm-star star-cur"></a>
+                <a href="javascript:;" data-star="40" title="总体评价" class="comm-star star-cur"></a>
+                <a href="javascript:;" data-star="50" title="总体评价" class="comm-star star-cur"></a>
+                <input id="W_star_holder" type="hidden" name="star" value="50">
+            </div>
+            <div class="all-con">
+                <textarea id="W_describe" placeholder="提交15个字并带有插图的评论，会获得5个积分" name="textarea" cols="" rows="8" class="tarea"></textarea>
+                <div class="upload-area">
+                    <ul class="upload-list" id="upload-list">
+
+                    </ul>
+                    <label class="upload-btn">
+                        <input id="upload-image" type="file" accept="image/*;capture=camera" class="input-file">
+                        <a class="W_photo" href="javascript:;" title="">添加晒单照片</a>
+                    </label>
+                </div>
+            </div>
+            <a id="W_submit" href="javascript:;" title="提交" class="icon-btn icon-btn-orange">提交</a>
+        </form>
+    </section>
+</main>
+<div id="tipsDia"></div>
+</body>
+<script type="text/javascript" src="/js/weixin.main.js"></script>
+<script type="text/javascript" src="/js/third-part/binaryajax.js"></script>
+<script type="text/javascript" src="/js/third-part/exif.js"></script>
+<script type="text/javascript" src="/js/third-part/localResizeIMG.js"></script>
+<script type="text/javascript" src="/js/third-part/mobileBUGFix.js"></script>
+<script type="text/javascript">
+    (function(){
+
+        var object_id = <?php echo $id;?>,
+            type=<?php echo $type;?>,
+            order_sn = <?php echo $order_sn;?>;
+
+
+        var viewImg = $("#upload-list"),
+            imgcount = 0;
+
+        $('#upload-image').localResizeIMG ({
+            width: 800,
+            quality: 0.8,
+            success: function (result) {
+                var status = true;
+                if (result.height > 1600) {
+                    status = false;
+                    alert("照片最大高度不超过1600像素");
+                }
+                if (viewImg.find("li").length > 8) {
+                    status = false;
+                    alert("最多上传9张照片");
+                }
+                if (status) {
+                    viewImg.append('<li></li>');
+                    viewImg.find("li:last-child").html('<span class="del">×</span><img src="' + result.base64 + '"/><input type="hidden" id="file'
+                        + imgcount
+                        + '" name="fileup[]" value="'
+                        + result.clearBase64 + '">');
+
+                    var  del = $(".del");
+                    del.on("click",function(){
+                        $(this).parent('li').remove();
+                    });
+                    imgcount++;
+                }
+            }
+        });
+
+        $(".all-comment").on("click","a",function(e){
+            e.preventDefault();
+            var event = $(e.target);
+            event.addClass("star-cur");
+            event.prevAll("a").addClass("star-cur");
+            event.nextAll("a").removeClass("star-cur");
+            $("#W_star_holder").val(event.data("star"));
+        });
+
+           var submitBtn =  $("#W_submit"),
+            describe  = $("#W_describe"),
+            tipsDia = $("#tipsDia");
+
+        submitBtn.on("click",function(e){
+            e.preventDefault();
+            console.log();
+
+            var info = $('input[name="fileup[]"]');
+            var len = info.length;
+            var img_list = [];
+            for(var i=0;i<len;i++){
+                var img = $(info[i]).val();
+                if(img){
+                    $.ajax({
+                        type: "POST",
+                        url: "/social/sendpost/upimg",
+                        //        dataType:"json",
+                        async: false,
+                        data:{'file':img},
+                        headers: {
+                            "VER": 10
+                        },
+                        success: function (result) {
+                            if (result.response_params.status == 0) {
+                                alert(result.response_params.message);
+                            } else if(result.response_params.status == 1) {
+                                tipsDia.text("正在上传...");
+                                tipsDia.show();
+                                setTimeout(function(){
+                                    tipsDia.hide();
+                                    tipsDia.text("");
+                                },3000);
+                                img_list.push(result.response_params.url)
+                            }
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                            if (XMLHttpRequest.status == 401) {
+                                //alert('授权失败');
+                                // 跳转授权页面
+                                //alert(XMLHttpRequest.responseJSON.message);
+                                window.location.href = '<?php echo $authorUrl;?>';
+
+                            }
+                            else if (XMLHttpRequest.status == 403) {
+                                alert('接口验证失败，非法访问');
+                            }
+                            else if (XMLHttpRequest.status == 400) {
+                                alert('请求参数错误');
+                            }
+                            else {
+                                alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                            }
+                        }
+
+                    });
+                }
+            }
+
+            var mes = $("#W_describe").val();
+            var star = $("#W_star_holder").val();
+
+            if(describe.val() == ""){
+                tipsDia.text("请输入评论！");
+                tipsDia.show();
+                setTimeout(function(){
+                    tipsDia.hide();
+                    tipsDia.text("");
+                },4000);
+                return;
+            }
+            $(this).css("pointer-events","none");
+            var messageJson = [];
+            messageJson.push({'t':1,'val':mes});
+            if(img_list){
+                var img_len = img_list.length;
+                for(var i=0;i<img_len;i++){
+                    messageJson.push({'t':2,'val':img_list[i]});
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/post/index/index",
+                dataType:"json",
+                async: true,
+                data:{'uid':<?php echo $_COOKIE['uid'] ? $_COOKIE['uid'] : 0;?>,'type':type,'object_id':object_id,'message':JSON.stringify(messageJson),'star':parseInt(star)/10,'order_sn':order_sn},
+                headers: {
+                    "VER": 10
+                },
+                success: function (result) {
+                    if (result.response_params.status == 0) {
+                        tipsDia.text(result.response_params.message);
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },3000);
+                    } else{
+                        tipsDia.text("评论成功！");
+                        tipsDia.show();
+                        setTimeout(function(){
+                            tipsDia.hide();
+                            tipsDia.text("");
+                        },3000);
+                        $(this).css("pointer-events","auto");
+                        if(type==7){
+                            window.location.href = document.referrer;
+                        }else{
+                            window.location.href = "/web/comment/index?id="+object_id+"&type="+type;
+                        }
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //            alert("XHR=" + XMLHttpRequest + "\ntextStatus=" + textStatus + "\nerrorThrown=" + errorThrown);
+                    if (XMLHttpRequest.status == 401) {
+                        //alert('授权失败');
+                        // 跳转授权页面
+                        //alert(XMLHttpRequest.responseJSON.message);
+                        window.location.href = '<?php echo $authorUrl;?>';
+
+                    }
+                    else if (XMLHttpRequest.status == 403) {
+                        alert('接口验证失败，非法访问');
+                    }
+                    else if (XMLHttpRequest.status == 400) {
+                        alert('请求参数错误');
+                    }
+                    else {
+                        alert('网络异常,请刷新重试：' + XMLHttpRequest.status)
+                    }
+                }
+            });
+        });
+    }());
+</script>
+</html>

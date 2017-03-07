@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>晒宝宝疯玩照片，赢取荟聚周年壕礼！</title>
+    <link rel="stylesheet" type="text/css" href="/activity/css/layout.css">
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+</head>
+<body>
+    <div class="banner">
+        <img src="http://wan.wanfantian.com/uploads/2016/04/23/29f09e216a7a9dd583d00e6d82ca2300.jpg"/>
+    </div>
+    <form id="form-prize">
+        <div class="info2">
+            <div class="info-title">
+                <img src="<?php echo $userInfo->user_img?>" />
+                <p><?php echo $userInfo->user_name?><br/>疯狂指数:<span><?php echo $userInfo->power_num?></span></p>
+                <div class="numbers">剩余<span>3689</span>份奖品</div>
+            </div>
+            <p class="time">
+                <span>奖品领取时间：</span>2016/04/29-2016/05/2<br/>
+                <span>奖品领取地址：</span><mark>1、电子券（玩翻天现金券、爱奇艺会员）无需进店领取。<br/>
+                    2、雅哈咖啡领奖地点：武汉荟聚中心一楼服务台。
+                    <br/>3、其他奖品领奖地点：武汉荟聚中心对应的商家门店。
+                    <br/>* 所中奖品只能任选5个领取。
+                </mark>
+            </p>
+        </div>
+        <div class="myprize">
+            <?php if(!count($userPrize)):?>
+                <p class="text" style="display: ;">暂无奖品。快去用积分抽福袋吧。</p>
+            <?php else:?>
+                <div class="myprize-title">我的奖品</div>
+                <?php foreach($userPrize as $prize):?>
+                    <div class="myprize-content">
+                        <img src="<?php echo $prize['prize_img'];?>" />
+                        <div class="myprize-info">
+                            <p>奖品名称：<?php echo $prize['prize_name'];?></p>
+                            <?php if($prize['status'] == 2):?>
+                                <span style="height: 34px; width: 75px; background: #709fe0; color: #fff; border-radius: 4px 4px 4px 4px; -webkit-background-clip: padding-box;line-height: 34px;text-align: center;font-size: 18px; position: absolute;top: 32px; left:20px;">已领取</span>
+                            <?php elseif($prize['prize_id'] == 23):?>
+                                <input type="text" value="" data-id="<?php echo $prize['id'];?>" placeholder="请输入app绑定的手机号码"/>
+                                <a href="javascript:void(0)" class="button use-prize">领取</a>
+                            <?php elseif(!$prize['note']):?>
+                                <input type="text" value="" data-id="<?php echo $prize['id'];?>" placeholder="请工作人员输入验证码"/>
+                                <a href="javascript:void(0)" class="button use-prize">领取</a>
+                            <?php else:?>
+                                <?php echo $prize['note'];?>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                <?php endforeach;?>
+            <?php endif;?>
+        </div>
+    </form>
+    <div class="myprize-btn">
+        <a class="btn3 yao-ren" href="javascript:void(0)">邀请好友助力</a>
+        <a class="btn3" href="/activity/huiju/prize?tp=<?php echo time();?>">继续抽福袋</a>
+    </div>
+<!--<div class="prizes">
+    <div class="prizes-title">活动奖品</div>
+    <ul>
+        <?php /*foreach($prizeData as $prize):*/?>
+            <li>
+                <img src="<?php /*echo $prize['prize_img']; */?>"/>
+                <p><span><?php /*echo $prize['prize_name']; */?></span></p>
+            </li>
+        <?php /*endforeach;*/?>
+    </ul>
+</div>-->
+<div class="intro">
+    <div class="intro-title">奖品详情</div>
+    <p><span>*券、礼包等奖品请以实际发放的卡（券）面信息为准。除爱奇艺、玩翻天现金券，其他奖品细节请至相应店内了解。</span></p>
+    <p>1. 荟聚全明星滑冰俱乐部</p>
+    <p>价值1000元计时卡</p>
+    <p>价值20元券：凭券购买正价门票可抵用20元。</p>
+    <p>2. 荟聚kidsland</p>
+    <p>乐高海盗系列储蓄罐、欧博士手机擦、多乐钥匙扣</p>
+    <p>3. 荟聚 babyland</p>
+    <p>价值499元限量版妈咪包、欧博士手机擦、多乐钥匙扣</p>
+    <p>4. 荟聚美吉姆</p>
+    <p>价值900元大礼包：含4次体验课，限七个月以内宝宝使用。</p>
+    <p>价值300元早教大礼包：美吉姆手工制作风车、宝宝隔汗巾、美吉姆亲子欢动课体验券。</p>
+    <p>6. 荟聚乐友孕婴童礼包</p>
+    <p>含10片装湿纸巾，两张价值160元新会员优惠券</p>
+    <p>7. 荟聚美育音乐舞蹈机构</p>
+    <p>试听课礼包：赠送单次试听卡一张，有效期为1个月；试听完课程后会赠送奥尔夫乐器一个。</p>
+    <p>8. 爱奇艺会员月卡</p>
+    <p>月卡：打开爱奇艺首页——开通VIP——激活码支付，输入激活码领取。</p>
+    <p>9. 荟聚哈你运动馆</p>
+    <p>绳网探险5折券、淘气堡5折券、7D影院5折券</p>
+    <p>10. 荟聚玩具反斗城</p>
+    <p>价值80元折扣券礼包：购物满200立减30与购物满300立减50折扣券各一张。</p>
+    <p>11. 荟聚童装LCDP</p>
+    <p>价值205元集合券：含全场适用券两张，新品专享优惠券两张，最高可享折上立减100RMB。</p>
+    <p>12. 荟聚瑞思学科英语</p>
+    <p>价值300元英语学习礼包：瑞思特制小文具、瑞思母亲节主题亲子英语课堂，报名客户额外赠送价值2000元外教课。</p>
+    <p>13.雅哈咖啡1瓶</p>
+    <p>图片仅作示意，请以实物为准</p>
+    <p>14.玩翻天30元现金券</p>
+    <p>直接领取，即可使用。</p>
+</div>
+<div class="matte">
+    <img src="/activity/images/matte.png" />
+</div>
+</body>
+<script src="/activity/js/zepto.js"></script>
+<script src="/activity/js/common.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+    $(function () {
+
+        //邀请好友助力
+        $('.yao-ren').click(function(){
+            $(".matte").show();
+        })
+
+        $(".matte").click(function(){
+            $(".matte").hide();
+        });
+
+        $(".use-prize").click(function(){
+            var code = $(this).prev().val();
+            var id = $(this).prev().attr('data-id');
+            var href = '/activity/huiju/getprize';
+
+            $.post(href, {code:code, id: id}, function (data) {
+                alert(data.message);
+                location.href="/activity/huiju/myprize";
+            }, 'json');
+            return false;
+        });
+
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '<?php echo $jsApi['appid'];?>', // 必填，公众号的唯一标识
+            timestamp: <?php echo $jsApi['timestamp'];?>, // 必填，生成签名的时间戳
+            nonceStr: '<?php echo $jsApi['noncestr'];?>', // 必填，生成签名的随机串
+            signature: '<?php echo $jsApi['signature'];?>',// 必填，签名，见附录1
+            jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+        });
+
+        wx.ready(function () {
+// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            wx.onMenuShareTimeline({
+                title: '<?php echo $share['title'];?>', // 分享标题
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: '<?php echo $share['img'];?>', // 分享图标
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+
+            //分享给朋友
+            wx.onMenuShareAppMessage({
+                title: '<?php echo $share['title'];?>', // 分享标题
+                desc: '<?php echo $share['desc'];?>', // 分享描述
+                link: '<?php echo $toUrl;?>', // 分享链接
+                imgUrl: '<?php echo $share['img'];?>', // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+        });
+
+    });
+</script>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>图文详情</title>
+    <style>
+        body{
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        * {
+            padding: 0;
+            margin: 0;
+            word-break: break-all !important;
+            word-wrap: break-word !important;
+            white-space: normal !important;
+            max-width: 100% !important;
+            height: auto !important;
+            line-height: 1.6 !important;
+            font-size: 14px;
+        }
+    </style>
+    <?php if ($type == 4): ?>
+        <style>
+            body {
+                background-color: #F0F0EF;
+                color: #666666;
+                /*font:italic bold 12px/20px arial,sans-serif;*/
+            }
+        </style>
+    <?php endif; ?>
+</head>
+<body>
+<div id="all" class="detail">
+    <div class="container">
+        <div class="item-detail ib bg1">
+            <?php echo $res; ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>

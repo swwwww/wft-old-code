@@ -1,0 +1,86 @@
+<body>
+<section class="mycard">
+    <h2 class="title"><b><?php echo $user; ?></b> 的畅玩卡</h2>
+    <ul class="myinfo">
+        <li class="pic"><img src="/mabaobao/images/wan.png"/></li>
+        <li class="name">
+            <span class="myinfo-detail">宝宝姓名：</span>
+            <span><?php echo $data->username; ?>
+                <i class="icon <?php if ($data->sex == 'boy') {
+                    echo "nan";
+                } else {
+                    echo "nv";
+                } ?> "></i>
+            </span>
+        </li>
+        <li class="date">
+            <span class="myinfo-detail">宝宝生日：</span>
+            <span><?php echo date('Y-m-d', $data->birthday); ?></span>
+        </li>
+        <li class="method">
+            <span class="myinfo-detail">领取方式：</span>
+            <span>请前往贝乐园各大门店领取</span>
+        </li>
+        <li class="code">
+            <form class="code-form">
+                <?php if ($data->check_status == 1) { ?>
+                    <input type="text" id="code" name="code" placeholder="请商家输入验证码" value=""/>
+                    <button class="submit">领取</button>
+                <?php } elseif ($data->check_status == 2) { ?>
+                    <button class="submit disabled">已领取</button>
+                <?php } elseif ($data->check_status == 0) { ?>
+                    <button class="submit disabled">待审核</button>
+                <?php } ?>
+            </form>
+        </li>
+    </ul>
+    <div class="myphoto">
+        <?php foreach ($imgData as $img): ?>
+            <img src="<?php echo $this->url . $img->url; ?>"/>
+        <?php endforeach; ?>
+    </div>
+    <div id="error-tips"></div>
+</section>
+</body>
+<script type="text/javascript" src="/mabaobao/js/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+    "use strict";
+    var sub = $(".submit"),
+        errorTips = $("#error-tips"),
+        id = "<?php echo $data->id; ?>";
+    sub.on("tap", function (e) {
+        e.preventDefault();
+        var codeValue = $("input[name='code']").val();
+        if (!codeValue) {
+            errorTips.text("请输入验证码！");
+            errorTips.show();
+            setTimeout(function () {
+                errorTips.hide();
+            }, 4000);
+        }
+        if (codeValue != 1234) {
+            //提示错误按钮恢复
+            errorTips.text("您输入验证码有误！");
+            errorTips.show();
+            setTimeout(function () {
+                errorTips.hide();
+            }, 4000);
+            return false;
+        }
+
+        $.post("/mabao/index/use", {"code": codeValue, "id": id}, function (result) {
+            if (result.status == 1) {//成功
+                sub.prev("#code").remove();
+                sub.addClass("disabled").text("已领取");
+            } else {//失败
+                //提示错误按钮恢复
+                errorTips.text(result.message);
+                errorTips.show();
+                setTimeout(function () {
+                    errorTips.hide();
+                }, 4000);
+            }
+        }, 'json');
+        return false;
+    })
+</script>

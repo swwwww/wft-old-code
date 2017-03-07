@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>玩翻天--商家版</title>
+    <link href="/seller/css/layout.css" rel="stylesheet" />
+    <link href="/seller/css/components.css" rel="stylesheet" />
+    <script src="/seller/js/modernizr.js"></script>
+</head>
+<body>
+<!--<header id="header">-->
+<!--    <div class="center">-->
+<!--        <div id="header-tips">-->
+<!--            <a id="header-logo" target="_blank" href=""><img src="/seller/images/logo.gif" alt=""></a>-->
+<!--            <h2 id="header-title">商家版</h2>-->
+<!--        </div>-->
+<!--        <div id="header-member">-->
+<!--            <figure>-->
+<!--                <a href="" title="" class="portrait">-->
+<!--                    <img alt="" src="/seller/images/demo01.png">-->
+<!--                </a>-->
+<!--                <figcaption>-->
+<!--                    <a class="username" title="世界儿童乐园" href="">世界儿童乐园</a>-->
+<!--                </figcaption>-->
+<!--            </figure>-->
+<!--            <nav id="header-nav">-->
+<!--                <a class="set" href=""></a>-->
+<!--                <a class="exit" href=""></a>-->
+<!--            </nav>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+
+<div id="container" class="center">
+    <nav id="navigator">
+        <ul>
+            <li>
+                <a class="user-self" href="/selleradmin/index/info" title="">
+                    <i></i>首页
+                </a>
+            </li>
+            <li>
+                <a class="user-order" href="/selleradmin/index/order" >
+                    <i></i>订单
+                </a>
+            </li>
+            <li>
+                <a class="user-shops  active" href="" >
+                    <i></i>分店管理
+                </a>
+            </li>
+            <li>
+                <a class="user-info" href="/selleradmin/index/article" >
+                    <i></i>基本信息
+                </a>
+            </li>
+            <li>
+                <a class="user-account" href="/selleradmin/index/account" >
+                    <i></i>绑定银行账号
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <main id="content">
+        <header id="top-nav">
+            <nav id="top-nav-crumb">
+                <a href="/selleradmin/index/info">首页</a>
+                <span>&gt;</span>
+                <span>分店管理</span>
+            </nav>
+        </header>
+        <section class="wrapper">
+            <ul class="cms-list">
+                <?php if(count($this->data)):?>
+                <?php foreach($this->data as $v):?>
+                <li class="cms-item">
+                    <figure>
+                        <a title="" href="" class="cms-img" target="_blank">
+                            <img class="" alt="" src="<?php echo $v['cover'];?>">
+                        </a>
+                        <figcaption>
+                            <h2 class="cms-title">
+                                <a title="#" target="_blank" href="">
+                                    <?php echo $v['name'];?>
+                                </a>
+                            </h2>
+                        <div class="cms-ctr">
+                            <div class="cms-onsale">
+                                在售商品 <?php echo $v['on_sale_num'];?>
+                            </div>
+                            <div class="cms-sum">
+                                今日销售额 <?php echo "&yen;".$v['total_sale_cash'];?>
+                            </div>
+                        </div>
+                        </figcaption>
+                    </figure>
+                </li>
+                <?php endforeach;?>
+                <?php endif;?>
+            </ul>
+        </section>
+
+    </main>
+</div>
+<footer id="footer"></footer>
+</body>
+<script src="/seller/js/jquery.js"></script>
+<script src="/seller/js/lodash.js"></script>
+<script src="/seller/js/horcrux.js"></script>
+<script src="/seller/js/components.js" charset="utf-8"></script>
+</html>
+

@@ -1,0 +1,145 @@
+<hgroup class="box">
+    <header>
+        <h3>推送管理</h3>
+        <i class="icon icon-list"></i>
+        <a href="/wftadlogin/getui">返回推送列表</a>
+    </header>
+    <aside class="tips">
+        <i class="icon icon-notice"></i>
+        <div>温馨提示： 有问题及时联系</div>
+    </aside>
+</hgroup>
+<form class="box box-form" action="/wftadlogin/getui/save" method="post">
+    <header class="box-title">添加推送</header>
+    <table class="table">
+        <tr>
+            <th width="160">标题</th>
+            <th colspan="3"><input type="text" class="cssInput" name="title" value="<?php echo $data ? $data->title : ''; ?>">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">正文</th>
+            <th colspan="3" width="600">
+                <textarea class="cssTextArea" name="info" ><?php echo $data ? $data->info : ''; ?></textarea><span style="color:red">&nbsp;30个字以内</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">目标用户</th>
+            <th colspan="3" width="600">
+                <select name="area">
+                    <option value="0" selected>全部用户</option>
+                    <option value="1">安卓</option>
+                    <option value="2">苹果</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">内容类别</th>
+            <th colspan="3">
+                <select onchange="getTitle()" name="link_type">
+                    <option value="1">专题</option>
+                    <option value="3">商品</option>
+                    <option value="4">游玩地</option>
+                    <option value="5">活动组织者</option>
+                    <option value="9">遛娃活动</option>
+                    <option value="6">首页</option>
+                    <option value="18">Html5页面URL</option>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">城市</th>
+            <th colspan="3">
+                <select name="city">
+                    <?php foreach($city as $k=>$v):?>
+                    <option value="<?php echo $k;?>"><?php echo $v;?></option>
+                    <?php endforeach;?>
+                </select>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">对应id</th>
+            <th colspan="3"><input type="text" class="cssInput" id="link_id" name="link_id" onblur="getTitle()">
+                <input id="tip" style="border: none" readonly type="text" name="link_title" value="" class="cssInput" />
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">Html5页面URL</th>
+            <th colspan="3"><input type="text" class="cssInput" id="url" name="url">
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">个人id</th>
+            <th colspan="3"><input type="text" class="cssInput" name="link_people"> 如果填写了个人id 则只对该人推送 马上推送
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">推送时间</th>
+            <th colspan="3">
+                <input type="date" value="<?php echo  date('Y-m-d', time()+94000);?>" name="time">
+                <input type="time" value="<?php echo  '09:00';?>" name="timel"> <span style="color:red">小于当前时间则会马上推送</span>
+            </th>
+        </tr>
+
+        <tr>
+            <th width="160">持续时间</th>
+            <th colspan="3">
+                <select name="duration">
+                    <?php for($i = 12; $i > 0; $i--):?>
+                    <option value="<?php echo $i;?>"><?php echo $i.'个小时';?></option>
+                    <?php endfor;?>
+                </select>
+            </th>
+        </tr>
+
+    </table>
+    <span id="submit-ti" class="btn btn-primary">提交</span>
+</form>
+
+<script>
+    var getTitle = function() {
+        var obj_id = $('#link_id').val();
+        var obj_type = $('select[name="link_type"]').val();
+
+        if (obj_id < 1 || obj_type == 6) {
+            return false;
+        }
+
+        $.get('/wftadlogin/getui/getObjectTitle', {id: obj_id, type: obj_type}, function (data) {
+
+            if (data.status) {
+                $('#tip').val(data.message);
+            } else {
+                alert(data.message);
+                $('#tip').val('');
+                $('#link_id').val('');
+            }
+        }, 'json');
+
+    }
+
+
+    $(function () {
+
+        $("#submit-ti").click(function() {
+
+            $("#submit-ti").remove();
+
+            $("form").submit();
+        });
+
+
+    });
+
+
+
+</script>
+

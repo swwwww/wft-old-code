@@ -1,0 +1,33 @@
+<h1>
+    验证码查询
+</h1>
+<br>
+
+<form method="get" action="">
+    查询手机号 <input placeholder="手机号" name="phone"><input type="submit">
+</form>
+<br>
+
+<a href="/wftadlogin/index/phonecode?status=1" class="btn btn-primary">所有待使用</a>
+<a href="/wftadlogin/index/phonecode?status=0" class="btn btn-primary">所有已使用</a>
+<table class="table">
+
+    <tr>
+        <td>手机号</td>
+        <td>验证码</td>
+        <td>发送时间</td>
+        <td>状态</td>
+    </tr>
+    <?php foreach ($data as $v): ?>
+        <tr>
+            <td><?php echo $v->phone; ?></td>
+            <td><?php echo $v->code; ?></td>
+            <td><?php echo date('Y-m-d H:i:s', $v->time); ?></td>
+            <td><?php echo $v->status ? '待使用' : '已使用'; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<div>
+    <?php echo $pagedata; ?>
+</div>

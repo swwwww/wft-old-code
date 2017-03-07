@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>选择场次</title>
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <link href="/css/wap/activestyle.css?ver=<?php echo time();?>" rel="stylesheet" />
+    <script>(function(){var w=window.screen.width,s=w/750,u=navigator.userAgent,m='<meta name="viewport" content="width=750,';if(/android (\d+\.\d+)/i.test(u)){if(parseFloat(RegExp.$1>2.3)){m+="minimum-scale = "+s+", maximum-scale = "+s+","}}else{m+="user-scalable=no,"}m+='target-densitydpi=device-dpi">';document.write(m)}());</script>
+    <style type="text/css">
+        .attend-num{
+            display: block;
+            margin-top: 25px;
+        }
+        .sel-list-item-state{
+            margin-top: 48px;
+        }
+        .attend-status{
+            line-height: 43px;
+            float: right
+        }
+        .attend-price{
+            line-height: 43px;
+            float: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="sel">
+    <div class="sel-list">
+        <?php foreach($data as $v):?>
+            <a class="sel-list-item  <?php if($v['status'] != 1){echo 'otherState';};?>" <?php if($v['status'] != 1){echo 'style="display:none;"';};?> href="<?php if($v['status'] != 1){echo "#";}else{echo "/web/kidsplay/order?sid={$v['id']}";}?>">
+                <span class="sel-list-item-info">
+                    <mark><?php echo $v['name'];?></mark><br/>
+                    <span><?php echo $v['datetime'];?></span>
+                    <span class="attend-num">已有<?php echo $v['join_number'];?>人报名</span>
+                </span>
+            <span class="sel-list-item-state">
+                <mark id="type" class="attend-status">
+                    <?php
+                    if($v['status']==0){
+                        echo '已结束';
+                    }elseif($v['status']==1){
+                        echo '报名中';
+                    }elseif($v['status']==2){
+                        echo '已满员';
+                    }else{
+                        echo '未开始';
+                    }
+                    ?>
+                </mark>
+                <mark id="price" class="attend-price">￥<?php echo $v['low_price']>0 ? $v['low_price'] : 0 ;?>起</mark>
+            </span>
+                <i></i>
+            </a>
+        <?php endforeach;?>
+    </div>
+</div>
+</body>
+</html>

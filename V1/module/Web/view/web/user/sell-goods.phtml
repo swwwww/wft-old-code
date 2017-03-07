@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=Edge,chrome=1">
+    <meta http-equiv=”Cache-Control” content=”no-siteapp” />
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script>(function(){
+            var w=window.screen.width,
+                s=w/750,u=navigator.userAgent,
+                m='<meta name="viewport" content="width=750,';
+            if(/android (\d+\.\d+)/i.test(u)){
+                if(parseFloat(RegExp.$1>2.3)){
+                    m+="minimum-scale = "+s+", maximum-scale = "+s+","
+                }}else{
+                m+="user-scalable=no,"}
+            m+='target-densitydpi=device-dpi">';
+            document.write(m)}());
+    </script>
+    <title><?php $data['is_seller'] ? '推广列表' : '玩翻天' ?></title>
+    <link href="/css/wap/sell_good.css?ver=<?php echo time();?>" rel="stylesheet"/>
+</head>
+<body>
+    <div class="header">
+        <div class="header-nav">遛娃活动</div>
+        <div class="header-content">
+            <div class="category">
+                <a class="item active">遛娃活动</a>
+                <a class="item">商品</a>
+                <span class="matte-l"></span>
+                <span class="matte-r"></span>
+            </div>
+            <i class="i-bottom"></i>
+        </div>
+    </div>
+    <div class="main">
+    <!--    溜娃活动列表-->
+        <section class="adv" id="activity">
+        </section>
+
+    <!--   商品列表-->
+        <section class="adv" id="goods">
+        </section>
+    </div>
+    <script id="activity_list" type="text/html">
+        <div class="ticket-list">
+            {{each activity}}
+            {{each $value}}
+            <a class="ticket-list-item" href="{{if $value.seller_id > 0}}/web/kidsplay/info?id={{$value.id}}&seller_id={{$value.seller_id}}{{else}}/web/kidsplay/info?id={{$value.id}}{{/if}}">
+                <img src="{{$value.cover}}" />
+                <div class="item-content">
+                    <span class="ticket-title">{{$value.title}}</span>
+                    <span class="ticket-detail">
+                        <span>￥{{$value.price}}</span>
+                        <i>{{$value.start_time | dateFormat:'MM月dd日'}}-{{$value.end_time | dateFormat:'MM月dd日'}} {{$value.events_num}}场</i>
+                    </span>
+                    <span class="ticket-tip">
+                        {{if $value.buy_number > 0}}
+                        <span>已有{{$value.buy_number}}人报名</span>
+                        {{else}}
+                        <span>报名中</span>
+                        {{/if}}
+                        <i>{{$value.address}}</i>
+                    </span>
+                </div>
+                {{if $value.is_seller == 1}}
+                <div class="profit">
+                    <span class="profit-title">预计收益（单份）：</span>
+                    {{if $value.pre_income.min == $value.pre_income.max}}
+                    <mark class="profit-info">￥{{$value.pre_income.min}}</mark>
+                    {{else}}
+                    <mark class="profit-info">￥{{$value.pre_income.min}}</mark>~
+                    <mark class="profit-info">￥{{$value.pre_income.max}}
+                        {{/if}}
+                </div>
+                {{/if}}
+            </a>
+            {{/each}}
+            {{/each}}
+        </div>
+    </script>
+
+    <script id="goods_list" type="text/html">
+        <div class="ticket-list">
+            {{each goods}}
+            {{each $value}}
+            <a class="ticket-list-item" href="{{if $value.seller_id > 0}}/web/organizer/shops?id={{$value.id}}&seller_id={{$value.seller_id}}{{else}}/web/organizer/shops?id={{$value.id}}{{/if}}">
+                <img src="{{$value.cover}}" />
+                <div class="item-content">
+                    <span class="ticket-title">{{$value.title}}</span>
+                    <span class="ticket-detail">
+                        <span>￥{{$value.price}}</span>
+                        <mark>￥{{$value.low_money}}</mark>
+                    </span>
+                    <span class="ticket-tip">
+                        {{if $value.buy_number > 0}}
+                        <span>已售{{$value.buy_number}}份</span>
+                        {{else}}
+                        <span>有票</span>
+                        {{/if}}
+                        <i>金银湖</i>
+                    </span>
+                </div>
+                {{if $value.is_seller == 1}}
+                <div class="profit">
+                    <span class="profit-title">预计收益（单份）：</span>
+                    {{if $value.pre_income.min == $value.pre_income.max}}
+                    <mark class="profit-info">￥{{$value.pre_income.min}}</mark>
+                    {{else}}
+                    <mark class="profit-info">￥{{$value.pre_income.min}}</mark>~
+                    <mark class="profit-info">￥{{$value.pre_income.max}}
+                        {{/if}}
+                </div>
+                {{/if}}
+            </a>
+            {{/each}}
+            {{/each}}
+        </div>
+    </script>
+    <input type="hidden" id="activity_num" value="<?php echo $data['count_activity'];?>">
+    <input type="hidden" id="goods_num" value="<?php echo $data['count_goods'];?>">
+    <input type="hidden" id="is_seller" value="<?php echo $data['is_seller'];?>">
+</body>
+<script src="/js/wap/template.js"></script>
+<script type="text/javascript" src="/js/drop.min.js"></script>
+<script type="text/javascript" src="/js/zepto1.1.6.min.js"></script>
+<script>
+    function dateFormat(date, format){
+        date = new Date(date*1000);
+        var map = {
+            "M": date.getMonth() + 1, //月份
+            "d": date.getDate(), //日
+            "h": date.getHours(), //小时
+            "m": date.getMinutes(), //分
+            "s": date.getSeconds(), //秒
+            "q": Math.floor((date.getMonth() + 3) / 3), //季度
+            "S": date.getMilliseconds() //毫秒
+        };
+
+        format = format.replace(/([yMdhmsqS])+/g, function(all, t){
+            var v = map[t];
+            if (v !== undefined) {
+                if (all.length > 1) {
+                    v = '0' + v;
+                    v = v.substr(v.length - 2);
+                }
+                return v;
+            }
+            else if (t === 'y') {
+                return (date.getFullYear() + '').substr(4 - all.length);
+            }
+            return all;
+        });
+        return format;
+    }
+
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return decodeURI(r[2]); return null;
+    }
+
+
+    var sell_type = "activity",
+        itemIndex = 0,
+        nav = $('.header-nav'),
+        city = GetQueryString('city'),
+        uid = GetQueryString('seller_id'),
+        is_seller = $('#is_seller').val();
+
+    nav.on('tap',function(){
+        if($(this).hasClass('active')){
+            $('.header-content').hide();
+            $(this).removeClass('active');
+        }else{
+            $('.header-content').show();
+            $(this).addClass('active');
+        }
+    });
+
+
+    var activity_num = $('#activity_num').val(),
+        goods_num = $('#goods_num').val();
+
+    if(activity_num == 0){
+        $('.category').find('.item').eq(0).prop('disabled',true).addClass('disabled');
+        $('.matte-l').show();
+    }
+
+    if(goods_num == 0){
+        $('.category').find('.item').eq(1).prop('disabled',true).addClass('disabled');
+        $('.matte-r').show();
+    }
+
+    $('.header').on('touchend','.item',function(e){
+        e.preventDefault();
+        if($(this).text() == '遛娃活动'){
+            sell_type = 'activity';
+            itemIndex = 0;
+            nav.text($(this).text());
+            $('.adv').eq(0).empty().show().siblings().hide();
+        }else{
+            sell_type = 'goods';
+            itemIndex = 1;
+            nav.text($(this).text());
+            $('.adv').eq(1).empty().show().siblings().hide();
+        }
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.header-content').hide();
+        nav.removeClass('active');
+        dataRender(itemIndex,sell_type);
+    });
+
+    function dataRender(itemIndex,sell_type){
+        $.ajax({
+            type: 'POST',
+            url: '/user/sell/goods',
+            dataType: 'json',
+            data: {
+                'sell_type': sell_type,
+                'seller_id':uid,
+                'page':1,
+                "city":city,
+                "is_seller":is_seller
+            },
+            async: false,
+            headers: {
+                "VER": 10
+            },
+            success: function (data) {
+                console.log(data);
+                var result = [];
+                result[sell_type] = data.response_params;
+
+                console.log(data);
+                template.helper("dateFormat", dateFormat);
+                $('.adv').eq(itemIndex).append(template(sell_type+'_list', result));
+            },
+            error: function (xhr, type) {
+                alert('加载出错！！');
+            }
+        });
+        var page_num = $('.ticket-list').children().length;
+        if(page_num >= 10){
+            var counter = 1;
+            var dropload = $('.main').dropload({
+                scrollArea: window,
+                domDown: {
+                    domClass: 'dropload-down',
+                    domRefresh: '<div class="dropload-refresh" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;">↑上拉加载更多</div>',
+                    domLoad: '<div class="dropload-load" style="font-size: 20px;height:50px;line-height: 50px;text-align: center;margin-bottom: 100px;"><span class="loading"></span>加载中...</div>',
+                    domNoData: '<div class="dropload-noData" style="font-size: 20px;height:50px;line-height:50px;text-align: center;margin-bottom: 100px;">全部加载完毕</div>'
+                },
+                loadDownFn: function (me) {
+                    counter++;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/sell/goods',
+                        dataType: 'json',
+                        data: {
+                            'sell_type': sell_type,
+                            'seller_id':uid,
+                            'page': counter,
+                            "city": city,
+                            "is_seller":is_seller
+                        },
+                        async: false,
+                        headers: {
+                            "VER": 10
+                        },
+                        success: function (data) {
+                            var result = [];
+                            result[sell_type] = data.response_params;
+                            setTimeout(function () {
+                                template.helper("dateFormat", dateFormat);
+                                $('.adv').eq(itemIndex).append(template(sell_type+'_list', result));
+                                me.resetload();
+                            }, 500);
+                            if (result[sell_type]) {
+                                me.lock();
+                                me.noData();
+                                return;
+                            }
+                        },
+                        error: function (xhr, type) {
+                            alert('加载更多出错！！');
+                        }
+                    })
+                }
+            });
+        }
+    }
+    dataRender(itemIndex,sell_type);
+</script>
+
